@@ -1,0 +1,26 @@
+# .gitattributes - Normalize line endings and protect C++ files
+
+# Ensure consistent LF endings for all text files
+* text=auto eol=lf
+
+# Explicitly enforce LF for C++ source files
+*.cpp text eol=lf
+*.hpp text eol=lf
+*.tpp text eol=lf
+
+# Treat CMake and config files as text
+*.cmake text eol=lf
+CMakeLists.txt text eol=lf
+*.md text eol=lf
+.editorconfig text eol=lf
+.clang-format text eol=lf
+.clang-tidy text eol=lf
+
+# Binary files should not be modified
+*.png binary
+*.jpg binary
+*.gif binary
+
+# Notes:
+# - Keeps codebase clean from Windows vs Linux CRLF/LF issues.
+# - Prevents accidental line-ending changes in Git diffs.

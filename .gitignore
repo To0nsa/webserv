@@ -1,32 +1,41 @@
-# Prerequisites
-*.d
+# .gitignore - Webserv project
 
-# Compiled Object files
-*.slo
-*.lo
+# Ignore build system artifacts
+build/
+compile_commands.json
+
+# Ignore Makefile outputs
+objs/
+deps/
+bin/
+bin/tests/
+
+# Ignore common compiled files
 *.o
 *.obj
+*.lo
+*.slo
+*.d
+*.so
+*.a
+*.dll
+*.exe
+*.out
 
-# Precompiled Headers
+# Ignore precompiled headers
 *.gch
 *.pch
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# Ignore IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
-# Fortran module files
-*.mod
-*.smod
+# Ignore OS system files
+.DS_Store
+Thumbs.db
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+# Ignore logs (if any)
+*.log

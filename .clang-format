@@ -1,0 +1,36 @@
+# .clang-format - Matches STYLEGUIDE.md
+
+BasedOnStyle: LLVM
+IndentWidth: 4
+UseTab: Never
+ColumnLimit: 100
+AllowShortFunctionsOnASingleLine: false
+DerivePointerAlignment: false
+PointerAlignment: Left
+BreakBeforeBraces: Attach
+BraceWrapping:
+  AfterClass: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterEnum: false
+  AfterStruct: false
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+SpacesInAngles: false
+SpaceAfterCStyleCast: true
+AlwaysBreakTemplateDeclarations: Yes
+SortIncludes: true
+IncludeBlocks: Preserve
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignOperands: true
+
+# Notes:
+# - 4 spaces everywhere.
+# - K&R style braces ("Attach" = same line).
+# - Limit columns to 100 for readability.
+# - Left-aligned * and & for pointers/references.
+# - Group consecutive assignments nicely aligned.
+# - Sort includes but preserve logical include blocks.
+# - Break long templates for better clarity.

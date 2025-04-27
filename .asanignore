@@ -1,0 +1,21 @@
+# Ignore known harmless leaks (exit, TLS keys, system libs)
+leak:libc
+leak:libstdc++
+leak:libgcc
+leak:__cxa
+leak:__tls_get_addr
+leak:malloc
+leak:epoll
+leak:poll
+leak:kqueue
+leak:fork
+leak:exec
+
+# Ignore sanitizer internals
+race:__sanitizer
+
+# Ignore undefined behavior triggered inside system libraries
+# Useful if UBSAN reports issues inside glibc or third-party libraries
+undefined:libc
+undefined:libstdc++
+undefined:malloc

@@ -1,0 +1,75 @@
+{
+	"version": 3,
+	"cmakeMinimumRequired": {
+	  "major": 3,
+	  "minor": 16
+	},
+	"configurePresets": [
+	  {
+		"name": "debug",
+		"displayName": "Debug Build",
+		"generator": "Unix Makefiles",
+		"binaryDir": "${sourceDir}/build/debug",
+		"cacheVariables": {
+		  "CMAKE_BUILD_TYPE": "Debug",
+		  "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+		}
+	  },
+	  {
+		"name": "asan",
+		"inherits": "debug",
+		"displayName": "ASAN Build",
+		"binaryDir": "${sourceDir}/build/asan",
+		"cacheVariables": {
+		  "ENABLE_ASAN": "ON"
+		}
+	  },
+	  {
+		"name": "tsan",
+		"inherits": "debug",
+		"displayName": "TSAN Build",
+		"binaryDir": "${sourceDir}/build/tsan",
+		"cacheVariables": {
+		  "ENABLE_TSAN": "ON"
+		}
+	  },
+	  {
+		"name": "ubsan",
+		"inherits": "debug",
+		"displayName": "UBSAN Build",
+		"binaryDir": "${sourceDir}/build/ubsan",
+		"cacheVariables": {
+		  "ENABLE_UBSAN": "ON"
+		}
+	  },
+	  {
+		"name": "release",
+		"displayName": "Release Build",
+		"generator": "Unix Makefiles",
+		"binaryDir": "${sourceDir}/build/release",
+		"cacheVariables": {
+		  "CMAKE_BUILD_TYPE": "Release",
+		  "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+		}
+	  }
+	],
+	"buildPresets": [
+	  {
+		"name": "debug",
+		"configurePreset": "debug"
+	  },
+	  {
+		"name": "asan",
+		"configurePreset": "asan"
+	  },
+	  {
+		"name": "tsan",
+		"configurePreset": "tsan"
+	  },
+	  {
+		"name": "release",
+		"configurePreset": "release"
+	  }
+	]
+  }
+  

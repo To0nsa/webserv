@@ -1,0 +1,58 @@
+#--------------------------------- Project ------------------------------------
+PROJECT_NAME           = "webserv"
+PROJECT_BRIEF          = "HTTP Server Project (Hive School)"
+PROJECT_NUMBER         = 1.0
+OUTPUT_DIRECTORY       = docs
+GENERATE_LATEX         = NO
+OPTIMIZE_OUTPUT_FOR_C  = NO
+OPTIMIZE_OUTPUT_FOR_CXX= YES
+INPUT                  = include src tests README.md
+RECURSIVE              = YES
+FILE_PATTERNS          = *.h *.hpp *.c *.cpp *.md
+
+#--------------------------------- Build settings -----------------------------
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+EXTRACT_ANON_NSPACES   = YES
+
+#--------------------------------- Warnings -----------------------------------
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+
+#--------------------------------- HTML Output --------------------------------
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+HTML_COLORSTYLE_HUE    = 210
+HTML_COLORSTYLE_SAT    = 180
+HTML_COLORSTYLE_GAMMA  = 0.8
+GENERATE_TREEVIEW      = YES
+FULL_PATH_NAMES        = NO
+STRIP_FROM_PATH        = ${CMAKE_SOURCE_DIR}
+
+#--------------------------------- README Mainpage ----------------------------
+USE_MDFILE_AS_MAINPAGE = README.md
+EXTENSION_MAPPING      = md=Markdown
+MARKDOWN_SUPPORT       = YES
+
+#--------------------------------- Source Browser -----------------------------
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = YES
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION    = YES
+
+#--------------------------------- Miscellaneous ------------------------------
+QUIET                  = NO
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+HIDE_UNDOC_MEMBERS     = NO
+HIDE_UNDOC_CLASSES     = NO
+
+#--------------------------------- Dot Graphs ---------------------------------
+HAVE_DOT               = YES
+DOT_NUM_THREADS        = 4
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+CLASS_DIAGRAMS         = YES
+DOT_CLEANUP            = YES
