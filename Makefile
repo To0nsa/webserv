@@ -6,15 +6,15 @@
 #    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/26 16:00:00 by nlouis            #+#    #+#              #
-#    Updated: 2025/04/27 22:27:13 by nlouis           ###   ########.fr        #
+#    Updated: 2025/04/28 21:04:47 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Compiler settings
-CXX       := c++
-CXXFLAGS  := -Wall -Wextra -Werror -I include
-DEBUGFLAGS:= -g3 -O0 -DDEBUG
-OPTFLAGS  := -O3
+CXX        := c++
+CXXFLAGS   := -Wall -Wextra -Werror -I include
+DEBUGFLAGS := -g3 -O0 -DDEBUG
+OPTFLAGS   := -O3
 
 # Sanitizer flags
 ASAN_FLAGS := -fsanitize=address,undefined -fno-omit-frame-pointer
@@ -22,18 +22,18 @@ TSAN_FLAGS := -fsanitize=thread -fno-omit-frame-pointer
 UBSAN_FLAGS:= -fsanitize=undefined -fno-omit-frame-pointer
 
 # Executable output
-NAME      := webserv
-BINDIR    := bin
-TARGET    := $(BINDIR)/$(NAME)
+NAME       := webserv
+BINDIR     := bin
+TARGET     := $(BINDIR)/$(NAME)
 
 # Source, object, and dependency files
-SRCDIR    := src
-OBJDIR    := objs
-DEPDIR    := deps
+SRCDIR     := src
+OBJDIR     := objs
+DEPDIR     := deps
 
-SRCS      := $(shell find $(SRCDIR) -name "*.cpp")
-OBJS      := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCS))
-DEPS      := $(patsubst $(SRCDIR)/%.cpp,$(DEPDIR)/%.d,$(SRCS))
+SRCS       := $(shell find $(SRCDIR) -name "*.cpp")
+OBJS       := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCS))
+DEPS       := $(patsubst $(SRCDIR)/%.cpp,$(DEPDIR)/%.d,$(SRCS))
 
 # Tests
 TESTDIR    := tests
@@ -43,11 +43,11 @@ TESTOBJS   := $(patsubst $(TESTDIR)/%.cpp,$(OBJDIR)/tests/%.o,$(TESTSRCS))
 TESTDEPS   := $(patsubst $(TESTDIR)/%.cpp,$(DEPDIR)/tests/%.d,$(TESTSRCS))
 
 # Colors
-GREEN     := \033[0;32m
-CYAN      := \033[0;36m
-YELLOW    := \033[1;33m
-RED       := \033[0;31m
-RESET     := \033[0m
+GREEN      := \033[0;32m
+CYAN       := \033[0;36m
+YELLOW     := \033[1;33m
+RED        := \033[0;31m
+RESET      := \033[0m
 
 # Default goal
 .DEFAULT_GOAL := all
@@ -71,25 +71,26 @@ else
 	CXXFLAGS += $(OPTFLAGS)
 endif
 
+# Prepare necessary directories
+prepare_dirs:
+	@mkdir -p $(BINDIR) $(BINDIR)/tests $(OBJDIR) $(DEPDIR)
+
 # Build rules
-all: $(TARGET)
+all: prepare_dirs $(TARGET)
 
 $(TARGET): $(OBJS)
-	@mkdir -p $(BINDIR)
 	@$(CXX) $(CXXFLAGS) $^ -o $@
 	@echo "$(CYAN)🚀 Built executable:$(RESET) $(TARGET)"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
-	@mkdir -p $(@D)
-	@if [ "$(FAST)" != "1" ]; then mkdir -p $(DEPDIR)/$(dir $(patsubst $(SRCDIR)/%,%,$<)); fi
+	@mkdir -p $(dir $@) $(DEPDIR)/$(dir $(patsubst $(OBJDIR)/%,%,$@))
 	@if [ "$(FAST)" = "1" ]; then \
 		$(CXX) $(CXXFLAGS) -c $< -o $@; \
 	else \
-		$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@ && mv $(basename $@).d $(DEPDIR)/$(notdir $(basename $@)).d; \
+		$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@; \
 	fi
 	@echo "$(GREEN)🛠️  Compiled:$(RESET) $<"
 
-# Build each test individually
 $(BINDIR)/tests/%: $(TESTDIR)/%.cpp
 	@mkdir -p $(dir $@)
 	@$(CXX) $(CXXFLAGS) $< -o $@
@@ -122,16 +123,15 @@ debug_ubsan:
 release:
 	@$(MAKE) MODE=release
 
-# Fast build (no dependency checking)
 fast:
 	@$(MAKE) FAST=1
 
 # Run shortcut
 run: all
-	@./bin/webserv
+	@./$(TARGET)
 
 # Test shortcut
-test: $(TARGET) $(TESTBINS)
+test: prepare_dirs $(TARGET) $(TESTBINS)
 	@echo "$(CYAN)🧪 Running all tests...$(RESET)"
 	@if [ -z "$(TESTBINS)" ]; then \
 		echo "$(YELLOW)⚠️  No test files found. Skipping tests.$(RESET)"; \
@@ -143,20 +143,16 @@ test: $(TARGET) $(TESTBINS)
 		echo "$(GREEN)🏆 All tests passed successfully!$(RESET)"; \
 	fi
 
-# Sanitize target
 sanitize:
 	@echo "$(CYAN)🔬 Building and testing with AddressSanitizer...$(RESET)"
 	@$(MAKE) debug_asan
-	@ASAN_OPTIONS="detect_leaks=1:halt_on_error=1:abort_on_error=1:fast_unwind_on_malloc=0:suppressions=$(PWD)/.asanignore" ./bin/webserv & sleep 2 ; kill $$! || true
-
+	@ASAN_OPTIONS="detect_leaks=1:halt_on_error=1:abort_on_error=1:fast_unwind_on_malloc=0:suppressions=$(PWD)/.asanignore" ./$(TARGET) & sleep 2 ; kill $$! || true
 	@echo "$(CYAN)🔬 Building and testing with ThreadSanitizer...$(RESET)"
 	@$(MAKE) debug_tsan
-	@TSAN_OPTIONS="suppressions=$(PWD)/.asanignore:halt_on_error=1" ./bin/webserv & sleep 2 ; kill $$! || true
-
+	@TSAN_OPTIONS="suppressions=$(PWD)/.asanignore:halt_on_error=1" ./$(TARGET) & sleep 2 ; kill $$! || true
 	@echo "$(CYAN)🔬 Building and testing with UndefinedBehaviorSanitizer...$(RESET)"
 	@$(MAKE) debug_ubsan
-	@UBSAN_OPTIONS="suppressions=$(PWD)/.asanignore:halt_on_error=1:print_stacktrace=1" ./bin/webserv & sleep 2 ; kill $$! || true
-
+	@UBSAN_OPTIONS="suppressions=$(PWD)/.asanignore:halt_on_error=1:print_stacktrace=1" ./$(TARGET) & sleep 2 ; kill $$! || true
 	@echo "$(GREEN)🏆 All sanitizer builds completed successfully!$(RESET)"
 
 # Code Quality Targets
@@ -168,7 +164,6 @@ tidy:
 	@echo "$(CYAN)🔍 Running clang-tidy analysis...$(RESET)"
 	@clang-tidy src/**/*.cpp tests/**/*.cpp -- -Iinclude -std=c++20
 
-# Help target
 help:
 	@echo "$(CYAN)📦 Build Targets:$(RESET)"
 	@echo "  $(GREEN)make$(RESET)                → Build in release mode (optimized) 🚀"
@@ -196,7 +191,7 @@ help:
 	@echo "$(CYAN)📚 Other:$(RESET)"
 	@echo "  $(GREEN)make help$(RESET)           → Show this help message 📚"
 
-.PHONY: all clean fclean re debug debug_asan debug_tsan debug_ubsan release run test sanitize fast help
+.PHONY: all clean fclean re debug debug_asan debug_tsan debug_ubsan release run test sanitize fast help prepare_dirs
 
 # Include dependency files unless FAST
 ifeq ($(FAST),)
