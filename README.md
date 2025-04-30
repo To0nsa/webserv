@@ -40,6 +40,13 @@ Available Makefile targets:
 
 | Command      | Description                                     |
 |--------------|-------------------------------------------------|
+| `make format`   | Format all `.cpp` and `.hpp` files using `clang-format` |
+| `make tidy`  | Run `clang-tidy` on all source and test files |
+
+### Code quality
+
+| Command      | Description                                     |
+|--------------|-------------------------------------------------|
 | `make run`   | Build and run the web server                    |
 | `make test`  | Build and run all test binaries from `tests/` folder |
 | `make sanitize` | Build and run under all sanitizers (ASAN, TSAN, UBSAN) |
@@ -51,6 +58,12 @@ Available Makefile targets:
 | `make clean` | Remove all object files and dependency files |
 | `make fclean`| Remove everything: binaries, builds, tests |
 | `make re`    | Full clean and rebuild          |
+
+### Help
+
+| Command      | Description                    |
+|--------------|---------------------------------|
+| `make help` | Displays a categorized list of all available `Makefile` targets |
 
 ___
 
