@@ -1,0 +1,13 @@
+name: Notify Discord
+
+on: [push, pull_request]
+
+jobs:
+  discord:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Notify Discord
+      uses: Ilshidur/action-discord@master
+      with:
+        webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+        message: "New event in the repo! 📢"
