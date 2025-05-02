@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 13:45:05 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/02 17:00:46 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/02 17:20:31 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ class Location {
      * @param method The HTTP method string to check.
      * @return True if the method is allowed, false otherwise.
      */
-    bool allowsMethod(const std::string& method) const;
+    bool isMethodAllowed(const std::string& method) const;
 
     /**
      * @brief Checks if this location matches a given request URI.

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/02 17:01:37 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/02 17:27:27 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * @ingroup config
  */
 
-#include "Location.hpp"
+#include "config/Location.hpp"
 
 // --- Constructor ---
 
@@ -119,7 +119,7 @@ const std::string& Location::getCgiExtension() const {
  * @param method The HTTP method string to check.
  * @return True if the method is allowed, false otherwise.
  */
-bool Location::allowsMethod(const std::string& method) const {
+bool Location::isMethodAllowed(const std::string& method) const {
     return methods_.count(method) > 0;
 }
 
