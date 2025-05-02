@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 13:45:05 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/02 13:55:34 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/02 17:00:46 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include <string>
 #include <set>
+#include <string>
 
 /**
  * @defgroup config Server Configuration
@@ -40,190 +40,103 @@
  * @ingroup config
  */
 class Location {
-public:
-    /**
-     * @brief Constructs a Location object with default values.
-     */
+  public:
     Location();
-
-    /**
-     * @brief Default destructor.
-     */
-    ~Location() = default;
-
-    /**
-     * @brief Default copy constructor.
-     */
-    Location(const Location& other) = default;
-
-    /**
-     * @brief Default copy assignment operator.
-     */
+    ~Location()                                = default;
+    Location(const Location& other)            = default;
     Location& operator=(const Location& other) = default;
 
     // --- Setters ---
 
-    /**
-     * @brief Sets the path associated with this location.
-     *
-     * @param path The URL path (e.g., "/images").
-     */
     void setPath(const std::string& path);
-
-    /**
-     * @brief Adds an allowed HTTP method for this location.
-     *
-     * @param method The HTTP method to allow (e.g., "GET", "POST").
-     */
     void addMethod(const std::string& method);
-
-    /**
-     * @brief Sets the root directory for this location.
-     *
-     * @param root The filesystem path to serve files from.
-     */
     void setRoot(const std::string& root);
-
-    /**
-     * @brief Sets the default index file for this location.
-     *
-     * @param index The filename to serve when a directory is requested.
-     */
     void setIndex(const std::string& index);
-
-    /**
-     * @brief Enables or disables autoindexing.
-     *
-     * @param enabled True to enable directory listing.
-     */
     void setAutoindex(bool enabled);
-
-    /**
-     * @brief Sets the HTTP redirect target and status code.
-     *
-     * @param target The redirection target URL.
-     * @param code The HTTP status code to return (default is 301).
-     */
     void setRedirect(const std::string& target, int code = 301);
-
-    /**
-     * @brief Sets the upload directory for POST requests.
-     *
-     * @param path Directory path where uploaded files will be stored.
-     */
     void setUploadStore(const std::string& path);
-
-    /**
-     * @brief Sets the file extension used to trigger CGI execution.
-     *
-     * @param ext The CGI file extension (e.g., ".php", ".py").
-     */
     void setCgiExtension(const std::string& ext);
 
     // --- Getters ---
 
-    /**
-     * @brief Returns the configured path.
-     *
-     * @return The URL path.
-     */
-    const std::string& getPath() const;
-
-    /**
-     * @brief Returns the set of allowed HTTP methods.
-     *
-     * @return A set of strings representing allowed methods.
-     */
+    const std::string&           getPath() const;
     const std::set<std::string>& getMethods() const;
-
-    /**
-     * @brief Returns the root directory for file serving.
-     *
-     * @return The root filesystem path.
-     */
-    const std::string& getRoot() const;
-
-    /**
-     * @brief Returns the default index file name.
-     *
-     * @return The index file name.
-     */
-    const std::string& getIndex() const;
-
-    /**
-     * @brief Returns whether autoindexing is enabled.
-     *
-     * @return True if enabled, false otherwise.
-     */
-    bool isAutoindexEnabled() const;
-
-    /**
-     * @brief Checks if a redirect is configured.
-     *
-     * @return True if a redirect target is set.
-     */
-    bool hasRedirect() const;
-
-    /**
-     * @brief Returns the redirect target.
-     *
-     * @return The redirection URL.
-     */
-    const std::string& getRedirect() const;
-
-    /**
-     * @brief Returns the HTTP return code for redirection.
-     *
-     * @return The HTTP status code (e.g., 301).
-     */
-    int getReturnCode() const;
-
-    /**
-     * @brief Returns the upload directory path.
-     *
-     * @return The path where uploads should be stored.
-     */
-    const std::string& getUploadStore() const;
-
-    /**
-     * @brief Returns the CGI file extension for this location.
-     *
-     * @return The extension string (e.g., ".php").
-     */
-    const std::string& getCgiExtension() const;
+    const std::string&           getRoot() const;
+    const std::string&           getIndex() const;
+    bool                         isAutoindexEnabled() const;
+    bool                         hasRedirect() const;
+    const std::string&           getRedirect() const;
+    int                          getReturnCode() const;
+    const std::string&           getUploadStore() const;
+    const std::string&           getCgiExtension() const;
 
     // --- Logic helpers ---
 
     /**
-     * @brief Checks if a method is allowed for this location.
+     * @brief Verifies if the given HTTP method is allowed for this location.
      *
-     * @param method The HTTP method to check.
-     * @return True if allowed, false otherwise.
+     * @details Checks whether the method exists in the set of allowed methods
+     * configured for this location (e.g., "GET", "POST", "DELETE").
+     *
+     * @param method The HTTP method string to check.
+     * @return True if the method is allowed, false otherwise.
      */
     bool allowsMethod(const std::string& method) const;
 
-private:
-    std::string path_;             ///< The URL path this location matches.
+    /**
+     * @brief Checks if this location matches a given request URI.
+     *
+     * @details This is typically a prefix match. For example, if the path is "/api",
+     * then this method returns true for "/api/users" and "/api/status".
+     *
+     * @param uri The full request URI to match.
+     * @return True if the location path is a prefix of the URI.
+     */
+    bool matchesPath(const std::string& uri) const;
 
     /**
-     * @brief Set of allowed HTTP methods for this location.
+     * @brief Resolves a request URI into a full filesystem path.
      *
-     * @details Uses std::set instead of std::vector to:
-     * - Prevent duplicate methods automatically.
-     * - Allow fast O(log n) lookup with .count().
-     * - Reflect that order and duplicates are irrelevant for method checks.
+     * @details Joins the root directory and the URI suffix after the location path.
+     * Returns an empty string if the URI does not match this location.
      *
-     * This is more semantically correct and efficient than std::vector
-     * for the use case of validating allowed methods (e.g., GET, POST, DELETE).
+     * @param uri The full request URI.
+     * @return The absolute path to the requested resource.
      */
-    std::set<std::string> methods_;
-    std::string root_;             ///< Root directory for file serving.
-    std::string index_;            ///< Default index file name.
-    bool autoindex_;               ///< Whether to enable directory listing.
-    std::string redirect_;         ///< Redirection target URL.
-    int return_code_;              ///< HTTP status code for redirection.
-    std::string upload_store_;     ///< Directory for uploaded files.
-    std::string cgi_extension_;    ///< CGI file extension (e.g., ".php").
+    std::string resolveAbsolutePath(const std::string& uri) const;
+
+    /**
+     * @brief Indicates whether file uploads are allowed for this location.
+     *
+     * @return True if an upload directory is configured, false otherwise.
+     */
+    bool isUploadEnabled() const;
+
+    /**
+     * @brief Determines if the URI targets a CGI script.
+     *
+     * @param uri The requested URI.
+     * @return True if the URI ends with the configured CGI extension.
+     */
+    bool isCgiRequest(const std::string& uri) const;
+
+    /**
+     * @brief Returns the full path to the index file, if one is set.
+     *
+     * @return The absolute path to the index file or an empty string.
+     */
+    std::string getEffectiveIndexPath() const;
+
+  private:
+    std::string           path_;          ///< The URL path this location matches.
+    std::set<std::string> methods_;       ///< Set of allowed HTTP methods.
+    std::string           root_;          ///< Root directory for file serving.
+    std::string           index_;         ///< Default index file name.
+    bool                  autoindex_;     ///< Whether to enable directory listing.
+    std::string           redirect_;      ///< Redirection target URL.
+    int                   return_code_;   ///< HTTP status code for redirection.
+    std::string           upload_store_;  ///< Directory for uploaded files.
+    std::string           cgi_extension_; ///< CGI file extension (e.g., ".php").
 };
 
 /** @} */
