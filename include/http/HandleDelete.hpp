@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Config.cpp                                         :+:      :+:    :+:   */
+/*   HandleDelete.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/30 10:36:29 by irychkov          #+#    #+#             */
-/*   Updated: 2025/04/30 10:37:42 by irychkov         ###   ########.fr       */
+/*   Created: 2025/05/01 19:00:17 by irychkov          #+#    #+#             */
+/*   Updated: 2025/05/01 19:01:43 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Config.hpp"
+#pragma once
 
-Config :: Config( void ) { }
+#include "Server.hpp"
+#include "HttpRequest.hpp"
 
-Config :: ~Config( void ) { }
-
-void Config :: addServer( const Server& server ) {
-	_servers.push_back(server);
-}
-const std::vector<Server>& Config :: getServers( void ) const {
-	return _servers;
-}
+// Attempts to delete a file based on DELETE request and location config
+// Returns HTTP status code as string: "200", "403", "404", "405", "500"
+std::string handleDelete(const Server& server, const HttpRequest& request);

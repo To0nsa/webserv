@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Config.cpp                                         :+:      :+:    :+:   */
+/*   FilePath.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/30 10:36:29 by irychkov          #+#    #+#             */
-/*   Updated: 2025/04/30 10:37:42 by irychkov         ###   ########.fr       */
+/*   Created: 2025/05/01 12:42:21 by irychkov          #+#    #+#             */
+/*   Updated: 2025/05/01 12:42:24 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Config.hpp"
+#pragma once
 
-Config :: Config( void ) { }
+#include <string>
+#include "Server.hpp"
+#include "HttpRequest.hpp"
 
-Config :: ~Config( void ) { }
-
-void Config :: addServer( const Server& server ) {
-	_servers.push_back(server);
-}
-const std::vector<Server>& Config :: getServers( void ) const {
-	return _servers;
-}
+std::string buildFilePath(const Server& server, const HttpRequest& request);

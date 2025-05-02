@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Config.cpp                                         :+:      :+:    :+:   */
+/*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/30 10:36:29 by irychkov          #+#    #+#             */
-/*   Updated: 2025/04/30 10:37:42 by irychkov         ###   ########.fr       */
+/*   Created: 2025/04/30 09:40:11 by irychkov          #+#    #+#             */
+/*   Updated: 2025/04/30 14:19:58 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Config.hpp"
+#pragma once
+#include <string>
+#include <vector>
 
-Config :: Config( void ) { }
+struct Location {
+		std::string path;
+		std::vector<std::string> methods;
+		std::string root;
+		std::string index;
+		bool autoindex;
+		std::string redirect;
+		int return_code;
+		std::string upload_store;
+		std::string cgi_extension;
 
-Config :: ~Config( void ) { }
-
-void Config :: addServer( const Server& server ) {
-	_servers.push_back(server);
-}
-const std::vector<Server>& Config :: getServers( void ) const {
-	return _servers;
-}
+		Location();
+	};
