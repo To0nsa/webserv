@@ -14,7 +14,7 @@ This style guide defines the conventions used throughout the Webserv project. Al
 | Enum                 | `PascalCase`  | `HttpMethod`      |
 | Enum Constant        | `UPPER_CASE`  | `GET`, `POST`     |
 | Constant (constexpr) | `UPPER_CASE`  | `DEFAULT_TIMEOUT` |
-| Private Member       | `snake_case_` | `connection_`     |
+| Private Member       | `_snake_case` | `_connection`     |
 
 Naming rules are enforced by `clang-tidy` via the `readability-identifier-naming` check group. Violations will fail CI.
 
