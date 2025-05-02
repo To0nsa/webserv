@@ -1,13 +1,40 @@
-# Modern C++ Coding Style Guide
+# Modern C++ Coding Style Guide (Enhanced for clang-tidy)
 
-## 1. Headers and Includes
+This style guide defines the conventions used throughout the Webserv project. All rules are enforced by `.clang-tidy`, `.clang-format`, and GitHub Actions CI.
 
-- Use C++ standard headers only: `<cstring>`, `<string>`, `<vector>`, `<memory>`, `<filesystem>`, etc.
-- Include order:
-  1. Corresponding header ("MyClass.hpp")
-  2. Standard Library headers
-  3. External libraries
-  4. Project headers
+---
+
+## 1. Naming Conventions
+
+| Entity               | Convention    | Example           |
+| -------------------- | ------------- | ----------------- |
+| Variable             | `snake_case`  | `buffer_size`     |
+| Function             | `camelCase`   | `handleRequest()` |
+| Class / Struct       | `PascalCase`  | `HttpServer`      |
+| Enum                 | `PascalCase`  | `HttpMethod`      |
+| Enum Constant        | `UPPER_CASE`  | `GET`, `POST`     |
+| Constant (constexpr) | `UPPER_CASE`  | `DEFAULT_TIMEOUT` |
+| Private Member       | `snake_case_` | `connection_`     |
+
+Naming rules are enforced by `clang-tidy` via the `readability-identifier-naming` check group. Violations will fail CI.
+
+---
+
+## 2. File Structure & Naming
+
+* **Source files**: `snake_case.cpp`
+* **Header files**: `snake_case.hpp`
+* **One class per file**
+* Match filename with class name (e.g. `HttpServer.hpp` ↔ `HttpServer.cpp`)
+
+---
+
+## 3. Includes and Order
+
+1. Corresponding header
+2. Standard library
+3. Third-party libraries
+4. Project headers
 
 Example:
 
@@ -15,331 +42,160 @@ Example:
 #include "Server.hpp"
 #include <vector>
 #include <string>
-#include <filesystem>
+#include "utils/config_utils.hpp"
 ```
 
-## 2. Namespaces
+---
 
-- Do not use `using namespace std;` globally.
-- Local `using` is acceptable inside `.cpp` files.
+## 4. Indentation and Braces
 
-Example:
-
-```cpp
-using std::vector;
-using std::string;
-```
-
-## 3. Class Style
-
-- One class per `.hpp` and `.cpp` file.
-- Naming conventions:
-  - Classes: PascalCase (`HttpServer`)
-  - Methods: camelCase (`startServer`)
-  - Members: snake_case (`server_name`, `port`)
-
-Example:
+* Indent with 4 spaces (no tabs)
+* Use **K\&R style**:
 
 ```cpp
-class HttpServer {
-public:
-    void start();
-    void stop();
-
-private:
-    int port;
-    std::string server_name;
-};
-```
-
-## 4. Smart Pointers
-
-- Prefer `std::unique_ptr`, `std::shared_ptr`, `std::weak_ptr`.
-
-Example:
-
-```cpp
-std::unique_ptr<Server> server = std::make_unique<Server>();
-```
-
-## 5. Filesystem
-
-- Use `std::filesystem` for paths, files, directories.
-
-Example:
-
-```cpp
-std::filesystem::path config_path("config/server.conf");
-```
-
-## 6. Function Definitions
-
-- Only prototypes in headers.
-- Full definitions in `.cpp`.
-
-Header:
-
-```cpp
-class Server {
-public:
-    void run();
-};
-```
-
-Source:
-
-```cpp
-void Server::run() {
-    // implementation
-}
-```
-
-## 7. Indentation and Braces
-
-- Always use braces, even for one-line blocks.
-- K&R style (brace on same line).
-- 4 spaces indentation, no tabs.
-
-Example:
-
-```cpp
-if (condition) {
+if (x) {
     doSomething();
 } else {
     doSomethingElse();
 }
 ```
 
-## 8. Const Correctness
+* Always use braces, even for one-liners
 
-- Use `const` for inputs that are not modified.
-- Mark methods as `const` if they don't modify the object.
+---
+
+## 5. Pointer and Reference Style
+
+* Attach `*` and `&` to the **type**:
+
+```cpp
+int* ptr;
+std::string& name = ref;
+```
+
+---
+
+## 6. Const Correctness
+
+* Use `const` everywhere applicable:
+
+```cpp
+std::string getName() const;
+void setTimeout(const int timeout);
+```
+
+---
+
+## 7. Canonical Form
+
+Follow the Rule of 0 / Rule of 5:
+
+* Use `= default` / `= delete`
+* Define all 5 special functions only if managing a resource manually
 
 Example:
 
 ```cpp
-std::string getServerName() const;
-void setServerName(const std::string& name);
-```
-
-## 9. Orthodox Canonical Form Rules
-
-### What is the Orthodox Canonical Form?
-
-It includes these **five** special member functions:
-
-| Function | Purpose |
-|:---------|:--------|
-| Default constructor `MyClass()` | Initialize an object |
-| Copy constructor `MyClass(const MyClass&)` | Create a copy |
-| Copy assignment operator `MyClass& operator=(const MyClass&)` | Assign from another object |
-| Destructor `~MyClass()` | Clean up resources |
-| (Optionally) Parameterized constructor | Initialize with parameters |
-
-In modern C++, this extends to:
-
-- Move constructor: `MyClass(MyClass&&) noexcept`
-- Move assignment: `MyClass& operator=(MyClass&&) noexcept`
-
-**This is often referred to as the Rule of 5.**
-
----
-
-### When to Explicitly Define It
-
-- Class **manages resources** (raw pointers, file descriptors, sockets).
-- Class has **dynamic memory ownership**.
-- You need to **delete copy/move** to prevent unwanted copying.
-- You want **explicit copy/move behavior**.
-
-Example: Classes that manage a socket, file, or manual heap memory.
-
----
-
-### When You Can Skip It
-
-- Class only contains **standard containers** (`std::vector`, `std::string`, etc.).
-- Class is a **simple data holder** (POD - Plain Old Data).
-- Class does not manage any manual resources.
-
-The compiler-generated versions are correct and optimal in these cases.
-
----
-
-### Best Modern Practices
-
-### Rule of Zero
-
-- Design classes that **don't need custom copy/move/destructor**.
-- Rely fully on standard containers and smart pointers.
-
-### Rule of Three
-
-- If you define any of: destructor, copy constructor, or copy assignment operator, **you should define all three**.
-
-### Rule of Five
-
-- If you manually define a destructor, copy/move constructor, or copy/move assignment operator, **define all five**.
-
----
-
-### Minimalist Canonical Form Templates
-
-#### Trivial Class (No Resource Management)
-
-```cpp
-class Config {
+class HttpServer {
 public:
-    Config() = default;
-    ~Config() = default;
-    Config(const Config&) = default;
-    Config& operator=(const Config&) = default;
-    Config(Config&&) noexcept = default;
-    Config& operator=(Config&&) noexcept = default;
-};
-```
-
-#### Resource-Managing Class
-
-```cpp
-class ServerSocket {
-public:
-    explicit ServerSocket(int fd);
-    ~ServerSocket();
-
-    ServerSocket(const ServerSocket&) = delete;
-    ServerSocket& operator=(const ServerSocket&) = delete;
-
-    ServerSocket(ServerSocket&& other) noexcept;
-    ServerSocket& operator=(ServerSocket&& other) noexcept;
-
-private:
-    int socket_fd;
+    HttpServer() = default;
+    ~HttpServer() = default;
+    HttpServer(const HttpServer&) = delete;
+    HttpServer& operator=(const HttpServer&) = delete;
+    HttpServer(HttpServer&&) noexcept = default;
+    HttpServer& operator=(HttpServer&&) noexcept = default;
 };
 ```
 
 ---
 
-### Quick Summary Table
+## 8. Constants and Macros
 
-| Situation | Should you write canonical form? | Why? |
-|:----------|:-------------------------------|:----|
-| Class manages a resource | ✅ Yes | Manual control of copy/move required |
-| Class has only `std::vector`, `std::string`, etc. | ❌ No | Compiler-generated is optimal |
-| Simple config/data class | ❌ No | Overkill |
-| Class must not be copied | ✅ Yes | Delete copy constructor/assignment |
+* Prefer `constexpr` or `const` over macros
+* Use `UPPER_CASE` for global constants
+
+```cpp
+constexpr int MAX_CONNECTIONS = 100;
+```
+
+* Avoid `#define` unless platform-level or header guards
 
 ---
 
-### Final Takeaway
+## 9. Enums
 
-- If your class **owns resources**, manage copy/move explicitly.
-- If not, let the **compiler generate** everything for you.
-- Prefer **`= default`** and **`= delete`** over writing boilerplate code.
+* Use `enum class` (strongly typed)
+* Name with `PascalCase`, constants in `UPPER_CASE`
+
+```cpp
+enum class HttpMethod {
+    GET,
+    POST,
+    DELETE
+};
+```
 
 ---
 
 ## 10. Error Handling
 
-- Use exceptions for unrecoverable errors.
-- Use `std::optional`, `std::variant`, or `std::expected` for recoverable errors.
+* Use `std::optional`, `std::variant`, or exceptions
+* Never silently fail
 
-Example:
-
-```cpp
-std::optional<std::string> readConfig(const std::filesystem::path& path);
-```
+---
 
 ## 11. Comments
 
-- Use Doxygen style comments for public classes and methods.
+* Doxygen-style for all public API
+* Use present tense, factual, action-oriented descriptions
 
 Example:
 
 ```cpp
-/// @brief Starts the server.
-/// @details Opens the socket and begins listening for connections.
-void start();
-```
-
-## 12. Naming Conventions
-
-| Entity | Convention | Example |
-|:-------|:-----------|:--------|
-| Class/Struct | PascalCase | `HttpRequest` |
-| Method | camelCase | `handleRequest()` |
-| Variable | snake_case | `timeout`, `port_number` |
-| Constant | ALL_CAPS | `DEFAULT_PORT` |
-| Enum | PascalCase | `enum class Method` |
-
-## 13. Other Modern Practices
-
-- Prefer `enum class`.
-- Prefer `auto` when obvious.
-- Use range-based for loops.
-- Use `default` and `delete` for special member functions.
-
-Example:
-
-```cpp
-Server(const Server&) = delete;
-Server& operator=(const Server&) = delete;
-```
-
-## Example
-
-### Server.hpp
-
-```cpp
-#pragma once
-
-#include <string>
-#include <memory>
-
-class Server {
-public:
-    Server(const std::string& host, int port);
-    ~Server();
-
-    void start();
-    void stop();
-    [[nodiscard]] bool isRunning() const;
-
-private:
-    std::string host;
-    int port;
-    bool running;
-};
-```
-
-### Server.cpp
-
-```cpp
-#include "Server.hpp"
-
-Server::Server(const std::string& host, int port)
-    : host(host), port(port), running(false) {}
-
-Server::~Server() = default;
-
-void Server::start() {
-    running = true;
-    // bind, listen, accept...
-}
-
-void Server::stop() {
-    running = false;
-}
-
-bool Server::isRunning() const {
-    return running;
-}
+/* @brief Starts the server.
+ * @details Opens the socket and begins listening.
+ * void start();
+ */
 ```
 
 ---
 
-## Final Notes
+## 12. Tools and Enforcement
 
-- Keep interfaces clean (minimal public API).
-- No memory leaks (RAII or smart pointers).
-- Stay consistent throughout the project.
+* Naming and structural conventions are enforced by `.clang-tidy`
+* Formatting is enforced via `.clang-format`
+* CI fails on any `clang-tidy` or format violation
+* Follow C++ Core Guidelines (`cppcoreguidelines-*` in clang-tidy)
+
+---
+
+## 13. Examples
+
+### Good
+
+```cpp
+class HttpRequest {
+public:
+    void parseHeaders();
+
+private:
+    int content_length_;
+};
+```
+
+### Bad
+
+```cpp
+class http_request {
+    int ContentLength;
+    void Parseheaders();
+};
+```
+
+---
+
+## References
+
+* [https://clang.llvm.org/extra/clang-tidy/](https://clang.llvm.org/extra/clang-tidy/)
+* [https://clang.llvm.org/docs/ClangFormat.html](https://clang.llvm.org/docs/ClangFormat.html)
+* [https://isocpp.github.io/CppCoreGuidelines/](https://isocpp.github.io/CppCoreGuidelines/)

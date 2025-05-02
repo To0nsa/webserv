@@ -28,6 +28,12 @@ CheckOptions:
     value:           camelCase
   - key:             readability-identifier-naming.PrivateMemberSuffix
     value:           _
+  - key:             readability-identifier-naming.ConstantCase
+    value:           UPPER_CASE
+  - key:             readability-identifier-naming.EnumCase
+    value:           PascalCase
+  - key:             readability-identifier-naming.EnumConstantCase
+    value:           UPPER_CASE
 
 # Notes:
 # - We enable strong checks on performance, readability, and modern best practices.

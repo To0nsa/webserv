@@ -1,5 +1,58 @@
 # Webserv Project - Action Plan
 
+## Project Completion Status
+
+| Area                  | Status                   |
+|-----------------------|--------------------------|
+| Mandatory             | ✅ Done after Sprint 3   |
+| Bonus - CGI (multi)   | ✅ Sprint 5              |
+| Bonus - Sessions      | ✅ Sprint 4              |
+| Bonus - WebSocket     | ✅ Sprint 6              |
+| Bonus - Rate limiting | ✅ Sprint 7              |
+
+___
+
+## Project Timeline (Estimate)
+
+| Sprint | Goal Summary                    | ETA (Days) | Checkpoint Description         |
+|--------|----------------------------------|------------|--------------------------------|
+| 0      | Setup project infrastructure     | 1–2        | CI, Makefile, linting, docs    |
+| 1      | Minimal non-blocking server      | 3–4        | Accepts connections, Hello World |
+| 2      | Config parsing + static serving  | 4–5        | `.conf` support, file routes   |
+| 3      | Full HTTP + CGI                  | 5–6        | POST, DELETE, CGI              |
+| 4–7    | Bonus extensions                 | 10–12      | Sessions, WebSocket, Security  |
+
+___
+
+## SPRINT 0 - Project Bootstrapping
+
+<details>
+<summary><strong>See Sprint 0</strong></summary>
+
+### Sprint Goal
+Prepare a clean, maintainable foundation for the Webserv project:
+
+- Repository + CI pipeline setup.
+- Build system, linter, and formatter ready.
+- Doxygen + GitHub Pages documentation scaffold.
+
+### Tasks
+
+| Task                                  | Owner | Priority | Size |
+|---------------------------------------|-------|----------|------|
+| Set up GitHub repo and `.gitignore`  | Shared| P0       | XS   |
+| Create `Makefile`, CI, and `main.cpp`| Dev 3 | P0       | S    |
+| Setup `.clang-format`, `.clang-tidy` | Dev 3 | P0       | XS   |
+| Add README, CONTRIBUTING, LICENSE    | Dev 3 | P0       | XS   |
+| Add `Doxyfile`, generate site        | Dev 2 | P0       | S    |
+
+### Deliverables
+- All team members can build and push.
+- CI and static analysis pass from day one.
+- Doc generation pipeline (Doxygen + Pages) is live.
+
+</details>
+
 ___
 
 ## SPRINT 1 - minimal non-blocking HTTP server
@@ -104,12 +157,24 @@ ___
 
 ___
 
-## Mindset Reminder
+## Mindset Reminder (sprint 0)
 
 > Focus ONLY on Sprint 1 scope.
 > No CGI, no POST, no DELETE, no sessions yet.
 
 First get a **rock-solid event loop** with basic GET handling.
+
+___
+
+### Testing Plan (sprint 1)
+- Run telnet or curl to test basic connection:
+
+```bash
+curl http://localhost:8080/
+```
+
+- Confirm browser and terminal clients receive Hello, world!.
+- Ensure server doesn’t block and accepts new connections in loop.
 
 </details>
 
@@ -221,6 +286,14 @@ ___
 
 Prepare the foundation for CGI, Uploads, Sessions, and Bonus work later!
 
+___
+
+### Testing Plan (sprint 2)
+- Create and load real `.conf` files.
+- Try serving multiple static files.
+- Check 404 and other error responses.
+- Use browser + curl to verify static routes.
+
 </details>
 
 ___
@@ -320,6 +393,14 @@ ___
 
 Ensure that everything works **cleanly, reliably, and resiliently**.
 
+___
+
+### Testing Plan
+- Test GET, POST, DELETE using curl.
+- Upload test files to `/uploads/` via HTML form.
+- Try malformed requests to trigger 400, 500, etc.
+- Compare responses with NGINX.
+
 </details>
 
 ___
@@ -402,11 +483,15 @@ ___
 >
 > Keep it minimal but solid: no databases, no file-based session persistence needed.
 
-</details>
+### Testing Plan
+- Check if browser receives `Set-Cookie` header.
+- Refresh page and confirm session data persists.
+- Simulate session expiration.
 
+</details>
 ___
 
-## Webserv Project - Multiple CGI Handlers
+## SPRINT 5 - Multiple CGI Handlers
 
 <details>
 <summary><strong>See Sprint 5</strong></summary>
@@ -489,10 +574,19 @@ __
 >
 > This bonus makes your server feel "real" like NGINX or Apache.
 
+### Testing Plan
+- Serve a `.php` and `.py` CGI from one route.
+- Break a CGI script (syntax error) → return 500.
+- Check output headers from CGI and validate response.
+
 </details>
+
 ___
 
 ## SPRINT 6 - WebSocket Basic Support
+
+<details>
+<summary><strong>See Sprint 6</strong></summary>
 
 > Bonus sprint: Implement a basic **WebSocket** server with RFC 6455 handshake and simple message echoing.
 
@@ -563,7 +657,16 @@ ___
 
 > Focus on a minimal but stable echo server first.
 
+### Testing Plan
+- Connect via JS WebSocket API:
+  ```js
+  new WebSocket("ws://localhost:8080/")
+  ```
+- Send and receive messages.
+- Kill the connection and verify graceful handling.
+
 </details>
+
 ___
 
 ## SPRINT 7 - Resilience and Rate Limiting
@@ -574,7 +677,6 @@ ___
 > Bonus sprint: Strengthen server robustness under stress, and protect against basic abuse patterns.
 
 This greatly improves stability during load and demonstrates production-level quality.
-
 ___
 
 ### Developer Assignments (sprint 7)
@@ -596,7 +698,6 @@ ___
 - Defend against slow POST attacks:
   - Set a per-client body read timeout.
   - If body upload is too slow, terminate the connection.
-
 ___
 
 ### Tasks Summary (sprint 7)
@@ -640,5 +741,14 @@ ___
 > A strong server is not just functional but **resilient**.
 >
 > Make Webserv survive heavy, slow, or abusive clients without dying.
+
+___
+
+### Testing Plan
+- Use Python/Golang script to flood connections.
+- Sleep between request body chunks → ensure server drops.
+- Confirm limits per-IP (e.g. max 10/sec).
+
+</details>
 
 ___
