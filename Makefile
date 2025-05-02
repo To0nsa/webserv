@@ -3,16 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
+#    By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/26 16:00:00 by nlouis            #+#    #+#              #
-#    Updated: 2025/04/28 21:04:47 by nlouis           ###   ########.fr        #
+#    Updated: 2025/05/02 14:07:36 by irychkov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Compiler settings
 CXX        := c++
-CXXFLAGS   := -Wall -Wextra -Werror -I include
+INCLUDES   := $(shell find include -type d)
+CXXFLAGS   := -Wall -Wextra -Werror $(addprefix -I, $(INCLUDES))
 DEBUGFLAGS := -g3 -O0 -DDEBUG
 OPTFLAGS   := -O3
 
@@ -34,6 +35,7 @@ DEPDIR     := deps
 SRCS       := $(shell find $(SRCDIR) -name "*.cpp")
 OBJS       := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCS))
 DEPS       := $(patsubst $(SRCDIR)/%.cpp,$(DEPDIR)/%.d,$(SRCS))
+
 
 # Tests
 TESTDIR    := tests
