@@ -7,7 +7,9 @@ Checks: >
   readability-*,
   clang-analyzer-*,
   cppcoreguidelines-*,
-  misc-*
+  misc-*,
+  -modernize-use-trailing-return-type,
+  -llvm-header-guard
 
 WarningsAsErrors: '*'
 
