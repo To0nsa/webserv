@@ -6,7 +6,7 @@
 #    By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/26 16:00:00 by nlouis            #+#    #+#              #
-#    Updated: 2025/05/02 14:07:36 by irychkov         ###   ########.fr        #
+#    Updated: 2025/05/03 12:30:22 by irychkov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@
 CXX        := c++
 INCLUDES   := $(shell find include -type d)
 CXXFLAGS   := -Wall -Wextra -Werror $(addprefix -I, $(INCLUDES))
+CXXFLAGS += -std=c++17
 DEBUGFLAGS := -g3 -O0 -DDEBUG
 OPTFLAGS   := -O3
 

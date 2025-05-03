@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:31:52 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/02 14:08:45 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/03 12:39:53 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	main(int ac, char** av)
 	std::string config_file;
 
 	if (ac == 1)
-		config_file = "../configs/default.conf";
+		config_file = "./configs/default.conf";
 	else if (ac == 2)
 		config_file = av[1];
 	else

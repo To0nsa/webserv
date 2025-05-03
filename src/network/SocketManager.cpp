@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:17:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/01 21:26:50 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/03 13:01:08 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,19 @@
 #include <fstream>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <csignal>
+
+// Signal handler for exiting the server
+static volatile sig_atomic_t running = 1;
+
+static void signalHandler(int signum) {
+	if (signum == SIGINT)
+		running = 0;
+}
 
 // Constructor: sets up sockets for each server defined in the config
 SocketManager::SocketManager(const std::vector<Server>& servers) {
+	signal(SIGINT, signalHandler);
 	setupSockets(servers);
 }
 
@@ -90,10 +100,14 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 
 // Main server loop using poll
 void SocketManager::run() {
-	while (true) {
+	while (running) {
 		int n = poll(&_poll_fds[0], _poll_fds.size(), -1); // Block until at least one fd is ready
-		if (n < 0)
+		if (n < 0) {
+			if (errno == EINTR)
+				continue;
 			throw SocketError("poll() failed: " + std::string(strerror(errno)));
+		}
+
 
 		for (size_t i = 0; i < _poll_fds.size(); ++i) {
 			if (_poll_fds[i].revents & POLLIN) { // Ready to read (incoming data or connection)
@@ -104,6 +118,8 @@ void SocketManager::run() {
 			}
 		}
 	}
+	std::cout << std::endl;
+	std::cout << "Shutting down server" << std::endl;
 }
 
 // Accept new client and add to poll list
