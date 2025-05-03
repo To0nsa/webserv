@@ -6,15 +6,13 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:11:30 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/03 14:16:51 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/03 15:09:42 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include "network/SocketManager.hpp"
 #include "utils/PrintInfo.hpp"
-
-
 
 int	main(int ac, char** av)
 {
@@ -64,6 +62,7 @@ int	main(int ac, char** av)
 
 		Config config;
 		config.addServer(server);
+
 		// Print the configuration
 		print_config(config);
 
