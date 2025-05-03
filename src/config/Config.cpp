@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:36:29 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/02 23:43:08 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/03 15:33:46 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
  * @param server A fully constructed Server instance.
  */
 void Config::addServer(const Server& server) {
-    servers_.push_back(server);
+    _servers.push_back(server);
 }
 
 /**
@@ -38,5 +38,5 @@ void Config::addServer(const Server& server) {
  * @return A read-only reference to the internal server list.
  */
 const std::vector<Server>& Config::getServers() const {
-    return servers_;
+    return _servers;
 }

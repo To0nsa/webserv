@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:37:06 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/03 15:27:51 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/03 15:39:49 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@
  */
 class Server {
   private:
-    int                        port_;                 ///< Port number to bind to.
-    std::string                host_;                 ///< Host IP address (e.g. 0.0.0.0).
-    std::vector<std::string>   server_names_;         ///< Server name aliases.
-    std::map<int, std::string> error_pages_;          ///< HTTP error code to file path.
-    size_t                     client_max_body_size_; ///< Max request body size in bytes.
-    std::vector<Location>      locations_;            ///< Location blocks (routes).
+    int                        _port;                 ///< Port number to bind to.
+    std::string                _host;                 ///< Host IP address (e.g. 0.0.0.0).
+    std::vector<std::string>   _server_names;         ///< Server name aliases.
+    std::map<int, std::string> _error_pages;          ///< HTTP error code to file path.
+    size_t                     _client_max_body_size; ///< Max request body size in bytes.
+    std::vector<Location>      _locations;            ///< Location blocks (routes).
 
   public:
     // --- Constructor / Destructor ---
@@ -83,7 +83,7 @@ class Server {
      * when multiple server blocks are listening on the same port (name-based virtual hosting).
      *
      * @param name The value from the Host header (e.g. "example.com").
-     * @return True if it matches any entry in server_names_.
+     * @return True if it matches any entry in _server_names.
      */
     bool hasServerName(const std::string& name) const;
 };

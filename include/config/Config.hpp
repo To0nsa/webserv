@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:34:50 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/02 23:44:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/03 15:33:16 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
  */
 class Config {
   private:
-    std::vector<Server> servers_; ///< List of all parsed servers
+    std::vector<Server> _servers; ///< List of all parsed servers
 
   public:
     // --- Constructor / Destructor ---

@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 13:45:05 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/03 15:27:32 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/03 15:35:35 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,15 +128,15 @@ class Location {
     std::string getEffectiveIndexPath() const;
 
   private:
-    std::string           path_;          ///< The URL path this location matches.
-    std::set<std::string> methods_;       ///< Set of allowed HTTP methods.
-    std::string           root_;          ///< Root directory for file serving.
-    std::string           index_;         ///< Default index file name.
-    bool                  autoindex_;     ///< Whether to enable directory listing.
-    std::string           redirect_;      ///< Redirection target URL.
-    int                   return_code_;   ///< HTTP status code for redirection.
-    std::string           upload_store_;  ///< Directory for uploaded files.
-    std::string           cgi_extension_; ///< CGI file extension (e.g., ".php").
+    std::string           _path;          ///< The URL path this location matches.
+    std::set<std::string> _methods;       ///< Set of allowed HTTP methods.
+    std::string           _root;          ///< Root directory for file serving.
+    std::string           _index;         ///< Default index file name.
+    bool                  _autoindex;     ///< Whether to enable directory listing.
+    std::string           _redirect;      ///< Redirection target URL.
+    int                   _return_code;   ///< HTTP status code for redirection.
+    std::string           _upload_store;  ///< Directory for uploaded files.
+    std::string           _cgi_extension; ///< CGI file extension (e.g., ".php").
 };
 
 /** @} */

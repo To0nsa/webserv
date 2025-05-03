@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/03 15:28:45 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/03 15:36:52 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,84 +28,84 @@
  *
  * @details Initializes autoindex to false and return code to 0.
  */
-Location::Location() : autoindex_(false), return_code_(0) {
+Location::Location() : _autoindex(false), _return_code(0) {
 }
 
 // --- Setters ---
 
 void Location::setPath(const std::string& path) {
-    path_ = path;
+    _path = path;
 }
 
 void Location::addMethod(const std::string& method) {
-    methods_.insert(method);
+    _methods.insert(method);
 }
 
 void Location::setRoot(const std::string& root) {
-    root_ = root;
+    _root = root;
 }
 
 void Location::setIndex(const std::string& index) {
-    index_ = index;
+    _index = index;
 }
 
 void Location::setAutoindex(bool enabled) {
-    autoindex_ = enabled;
+    _autoindex = enabled;
 }
 
 void Location::setRedirect(const std::string& target, int code) {
-    redirect_    = target;
-    return_code_ = code;
+    _redirect    = target;
+    _return_code = code;
 }
 
 void Location::setUploadStore(const std::string& path) {
-    upload_store_ = path;
+    _upload_store = path;
 }
 
 void Location::setCgiExtension(const std::string& ext) {
-    cgi_extension_ = ext;
+    _cgi_extension = ext;
 }
 
 // --- Getters ---
 
 const std::string& Location::getPath() const {
-    return path_;
+    return _path;
 }
 
 const std::set<std::string>& Location::getMethods() const {
-    return methods_;
+    return _methods;
 }
 
 const std::string& Location::getRoot() const {
-    return root_;
+    return _root;
 }
 
 const std::string& Location::getIndex() const {
-    return index_;
+    return _index;
 }
 
 bool Location::isAutoindexEnabled() const {
-    return autoindex_;
+    return _autoindex;
 }
 
 bool Location::hasRedirect() const {
-    return !redirect_.empty();
+    return !_redirect.empty();
 }
 
 const std::string& Location::getRedirect() const {
-    return redirect_;
+    return _redirect;
 }
 
 int Location::getReturnCode() const {
-    return return_code_;
+    return _return_code;
 }
 
 const std::string& Location::getUploadStore() const {
-    return upload_store_;
+    return _upload_store;
 }
 
 const std::string& Location::getCgiExtension() const {
-    return cgi_extension_;
+    return _cgi_extension;
 }
 
 // --- Logic Helpers ---
@@ -120,7 +120,7 @@ const std::string& Location::getCgiExtension() const {
  * @return True if the method is allowed, false otherwise.
  */
 bool Location::isMethodAllowed(const std::string& method) const {
-    return methods_.count(method) > 0;
+    return _methods.count(method) > 0;
 }
 
 /**
@@ -133,7 +133,7 @@ bool Location::isMethodAllowed(const std::string& method) const {
  * @return True if the location path is a prefix of the URI.
  */
 bool Location::matchesPath(const std::string& uri) const {
-    return uri.rfind(path_, 0) == 0; // path_ is a prefix of uri
+    return uri.rfind(_path, 0) == 0; // _path is a prefix of uri
 }
 
 /**
@@ -148,7 +148,7 @@ bool Location::matchesPath(const std::string& uri) const {
 std::string Location::resolveAbsolutePath(const std::string& uri) const {
     if (!matchesPath(uri))
         return "";
-    return root_ + uri.substr(path_.length());
+    return _root + uri.substr(_path.length());
 }
 
 /**
@@ -157,7 +157,7 @@ std::string Location::resolveAbsolutePath(const std::string& uri) const {
  * @return True if an upload directory is configured, false otherwise.
  */
 bool Location::isUploadEnabled() const {
-    return !upload_store_.empty();
+    return !_upload_store.empty();
 }
 
 /**
@@ -167,8 +167,8 @@ bool Location::isUploadEnabled() const {
  * @return True if the URI ends with the configured CGI extension.
  */
 bool Location::isCgiRequest(const std::string& uri) const {
-    return !cgi_extension_.empty() && uri.size() >= cgi_extension_.size() &&
-           uri.compare(uri.size() - cgi_extension_.size(), cgi_extension_.size(), cgi_extension_) ==
+    return !_cgi_extension.empty() && uri.size() >= _cgi_extension.size() &&
+           uri.compare(uri.size() - _cgi_extension.size(), _cgi_extension.size(), _cgi_extension) ==
                0;
 }
 
@@ -178,5 +178,5 @@ bool Location::isCgiRequest(const std::string& uri) const {
  * @return The absolute path to the index file or an empty string.
  */
 std::string Location::getEffectiveIndexPath() const {
-    return index_.empty() ? "" : root_ + "/" + index_;
+    return _index.empty() ? "" : _root + "/" + _index;
 }
