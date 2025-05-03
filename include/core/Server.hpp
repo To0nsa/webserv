@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:37:06 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/02 21:13:41 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/03 15:27:51 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include "config/Location.hpp"
+#include "core/Location.hpp"
 #include <map>
 #include <string>
 #include <vector>

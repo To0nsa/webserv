@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/02 18:15:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/03 15:28:45 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
  *
  * @details Provides setters, getters, and helper logic for path-based configuration
  * blocks, including method filtering, path resolution, CGI detection, and more.
- * @ingroup config
+ * @ingroup core
  */
 
-#include "config/Location.hpp"
+#include "core/Location.hpp"
 
 // --- Constructor ---
 

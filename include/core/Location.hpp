@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 13:45:05 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/02 17:20:31 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/03 15:27:32 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * @details Each Location object holds the configuration for a specific URL path
  * within a virtual server, including allowed methods, root, autoindex setting,
  * and CGI behavior.
- * @ingroup config
+ * @ingroup core
  */
 
 #pragma once
@@ -37,7 +37,7 @@
  * @details Encapsulates path-specific configuration such as allowed HTTP methods,
  * root directory, CGI extension, autoindex behavior, redirection settings,
  * and upload storage path.
- * @ingroup config
+ * @ingroup core
  */
 class Location {
   public:

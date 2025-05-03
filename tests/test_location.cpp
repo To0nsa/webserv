@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   test_location.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:24:13 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/02 17:31:16 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/03 15:28:23 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "config/Location.hpp"
+#include "core/Location.hpp"
 #include <cassert>
 #include <iostream>
 
