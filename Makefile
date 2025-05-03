@@ -6,7 +6,7 @@
 #    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/26 16:00:00 by nlouis            #+#    #+#              #
-#    Updated: 2025/04/28 21:04:47 by nlouis           ###   ########.fr        #
+#    Updated: 2025/05/02 17:41:53 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,9 +91,10 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	fi
 	@echo "$(GREEN)🛠️  Compiled:$(RESET) $<"
 
+OBJS_NO_MAIN := $(filter-out $(OBJDIR)/main.o, $(OBJS))
 $(BINDIR)/tests/%: $(TESTDIR)/%.cpp
 	@mkdir -p $(dir $@)
-	@$(CXX) $(CXXFLAGS) $< -o $@
+	@$(CXX) $(CXXFLAGS) $< $(OBJS_NO_MAIN) -o $@
 	@echo "$(GREEN)🛠️  Built test executable:$(RESET) $@"
 
 # Cleaning

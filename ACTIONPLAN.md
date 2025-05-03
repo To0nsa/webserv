@@ -70,6 +70,11 @@ Build a **minimal non-blocking HTTP server** that:
 - Uses a **single `poll()` loop** for all socket operations.
 - Compiles cleanly using the **Makefile**.
 
+ConfigParser parses server in a std::vector<server> and location in a struct.
+So we have all the data we need to run a socket manager and http handler.
+
+Iurii already has a draft for that.
+
 ___
 
 ## Developer Assignments
@@ -83,6 +88,9 @@ ___
   - Handle the `poll()` loop for all FDs.
   - Accept new clients when the server socket has a POLLIN event.
   - Set new client sockets to non-blocking.
+- Create a minimal `main.cpp`:
+  - Instantiate `SocketManager`, `PollManager`.
+  - Start server loop.
 
 **Output**: Accept clients without blocking.
 
@@ -108,9 +116,6 @@ Hello, world!
   - Hardcode default settings (port 8080).
   - No real `.conf` file parsing yet.
 - Validate that the **Makefile** builds correctly.
-- Create a minimal `main.cpp`:
-  - Instantiate `SocketManager`, `PollManager`.
-  - Start server loop.
 
 **Output**: Server starts and runs correctly.
 
@@ -489,6 +494,7 @@ ___
 - Simulate session expiration.
 
 </details>
+
 ___
 
 ## SPRINT 5 - Multiple CGI Handlers
