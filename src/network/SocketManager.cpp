@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/03 15:04:35 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:19:12 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,17 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 	for (size_t i = 0; i < servers.size(); ++i) {
 		int fd = socket(AF_INET, SOCK_STREAM, 0); // Create a TCP socket
 		if (fd < 0)
-			throw SocketError("socket() failed: " + std::string(strerror(errno)));
+			throw SocketError("socket() failed: " + std::string(std::strerror(errno)));
 
 		int opt = 1; // To tell the OS: "I want to reuse this port immediately, even if it's in TIME_WAIT
 		if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
 			close(fd);
-			throw SocketError("setsockopt() failed: " + std::string(strerror(errno)));
+			throw SocketError("setsockopt() failed: " + std::string(std::strerror(errno)));
 		}
 
 		if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0) { // Make socket non-blocking
 			close(fd);
-			throw SocketError("fcntl() failed: " + std::string(strerror(errno)));
+			throw SocketError("fcntl() failed: " + std::string(std::strerror(errno)));
 		}
 
 		sockaddr_in addr;
@@ -77,7 +77,7 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 
 		if (listen(fd, SOMAXCONN) < 0) { // Start listening for incoming connections
 			close(fd);
-			throw SocketError("listen() failed: " + std::string(strerror(errno)));
+			throw SocketError("listen() failed: " + std::string(std::strerror(errno)));
 		}
 
 		// Register fd in poll list
@@ -95,16 +95,39 @@ void SocketManager::run() {
 		if (n < 0) {
 			if (errno == EINTR)
 				continue;
-			throw SocketError("poll() failed: " + std::string(strerror(errno)));
+			throw SocketError("poll() failed: " + std::string(std::strerror(errno)));
 		}
 
-
 		for (size_t i = 0; i < _poll_fds.size(); ++i) {
-			if (_poll_fds[i].revents & POLLIN) { // Ready to read (incoming data or connection)
+			short revents = _poll_fds[i].revents;
+			int current_fd = _poll_fds[i].fd;
+
+			if (revents & POLLERR) {
+				std::cerr << "Socket error on fd: " << current_fd << std::endl;
+				close(current_fd);
+				_poll_fds.erase(_poll_fds.begin() + i);
+				_client_map.erase(current_fd);
+				if (i != 0)
+					i--;
+				continue;
+			}
+
+			if (revents & POLLHUP) {
+				std::cout << "Client disconnected (POLLHUP) on fd: " << _poll_fds[i].fd << std::endl;
+				close(current_fd);
+				_poll_fds.erase(_poll_fds.begin() + i);
+				_client_map.erase(current_fd);
+				if (i != 0)
+					i--;
+				continue;
+			}
+			if (revents & POLLIN) { // Ready to read (incoming data or connection)
 				if (_listen_map.count(_poll_fds[i].fd))
 					handleNewConnection(_poll_fds[i].fd); // Accept a new client
 				else
 					handleClientData(_poll_fds[i].fd, i); // Handle data from existing client
+				if (i != 0)
+					i--;
 			}
 		}
 	}
@@ -116,11 +139,11 @@ void SocketManager::run() {
 void SocketManager::handleNewConnection(int listen_fd) {
 	int client_fd = accept(listen_fd, NULL, NULL);
 	if (client_fd < 0)
-		return;
+		return; //think
 
 	if (fcntl(client_fd, F_SETFL, O_NONBLOCK) < 0) {
 		close(client_fd);
-		return;
+		return; //think
 	}
 
 	_poll_fds.push_back((pollfd){ client_fd, POLLIN, 0 });
@@ -139,7 +162,7 @@ void SocketManager::handleClientData(int client_fd, size_t index) {
 		close(client_fd);
 		_poll_fds.erase(_poll_fds.begin() + index);
 		_client_map.erase(client_fd);
-		return;
+		return; // decrease index here
 	}
 	buffer[bytes] = '\0';
 	std::cout << std::endl;
@@ -158,7 +181,9 @@ void SocketManager::handleClientData(int client_fd, size_t index) {
 
 	std::string full_response = response.str();
 	send(client_fd, full_response.c_str(), full_response.size(), 0);
+	std::cout << "We sent to fd:" << client_fd << std::endl;
 	close(client_fd);
+	std::cout << "We close fd:" << client_fd << std::endl;
 	_poll_fds.erase(_poll_fds.begin() + index);
 	_client_map.erase(client_fd);
 }

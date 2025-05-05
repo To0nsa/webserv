@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/03 15:24:06 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/05 10:50:10 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <cstring>
 #include <poll.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <signal.h>
 #include <arpa/inet.h>
 #include "core/Server.hpp"
 
