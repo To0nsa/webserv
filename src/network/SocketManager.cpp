@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/06 12:18:54 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/06 14:40:34 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void SocketManager::run() {
 		int n = poll(&_poll_fds[0], _poll_fds.size(), -1); // Block until at least one fd is ready (timeout = -1)
 		if (n < 0) {
 			if (errno == EINTR) { // we can try to handle signal here (A signal was caught during poll().)
-				/* running = 0; */
+				running = 0;
 				continue;
 			}
 			throw SocketError("poll() failed: " + std::string(std::strerror(errno)));
@@ -114,7 +114,7 @@ void SocketManager::run() {
 			int current_fd = _poll_fds[i].fd;
 
 			if (revents & POLLERR) {
-				std::cerr << "Socket error on fd: " << current_fd << std::endl;
+				std::cout << "Socket error on fd: " << current_fd << std::endl;
 				cleanupClient(current_fd, i);
 				continue;
 			}
@@ -124,11 +124,20 @@ void SocketManager::run() {
 				cleanupClient(current_fd, i);
 				continue;
 			}
-			if (revents & POLLIN) { // Ready to read (incoming data or connection)
+			if (revents & POLLIN) {													// Ready to read (incoming data or connection)
 				if (_listen_map.count(_poll_fds[i].fd))
-					handleNewConnection(_poll_fds[i].fd); // Accept a new client
-				else
-					handleClientData(_poll_fds[i].fd, i); // Handle data from existing client
+					handleNewConnection(_poll_fds[i].fd);							// Accept a new client
+				else {
+					std::string response = handleClientData(_poll_fds[i].fd, i);	// Handle data from existing client
+					_client_responses[current_fd] = response;						// Store the response for later
+					// After handling the request, mark the socket as ready for writing (POLLOUT)
+					_poll_fds[i].events |= POLLOUT;									// Mark the socket for writing
+				}
+			}
+
+			if (revents & POLLOUT) {												// Ready to write (can send data)
+				std::string response = _client_responses[current_fd];				// Retrieve the stored response
+				sendResponse(current_fd, i, response);								// Send the response when the socket is ready to write
 			}
 		}
 	}
@@ -156,12 +165,12 @@ void SocketManager::handleNewConnection(int listen_fd) {
 }
 
 // Read data from client, send fixed response, then close
-void SocketManager::handleClientData(int client_fd, size_t index) {
+std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	char buffer[1024];
 	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
 	if (bytes <= 0) {
 		cleanupClient(client_fd, index);
-		return;
+		return ""; // Think, maybe error 500.
 	}
 	buffer[bytes] = '\0';
 	std::cout << std::endl;
@@ -205,7 +214,13 @@ void SocketManager::handleClientData(int client_fd, size_t index) {
 	response << body;
 
 	std::string full_response = response.str();
-	send(client_fd, full_response.c_str(), full_response.size(), 0);
+	return (full_response);
+}
+
+// Accept new client and add to poll list
+void SocketManager::sendResponse(int client_fd, size_t index, std::string &response) {
+	send(client_fd, response.c_str(), response.size(), 0);
 	std::cout << "We sent to fd:" << client_fd << std::endl;
 	cleanupClient(client_fd, index);
+	_client_responses.erase(client_fd);	// Clear stored response
 }

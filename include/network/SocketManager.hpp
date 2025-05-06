@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/06 12:22:33 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/06 14:30:27 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,10 @@ class SocketManager {
 		};
 
 	private:
-		std::vector<pollfd> _poll_fds;		///< Monitored file descriptors for poll().
-		std::map<int, Server> _listen_map;	///< Maps listening socket fds to their corresponding server configurations.
-		std::map<int, Server> _client_map;	///< Maps client fds to their corresponding server configurations.
+		std::vector<pollfd> _poll_fds;					///< Monitored file descriptors for poll().
+		std::map<int, Server> _listen_map;				///< Maps listening socket fds to their corresponding server configurations.
+		std::map<int, Server> _client_map;				///< Maps client fds to their corresponding server configurations.
+		std::map<int, std::string> _client_responses;	///< Stores responses to be sent to clients when they are ready to write.
 
 		/**
 		 * @brief Initializes all listening sockets for the provided servers.
@@ -106,12 +107,21 @@ class SocketManager {
 		 */
 		void handleNewConnection( int listen_fd );
 		/**
-		 * @brief Reads from a client socket, generates a response, and sends it.
+		 * @brief Reads from a client socket, generates a response.
 		 *
 		 * @param client_fd File descriptor of the connected client.
 		 * @param index Index of the fd in the `_poll_fds` vector.
+		 * @return The response to be sent to the client.
 		 */
-		void handleClientData( int client_fd, size_t index );
+		std::string handleClientData( int client_fd, size_t index );
+		/**
+		 * @brief Sends from a client socket, generates a response, and sends it.
+		 *
+		 * @param client_fd File descriptor of the connected client.
+		 * @param index Index of the fd in the `_poll_fds` vector.
+		 * @param response The response data to send to the client.
+		 */
+		void sendResponse(int client_fd, size_t index, std::string &response);
 		/**
 		 * @brief Closes client_fd and erases fds from a _client_map and _poll_fds.
 		 *
