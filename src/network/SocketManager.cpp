@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/06 12:13:38 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:18:54 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ SocketManager::SocketManager(const std::vector<Server>& servers) {
 
 // Destructor: closes all open file descriptors
 SocketManager::~SocketManager() {
-	for (size_t i = 0; i < _poll_fds.size(); ++i)
-		close(_poll_fds[i].fd);
+	for (const pollfd& pfd : _poll_fds)
+		close(pfd.fd);
 }
 
 // Utility function to clean up client connections

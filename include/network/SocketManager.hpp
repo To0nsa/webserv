@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/06 12:14:05 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:22:33 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ class SocketManager {
 		 * @brief Destructor that closes all open file descriptors.
 		 */
 		~SocketManager( void );
-		SocketManager( const SocketManager& other ) = default;
-		SocketManager& operator=( const SocketManager& other ) = default;
+		SocketManager( const SocketManager& other ) = delete;
+		SocketManager& operator=( const SocketManager& other ) = delete;
 
 		/**
 		 * @brief Starts the server loop, handling I/O using poll().
