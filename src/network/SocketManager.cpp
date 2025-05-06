@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/06 10:45:33 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:58:20 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // Signal handler for exiting the server
 static volatile sig_atomic_t running = 1;
 
+// We don't need it. We can handle it directly in poll. Let's discuss.
 static void signalHandler(int signum) {
 	if (signum == SIGINT)
 		running = 0;
@@ -93,8 +94,10 @@ void SocketManager::run() {
 	while (running) {
 		int n = poll(&_poll_fds[0], _poll_fds.size(), -1); // Block until at least one fd is ready (timeout = -1)
 		if (n < 0) {
-			if (errno == EINTR) // we can try to handle signal here (A signal was caught during poll().)
+			if (errno == EINTR) { // we can try to handle signal here (A signal was caught during poll().)
+				/* running = 0; */
 				continue;
+			}
 			throw SocketError("poll() failed: " + std::string(std::strerror(errno)));
 		}
 
@@ -133,11 +136,11 @@ void SocketManager::run() {
 void SocketManager::handleNewConnection(int listen_fd) {
 	int client_fd = accept(listen_fd, NULL, NULL);
 	if (client_fd < 0)
-		return; //think
+		return; // Shall we log it?
 
 	if (fcntl(client_fd, F_SETFL, O_NONBLOCK) < 0) {
 		close(client_fd);
-		return; //think
+		return; // Shall we log it?
 	}
 
 	_poll_fds.push_back((pollfd){ client_fd, POLLIN, 0 });
@@ -156,14 +159,40 @@ void SocketManager::handleClientData(int client_fd, size_t index) {
 		close(client_fd);
 		_poll_fds.erase(_poll_fds.begin() + index);
 		_client_map.erase(client_fd);
-		return; // decrease index here
+		return;
 	}
 	buffer[bytes] = '\0';
 	std::cout << std::endl;
 	std::cout << "Received request: " << buffer << std::endl;
-
 	std::cout << std::endl;
-	// Respond with simple HTML and explicit connection close
+
+	/*==== Here we will have Request with parser ====*/
+	// At this point, you could parse the request to handle HTTP methods, headers, etc.
+
+	/* Example code (uncomment when implementing request parsing):
+	HttpRequest request;
+	if (!request.parse(raw_request)) {
+		std::cerr << "Failed to parse HTTP request.\n";
+		close(client_fd);
+		_poll_fds.erase(_poll_fds.begin() + index);
+		_client_map.erase(client_fd);
+		return;
+	}
+	request.printRequest(); 
+	*/
+
+	/*==== parser ends ====*/
+
+	/*==== Here we will have RequestHandler ====*/
+	// You might want to handle the parsed request based on HTTP methods, route, etc.
+	// The request handler would process the parsed request and generate an appropriate response.
+
+	/* Example code (uncomment when implementing request handling):
+	const Server& server = _client_map[client_fd];  // Get the server configuration
+	RequestHandler(server, request);  // Handle the request
+	*/
+	
+	// Temporary HTTP response logic for now (simple hardcoded response)
 	std::string body = "<h1>Success</h1><p>OK</p>";
 	std::stringstream response;
 	response << "HTTP/1.1 200 OK\r\n";
