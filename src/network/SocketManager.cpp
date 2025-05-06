@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/05 16:19:12 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/06 10:45:33 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,14 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 // Main server loop using poll
 void SocketManager::run() {
 	while (running) {
-		int n = poll(&_poll_fds[0], _poll_fds.size(), -1); // Block until at least one fd is ready
+		int n = poll(&_poll_fds[0], _poll_fds.size(), -1); // Block until at least one fd is ready (timeout = -1)
 		if (n < 0) {
-			if (errno == EINTR)
+			if (errno == EINTR) // we can try to handle signal here (A signal was caught during poll().)
 				continue;
 			throw SocketError("poll() failed: " + std::string(std::strerror(errno)));
 		}
 
-		for (size_t i = 0; i < _poll_fds.size(); ++i) {
+		for (size_t i = _poll_fds.size(); i-- > 0;) {
 			short revents = _poll_fds[i].revents;
 			int current_fd = _poll_fds[i].fd;
 
@@ -107,8 +107,6 @@ void SocketManager::run() {
 				close(current_fd);
 				_poll_fds.erase(_poll_fds.begin() + i);
 				_client_map.erase(current_fd);
-				if (i != 0)
-					i--;
 				continue;
 			}
 
@@ -117,8 +115,6 @@ void SocketManager::run() {
 				close(current_fd);
 				_poll_fds.erase(_poll_fds.begin() + i);
 				_client_map.erase(current_fd);
-				if (i != 0)
-					i--;
 				continue;
 			}
 			if (revents & POLLIN) { // Ready to read (incoming data or connection)
@@ -126,8 +122,6 @@ void SocketManager::run() {
 					handleNewConnection(_poll_fds[i].fd); // Accept a new client
 				else
 					handleClientData(_poll_fds[i].fd, i); // Handle data from existing client
-				if (i != 0)
-					i--;
 			}
 		}
 	}
