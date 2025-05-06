@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/06 11:58:20 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:13:38 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@ SocketManager::SocketManager(const std::vector<Server>& servers) {
 SocketManager::~SocketManager() {
 	for (size_t i = 0; i < _poll_fds.size(); ++i)
 		close(_poll_fds[i].fd);
+}
+
+// Utility function to clean up client connections
+void SocketManager::cleanupClient(int client_fd, size_t index) {
+	close(client_fd);
+	_poll_fds.erase(_poll_fds.begin() + index);
+	_client_map.erase(client_fd);
+	std::cout << "Closed client fd: " << client_fd << std::endl;
 }
 
 // Custom exception for socket errors
@@ -107,17 +115,13 @@ void SocketManager::run() {
 
 			if (revents & POLLERR) {
 				std::cerr << "Socket error on fd: " << current_fd << std::endl;
-				close(current_fd);
-				_poll_fds.erase(_poll_fds.begin() + i);
-				_client_map.erase(current_fd);
+				cleanupClient(current_fd, i);
 				continue;
 			}
 
 			if (revents & POLLHUP) {
 				std::cout << "Client disconnected (POLLHUP) on fd: " << _poll_fds[i].fd << std::endl;
-				close(current_fd);
-				_poll_fds.erase(_poll_fds.begin() + i);
-				_client_map.erase(current_fd);
+				cleanupClient(current_fd, i);
 				continue;
 			}
 			if (revents & POLLIN) { // Ready to read (incoming data or connection)
@@ -156,9 +160,7 @@ void SocketManager::handleClientData(int client_fd, size_t index) {
 	char buffer[1024];
 	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
 	if (bytes <= 0) {
-		close(client_fd);
-		_poll_fds.erase(_poll_fds.begin() + index);
-		_client_map.erase(client_fd);
+		cleanupClient(client_fd, index);
 		return;
 	}
 	buffer[bytes] = '\0';
@@ -205,8 +207,5 @@ void SocketManager::handleClientData(int client_fd, size_t index) {
 	std::string full_response = response.str();
 	send(client_fd, full_response.c_str(), full_response.size(), 0);
 	std::cout << "We sent to fd:" << client_fd << std::endl;
-	close(client_fd);
-	std::cout << "We close fd:" << client_fd << std::endl;
-	_poll_fds.erase(_poll_fds.begin() + index);
-	_client_map.erase(client_fd);
+	cleanupClient(client_fd, index);
 }

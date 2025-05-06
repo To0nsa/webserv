@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/05 10:50:10 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:14:05 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +112,11 @@ class SocketManager {
 		 * @param index Index of the fd in the `_poll_fds` vector.
 		 */
 		void handleClientData( int client_fd, size_t index );
+		/**
+		 * @brief Closes client_fd and erases fds from a _client_map and _poll_fds.
+		 *
+		 * @param client_fd File descriptor of the connected client.
+		 * @param index Index of the fd in the `_poll_fds` vector.
+		 */
+		void cleanupClient( int client_fd, size_t index );
 };
