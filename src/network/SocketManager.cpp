@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/07 13:54:14 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/07 14:50:59 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,13 @@ void SocketManager::cleanupClient(int client_fd, size_t index) {
 	std::cout << "cleanupClient client fd: " << client_fd << std::endl;
 }
 
+// Utility function to clean up client connections
+void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
+	cleanupClient(client_fd, index);
+	close(client_fd);
+	std::cout << "We close FD(Connection: close): " << client_fd << std::endl;
+}
+
 // Custom exception for socket errors
 SocketManager::SocketError::SocketError(const std::string& msg) {
 	_msg = msg;
@@ -53,7 +60,7 @@ const char* SocketManager::SocketError::what() const throw() {
 // Set up sockets for each server (host:port)
 void SocketManager::setupSockets(const std::vector<Server>& servers) {
 	for (size_t i = 0; i < servers.size(); ++i) {
-		int fd = socket(AF_INET, SOCK_STREAM, 0); // Create a TCP socket
+		int fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0); // Create a TCP socket
 		if (fd < 0)
 			throw SocketError("socket() failed: " + std::string(std::strerror(errno)));
 
@@ -63,10 +70,11 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 			throw SocketError("setsockopt() failed: " + std::string(std::strerror(errno)));
 		}
 
-		if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0) { // Make socket non-blocking
+		//MacOS
+		/* if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0) { // Make socket non-blocking
 			close(fd);
 			throw SocketError("fcntl() failed: " + std::string(std::strerror(errno)));
-		}
+		} */
 
 		sockaddr_in addr;
 		addr.sin_family = AF_INET;
@@ -114,15 +122,13 @@ void SocketManager::run() {
 
 			if (revents & POLLERR) {
 				std::cout << "Socket error on fd: " << current_fd << std::endl;
-				cleanupClient(current_fd, i);
-				close(current_fd);
+				cleanupClientConnectionClose(current_fd, i);
 				continue;
 			}
 
 			if (revents & POLLHUP) {
 				std::cout << "Client disconnected (POLLHUP) on fd: " << _poll_fds[i].fd << std::endl;
-				cleanupClient(current_fd, i);
-				close(current_fd);
+				cleanupClientConnectionClose(current_fd, i);
 				continue;
 			}
 			if (revents & POLLIN) {													// Ready to read (incoming data or connection)
@@ -214,7 +220,7 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	response << "HTTP/1.1 200 OK\r\n";
 	response << "Content-Type: text/html\r\n";
 	response << "Content-Length: " << body.length() << "\r\n";
-	response << "Connection: close\r\n";
+	response << "Connection: keep-alive\r\n";
 	response << "\r\n";
 	response << body;
 
@@ -236,7 +242,6 @@ void SocketManager::sendResponse(int client_fd, size_t index, std::string &respo
 	} else {
 		// If it's not keep-alive, close the connection
 		std::cout << "Connection: close - closing the connection" << std::endl;
-		cleanupClient(client_fd, index); // Close the connection
-		close(client_fd);
+		cleanupClientConnectionClose(client_fd, index); // Close the connection
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/06 15:50:25 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/07 14:49:53 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,10 +124,17 @@ class SocketManager {
 		 */
 		void sendResponse(int client_fd, size_t index, std::string &response);
 		/**
-		 * @brief Closes client_fd and erases fds from a _client_map and _poll_fds.
+		 * @brief Erases fds from a _client_map and _poll_fds.
 		 *
 		 * @param client_fd File descriptor of the connected client.
 		 * @param index Index of the fd in the `_poll_fds` vector.
 		 */
 		void cleanupClient( int client_fd, size_t index );
+		/**
+		 * @brief Closes client_fd and erases fds from a _client_map and _poll_fds.
+		 *
+		 * @param client_fd File descriptor of the connected client.
+		 * @param index Index of the fd in the `_poll_fds` vector.
+		 */
+		 void cleanupClientConnectionClose( int client_fd, size_t index );
 };
