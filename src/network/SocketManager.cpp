@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/07 14:50:59 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:04:48 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ SocketManager::~SocketManager() {
 // Utility function to clean up client connections
 void SocketManager::cleanupClient(int client_fd, size_t index) {
 	_poll_fds.erase(_poll_fds.begin() + index);
-	_client_map.erase(client_fd);
+	_client_info.erase(client_fd);
 	std::cout << "cleanupClient client fd: " << client_fd << std::endl;
 }
 
@@ -127,26 +127,26 @@ void SocketManager::run() {
 			}
 
 			if (revents & POLLHUP) {
-				std::cout << "Client disconnected (POLLHUP) on fd: " << _poll_fds[i].fd << std::endl;
+				std::cout << "Client disconnected (POLLHUP) on fd: " << current_fd << std::endl;
 				cleanupClientConnectionClose(current_fd, i);
 				continue;
 			}
-			if (revents & POLLIN) {													// Ready to read (incoming data or connection)
-				if (_listen_map.count(_poll_fds[i].fd))
-					handleNewConnection(_poll_fds[i].fd);							// Accept a new client
+			if (revents & POLLIN) {												// Ready to read (incoming data or connection)
+				if (_listen_map.count(current_fd))
+					handleNewConnection(current_fd);							// Accept a new client
 				else {
-					std::string response = handleClientData(_poll_fds[i].fd, i);	// Handle data from existing client
+					std::string response = handleClientData(current_fd, i);		// Handle data from existing client
 					if (response == "")
 						continue;
-					_client_responses[current_fd].push(response);						// Store the response for later
+					_client_info[current_fd].responses.push(response);						// Store the response for later
 					// After handling the request, mark the socket as ready for writing (POLLOUT)
 					_poll_fds[i].events |= POLLOUT;									// Mark the socket for writing
 				}
 			}
 
 			if (revents & POLLOUT) {												// Ready to write (can send data)
-				if (!_client_responses[current_fd].empty()) {
-					std::string response = _client_responses[current_fd].front();	// Retrieve the next response
+				if (!_client_info[current_fd].responses.empty()) {
+					std::string response = _client_info[current_fd].responses.front();	// Retrieve the next response
 					sendResponse(current_fd, i, response);							// Send the response when the socket is ready to write
 				}
 			}
@@ -171,8 +171,13 @@ void SocketManager::handleNewConnection(int listen_fd) {
 	std::cout << std::endl;
 	std::cout << "Accepted client on fd: " << client_fd << std::endl;
 
-	// Store which server this client is connected to based on listen_fd
-	_client_map[client_fd] = _listen_map[listen_fd];
+	ClientInfo info;
+	info.client_fd = client_fd;
+	info.lastRequestTime = time(NULL);
+	info.keepAlive = true;
+	info.serverConfig = _listen_map[listen_fd];
+
+	_client_info[client_fd] = info;
 }
 
 // Read data from client, send fixed response, then close
@@ -233,7 +238,7 @@ void SocketManager::sendResponse(int client_fd, size_t index, std::string &respo
 	send(client_fd, response.c_str(), response.size(), 0);
 	std::cout << "We sent to fd:" << client_fd << std::endl;
 	std::cout << response << std::endl;
-	_client_responses[client_fd].pop(); // Remove the sent response
+	_client_info[client_fd].responses.pop(); // Remove the sent response
 	// Check if the response indicates that the connection should be kept alive
 	if (response.find("Connection: keep-alive") != std::string::npos) {
 		std::cout << "Connection: keep-alive - keeping the connection open" << std::endl;

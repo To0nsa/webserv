@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/07 14:49:53 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:13:21 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,14 @@
  * @brief Low-level socket and I/O management for HTTP servers.
  * @{
  */
+
+struct ClientInfo {
+	int client_fd;						// File descriptor of the client socket
+	time_t lastRequestTime;				// Last request time for timeout management
+	bool keepAlive;						// Keep-alive flag
+	Server serverConfig;				// The server config the client is connected to
+	std::queue<std::string> responses;	// Queue of responses to be sent to the client
+};
 
 /**
  * @brief Manages all network sockets for a set of HTTP servers.
@@ -94,6 +102,7 @@ class SocketManager {
 		std::map<int, Server> _listen_map;				///< Maps listening socket fds to their corresponding server configurations.
 		std::map<int, Server> _client_map;				///< Maps client fds to their corresponding server configurations.
 		std::map<int, std::queue<std::string>> _client_responses;	///< Stores responses to be sent to clients when they are ready to write.
+		std::map<int, ClientInfo> _client_info;			/// Stores all information about each client
 
 		/**
 		 * @brief Initializes all listening sockets for the provided servers.
