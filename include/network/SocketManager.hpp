@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/06 14:30:27 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:50:25 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <map>
 #include <cstring>
 #include <poll.h>
@@ -92,7 +93,7 @@ class SocketManager {
 		std::vector<pollfd> _poll_fds;					///< Monitored file descriptors for poll().
 		std::map<int, Server> _listen_map;				///< Maps listening socket fds to their corresponding server configurations.
 		std::map<int, Server> _client_map;				///< Maps client fds to their corresponding server configurations.
-		std::map<int, std::string> _client_responses;	///< Stores responses to be sent to clients when they are ready to write.
+		std::map<int, std::queue<std::string>> _client_responses;	///< Stores responses to be sent to clients when they are ready to write.
 
 		/**
 		 * @brief Initializes all listening sockets for the provided servers.
