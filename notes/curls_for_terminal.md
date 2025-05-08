@@ -15,3 +15,12 @@ ab -n 100 -c 10 http://127.0.0.1:8080/
 nc 127.0.0.1 8080
 GET / HTTP/1.1
 
+
+nc 127.0.0.1 8080
+GET / HTTP/1.1\r
+
+
+printf "GET / HTTP/1.1\r\n\r\n" | nc 127.0.0.1 8080
+
+
+printf "G\r\n" | nc 127.0.0.1 8080
