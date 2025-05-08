@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/07 15:13:21 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/08 10:50:58 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 #include <signal.h>
 #include <arpa/inet.h>
 #include "core/Server.hpp"
+
+# define TIMEOUT 5
 
 /**
  * @defgroup network Networking
@@ -145,5 +147,6 @@ class SocketManager {
 		 * @param client_fd File descriptor of the connected client.
 		 * @param index Index of the fd in the `_poll_fds` vector.
 		 */
-		 void cleanupClientConnectionClose( int client_fd, size_t index );
+		void cleanupClientConnectionClose( int client_fd, size_t index );
+		void checkClientTimeouts( int client_fd, size_t index );
 };

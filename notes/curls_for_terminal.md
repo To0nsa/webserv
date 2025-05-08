@@ -10,3 +10,8 @@ seq 1 10 | xargs -n 1 -P 10 curl --no-keepalive 127.0.0.1:8080
 
 
 ab -n 100 -c 10 http://127.0.0.1:8080/
+
+
+nc 127.0.0.1 8080
+GET / HTTP/1.1
+

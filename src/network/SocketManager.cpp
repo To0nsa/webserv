@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/07 18:04:48 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/08 10:52:31 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,16 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
 	cleanupClient(client_fd, index);
 	close(client_fd);
 	std::cout << "We close FD(Connection: close): " << client_fd << std::endl;
+}
+
+void SocketManager::checkClientTimeouts( int client_fd, size_t index ) {
+	std::cout << "We check!" << std::endl;
+	time_t now = time(NULL);
+	// Check if client has timed out
+	if (_client_info.count(client_fd) && now - _client_info[client_fd].lastRequestTime > TIMEOUT) {
+		std::cout << "Client fd " << client_fd << " timed out." << std::endl;
+		cleanupClientConnectionClose(client_fd, index);
+	}
 }
 
 // Custom exception for socket errors
@@ -107,7 +117,8 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 // Main server loop using poll
 void SocketManager::run() {
 	while (running) {
-		int n = poll(&_poll_fds[0], _poll_fds.size(), -1); // Block until at least one fd is ready (timeout = -1)
+		int n = poll(&_poll_fds[0], _poll_fds.size(), 1000); // Poll each 1sec (timeout = 1sec)
+		std::cout << "Poll woke up!" << std::endl;
 		if (n < 0) {
 			if (errno == EINTR) { // we can try to handle signal here (A signal was caught during poll().)
 				running = 0;
@@ -150,6 +161,8 @@ void SocketManager::run() {
 					sendResponse(current_fd, i, response);							// Send the response when the socket is ready to write
 				}
 			}
+
+			checkClientTimeouts( current_fd, i);
 		}
 	}
 	std::cout << std::endl;
@@ -189,6 +202,7 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 		return ""; // Think, maybe error 500.
 	}
 	buffer[bytes] = '\0';
+	_client_info[client_fd].lastRequestTime = time(NULL);
 	std::cout << std::endl;
 	std::cout << "Received request: " << buffer << std::endl;
 	std::cout << std::endl;
