@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/08 10:50:58 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:25:58 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,6 @@ class SocketManager {
 	private:
 		std::vector<pollfd> _poll_fds;					///< Monitored file descriptors for poll().
 		std::map<int, Server> _listen_map;				///< Maps listening socket fds to their corresponding server configurations.
-		std::map<int, Server> _client_map;				///< Maps client fds to their corresponding server configurations.
-		std::map<int, std::queue<std::string>> _client_responses;	///< Stores responses to be sent to clients when they are ready to write.
 		std::map<int, ClientInfo> _client_info;			/// Stores all information about each client
 
 		/**
@@ -148,5 +146,11 @@ class SocketManager {
 		 * @param index Index of the fd in the `_poll_fds` vector.
 		 */
 		void cleanupClientConnectionClose( int client_fd, size_t index );
+		/**
+		 * @brief Check timeout for connection. Closes fd and erases fds if idle > TIMEOUT.
+		 *
+		 * @param client_fd File descriptor of the connected client.
+		 * @param index Index of the fd in the `_poll_fds` vector.
+		 */
 		void checkClientTimeouts( int client_fd, size_t index );
 };

@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/08 10:52:31 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:18:19 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,27 +142,27 @@ void SocketManager::run() {
 				cleanupClientConnectionClose(current_fd, i);
 				continue;
 			}
-			if (revents & POLLIN) {												// Ready to read (incoming data or connection)
+			if (revents & POLLIN) {											// Ready to read (incoming data or connection)
 				if (_listen_map.count(current_fd))
-					handleNewConnection(current_fd);							// Accept a new client
+					handleNewConnection(current_fd);						// Accept a new client
 				else {
-					std::string response = handleClientData(current_fd, i);		// Handle data from existing client
+					std::string response = handleClientData(current_fd, i);	// Handle data from existing client
 					if (response == "")
 						continue;
-					_client_info[current_fd].responses.push(response);						// Store the response for later
+					_client_info[current_fd].responses.push(response);		// Store the response for later
 					// After handling the request, mark the socket as ready for writing (POLLOUT)
-					_poll_fds[i].events |= POLLOUT;									// Mark the socket for writing
+					_poll_fds[i].events |= POLLOUT;							// Mark the socket for writing
 				}
 			}
 
-			if (revents & POLLOUT) {												// Ready to write (can send data)
+			if (revents & POLLOUT) {										// Ready to write (can send data)
 				if (!_client_info[current_fd].responses.empty()) {
 					std::string response = _client_info[current_fd].responses.front();	// Retrieve the next response
-					sendResponse(current_fd, i, response);							// Send the response when the socket is ready to write
+					sendResponse(current_fd, i, response);					// Send the response when the socket is ready to write
 				}
 			}
 
-			checkClientTimeouts( current_fd, i);
+			checkClientTimeouts( current_fd, i);							// If connection keep-alive but client idle we close
 		}
 	}
 	std::cout << std::endl;
