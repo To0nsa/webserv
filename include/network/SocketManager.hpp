@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/08 13:24:37 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:52:20 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@
 #include <arpa/inet.h>
 #include "core/Server.hpp"
 
-# define TIMEOUT 5
+# define TIMEOUT 10
 # define HEADER_TIMEOUT_SECONDS 5
-# define HEADER_MIN_LENGTH 16
+# define HEADER_MIN_LENGTH 15
 # define HEADER_MAX_LENGTH 8192
 # define RECV_BUFFER HEADER_MAX_LENGTH * 2
 

@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/08 13:27:15 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:38:14 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,10 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
 }
 
 void SocketManager::checkClientTimeouts( int client_fd, size_t index ) {
-	std::cout << "We check!" << std::endl;
 	time_t now = time(NULL);
 	// Check if client has timed out
 	if (_client_info.count(client_fd) && now - _client_info[client_fd].lastRequestTime > TIMEOUT) {
-		std::cout << "Client fd " << client_fd << " timed out." << std::endl;
+		std::cout << "Client fd " << client_fd << " timed out is "<< TIMEOUT << std::endl;
 		cleanupClientConnectionClose(client_fd, index);
 	}
 }
@@ -118,7 +117,6 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 void SocketManager::run() {
 	while (running) {
 		int n = poll(&_poll_fds[0], _poll_fds.size(), 1000); // Poll each 1sec (timeout = 1sec)
-		std::cout << "Poll woke up!" << std::endl;
 		if (n < 0) {
 			if (errno == EINTR) { // we can try to handle signal here (A signal was caught during poll().)
 				running = 0;
@@ -202,21 +200,25 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	/* int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); */ // MacOS only
 	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
 	if (bytes <= 0) {
-		cleanupClient(client_fd, index);
+		cleanupClientConnectionClose(client_fd, index);
 		return ""; // Think, maybe error 500.
 	}
 	buffer[bytes] = '\0';
+	std::cout << std::endl;
+	std::cout << "Received request: " << buffer << " bytes: " << bytes <<  std::endl;
+	std::cout << std::endl;
+	
 	std::string single_msg(buffer, bytes);
 	_client_info[client_fd].requestBuffer += single_msg;
 
 	
 	_client_info[client_fd].headerBytesReceived += bytes;
-	if (single_msg.size() > HEADER_MAX_LENGTH && single_msg.find("\r\n\r\n") == std::string::npos) {
+	if (_client_info[client_fd].requestBuffer.size() > HEADER_MAX_LENGTH &&
+		_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
 		std::cout << "Client fd " << client_fd << " sent too big header." << std::endl;
 		cleanupClientConnectionClose(client_fd, index);
 		return "";
 	}
-	
 	
 	if (_client_info[client_fd].headerBytesReceived < HEADER_MIN_LENGTH) {
 		time_t now = time(NULL);
@@ -226,17 +228,22 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 			return "";
 		}
 	}
+	std::cout << (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) << std::endl;
+	if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
+		std::cout << "Request for Client fd " << client_fd << " is in process." << std::endl;
+		return "";
+	}
+	
+	_client_info[client_fd].requestBuffer.clear();
 
-	std::cout << std::endl;
-	std::cout << "Received request: " << buffer << std::endl;
-	std::cout << std::endl;
+	
 
 	/*==== Here we will have Request with parser ====*/
 	// At this point, you could parse the request to handle HTTP methods, headers, etc.
 
 	/* Example code (uncomment when implementing request parsing):
 	HttpRequest request;
-	if (!request.parse(raw_request)) {
+	if (!request.parse(_client_info[client_fd].requestBuffer)) {
 		std::cerr << "Failed to parse HTTP request.\n";
 		close(client_fd);
 		_poll_fds.erase(_poll_fds.begin() + index);
