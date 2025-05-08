@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/08 11:32:59 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:27:15 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,8 @@ void SocketManager::handleNewConnection(int listen_fd) {
 	ClientInfo info;
 	info.client_fd = client_fd;
 	info.lastRequestTime = time(NULL);
+	info.connectionStartTime = time(NULL);
+	info.headerBytesReceived = 0;
 	info.keepAlive = true;
 	info.serverConfig = _listen_map[listen_fd];
 
@@ -195,7 +197,8 @@ void SocketManager::handleNewConnection(int listen_fd) {
 
 // Read data from client, send fixed response, then close
 std::string SocketManager::handleClientData(int client_fd, size_t index) {
-	char buffer[1024];
+	char buffer[RECV_BUFFER];
+	_client_info[client_fd].lastRequestTime = time(NULL);
 	/* int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); */ // MacOS only
 	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
 	if (bytes <= 0) {
@@ -203,7 +206,27 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 		return ""; // Think, maybe error 500.
 	}
 	buffer[bytes] = '\0';
-	_client_info[client_fd].lastRequestTime = time(NULL);
+	std::string single_msg(buffer, bytes);
+	_client_info[client_fd].requestBuffer += single_msg;
+
+	
+	_client_info[client_fd].headerBytesReceived += bytes;
+	if (single_msg.size() > HEADER_MAX_LENGTH && single_msg.find("\r\n\r\n") == std::string::npos) {
+		std::cout << "Client fd " << client_fd << " sent too big header." << std::endl;
+		cleanupClientConnectionClose(client_fd, index);
+		return "";
+	}
+	
+	
+	if (_client_info[client_fd].headerBytesReceived < HEADER_MIN_LENGTH) {
+		time_t now = time(NULL);
+		if (now - _client_info[client_fd].connectionStartTime > HEADER_TIMEOUT_SECONDS) {
+			std::cout << "Client fd " << client_fd << " sent header too slow (rate limit)." << std::endl;
+			cleanupClientConnectionClose(client_fd, index);
+			return "";
+		}
+	}
+
 	std::cout << std::endl;
 	std::cout << "Received request: " << buffer << std::endl;
 	std::cout << std::endl;

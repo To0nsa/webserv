@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/08 11:25:58 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:24:37 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@
 #include "core/Server.hpp"
 
 # define TIMEOUT 5
+# define HEADER_TIMEOUT_SECONDS 5
+# define HEADER_MIN_LENGTH 16
+# define HEADER_MAX_LENGTH 8192
+# define RECV_BUFFER HEADER_MAX_LENGTH * 2
 
 /**
  * @defgroup network Networking
@@ -46,6 +50,9 @@
 struct ClientInfo {
 	int client_fd;						// File descriptor of the client socket
 	time_t lastRequestTime;				// Last request time for timeout management
+	time_t connectionStartTime;
+	size_t headerBytesReceived;
+	std::string requestBuffer;
 	bool keepAlive;						// Keep-alive flag
 	Server serverConfig;				// The server config the client is connected to
 	std::queue<std::string> responses;	// Queue of responses to be sent to the client
