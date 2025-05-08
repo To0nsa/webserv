@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:11:30 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/03 15:09:42 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:58:00 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	main(int ac, char** av)
 		server.addServerName("example.com");
 		server.setClientMaxBodySize(1000000);
 		server.setErrorPage(404, "/errors/404.html");
+		//server.setClientMaxBodySize(1024);
 
 		// Define a location block
 		Location loc;

@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/08 16:38:14 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:57:41 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	_client_info[client_fd].lastRequestTime = time(NULL);
 	/* int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); */ // MacOS only
 	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
-	if (bytes <= 0) {
+	if (bytes <= 0 || static_cast<size_t>(bytes) >_client_info[client_fd].serverConfig.getClientMaxBodySize()) {
 		cleanupClientConnectionClose(client_fd, index);
 		return ""; // Think, maybe error 500.
 	}
@@ -212,7 +212,12 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	_client_info[client_fd].requestBuffer += single_msg;
 
 	
-	_client_info[client_fd].headerBytesReceived += bytes;
+	_client_info[client_fd].headerBytesReceived += bytes; // Think! What kinda type is better to use here.
+	if (_client_info[client_fd].headerBytesReceived > _client_info[client_fd].serverConfig.getClientMaxBodySize()) {
+		cleanupClientConnectionClose(client_fd, index);
+		return ""; // Think, maybe error 500.
+	}
+		
 	if (_client_info[client_fd].requestBuffer.size() > HEADER_MAX_LENGTH &&
 		_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
 		std::cout << "Client fd " << client_fd << " sent too big header." << std::endl;
