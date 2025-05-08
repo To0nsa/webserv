@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/08 11:18:19 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:32:59 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,10 +175,10 @@ void SocketManager::handleNewConnection(int listen_fd) {
 	if (client_fd < 0)
 		return; // Shall we log it?
 
-	if (fcntl(client_fd, F_SETFL, O_NONBLOCK) < 0) {
+	/* if (fcntl(client_fd, F_SETFL, O_NONBLOCK) < 0) { // MacOS only
 		close(client_fd);
 		return; // Shall we log it?
-	}
+	} */
 
 	_poll_fds.push_back((pollfd){ client_fd, POLLIN, 0 });
 	std::cout << std::endl;
@@ -196,7 +196,8 @@ void SocketManager::handleNewConnection(int listen_fd) {
 // Read data from client, send fixed response, then close
 std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	char buffer[1024];
-	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
+	/* int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); */ // MacOS only
+	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
 	if (bytes <= 0) {
 		cleanupClient(client_fd, index);
 		return ""; // Think, maybe error 500.
@@ -249,7 +250,8 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 
 // Accept new client and add to poll list
 void SocketManager::sendResponse(int client_fd, size_t index, std::string &response) {
-	send(client_fd, response.c_str(), response.size(), 0);
+	/* send(client_fd, response.c_str(), response.size(), 0); */ // MacOS only
+	send(client_fd, response.c_str(), response.size(), MSG_DONTWAIT);
 	std::cout << "We sent to fd:" << client_fd << std::endl;
 	std::cout << response << std::endl;
 	_client_info[client_fd].responses.pop(); // Remove the sent response
