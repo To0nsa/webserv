@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/09 13:04:11 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:45:59 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,14 @@ void SocketManager::run() {
 
 // Accept new client and add to poll list
 void SocketManager::handleNewConnection(int listen_fd) {
+	if (_poll_fds.size() >= MAX_CLIENTS) {
+		std::cout << "Maximum client limit reached. Rejecting connection." << std::endl;
+		int client_fd = accept(listen_fd, NULL, NULL);
+		if (client_fd >= 0) { // Optionally send HTTP error before closing (nice but optional) 503
+			close(client_fd);
+		}
+		return;
+	}
 	int client_fd = accept(listen_fd, NULL, NULL);
 	if (client_fd < 0)
 		return; // Shall we log it?
