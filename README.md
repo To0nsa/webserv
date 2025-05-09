@@ -12,11 +12,120 @@
 
 ___
 
+## Tokenizer: The First Step of Configuration Parsing
+
+### Overview
+
+The tokenizer is the **first phase** of the configuration file processing pipeline. It transforms the raw text input (usually from a `.conf` file) into a structured list of **tokens** that represent the syntactic elements of the configuration language. These tokens are then consumed by the parser to build the in-memory configuration tree used by the web server.
+
+This separation of concerns improves error reporting, modularity, and testability.
+
+___
+
+### Responsibilities of the Tokenizer
+
+The tokenizer (also known as the lexer) is responsible for:
+
+* **Skipping** irrelevant input:
+
+  * Whitespace (spaces, tabs, carriage returns)
+  * Newlines (including CRLF and LF endings)
+  * Single-line and multi-line comments (`#`, `//`, `/* ... */`)
+
+* **Lexical classification**:
+
+  * **Keywords** such as `server`, `location`, `listen`, `root`, `methods`, etc.
+  * **Identifiers**, which include user-defined names, path fragments, MIME types, and hostnames
+  * **Numbers**, including optional unit suffixes (`k`, `m`, `g`) for sizes
+  * **Quoted strings**, both single- and double-quoted, with escape sequence handling
+  * **Symbols**: structural elements like `{`, `}`, `;`
+
+* **Error detection and diagnostics**:
+
+  * Reports **unterminated strings** with clear context
+  * Rejects **invalid escape sequences** inside strings
+  * Validates identifiers (no control characters, must be non-empty)
+  * Verifies that keywords are lowercase only
+  * Detects and reports **unexpected characters** or malformed input early
+
+* **Position tracking**:
+
+  * Maintains line and column numbers for every token
+  * Allows precise and informative error messages downstream in the parser
+
+* **Efficiency considerations**:
+
+  * Uses a single linear pass through the input string
+  * Reserves memory for tokens to reduce reallocations
+
+The final token returned is always `END_OF_FILE`, which marks the logical end of the input.
+
+___
+
+### Example Tokenization
+
+Input:
+
+```nginx
+server {
+    listen 8080;
+    root "/var/www/html";
+    # This is a comment
+}
+```
+
+Output tokens (via `debugToken()`):
+
+```bash
+[Token type=KEYWORD_SERVER value="server" line=1 column=1]
+[Token type=LBRACE value="{" line=1 column=8]
+[Token type=KEYWORD_LISTEN value="listen" line=2 column=5]
+[Token type=NUMBER value="8080" line=2 column=12]
+[Token type=SEMICOLON value=";" line=2 column=16]
+[Token type=KEYWORD_ROOT value="root" line=3 column=5]
+[Token type=STRING value="/var/www/html" line=3 column=10]
+[Token type=SEMICOLON value=";" line=3 column=26]
+[Token type=RBRACE value="}" line=5 column=1]
+[Token type=END_OF_FILE value="" line=6 column=1]
+```
+
+Each line shows the exact representation of a token as returned by the `debugToken()` utility, which formats both the token type (via `debugTokenType()`) and its source metadata.
+
+___
+
+### What the Tokenizer Does *Not* Do
+
+The tokenizer **does not**:
+
+* Validate the grammar (e.g., `server` blocks must contain `listen`)
+* Resolve scope/nesting of blocks (`{`/`}`)
+* Enforce semantic constraints (e.g., port number validity, method duplication)
+* Resolve inheritance or merging of locations and directives
+
+These are handled in the **parser phase**, which consumes the token stream and builds the configuration tree.
+
+___
+
+### Benefits of Tokenization
+
+* Early failure on malformed input
+* Improved debuggability through token inspection
+* Simplified parser logic by cleanly separating concerns
+* Reusability: the same tokenizer can be reused in config linters, validators, or autocompletion tools
+
+___
+
+### Related Files
+
+* `Tokenizer.cpp`, `Tokenizer.hpp`: Implementation of the lexer
+* `token.cpp`, `token.hpp`: Definition of token types and utilities
+* `ConfigParseError.hpp`: Exception types thrown on malformed input
+
+___
+
 ## Build & Test Instructions
 
 ### Build with Makefile
-
-> Mandatory for Hive/42 evaluation.
 
 ```bash
 make
@@ -28,25 +137,23 @@ Available Makefile targets:
 ### Build Modes
 
 | Command           | Description                                           |
-|-------------------|-------------------------------------------------------|
+|__________________-|______________________________________________________-|
 | `make`            | Build in release mode (optimized)                     |
 | `make debug`      | Build in debug mode (with `-g` and no optimizations)   |
 | `make debug_asan` | Build in debug mode with AddressSanitizer            |
-| `make debug_tsan` | Build in debug mode with ThreadSanitizer              |
 | `make debug_ubsan`| Build in debug mode with UndefinedBehaviorSanitizer  |
 | `make fast`       | Fast build without dependency tracking (development only) |
-
-### Run and Test
-
-| Command      | Description                                     |
-|--------------|-------------------------------------------------|
-| `make format`   | Format all `.cpp` and `.hpp` files using `clang-format` |
-| `make tidy`  | Run `clang-tidy` on all source and test files |
 
 ### Code quality
 
 | Command      | Description                                     |
-|--------------|-------------------------------------------------|
+|____________--|________________________________________________-|
+| `make format`   | Format all `.cpp` and `.hpp` files using `clang-format` |
+
+### Run and Test
+
+| Command      | Description                                     |
+|____________--|________________________________________________-|
 | `make run`   | Build and run the web server                    |
 | `make test`  | Build and run all test binaries from `tests/` folder |
 | `make sanitize` | Build and run under all sanitizers (ASAN, TSAN, UBSAN) |
@@ -54,7 +161,7 @@ Available Makefile targets:
 ### Cleaning
 
 | Command      | Description                    |
-|--------------|---------------------------------|
+|____________--|_________________________________|
 | `make clean` | Remove all object files and dependency files |
 | `make fclean`| Remove everything: binaries, builds, tests |
 | `make re`    | Full clean and rebuild          |
@@ -62,109 +169,42 @@ Available Makefile targets:
 ### Help
 
 | Command      | Description                    |
-|--------------|---------------------------------|
+|____________--|_________________________________|
 | `make help` | Displays a categorized list of all available `Makefile` targets |
-
-___
-
-### Optional: Build with CMake (for GitHub Actions / CI)
-
-For development and automation, a `CMakeLists.txt` with presets is provided.
-
-First, configure the project:
-
-```bash
-cmake --preset debug
-```
-
-Then build:
-
-```bash
-cmake --build --preset debug
-```
-
-Executables are placed inside the `build/<config>/bin/` folder (e.g., `build/debug/bin/webserv`).
-
-### Available CMake Presets
-
-| Preset    | Description                                        |
-| --------- | -------------------------------------------------- |
-| `debug`   | Debug build (with debug symbols, no optimizations) |
-| `release` | Optimized build for production                     |
-| `asan`    | Debug build with AddressSanitizer (memory bugs)    |
-| `tsan`    | Debug build with ThreadSanitizer (thread races)    |
-| `ubsan`   | Debug build with UndefinedBehaviorSanitizer (UB)   |
-
-To use another preset, just replace `debug`:
-
-```bash
-cmake --preset asan
-cmake --build --preset asan
-./build/asan/bin/webserv configs/default.conf
-```
-
-CMake presets make building easier and ensure consistent builds across machines and CI pipelines.
-
-</details>
 
 ___
 
 ## Continuous Integration & Documentation
 
-> This project uses GitHub Actions for automated build, test, and documentation deployment.
+> This project uses **GitHub Actions** to automate building, testing, and documentation deployment.
 
-### CI Pipeline
+### ✅ CI Pipeline
 
-The following jobs are executed automatically on each push or pull request to the `main` or `dev` branches:
+On each push or pull request to `main` or `dev`, the following jobs are run automatically:
 
-| Job Name                   | Purpose                                           |
-|-----------------------------|---------------------------------------------------|
-| Build and Test (Debug)      | Build in debug mode and run all tests.            |
-| Build and Test (AddressSanitizer) | Build with AddressSanitizer (memory bug detection). |
-| Build and Test (UndefinedBehaviorSanitizer) | Build with UndefinedBehaviorSanitizer (UB detection). |
-| Build and Test (ThreadSanitizer)  | Build with ThreadSanitizer (thread race detection). |
-| Static Analysis (clang-tidy)       | Run static code analysis using `clang-tidy`.        |
+| Job                             | Purpose                                                        |
+|----------------------------------|----------------------------------------------------------------|
+| 🧪 Build (Release)               | Builds the project using the provided `Makefile`.             |
+| 📄 Doxygen Docs                  | Generates and deploys Doxygen documentation to GitHub Pages.  |
 
-All builds are configured using **CMake presets** to ensure reproducibility.
+All configurations rely on the project `Makefile` and follow the project's coding style.
 
-**Static Analysis:** `clang-tidy` is automatically run on each commit to catch potential issues early.  
-**Memory Checking:** Builds are tested with **ASAN**, **UBSAN**, and **TSAN** enabled in CI.
+### 🧼 Sanitizer Suppressions
 
-### Sanitizer Suppressions
+To reduce noise in sanitizer reports, the `.asanignore` file suppresses:
 
-To ensure clean and actionable sanitizer reports, suppression rules are used:
+- Known benign leaks from `libstdc++`, `libc`, and dynamic allocators
+- Internal race conditions in `__sanitizer` symbols
+- Undefined behavior in standard library internals
 
-- Ignore harmless leaks from system libraries (`libc`, `libstdc++`, `malloc`, etc.).
-- Ignore race conditions inside sanitizer internals (`__sanitizer`).
-- Ignore undefined behavior triggered inside standard libraries (e.g., `glibc`).
+These help CI focus on bugs *in your code*, not external sources.
 
-This minimizes false positives and focuses on real issues inside the project code.
+### 📚 Documentation
 
-___
+- Doxygen generates HTML docs from source code and Markdown (`README.md` is the main page)
+- Graphviz is enabled for call graphs, class diagrams, and source browser
+- Documentation is deployed automatically via GitHub Pages from the `docs/html` directory
 
-## Build System
-
-The project uses a modern **CMake** setup:
-
-- A clean `CMakeLists.txt` is provided with modular includes (`CompilerOptions`, `Warnings`, `Sanitizers`, etc.).
-- `compile_commands.json` is automatically generated for tooling (`clang-tidy`, `IDE`, `LSP`).
-- All executables are placed in the `bin/` folder for easy access.
-- [CMakePresets.json](CMakePresets.json) defines multiple configurations (`debug`, `release`, `asan`, `tsan`, `ubsan`) for easy builds across platforms.
-- Multi-configuration generators (Visual Studio, Xcode) are properly handled.
-
-### CMake Modules
-
-This project includes custom CMake modules to enforce code quality, testing, and build robustness:
-
-| Module                  | Purpose                                                |
-|--------------------------|--------------------------------------------------------|
-| `CompilerOptions.cmake`  | Enforces strict compiler settings and best practices.  |
-| `Warnings.cmake`         | Enables a comprehensive set of compiler warnings.      |
-| `ClangTools.cmake`       | Integrates clang-tidy and clang-format automatically.  |
-| `Sanitizers.cmake`       | Provides easy toggles for ASAN, TSAN, UBSAN.            |
-| `CTestSettings.cmake`    | Configures testing behavior with CTest.                 |
-
-> These modules are used automatically when building via **CMake presets** or during **CI builds**.
 ___
 
 ## Contributing
@@ -188,57 +228,30 @@ ___
 
 ```bash
 webserv
-├── .asanignore            # Suppressions for AddressSanitizer
-├── .clang-format          # Code formatting rules (LLVM style)
-├── .clang-tidy            # Static analysis rules (clang-tidy config)
-├── .editorconfig          # Editor settings (indentation, charset, etc.)
-├── .gitattributes         # Enforce LF endings, binary handling
-├── .gitignore             # Ignore build artifacts, OS files, etc.
-├── CMakePresets.json      # CMake build configuration presets
-├── CMakeLists.txt         # CMake build script
-├── Makefile               # Mandatory 42 Makefile (plus extensions)
-├── CONTRIBUTING.md        # Contribution guidelines
-├── DOXYGENSTYLEGUIDE.md   # Doxygen documentation rules
-├── Doxyfile               # Doxygen config for documentation generation
-├── LICENSE                # MIT License file
-├── README.md              # Main project documentation
-├── STYLEGUIDE.md          # Modern C++ code style guide
-├── webserv.subject.pdf    # Official project subject/specification
-│
-├── cmake/                 # CMake helper modules
-│   ├── CTestSettings.cmake
-│   ├── ClangTools.cmake
-│   ├── CompilerOptions.cmake
-│   ├── Sanitizers.cmake
-│   └── Warnings.cmake
-│
-├── configs/               # Example configuration files
-│   └── default.conf
-│
-├── docs/                  # Project documentation
-│   └── README.md
-│
-├── include/               # Header files (empty for now)
-│   ├── config/
-│   ├── http/
-│   ├── server/
-│   └── utils/
-│
-├── scripts/               # Development and test helper scripts
-│   ├── run_all_tests.sh
-│   ├── run_webserv.sh
-│   ├── run_webserv_asan.sh
-│   ├── run_webserv_tsan.sh
-│   └── run_webserv_ubsan.sh
-│
-├── src/                   # Source files (empty for now)
-│   ├── config/
-│   ├── http/
-│   ├── server/
-│   └── utils/
-│
-└── tests/                 # Unit and integration tests (empty for now)
-    └── .gitkeep
+├── 📁 .github/               # GitHub Actions CI workflows and PR/issue templates
+│   └── workflows/
+│       ├── ci.yml             # CI workflow: builds with Makefile
+│       └── docs.yml           # Doxygen documentation generation & GitHub Pages deploy
+├── 📁 include/                # All public project headers, grouped by module (config, http, core, etc.)
+├── 📁 src/                    # Source files, mirrors the include/ structure
+├── 📁 tests/                  # Unit tests for various modules
+├── 📁 configs/                # Test configuration files for parser/tokenizer
+├── 📁 docs/                   # Markdown documentation (DOCS.md, guides, etc.)
+├── 📁 scripts/                # Helper scripts to run tests and sanitizer builds
+├── .asanignore                 # Suppression rules for AddressSanitizer (e.g. libc++ internals)
+├── .clang-format               # Enforces formatting rules (4-space indent, K&R braces, etc.)
+├── .editorconfig               # Shared IDE/editor config for consistent style
+├── .gitattributes              # Defines merge/diff rules for Git (e.g. binary files)
+├── .gitignore                  # Files and folders ignored by Git (e.g. build/, *.o)
+├── ACTIONPLAN.md               # Project-level planning or roadmap
+├── CONTRIBUTING.md             # Guidelines for contributing to the project
+├── DOXYGENSTYLEGUIDE.md        # Doxygen conventions for documenting code
+├── Doxyfile                    # Main config for Doxygen documentation generation
+├── LICENSE                     # Project license (e.g. MIT, GPL)
+├── Makefile                    # Build system entry point (defines targets like all, clean, fclean)
+├── README.md                   # Main README shown on GitHub (overview, build, usage, etc.)
+├── STYLEGUIDE.md               # Coding conventions for naming, layout, formatting
+├── webserv.subject.pdf         # Original subject specification for the project
 ```
 
 ___
