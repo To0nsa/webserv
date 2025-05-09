@@ -174,6 +174,114 @@ Available Makefile targets:
 
 ___
 
+## Parser: Building the Configuration Tree
+
+### Overview
+
+The parser is the **second stage** of the configuration pipeline. After the tokenizer has broken the raw configuration file into discrete tokens, the parser consumes this stream to build a structured, validated in-memory representation of the configuration—composed of `Config`, `Server`, and `Location` objects. This tree determines how the server behaves at runtime.
+
+Where the tokenizer is concerned only with syntax, the parser enforces the **grammar**, **semantic rules**, and **hierarchical structure** of the configuration language.
+
+___
+
+### Responsibilities of the Parser
+
+The `ConfigParser` performs the following high-level tasks:
+
+* **Top-level validation**: Ensures the file starts with one or more `server` blocks and that no unexpected tokens appear outside them.
+
+* **Recursive block parsing**: Parses each `server { ... }` block into a `Server` object, and each `location /path { ... }` block into a `Location` object nested inside its respective server.
+
+* **Directive dispatching**: Uses centralized handler tables to map directive names (e.g., `listen`, `root`, `index`) to functions that apply them to configuration objects, validating arguments along the way.
+
+* **Duplicate detection**: Tracks encountered directives per block to reject duplicates, except for explicitly repeatable directives like `error_page` and `methods`.
+
+* **Error reporting**: Provides detailed, context-rich error messages for invalid directives, unexpected tokens, missing semicolons, or block misnests—highlighting the exact token and surrounding snippet.
+
+___
+
+### Grammar Example
+
+This input:
+
+```nginx
+server {
+    listen 8080;
+    host 127.0.0.1;
+
+    location /files {
+        root /var/www/data;
+        index index.html;
+        methods GET POST;
+    }
+}
+```
+
+Produces an internal tree:
+
+```txt
+Config
+└── Server
+    ├── listen: 8080
+    ├── host: 127.0.0.1
+    └── Location /files
+        ├── root: /var/www/data
+        ├── index: index.html
+        └── methods: GET, POST
+```
+
+___
+
+### Design Highlights
+
+* **Directive handler tables**: Each directive is mapped to a specific function (e.g. `"listen" → setPort()`), with argument validation for type, count, and range.
+
+* **Grammar enforcement**: Enforces valid directives per block type, with required braces and semicolons.
+
+* **Normalized directive names**: Converts directive names to lowercase to ensure case-insensitive matching.
+
+* **Position-aware error reporting**: All parser errors include precise line and column numbers, plus a source code snippet—enabling accurate debugging and testing.
+
+___
+
+### What the Parser Does *Not* Do
+
+The parser **does not**:
+
+* Bind sockets or allocate runtime resources
+* Validate path existence or filesystem access
+* Perform runtime merging of virtual hosts (this is done later)
+
+___
+
+### Benefits of Modular Parsing
+
+* Easy to extend: new directives can be added by inserting a new handler
+* Error-resilient: clear diagnostics with minimal overhead
+* Testable: parser logic is decoupled from runtime behaviors
+
+___
+
+### Related Files
+
+**Parser Core**:
+
+* `ConfigParser.cpp`, `ConfigParser.hpp`: Parser implementation
+* `directive_handler_table.cpp`, `directive_handler_table.hpp`: Directive dispatchers
+
+**Configuration Models**:
+
+* `Config.cpp`, `Config.hpp`: Root configuration object
+* `Server.cpp`, `Server.hpp`: Virtual host configuration model
+* `Location.cpp`, `Location.hpp`: Path-specific configuration blocks
+
+**Support Code**:
+
+* `token.cpp`, `token.hpp`: Token types and debug printers
+* `ConfigParseError.hpp`: Error types for tokenizer and parser phases
+
+___
+
 ## Continuous Integration & Documentation
 
 > This project uses **GitHub Actions** to automate building, testing, and documentation deployment.
@@ -183,7 +291,9 @@ ___
 On each push or pull request to `main` or `dev`, the following jobs are run automatically:
 
 | Job                             | Purpose                                                        |
-|----------------------------------|----------------------------------------------------------------|
+
+___-
+___-|
 | 🧪 Build (Release)               | Builds the project using the provided `Makefile`.             |
 | 📄 Doxygen Docs                  | Generates and deploys Doxygen documentation to GitHub Pages.  |
 
