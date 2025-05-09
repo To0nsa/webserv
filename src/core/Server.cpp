@@ -6,90 +6,105 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:51:19 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/02 21:14:08 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/08 16:29:55 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
  * @file    Server.cpp
- * @brief   Implements the Server class.
+ * @brief   Implements the Server class used for virtual host configuration.
  *
- * @details This file defines the member functions of the Server class, which represents
- * a virtual host configuration block. It includes logic for setting and retrieving
- * configuration parameters such as port, host, server names, error pages, client body size,
- * and per-route Location entries. It also implements host name matching via `hasServerName()`.
+ * @details This file defines all methods of the Server class, including setters,
+ *          getters, and helper logic for managing host binding, server names,
+ *          error pages, body size limits, and associated location blocks.
+ *          It is part of the configuration system and supports parsing and runtime use.
  *
  * @ingroup config
  */
 
 #include "core/Server.hpp"
+#include "utils/stringUtils.hpp"
 #include <algorithm>
+#include <string_view>
 
-// --- Constructor ---
+///////////////////
+// --- Constructor
 
 Server::Server()
-    : port_(80),                     // Default HTTP port
-      host_("0.0.0.0"),              // Default bind address
-      client_max_body_size_(1048576) // 1 MB
+    : _port(80) // Default HTTP port
+      ,
+      _host("0.0.0.0") // Default bind address
+      ,
+      _client_max_body_size(1 * 1024 * 1024) // 1 MiB
 {
 }
 
-// --- Setters ---
+///////////////
+// --- Setters
 
-void Server::setPort(int port) {
-    port_ = port;
+void Server::setPort(int port) noexcept {
+    _port = port;
 }
 
-void Server::setHost(const std::string& host) {
-    host_ = host;
+void Server::setHost(std::string_view host) noexcept {
+    _host = host;
 }
 
-void Server::addServerName(const std::string& name) {
-    server_names_.push_back(name);
+void Server::addServerName(std::string_view name) {
+    // Append the given server name to the list of aliases.
+    _server_names.emplace_back(toLower(std::string(name)));
 }
 
 void Server::setErrorPage(int code, const std::string& path) {
-    error_pages_[code] = path;
+    // Map the given HTTP status code to a custom error page path.
+    _error_pages[code] = path;
 }
 
-void Server::setClientMaxBodySize(size_t size) {
-    client_max_body_size_ = size;
+void Server::setClientMaxBodySize(std::size_t size) noexcept {
+    _client_max_body_size = size;
 }
 
 void Server::addLocation(const Location& location) {
-    locations_.push_back(location);
+    // Add a new location block to the server's routing table.
+    _locations.push_back(location);
 }
 
-// --- Getters ---
+///////////////
+// --- Getters
 
 int Server::getPort() const noexcept {
-    return port_;
+    return _port;
 }
 
 const std::string& Server::getHost() const noexcept {
-    return host_;
+    return _host;
 }
 
 const std::vector<std::string>& Server::getServerNames() const noexcept {
-    return server_names_;
+    return _server_names;
 }
 
 const std::map<int, std::string>& Server::getErrorPages() const noexcept {
-    return error_pages_;
+    return _error_pages;
 }
 
-size_t Server::getClientMaxBodySize() const noexcept {
-    return client_max_body_size_;
+std::size_t Server::getClientMaxBodySize() const noexcept {
+    return _client_max_body_size;
 }
 
 const std::vector<Location>& Server::getLocations() const noexcept {
-    return locations_;
+    return _locations;
 }
 
-bool Server::hasServerName(const std::string& name) const {
-    for (const std::string& server_name : server_names_) {
-        if (server_name == name)
-            return true;
-    }
-    return false;
+std::vector<Location>& Server::getLocations() noexcept {
+    return _locations;
+}
+
+/////////////////
+// --- Utilities
+
+bool Server::hasServerName(std::string_view name) const noexcept {
+    // Check if the given name matches any of the configured server names.
+    return std::any_of(_server_names.begin(), _server_names.end(),
+                       [&name](const std::string& s) { return s == name; });
 }

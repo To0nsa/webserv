@@ -6,17 +6,19 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:34:50 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/02 23:44:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/08 15:57:19 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
- * @file    config.hpp
- * @brief   Declares the Config class.
+ * @file    Config.hpp
+ * @brief   Declares the Config class, a container for server configurations.
  *
- * @details Represents the parsed server configuration. Holds a list of `Server` instances
- * that define virtual hosts. Used by the HTTP router to select the correct server
- * based on port and Host header.
+ * @details The Config class aggregates Server instances parsed from a
+ *          configuration file, representing virtual hosts. It provides
+ *          methods to add new Server objects and retrieve the collection
+ *          for HTTP request routing based on host and port matching.
+ *
  * @ingroup config
  */
 
@@ -26,52 +28,50 @@
 #include <vector>
 
 /**
- * @brief Top-level server configuration container.
+ * @brief   Top-level server configuration container.
  *
- * @details Holds one or more `Server` blocks parsed from the configuration file.
- * Each `Server` represents a virtual host, which may listen on different ports
- * and respond to different server names.
+ * @details Manages a collection of Server objects, each corresponding to
+ *          a virtual host definition in the configuration file. Servers
+ *          may listen on different ports, respond to specific hostnames,
+ *          and define custom error pages and location blocks.
+ *
  * @ingroup config
  */
 class Config {
-  private:
-    std::vector<Server> servers_; ///< List of all parsed servers
-
   public:
-    // --- Constructor / Destructor ---
-    Config()                         = default;
-    ~Config()                        = default;
-    Config(const Config&)            = default;
-    Config& operator=(const Config&) = default;
-
-    /**
-     * @brief Enables efficient move construction.
-     *
-     * @details Transfers ownership of internal server list from another instance.
-     * Improves performance when returning Config by value or storing it in containers.
-     */
-    Config(Config&&) noexcept = default;
-
-    /**
-     * @brief Enables efficient move assignment.
-     *
-     * @details Transfers ownership of internal server list from another instance.
-     * Marked noexcept to support STL container performance and exception guarantees.
-     */
+    ////////////////////////////////
+    // --- Constructor
+    Config()                             = default;
+    ~Config()                            = default;
+    Config(const Config&)                = default;
+    Config& operator=(const Config&)     = default;
+    Config(Config&&) noexcept            = default;
     Config& operator=(Config&&) noexcept = default;
 
-    // --- Public API ---
+    //////////////////
+    // --- Public API
     /**
      * @brief Adds a new Server configuration.
      *
      * @param server A fully initialized Server object.
      */
     void addServer(const Server& server);
-
     /**
      * @brief Returns the list of configured servers.
      *
      * @return Read-only reference to internal server list.
      */
     const std::vector<Server>& getServers() const;
+    /**
+     * @brief Provides mutable access to the configured servers.
+     *
+     * @details Returns a non-const reference to the internal server list,
+     *          allowing modifications such as adding, removing, or reordering Servers.
+     *
+     * @return Reference to the vector of Server objects stored internally.
+     */
+    std::vector<Server>& getServers();
+
+  private:
+    std::vector<Server> _servers; ///< List of all parsed servers
 };
