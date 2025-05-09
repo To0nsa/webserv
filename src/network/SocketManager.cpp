@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/08 16:57:41 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:04:11 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,10 +233,45 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 			return "";
 		}
 	}
-	std::cout << (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) << std::endl;
+
+	// Check if we have a complete HTTP request header, if not, wait for more data
 	if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
 		std::cout << "Request for Client fd " << client_fd << " is in process." << std::endl;
 		return "";
+	}
+
+	if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") != std::string::npos) {
+		// We have a complete HTTP request header
+		
+		size_t headersEnd = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
+		std::string headersPart = _client_info[client_fd].requestBuffer.substr(0, headersEnd);
+	
+		/* HttpRequest tmpRequest;
+		if (!tmpRequest.parseHeadersOnly(headersPart)) {
+			// not a valid HTTP header
+			cleanupClientConnectionClose(client_fd, index);
+			return "";
+		}
+	
+		if (tmpRequest.headers.count("Content-Length")) {
+			size_t bodySize = std::stoi(tmpRequest.headers["Content-Length"]);
+			if (_client_info[client_fd].requestBuffer.size() >= headersEnd + 4 + bodySize) {
+				// Body is fully received, start parsing
+				// Parse the body and headers
+			} else {
+				// Wait for more data...
+			}
+		} else if (tmpRequest.headers["Transfer-Encoding"] == "chunked") {
+			if (hasFullChunkedBody(requestBuffer, headersEnd + 4)) {
+				// Chunked body is fully received, start parsing
+				// Parse the body and headers
+			} else {
+				// Wait for more data...
+			}
+		} else {
+			// Request without body
+			// Parse the headers and body
+		} */
 	}
 	
 	_client_info[client_fd].requestBuffer.clear();
