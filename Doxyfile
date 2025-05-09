@@ -5,7 +5,7 @@ PROJECT_BRIEF          = Lightweight HTTP/1.1 server written in modern C++
 OUTPUT_DIRECTORY       = docs
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
-INPUT_ENCODING         = UTF-8
+_inputENCODING         = UTF-8
 
 # --- Input Files ---
 
@@ -30,7 +30,7 @@ EXTRACT_PRIVATE        = YES
 EXTRACT_STATIC         = YES
 EXTRACT_LOCAL_METHODS  = YES
 EXTRACT_ANON_NSPACES   = YES
-INLINE_INHERITED_MEMB  = YES
+IN_lineINHERITED_MEMB  = YES
 
 # --- Output Format ---
 
@@ -51,7 +51,7 @@ AUTOLINK_SUPPORT       = YES
 
 SHOW_INCLUDE_FILES     = YES
 SOURCE_BROWSER         = YES
-INLINE_SOURCES         = NO
+IN_lineSOURCES         = NO
 VERBATIM_HEADERS       = YES
 STRIP_CODE_COMMENTS    = NO
 REFERENCED_BY_RELATION = YES
@@ -101,4 +101,4 @@ GENERATE_LATEX         = NO
 GENERATE_MAN           = NO
 GENERATE_RTF           = NO
 GENERATE_XML           = NO
-MULTILINE_CPP_IS_BRIEF = YES
+MULTI_lineCPP_IS_BRIEF = YES

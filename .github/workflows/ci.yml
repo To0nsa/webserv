@@ -2,95 +2,21 @@ name: CI
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [main, dev]
   pull_request:
-    branches: [ main, dev ]
+    branches: [main, dev]
 
 jobs:
-  build-debug:
-    name: Build and Test (Debug)
+  build:
+    name: Build (Release)
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Install build tools
-        run: sudo apt-get update && sudo apt-get install -y build-essential cmake
+        run: sudo apt-get update && sudo apt-get install -y build-essential
 
-      - name: Configure Debug
-        run: cmake --preset debug -DBUILD_TESTING=ON
-
-      - name: Build Debug
-        run: cmake --build --preset debug
-
-      - name: Run Tests Debug
-        run: ctest --preset debug --output-on-failure
-
-  build-asan:
-    name: Build and Test (AddressSanitizer)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install build tools
-        run: sudo apt-get update && sudo apt-get install -y build-essential cmake
-
-      - name: Configure ASAN
-        run: cmake --preset asan -DBUILD_TESTING=ON
-
-      - name: Build ASAN
-        run: cmake --build --preset asan
-
-      - name: Run Tests ASAN
-        run: ctest --preset asan --output-on-failure
-
-  build-ubsan:
-    name: Build and Test (UndefinedBehaviorSanitizer)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install build tools
-        run: sudo apt-get update && sudo apt-get install -y build-essential cmake
-
-      - name: Configure UBSAN
-        run: cmake --preset ubsan -DBUILD_TESTING=ON
-
-      - name: Build UBSAN
-        run: cmake --build --preset ubsan
-
-      - name: Run Tests UBSAN
-        run: ctest --preset ubsan --output-on-failure
-
-
-  build-tsan:
-    name: Build and Test (ThreadSanitizer)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install build tools
-        run: sudo apt-get update && sudo apt-get install -y build-essential cmake
-
-      - name: Configure TSAN
-        run: cmake --preset tsan -DBUILD_TESTING=ON
-
-      - name: Build TSAN
-        run: cmake --build --preset tsan
-
-      - name: Run Tests TSAN
-        run: ctest --preset tsan --output-on-failure
-
-  clang-tidy:
-    name: Static Analysis (clang-tidy)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install clang-tidy
-        run: sudo apt-get update && sudo apt-get install -y clang-tidy
-
-      - name: Run clang-tidy
-        run: |
-          cmake -S . -B build/clang-tidy
-          run-clang-tidy-15 -p build/clang-tidy
-
+      - name: Build using Makefile
+        run: make

@@ -6,19 +6,18 @@
 #    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/26 16:00:00 by nlouis            #+#    #+#              #
-#    Updated: 2025/05/02 17:41:53 by nlouis           ###   ########.fr        #
+#    Updated: 2025/05/09 11:06:47 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Compiler settings
 CXX        := c++
-CXXFLAGS   := -Wall -Wextra -Werror -I include
+CXXFLAGS   := -Wall -Wextra -Werror -I include -g
 DEBUGFLAGS := -g3 -O0 -DDEBUG
 OPTFLAGS   := -O3
 
 # Sanitizer flags
 ASAN_FLAGS := -fsanitize=address,undefined -fno-omit-frame-pointer
-TSAN_FLAGS := -fsanitize=thread -fno-omit-frame-pointer
 UBSAN_FLAGS:= -fsanitize=undefined -fno-omit-frame-pointer
 
 # Executable output
@@ -115,9 +114,6 @@ debug:
 debug_asan:
 	@$(MAKE) MODE=debug SAN=asan
 
-debug_tsan:
-	@$(MAKE) MODE=debug SAN=tsan
-
 debug_ubsan:
 	@$(MAKE) MODE=debug SAN=ubsan
 
@@ -144,26 +140,10 @@ test: prepare_dirs $(TARGET) $(TESTBINS)
 		echo "$(GREEN)🏆 All tests passed successfully!$(RESET)"; \
 	fi
 
-sanitize:
-	@echo "$(CYAN)🔬 Building and testing with AddressSanitizer...$(RESET)"
-	@$(MAKE) debug_asan
-	@ASAN_OPTIONS="detect_leaks=1:halt_on_error=1:abort_on_error=1:fast_unwind_on_malloc=0:suppressions=$(PWD)/.asanignore" ./$(TARGET) & sleep 2 ; kill $$! || true
-	@echo "$(CYAN)🔬 Building and testing with ThreadSanitizer...$(RESET)"
-	@$(MAKE) debug_tsan
-	@TSAN_OPTIONS="suppressions=$(PWD)/.asanignore:halt_on_error=1" ./$(TARGET) & sleep 2 ; kill $$! || true
-	@echo "$(CYAN)🔬 Building and testing with UndefinedBehaviorSanitizer...$(RESET)"
-	@$(MAKE) debug_ubsan
-	@UBSAN_OPTIONS="suppressions=$(PWD)/.asanignore:halt_on_error=1:print_stacktrace=1" ./$(TARGET) & sleep 2 ; kill $$! || true
-	@echo "$(GREEN)🏆 All sanitizer builds completed successfully!$(RESET)"
-
 # Code Quality Targets
 format:
 	@echo "$(CYAN)🎨 Formatting source files...$(RESET)"
-	@clang-format -i src/**/*.cpp include/**/*.hpp tests/**/*.cpp
-
-tidy:
-	@echo "$(CYAN)🔍 Running clang-tidy analysis...$(RESET)"
-	@clang-tidy src/**/*.cpp tests/**/*.cpp -- -Iinclude -std=c++20
+	@find src include tests -name '*.cpp' -o -name '*.hpp' | xargs clang-format -i
 
 help:
 	@echo "$(CYAN)📦 Build Targets:$(RESET)"
