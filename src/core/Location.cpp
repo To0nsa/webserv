@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/08 16:45:15 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/11 21:14:20 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ void Location::setPath(const std::string& path) {
 
 void Location::addMethod(const std::string& method) {
     _methods.insert(method);
+}
+
+void Location::setAllowedMethods(const std::vector<std::string>& methods) {
+    _methods.clear();
+    for (std::vector<std::string>::const_iterator it = methods.begin(); it != methods.end(); ++it) {
+        addMethod(*it);
+    }
 }
 
 void Location::setRoot(const std::string& root) {
@@ -118,6 +125,10 @@ const std::vector<std::string>& Location::getCgiExtensions() const {
 
 /////////////////////
 // --- Logic Helpers
+
+bool Location::hasAllowedMethods() const {
+    return !_methods.empty();
+}
 
 bool Location::isMethodAllowed(const std::string& method) const {
     return _methods.count(method) > 0;

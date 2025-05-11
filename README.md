@@ -123,57 +123,6 @@ ___
 
 ___
 
-## Build & Test Instructions
-
-### Build with Makefile
-
-```bash
-make
-./bin/webserv configs/default.conf
-```
-
-Available Makefile targets:
-
-### Build Modes
-
-| Command           | Description                                           |
-|__________________-|______________________________________________________-|
-| `make`            | Build in release mode (optimized)                     |
-| `make debug`      | Build in debug mode (with `-g` and no optimizations)   |
-| `make debug_asan` | Build in debug mode with AddressSanitizer            |
-| `make debug_ubsan`| Build in debug mode with UndefinedBehaviorSanitizer  |
-| `make fast`       | Fast build without dependency tracking (development only) |
-
-### Code quality
-
-| Command      | Description                                     |
-|____________--|________________________________________________-|
-| `make format`   | Format all `.cpp` and `.hpp` files using `clang-format` |
-
-### Run and Test
-
-| Command      | Description                                     |
-|____________--|________________________________________________-|
-| `make run`   | Build and run the web server                    |
-| `make test`  | Build and run all test binaries from `tests/` folder |
-| `make sanitize` | Build and run under all sanitizers (ASAN, TSAN, UBSAN) |
-
-### Cleaning
-
-| Command      | Description                    |
-|____________--|_________________________________|
-| `make clean` | Remove all object files and dependency files |
-| `make fclean`| Remove everything: binaries, builds, tests |
-| `make re`    | Full clean and rebuild          |
-
-### Help
-
-| Command      | Description                    |
-|____________--|_________________________________|
-| `make help` | Displays a categorized list of all available `Makefile` targets |
-
-___
-
 ## Parser: Building the Configuration Tree
 
 ### Overview
@@ -282,6 +231,145 @@ ___
 
 ___
 
+## Config Normalizer: Applying Safe Defaults
+
+### Overview
+
+The `ConfigNormalizer` is the **third stage** of the configuration pipeline, run immediately after parsing but before validation. Its role is to **apply safe defaults** to optional configuration fields so that the validator can assume the config is complete.
+
+This mirrors the behavior of NGINX and ensures that runtime logic does not need to handle partial or missing configuration.
+
+___
+
+### Responsibilities of the Normalizer
+
+The normalizer visits all `Server` and `Location` objects and fills in missing optional values according to project conventions and HTTP server best practices.
+
+It does **not** attempt to correct invalid values—only to fill in omitted ones.
+
+#### Server-Level Defaults
+
+| Directive              | Default value                      |
+|------------------------|------------------------------------|
+| `client_max_body_size` | `1MB`                              |
+| `error_page`           | 500, 404, 403, 502 → `/error.html` |
+
+#### Location-Level Defaults
+
+| Directive | Default value |
+| --- | ---- |
+| `root`    | `/var/www`    |
+| `index`   | `index.html`  |
+| `methods` | `["GET"]`     |
+
+These defaults ensure that every server has valid behavior even if the user provides a minimal configuration.
+
+___
+
+### Example Normalization
+
+Input config:
+
+```nginx
+server {
+    listen 8080;
+    location / {
+        root /srv/www;
+    }
+}
+```
+
+After normalization:
+
+```txt
+Server:
+  client_max_body_size: 1048576 (1MB)
+  error_pages:
+    500 → "/error.html"
+    404 → "/error.html"
+    403 → "/error.html"
+    502 → "/error.html"
+
+Location "/":
+  root: "/srv/www"
+  index: "index.html"
+  methods: ["GET"]
+```
+
+___
+
+### Why Normalize Before Validation?
+
+The validator assumes all fields are complete. Normalizing beforehand:
+
+* Ensures **correct validator behavior** (e.g., `methods` is never empty)
+* Prevents **duplicate logic** in runtime error handling
+* Matches real-world server behavior (like NGINX)
+
+___
+
+### Related Files
+
+* `ConfigNormalizer.cpp`, `ConfigNormalizer.hpp`: Normalization logic
+* `Server.cpp`, `Server.hpp`: Default value holders and setters
+* `Location.cpp`, `Location.hpp`: Path-specific config normalization
+* `ConfigValidator.cpp`: Validates required structure after defaults are filled
+
+___
+
+___
+
+## Build & Test Instructions
+
+### Build with Makefile
+
+```bash
+make
+./bin/webserv configs/default.conf
+```
+
+Available Makefile targets:
+
+### Build Modes
+
+| Command           | Description                                           |
+|----|----|
+| `make`            | Build in release mode (optimized)                     |
+| `make debug`      | Build in debug mode (with `-g` and no optimizations)   |
+| `make debug_asan` | Build in debug mode with AddressSanitizer            |
+| `make debug_ubsan`| Build in debug mode with UndefinedBehaviorSanitizer  |
+| `make fast`       | Fast build without dependency tracking (development only) |
+
+### Code quality
+
+| Command      | Description                                     |
+|-----|----|
+| `make format`   | Format all `.cpp` and `.hpp` files using `clang-format` |
+
+### Run and Test
+
+| Command      | Description                                     |
+|-----|----|
+| `make run`   | Build and run the web server                    |
+| `make test`  | Build and run all test binaries from `tests/` folder |
+| `make sanitize` | Build and run under all sanitizers (ASAN, TSAN, UBSAN) |
+
+### Cleaning
+
+| Command      | Description                    |
+|-----|----|
+| `make clean` | Remove all object files and dependency files |
+| `make fclean`| Remove everything: binaries, builds, tests |
+| `make re`    | Full clean and rebuild          |
+
+### Help
+
+| Command      | Description                    |
+|-----|---|
+| `make help` | Displays a categorized list of all available `Makefile` targets |
+
+___
+
 ## Continuous Integration & Documentation
 
 > This project uses **GitHub Actions** to automate building, testing, and documentation deployment.
@@ -291,9 +379,7 @@ ___
 On each push or pull request to `main` or `dev`, the following jobs are run automatically:
 
 | Job                             | Purpose                                                        |
-
-___-
-___-|
+|---|---|
 | 🧪 Build (Release)               | Builds the project using the provided `Makefile`.             |
 | 📄 Doxygen Docs                  | Generates and deploys Doxygen documentation to GitHub Pages.  |
 

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 13:45:05 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/08 16:36:34 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/11 21:56:41 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,19 @@ class Location {
      */
     void addMethod(const std::string& method);
     /**
+     * @brief Sets the allowed HTTP methods for this location.
+     *
+     * @details Replaces the current method set with the given list. Each string
+     *          in the list should be a valid HTTP method (e.g. "GET", "POST").
+     *          This method is typically used by the normalizer to apply default
+     *          behavior when the `methods` directive is omitted.
+     *
+     * @param methods A list of HTTP method names to allow.
+     *
+     * @ingroup config
+     */
+    void setAllowedMethods(const std::vector<std::string>& methods);
+    /**
      * @brief Adds an index file candidate for this location.
      *
      * @details Appends a filename to the list of index files to check when a client
@@ -313,6 +326,18 @@ class Location {
 
     /////////////////////
     // --- Logic helpers
+    /**
+     * @brief Checks if the location explicitly defines allowed HTTP methods.
+     *
+     * @details Returns true if one or more methods (e.g. GET, POST) were added
+     *          via the `methods` directive. If false, the normalizer should apply
+     *          a default list of safe methods (e.g. GET, HEAD).
+     *
+     * @return `true` if at least one method is explicitly allowed.
+     *
+     * @ingroup config
+     */
+    bool hasAllowedMethods() const;
     /**
      * @brief Checks whether a given HTTP method is allowed for this location.
      *
