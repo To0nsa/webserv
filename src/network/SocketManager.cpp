@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/09 13:50:46 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 11:06:45 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ const char* SocketManager::SocketError::what() const throw() {
 // Set up sockets for each server (host:port)
 void SocketManager::setupSockets(const std::vector<Server>& servers) {
 	for (size_t i = 0; i < servers.size(); ++i) {
+		//int fd = socket(AF_INET, SOCK_STREAM, 0);
 		int fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0); // Create a TCP socket
 		if (fd < 0)
 			throw SocketError("socket() failed: " + std::string(std::strerror(errno)));
@@ -203,12 +204,24 @@ void SocketManager::handleNewConnection(int listen_fd) {
 std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	char buffer[RECV_BUFFER];
 	_client_info[client_fd].lastRequestTime = time(NULL);
-	/* int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); */ // MacOS only
+	//int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); // MacOS only
 	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
-	if (bytes <= 0 || static_cast<size_t>(bytes) >_client_info[client_fd].serverConfig.getClientMaxBodySize()) {
+	if (bytes == 0) {
+		std::cout << "Client fd " << client_fd << " disconnected." << std::endl;
+		cleanupClientConnectionClose(client_fd, index);
+		return "";
+	}
+	if (bytes < 0) {
+		std::cout << "recv() failed: " << std::strerror(errno) << std::endl;
+		cleanupClientConnectionClose(client_fd, index);
+		return "";
+	}
+	if (static_cast<size_t>(bytes) >_client_info[client_fd].serverConfig.getClientMaxBodySize()) {
+		std::cout << "Client fd " << client_fd << " sent too big body." << std::endl;
 		cleanupClientConnectionClose(client_fd, index);
 		return ""; // Think, maybe error 500.
 	}
+
 	buffer[bytes] = '\0';
 	std::cout << std::endl;
 	std::cout << "Received request: " << buffer << " bytes: " << bytes <<  std::endl;
@@ -251,6 +264,8 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 		
 		size_t headersEnd = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
 		std::string headersPart = _client_info[client_fd].requestBuffer.substr(0, headersEnd);
+
+		std::cout << "Headers part: " << headersPart << std::endl;
 	
 		/* HttpRequest tmpRequest;
 		if (!tmpRequest.parseHeadersOnly(headersPart)) {
@@ -326,8 +341,23 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 
 // Accept new client and add to poll list
 void SocketManager::sendResponse(int client_fd, size_t index, std::string &response) {
-	/* send(client_fd, response.c_str(), response.size(), 0); */ // MacOS only
-	send(client_fd, response.c_str(), response.size(), MSG_DONTWAIT);
+	ssize_t bytes_sent = send(client_fd, response.c_str(), response.size(), 0); // MacOS only
+	//ssize_t bytes_sent = send(client_fd, response.c_str(), response.size(), MSG_DONTWAIT);
+	if (bytes_sent < 0) {
+		std::cerr << "send() failed on fd " << client_fd << ": " << std::strerror(errno) << std::endl;
+		cleanupClientConnectionClose(client_fd, index);
+		return;
+	}
+
+	if (static_cast<size_t>(bytes_sent) < response.size()) {
+		// Not all data sent — this is a partial send, ideally handle it (advanced)
+		std::cerr << "Warning: partial send on fd " << client_fd << std::endl;
+		// We can requeue the rest of the response or store a "bytesSent" counter in ClientInfo
+		// For now, we close
+		cleanupClientConnectionClose(client_fd, index);
+		return;
+	}
+
 	std::cout << "We sent to fd:" << client_fd << std::endl;
 	std::cout << response << std::endl;
 	_client_info[client_fd].responses.pop(); // Remove the sent response
