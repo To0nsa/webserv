@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 13:04:40 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:36:07 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,10 +148,8 @@ void SocketManager::run() {
 				if (_listen_map.count(current_fd))
 					handleNewConnection(current_fd);						// Accept a new client
 				else {
-					std::string response = handleClientData(current_fd, i);	// Handle data from existing client
-					if (response == "")
+					if (!handleClientData(current_fd, i)) 					// Handle client data
 						continue;
-					_client_info[current_fd].responses.push(response);		// Store the response for later
 					// After handling the request, mark the socket as ready for writing (POLLOUT)
 					_poll_fds[i].events |= POLLOUT;							// Mark the socket for writing
 				}
@@ -159,8 +157,7 @@ void SocketManager::run() {
 
 			if (revents & POLLOUT) {										// Ready to write (can send data)
 				if (!_client_info[current_fd].responses.empty()) {
-					std::string response = _client_info[current_fd].responses.front();	// Retrieve the next response
-					sendResponse(current_fd, i, response);					// Send the response when the socket is ready to write
+					sendResponse(current_fd, i);					// Send the response when the socket is ready to write
 				}
 			}
 
@@ -204,7 +201,7 @@ void SocketManager::handleNewConnection(int listen_fd) {
 }
 
 // Read data from client, send fixed response, then close
-std::string SocketManager::handleClientData(int client_fd, size_t index) {
+bool SocketManager::handleClientData(int client_fd, size_t index) {
 	char buffer[RECV_BUFFER];
 	_client_info[client_fd].lastRequestTime = time(NULL);
 	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); // MacOS only
@@ -212,17 +209,19 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	if (bytes == 0) {
 		std::cout << "Client fd " << client_fd << " disconnected." << std::endl;
 		cleanupClientConnectionClose(client_fd, index);
-		return "";
+		return false;
 	}
 	if (bytes < 0) {
 		std::cout << "recv() failed: " << std::strerror(errno) << std::endl;
 		cleanupClientConnectionClose(client_fd, index);
-		return "";
+		return false;
 	}
 	if (static_cast<size_t>(bytes) >_client_info[client_fd].serverConfig.getClientMaxBodySize()) {
-		std::cout << "Client fd " << client_fd << " sent too big body." << std::endl;
-		cleanupClientConnectionClose(client_fd, index);
-		return ""; // Think, maybe error 500.
+		std::cout << "Client fd " << client_fd << " sent too big request." << std::endl;
+		HttpRequest empty;
+		HttpResponse errorResp = ResponseBuilder::generateError(413, _client_info[client_fd].serverConfig, empty);
+		_client_info[client_fd].responses.push(errorResp);
+		return true;
 	}
 
 	buffer[bytes] = '\0';
@@ -236,30 +235,36 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	
 	_client_info[client_fd].headerBytesReceived += bytes; // Think! What kinda type is better to use here.
 	if (_client_info[client_fd].headerBytesReceived > _client_info[client_fd].serverConfig.getClientMaxBodySize()) {
-		cleanupClientConnectionClose(client_fd, index);
-		return ""; // Think, maybe error 500.
+		HttpRequest empty2;
+		HttpResponse errorResp = ResponseBuilder::generateError(413, _client_info[client_fd].serverConfig, empty2);
+		_client_info[client_fd].responses.push(errorResp);
+		return true;
 	}
 		
 	if (_client_info[client_fd].requestBuffer.size() > HEADER_MAX_LENGTH &&
 		_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
 		std::cout << "Client fd " << client_fd << " sent too big header." << std::endl;
-		cleanupClientConnectionClose(client_fd, index);
-		return "";
+		HttpRequest empty3;
+		HttpResponse errorResp = ResponseBuilder::generateError(413, _client_info[client_fd].serverConfig, empty3);
+		_client_info[client_fd].responses.push(errorResp);
+		return true;
 	}
 	
 	if (_client_info[client_fd].headerBytesReceived < HEADER_MIN_LENGTH) {
 		time_t now = time(NULL);
 		if (now - _client_info[client_fd].connectionStartTime > HEADER_TIMEOUT_SECONDS) {
 			std::cout << "Client fd " << client_fd << " sent header too slow (rate limit)." << std::endl;
-			cleanupClientConnectionClose(client_fd, index);
-			return "";
+			HttpRequest too_slow;
+			HttpResponse errorResp = ResponseBuilder::generateError(408, _client_info[client_fd].serverConfig, too_slow);
+			_client_info[client_fd].responses.push(errorResp);
+			return true;
 		}
 	}
 
 	// Check if we have a complete HTTP request header, if not, wait for more data
 	if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
 		std::cout << "Request for Client fd " << client_fd << " is in process." << std::endl;
-		return "";
+		return false;
 	}
 
 	if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") != std::string::npos) {
@@ -300,8 +305,9 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	HttpRequest request;
 	if (!request.parse(_client_info[client_fd].requestBuffer)) {
 		std::cerr << "Failed to parse HTTP request.\n";
-		cleanupClientConnectionClose(client_fd, index);
-		return "";
+		HttpResponse badRequest = ResponseBuilder::generateError(400, _client_info[client_fd].serverConfig, request);
+		_client_info[client_fd].responses.push(badRequest);
+		return true;
 	}
 	request.printRequest(); 
 	_client_info[client_fd].requestBuffer.clear();
@@ -337,21 +343,24 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	// Temporary HTTP response logic for now (simple hardcoded response)
 	
 	HttpResponse response = ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
+	_client_info[client_fd].responses.push(response);
 	
-	return (response.toString());
+	return (true);
 }
 
 // Accept new client and add to poll list
-void SocketManager::sendResponse(int client_fd, size_t index, std::string &response) {
-	//ssize_t bytes_sent = send(client_fd, response.c_str(), response.size(), 0); // MacOS only
-	ssize_t bytes_sent = send(client_fd, response.c_str(), response.size(), MSG_DONTWAIT);
+void SocketManager::sendResponse(int client_fd, size_t index) {
+	HttpResponse response = _client_info[client_fd].responses.front(); // Get the response to send
+	std::string raw = response.toString();
+	//ssize_t bytes_sent = send(client_fd, raw.c_str(), raw.size(), 0); // MacOS only
+	ssize_t bytes_sent = send(client_fd, raw.c_str(), raw.size(), MSG_DONTWAIT);
 	if (bytes_sent < 0) {
 		std::cerr << "send() failed on fd " << client_fd << ": " << std::strerror(errno) << std::endl;
 		cleanupClientConnectionClose(client_fd, index);
 		return;
 	}
 
-	if (static_cast<size_t>(bytes_sent) < response.size()) {
+	if (static_cast<size_t>(bytes_sent) < raw.size()) {
 		// Not all data sent — this is a partial send, ideally handle it (advanced)
 		std::cerr << "Warning: partial send on fd " << client_fd << std::endl;
 		// We can requeue the rest of the response or store a "bytesSent" counter in ClientInfo
@@ -361,10 +370,10 @@ void SocketManager::sendResponse(int client_fd, size_t index, std::string &respo
 	}
 
 	std::cout << "We sent to fd:" << client_fd << std::endl;
-	std::cout << response << std::endl;
+	std::cout << raw << std::endl;
 	_client_info[client_fd].responses.pop(); // Remove the sent response
 	// Check if the response indicates that the connection should be kept alive
-	if (response.find("Connection: keep-alive") != std::string::npos) {
+	if (!response.isConnectionClose()) {
 		std::cout << "Connection: keep-alive - keeping the connection open" << std::endl;
 		// We should not close the client connection, but just reset the POLLOUT flag if needed
 		_poll_fds[index].events &= ~POLLOUT; // Reset POLLOUT flag if the connection should stay open

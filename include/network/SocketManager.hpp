@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/09 13:39:28 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:13:06 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 #include <signal.h>
 #include <arpa/inet.h>
 #include "core/Server.hpp"
+#include "http/HttpResponse.hpp"
 
 # define TIMEOUT 10
 # define HEADER_TIMEOUT_SECONDS 5
@@ -56,7 +57,7 @@ struct ClientInfo {
 	std::string requestBuffer;
 	bool keepAlive;						// Keep-alive flag
 	Server serverConfig;				// The server config the client is connected to
-	std::queue<std::string> responses;	// Queue of responses to be sent to the client
+	std::queue<HttpResponse> responses;;	// Queue of responses to be sent to the client
 };
 
 /**
@@ -129,17 +130,16 @@ class SocketManager {
 		 *
 		 * @param client_fd File descriptor of the connected client.
 		 * @param index Index of the fd in the `_poll_fds` vector.
-		 * @return The response to be sent to the client.
+		 * @return Bool indicating success if response is generated.
 		 */
-		std::string handleClientData( int client_fd, size_t index );
+		bool handleClientData( int client_fd, size_t index );
 		/**
 		 * @brief Sends from a client socket, generates a response, and sends it.
 		 *
 		 * @param client_fd File descriptor of the connected client.
 		 * @param index Index of the fd in the `_poll_fds` vector.
-		 * @param response The response data to send to the client.
 		 */
-		void sendResponse(int client_fd, size_t index, std::string &response);
+		void sendResponse(int client_fd, size_t index );
 		/**
 		 * @brief Erases fds from a _client_map and _poll_fds.
 		 *
