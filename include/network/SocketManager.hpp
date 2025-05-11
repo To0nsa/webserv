@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 19:29:07 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:50:30 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,31 @@
  * @details The SocketManager sets up listening sockets, handles incoming client connections,
  * and manages client I/O using non-blocking `poll()`. It supports multiple server blocks
  * listening on different ports and performs proper cleanup on shutdown.
- * 
+ *
  * @ingroup network
  */
 
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <map>
-#include <cstring>
-#include <poll.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <arpa/inet.h>
 #include "core/Server.hpp"
 #include "http/HttpResponse.hpp"
+#include <arpa/inet.h>
+#include <cstring>
+#include <fcntl.h>
+#include <iostream>
+#include <map>
+#include <poll.h>
+#include <queue>
+#include <signal.h>
+#include <unistd.h>
+#include <vector>
 
-# define TIMEOUT 10
-# define HEADER_TIMEOUT_SECONDS 5
-# define HEADER_MIN_LENGTH 15
-# define HEADER_MAX_LENGTH 8192
-# define RECV_BUFFER HEADER_MAX_LENGTH * 2
-# define MAX_CLIENTS 512
+#define TIMEOUT 10
+#define HEADER_TIMEOUT_SECONDS 5
+#define HEADER_MIN_LENGTH 15
+#define HEADER_MAX_LENGTH 8192
+#define RECV_BUFFER HEADER_MAX_LENGTH * 2
+#define MAX_CLIENTS 512
 
 /**
  * @defgroup network Networking
@@ -50,14 +50,14 @@
  */
 
 struct ClientInfo {
-	int client_fd;						// File descriptor of the client socket
-	time_t lastRequestTime;				// Last request time for timeout management
-	time_t connectionStartTime;
-	size_t headerBytesReceived;
-	std::string requestBuffer;
-	bool keepAlive;						// Keep-alive flag
-	Server serverConfig;				// The server config the client is connected to
-	std::queue<HttpResponse> responses;;	// Queue of responses to be sent to the client
+    int                      client_fd;       // File descriptor of the client socket
+    time_t                   lastRequestTime; // Last request time for timeout management
+    time_t                   connectionStartTime;
+    size_t                   headerBytesReceived;
+    std::string              requestBuffer;
+    bool                     keepAlive;    // Keep-alive flag
+    Server                   serverConfig; // The server config the client is connected to
+    std::queue<HttpResponse> responses;    // Queue of responses to be sent to the client
 };
 
 /**
@@ -72,133 +72,133 @@ struct ClientInfo {
  */
 class SocketManager {
 
-	public:
-		SocketManager( void ) = delete;
-		/**
-		 * @brief Constructs a SocketManager with the given server configurations.
-		 *
-		 * @param servers A vector of Server objects representing the server configurations.
-		 */
-		SocketManager( const std::vector<Server>& servers );
-		/**
-		 * @brief Destructor that closes all open file descriptors.
-		 */
-		~SocketManager( void );
-		SocketManager( const SocketManager& other ) = delete;
-		SocketManager& operator=( const SocketManager& other ) = delete;
+  public:
+    SocketManager(void) = delete;
+    /**
+     * @brief Constructs a SocketManager with the given server configurations.
+     *
+     * @param servers A vector of Server objects representing the server configurations.
+     */
+    SocketManager(const std::vector<Server>& servers);
+    /**
+     * @brief Destructor that closes all open file descriptors.
+     */
+    ~SocketManager(void);
+    SocketManager(const SocketManager& other)            = delete;
+    SocketManager& operator=(const SocketManager& other) = delete;
 
-		/**
-		 * @brief Starts the server loop, handling I/O using poll().
-		 *
-		 * @details Accepts new clients and handles data from existing ones.
-		 * Will exit cleanly on signal (e.g. SIGINT).
-		 */
-		void run();
-		/**
-		 * @brief Custom exception class for socket-related errors.
-		 *
-		 * @details Inherits from std::exception and provides a custom error message.
-		 */
-		class SocketError : public std::exception
-		{
-			private:
-				std::string _msg;
-			public:
-				explicit SocketError(const std::string& msg);
-				virtual const char* what() const throw();
-		};
+    /**
+     * @brief Starts the server loop, handling I/O using poll().
+     *
+     * @details Accepts new clients and handles data from existing ones.
+     * Will exit cleanly on signal (e.g. SIGINT).
+     */
+    void run();
+    /**
+     * @brief Custom exception class for socket-related errors.
+     *
+     * @details Inherits from std::exception and provides a custom error message.
+     */
+    class SocketError : public std::exception {
+      private:
+        std::string _msg;
 
-	private:
-		std::vector<pollfd> _poll_fds;					///< Monitored file descriptors for poll().
-		std::map<int, Server> _listen_map;				///< Maps listening socket fds to their corresponding server configurations.
-		std::map<int, ClientInfo> _client_info;			/// Stores all information about each client
+      public:
+        explicit SocketError(const std::string& msg);
+        virtual const char* what() const throw();
+    };
 
-		/**
-		 * @brief Initializes all listening sockets for the provided servers.
-		 *
-		 * @param servers A vector of server configurations.
-		 */
-		void setupSockets( const std::vector<Server>& servers );
-		/**
-		 * @brief Accepts a new client connection and adds it to the poll list.
-		 *
-		 * @param listen_fd File descriptor of the listening socket.
-		 */
-		void handleNewConnection( int listen_fd );
-		/**
-		 * @brief Reads from a client socket, generates a response.
-		 *
-		 * @param client_fd File descriptor of the connected client.
-		 * @param index Index of the fd in the `_poll_fds` vector.
-		 * @return Bool indicating success if response is generated.
-		 */
-		bool handleClientData( int client_fd, size_t index );
-		/**
-		 * @brief Sends from a client socket, generates a response, and sends it.
-		 *
-		 * @param client_fd File descriptor of the connected client.
-		 * @param index Index of the fd in the `_poll_fds` vector.
-		 */
-		void sendResponse(int client_fd, size_t index );
-		/**
-		 * @brief Erases fds from a _client_map and _poll_fds.
-		 *
-		 * @param client_fd File descriptor of the connected client.
-		 * @param index Index of the fd in the `_poll_fds` vector.
-		 */
-		void cleanupClient( int client_fd, size_t index );
-		/**
-		 * @brief Closes client_fd and erases fds from a _client_map and _poll_fds.
-		 *
-		 * @param client_fd File descriptor of the connected client.
-		 * @param index Index of the fd in the `_poll_fds` vector.
-		 */
-		void cleanupClientConnectionClose( int client_fd, size_t index );
-		/**
-		 * @brief Check timeout for connection. Closes fd and erases fds if idle > TIMEOUT.
-		 *
-		 * @param client_fd File descriptor of the connected client.
-		 * @param index Index of the fd in the `_poll_fds` vector.
-		 */
-		void checkClientTimeouts( int client_fd, size_t index );
-		/**
-		 * @brief Handles poll errors and cleans up the client connection.
-		 *
-		 * @param fd File descriptor of the socket with error.
-		 * @param index Index of the fd in the `_poll_fds` vector.
-		 * @param revents Events that occurred on the socket.
-		 */
-		void handlePollError( int fd, size_t index, short revents );
-		/**
-		 * @brief Receives data from a client socket.
-		 *
-		 * @param fd File descriptor of the connected client.
-		 * @param index Index of the fd in the `_poll_fds` vector.
-		 * @return Bool indicating success if data is successfully received.
-		 */
-		bool receiveFromClient( int fd, size_t index );
-		/**
-		 * @brief Sends an error response to the client.
-		 *
-		 * @details The error response is generated based on the provided HTTP status code
-		 * and is added to the client's response queue for sending.
-		 *
-		 * @param fd File descriptor of the connected client.
-		 * @param status_code HTTP status code to be sent in the error response.
-		 */
-		void respondError(int fd, int status_code);
-		/**
-		 * @brief Checks if the client's request exceeds predefined limits.
-		 *
-		 * @param fd File descriptor of the connected client.
-		 * @return Bool indicating whether the request violates any limits.
-		 */
-		bool checkRequestLimits(int fd);
-		/**
-		 * @brief Checks if the client header has timed out.
-		 *
-		 * @param fd File descriptor of the connected client.
-		 * @return Bool indicating whether the header timeout has occurred.
-		 */
-		bool isHeaderTimeout(int fd);
+  private:
+    std::vector<pollfd> _poll_fds;          ///< Monitored file descriptors for poll().
+    std::map<int, Server> _listen_map;      ///< Maps listening socket fds to their corresponding server configurations.
+    std::map<int, ClientInfo> _client_info; /// Stores all information about each client
+
+    /**
+     * @brief Initializes all listening sockets for the provided servers.
+     *
+     * @param servers A vector of server configurations.
+     */
+    void setupSockets(const std::vector<Server>& servers);
+    /**
+     * @brief Accepts a new client connection and adds it to the poll list.
+     *
+     * @param listen_fd File descriptor of the listening socket.
+     */
+    void handleNewConnection(int listen_fd);
+    /**
+     * @brief Reads from a client socket, generates a response.
+     *
+     * @param client_fd File descriptor of the connected client.
+     * @param index Index of the fd in the `_poll_fds` vector.
+     * @return Bool indicating success if response is generated.
+     */
+    bool handleClientData(int client_fd, size_t index);
+    /**
+     * @brief Sends from a client socket, generates a response, and sends it.
+     *
+     * @param client_fd File descriptor of the connected client.
+     * @param index Index of the fd in the `_poll_fds` vector.
+     */
+    void sendResponse(int client_fd, size_t index);
+    /**
+     * @brief Erases fds from a _client_map and _poll_fds.
+     *
+     * @param client_fd File descriptor of the connected client.
+     * @param index Index of the fd in the `_poll_fds` vector.
+     */
+    void cleanupClient(int client_fd, size_t index);
+    /**
+     * @brief Closes client_fd and erases fds from a _client_map and _poll_fds.
+     *
+     * @param client_fd File descriptor of the connected client.
+     * @param index Index of the fd in the `_poll_fds` vector.
+     */
+    void cleanupClientConnectionClose(int client_fd, size_t index);
+    /**
+     * @brief Check timeout for connection. Closes fd and erases fds if idle > TIMEOUT.
+     *
+     * @param client_fd File descriptor of the connected client.
+     * @param index Index of the fd in the `_poll_fds` vector.
+     */
+    void checkClientTimeouts(int client_fd, size_t index);
+    /**
+     * @brief Handles poll errors and cleans up the client connection.
+     *
+     * @param fd File descriptor of the socket with error.
+     * @param index Index of the fd in the `_poll_fds` vector.
+     * @param revents Events that occurred on the socket.
+     */
+    void handlePollError(int fd, size_t index, short revents);
+    /**
+     * @brief Receives data from a client socket.
+     *
+     * @param fd File descriptor of the connected client.
+     * @param index Index of the fd in the `_poll_fds` vector.
+     * @return Bool indicating success if data is successfully received.
+     */
+    bool receiveFromClient(int fd, size_t index);
+    /**
+     * @brief Sends an error response to the client.
+     *
+     * @details The error response is generated based on the provided HTTP status code
+     * and is added to the client's response queue for sending.
+     *
+     * @param fd File descriptor of the connected client.
+     * @param status_code HTTP status code to be sent in the error response.
+     */
+    void respondError(int fd, int status_code);
+    /**
+     * @brief Checks if the client's request exceeds predefined limits.
+     *
+     * @param fd File descriptor of the connected client.
+     * @return Bool indicating whether the request violates any limits.
+     */
+    bool checkRequestLimits(int fd);
+    /**
+     * @brief Checks if the client header has timed out.
+     *
+     * @param fd File descriptor of the connected client.
+     * @return Bool indicating whether the header timeout has occurred.
+     */
+    bool isHeaderTimeout(int fd);
 };

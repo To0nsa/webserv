@@ -13,16 +13,18 @@
 #pragma once
 
 #include "core/Server.hpp"
-#include "http/HttpResponse.hpp"
 #include "http/HttpRequest.hpp"
+#include "http/HttpResponse.hpp"
 #include <string>
 
 namespace MessageHandler {
-	std::string getDefaultMessage(int status_code);
+std::string getDefaultMessage(int status_code);
 }
 
 namespace ResponseBuilder {
-	HttpResponse generateSuccess(int status_code, const std::string& body, const std::string& content_type, const HttpRequest& request);
-	HttpResponse generateError(int status_code, const Server& server, const HttpRequest& request);
-	HttpResponse generateRedirect(int status_code, const std::string& location, const HttpRequest& request);
-}
+HttpResponse generateSuccess(int status_code, const std::string& body,
+                             const std::string& content_type, const HttpRequest& request);
+HttpResponse generateError(int status_code, const Server& server, const HttpRequest& request);
+HttpResponse generateRedirect(int status_code, const std::string& location,
+                              const HttpRequest& request);
+} // namespace ResponseBuilder

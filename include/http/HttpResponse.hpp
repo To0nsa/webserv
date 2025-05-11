@@ -6,32 +6,31 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:37 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 14:38:18 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:37:38 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# pragma once
+#pragma once
 
-#include <string>
 #include <map>
+#include <string>
 
 class HttpResponse {
-private:
-	int _status_code;
-	std::string _status_message;
-	std::map<std::string, std::string> _headers;
-	std::string _body;
+  private:
+    int                                _status_code;
+    std::string                        _status_message;
+    std::map<std::string, std::string> _headers;
+    std::string                        _body;
 
-public:
-	HttpResponse( void );
-	~HttpResponse( void );
-	HttpResponse( const HttpResponse& other ) = default;
-	HttpResponse& operator=( const HttpResponse& other ) = default;
+  public:
+    HttpResponse(void);
+    ~HttpResponse(void);
+    HttpResponse(const HttpResponse& other)            = default;
+    HttpResponse& operator=(const HttpResponse& other) = default;
 
-	void setStatus( int code, const std::string& message );
-	void setHeader( const std::string& key, const std::string& value );
-	void setBody( const std::string& body );
-	bool isConnectionClose( void ) const;
-
-	std::string toString( void ) const;
+    void setStatus(int code, const std::string& message);
+    void setHeader(const std::string& key, const std::string& value);
+    void setBody(const std::string& body);
+    bool isConnectionClose(void) const;
+    std::string toString(void) const;
 };

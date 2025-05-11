@@ -11,28 +11,28 @@
 /* ************************************************************************** */
 
 #pragma once
-#include <string>
 #include <map>
+#include <string>
 
 class HttpRequest {
 
-	private:
-		std::string _method;
-		std::string _path;
-		std::string _version;
-		std::map<std::string, std::string> _headers;
-		std::string _body;
+  private:
+    std::string                        _method;
+    std::string                        _path;
+    std::string                        _version;
+    std::map<std::string, std::string> _headers;
+    std::string                        _body;
 
-	public:
-		HttpRequest( void );
-		~HttpRequest( void );
+  public:
+    HttpRequest(void);
+    ~HttpRequest(void);
 
-		bool parse( const std::string& raw_request );
-		void printRequest( void ) const;
+    bool parse(const std::string& raw_request);
+    void printRequest(void) const;
 
-		const std::string& getMethod( void ) const;
-		const std::string& getPath( void ) const;
-		const std::string& getVersion( void ) const;
-		const std::string& getHeader( const std::string& key ) const;
-		const std::string& getBody( void ) const;
+    const std::string& getMethod(void) const;
+    const std::string& getPath(void) const;
+    const std::string& getVersion(void) const;
+    const std::string& getHeader(const std::string& key) const;
+    const std::string& getBody(void) const;
 };

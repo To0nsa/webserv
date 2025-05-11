@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #pragma once
-#include <iostream>
 #include "config/Config.hpp"
-#include "core/Server.hpp"
 #include "core/Location.hpp"
+#include "core/Server.hpp"
+#include <iostream>
 
-void print_usage( void );
-void print_config( Config& config );
+void print_usage(void);
+void print_config(Config& config);
