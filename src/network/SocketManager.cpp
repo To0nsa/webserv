@@ -6,11 +6,14 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 11:06:45 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 12:59:07 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/SocketManager.hpp"
+#include "http/HttpResponse.hpp"
+#include "http/HttpRequest.hpp"
+#include "http/HttpResponseBuilder.hpp"
 #include <sstream> // For stringstream, we will remove it later
 
 // Signal handler for exiting the server
@@ -294,7 +297,13 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 			// Parse the headers and body
 		} */
 	}
-	
+	HttpRequest request;
+	if (!request.parse(_client_info[client_fd].requestBuffer)) {
+		std::cerr << "Failed to parse HTTP request.\n";
+		cleanupClientConnectionClose(client_fd, index);
+		return;
+	}
+	request.printRequest(); 
 	_client_info[client_fd].requestBuffer.clear();
 
 	
@@ -326,17 +335,10 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	*/
 	
 	// Temporary HTTP response logic for now (simple hardcoded response)
-	std::string body = "<h1>Success</h1><p>OK</p>";
-	std::stringstream response;
-	response << "HTTP/1.1 200 OK\r\n";
-	response << "Content-Type: text/html\r\n";
-	response << "Content-Length: " << body.length() << "\r\n";
-	response << "Connection: keep-alive\r\n";
-	response << "\r\n";
-	response << body;
-
-	std::string full_response = response.str();
-	return (full_response);
+	
+	HttpResponse response = ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
+	
+	return (response.toString());
 }
 
 // Accept new client and add to poll list
