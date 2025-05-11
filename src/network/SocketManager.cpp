@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 12:59:07 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 13:04:40 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ const char* SocketManager::SocketError::what() const throw() {
 // Set up sockets for each server (host:port)
 void SocketManager::setupSockets(const std::vector<Server>& servers) {
 	for (size_t i = 0; i < servers.size(); ++i) {
-		//int fd = socket(AF_INET, SOCK_STREAM, 0);
-		int fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0); // Create a TCP socket
+		int fd = socket(AF_INET, SOCK_STREAM, 0);
+		//int fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0); // Create a TCP socket
 		if (fd < 0)
 			throw SocketError("socket() failed: " + std::string(std::strerror(errno)));
 
@@ -84,10 +84,10 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 		}
 
 		//MacOS
-		/* if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0) { // Make socket non-blocking
+		if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0) { // Make socket non-blocking
 			close(fd);
 			throw SocketError("fcntl() failed: " + std::string(std::strerror(errno)));
-		} */
+		}
 
 		sockaddr_in addr;
 		addr.sin_family = AF_INET;
@@ -183,10 +183,10 @@ void SocketManager::handleNewConnection(int listen_fd) {
 		return;
 	}
 
-	/* if (fcntl(client_fd, F_SETFL, O_NONBLOCK) < 0) { // MacOS only
+	if (fcntl(client_fd, F_SETFL, O_NONBLOCK) < 0) { // MacOS only
 		close(client_fd);
 		return; // Shall we log it?
-	} */
+	}
 
 	_poll_fds.push_back((pollfd){ client_fd, POLLIN, 0 });
 	std::cout << std::endl;
@@ -207,8 +207,8 @@ void SocketManager::handleNewConnection(int listen_fd) {
 std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	char buffer[RECV_BUFFER];
 	_client_info[client_fd].lastRequestTime = time(NULL);
-	//int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); // MacOS only
-	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
+	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); // MacOS only
+	//int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
 	if (bytes == 0) {
 		std::cout << "Client fd " << client_fd << " disconnected." << std::endl;
 		cleanupClientConnectionClose(client_fd, index);
@@ -301,7 +301,7 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 	if (!request.parse(_client_info[client_fd].requestBuffer)) {
 		std::cerr << "Failed to parse HTTP request.\n";
 		cleanupClientConnectionClose(client_fd, index);
-		return;
+		return "";
 	}
 	request.printRequest(); 
 	_client_info[client_fd].requestBuffer.clear();
@@ -343,8 +343,8 @@ std::string SocketManager::handleClientData(int client_fd, size_t index) {
 
 // Accept new client and add to poll list
 void SocketManager::sendResponse(int client_fd, size_t index, std::string &response) {
-	ssize_t bytes_sent = send(client_fd, response.c_str(), response.size(), 0); // MacOS only
-	//ssize_t bytes_sent = send(client_fd, response.c_str(), response.size(), MSG_DONTWAIT);
+	//ssize_t bytes_sent = send(client_fd, response.c_str(), response.size(), 0); // MacOS only
+	ssize_t bytes_sent = send(client_fd, response.c_str(), response.size(), MSG_DONTWAIT);
 	if (bytes_sent < 0) {
 		std::cerr << "send() failed on fd " << client_fd << ": " << std::strerror(errno) << std::endl;
 		cleanupClientConnectionClose(client_fd, index);

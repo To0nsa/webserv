@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:37 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 11:09:38 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 13:10:21 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ private:
 
 public:
 	HttpResponse( void );
-	~HttpResponse( void ) {}
+	~HttpResponse( void );
 	HttpResponse( const HttpResponse& other ) = default;
 	HttpResponse& operator=( const HttpResponse& other ) = default;
 

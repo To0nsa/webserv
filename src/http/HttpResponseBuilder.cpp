@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 12:52:37 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 13:09:09 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 namespace MessageHandler {
 
-	static std::string getDefaultMessage(int status_code) {
-		static std::map<int, std::string> status_messages = {
+	std::string getDefaultMessage(int status_code) {
+		std::map<int, std::string> status_messages = {
 			{200, "OK"},
 			{201, "Created"},
 			{204, "No Content"},
