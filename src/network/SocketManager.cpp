@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 14:36:07 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:49:00 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,9 @@ SocketManager::~SocketManager() {
 }
 
 // Utility function to clean up client connections
-void SocketManager::cleanupClient(int client_fd, size_t index) {
+void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
 	_poll_fds.erase(_poll_fds.begin() + index);
 	_client_info.erase(client_fd);
-	std::cout << "cleanupClient client fd: " << client_fd << std::endl;
-}
-
-// Utility function to clean up client connections
-void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
-	cleanupClient(client_fd, index);
 	close(client_fd);
 	std::cout << "We close FD(Connection: close): " << client_fd << std::endl;
 }
@@ -58,6 +52,15 @@ void SocketManager::checkClientTimeouts( int client_fd, size_t index ) {
 		std::cout << "Client fd " << client_fd << " timed out is "<< TIMEOUT << std::endl;
 		cleanupClientConnectionClose(client_fd, index);
 	}
+}
+
+void SocketManager::handlePollError(int fd, size_t index, short revents) {
+	if (revents & POLLERR)
+		std::cout << "Socket error on fd: " << fd << std::endl;
+	if (revents & POLLHUP)
+		std::cout << "Client disconnected (POLLHUP) on fd: " << fd << std::endl;
+
+	cleanupClientConnectionClose(fd, index);
 }
 
 // Custom exception for socket errors
@@ -132,36 +135,24 @@ void SocketManager::run() {
 		for (size_t i = _poll_fds.size(); i-- > 0;) {
 			short revents = _poll_fds[i].revents;
 			int current_fd = _poll_fds[i].fd;
-
-			if (revents & POLLERR) {
-				std::cout << "Socket error on fd: " << current_fd << std::endl;
-				cleanupClientConnectionClose(current_fd, i);
+			if (revents & POLLERR || revents & POLLHUP) {
+				handlePollError(current_fd, i, revents);
 				continue;
 			}
-
-			if (revents & POLLHUP) {
-				std::cout << "Client disconnected (POLLHUP) on fd: " << current_fd << std::endl;
-				cleanupClientConnectionClose(current_fd, i);
-				continue;
-			}
-			if (revents & POLLIN) {											// Ready to read (incoming data or connection)
+			if (revents & POLLIN) { // Ready to read (incoming data or connection)
 				if (_listen_map.count(current_fd))
-					handleNewConnection(current_fd);						// Accept a new client
+					handleNewConnection(current_fd);
 				else {
-					if (!handleClientData(current_fd, i)) 					// Handle client data
+					if (!handleClientData(current_fd, i))
 						continue;
 					// After handling the request, mark the socket as ready for writing (POLLOUT)
-					_poll_fds[i].events |= POLLOUT;							// Mark the socket for writing
+					_poll_fds[i].events |= POLLOUT;
 				}
 			}
-
-			if (revents & POLLOUT) {										// Ready to write (can send data)
-				if (!_client_info[current_fd].responses.empty()) {
-					sendResponse(current_fd, i);					// Send the response when the socket is ready to write
-				}
+			if ((revents & POLLOUT) && !_client_info[current_fd].responses.empty()) { // Ready to write (can send data)
+				sendResponse(current_fd, i);
 			}
-
-			checkClientTimeouts( current_fd, i);							// If connection keep-alive but client idle we close
+			checkClientTimeouts( current_fd, i); // If connection keep-alive but client idle we close
 		}
 	}
 	std::cout << std::endl;
@@ -226,8 +217,8 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 
 	buffer[bytes] = '\0';
 	std::cout << std::endl;
-	std::cout << "Received request: " << buffer << " bytes: " << bytes <<  std::endl;
-	std::cout << std::endl;
+	std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes <<  std::endl;
+	std::cout << "==================================================" << std::endl;
 	
 	std::string single_msg(buffer, bytes);
 	_client_info[client_fd].requestBuffer += single_msg;
@@ -263,7 +254,8 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 
 	// Check if we have a complete HTTP request header, if not, wait for more data
 	if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
-		std::cout << "Request for Client fd " << client_fd << " is in process." << std::endl;
+		std::cout << "==============Request for Client fd " << client_fd << " is in process." << std::endl;
+		std::cout << "==================================================" << std::endl;
 		return false;
 	}
 
@@ -273,7 +265,8 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 		size_t headersEnd = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
 		std::string headersPart = _client_info[client_fd].requestBuffer.substr(0, headersEnd);
 
-		std::cout << "Headers part: " << headersPart << std::endl;
+		std::cout << "===============Headers part: " << headersPart << std::endl;
+		std::cout << "==================================================" << std::endl;
 	
 		/* HttpRequest tmpRequest;
 		if (!tmpRequest.parseHeadersOnly(headersPart)) {
@@ -312,25 +305,6 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 	request.printRequest(); 
 	_client_info[client_fd].requestBuffer.clear();
 
-	
-
-	/*==== Here we will have Request with parser ====*/
-	// At this point, you could parse the request to handle HTTP methods, headers, etc.
-
-	/* Example code (uncomment when implementing request parsing):
-	HttpRequest request;
-	if (!request.parse(_client_info[client_fd].requestBuffer)) {
-		std::cerr << "Failed to parse HTTP request.\n";
-		close(client_fd);
-		_poll_fds.erase(_poll_fds.begin() + index);
-		_client_map.erase(client_fd);
-		return;
-	}
-	request.printRequest(); 
-	*/
-
-	/*==== parser ends ====*/
-
 	/*==== Here we will have RequestHandler ====*/
 	// You might want to handle the parsed request based on HTTP methods, route, etc.
 	// The request handler would process the parsed request and generate an appropriate response.
@@ -341,16 +315,14 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 	*/
 	
 	// Temporary HTTP response logic for now (simple hardcoded response)
-	
 	HttpResponse response = ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
 	_client_info[client_fd].responses.push(response);
-	
 	return (true);
 }
 
 // Accept new client and add to poll list
 void SocketManager::sendResponse(int client_fd, size_t index) {
-	HttpResponse response = _client_info[client_fd].responses.front(); // Get the response to send
+	HttpResponse response = _client_info[client_fd].responses.front();
 	std::string raw = response.toString();
 	//ssize_t bytes_sent = send(client_fd, raw.c_str(), raw.size(), 0); // MacOS only
 	ssize_t bytes_sent = send(client_fd, raw.c_str(), raw.size(), MSG_DONTWAIT);
@@ -369,10 +341,10 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 		return;
 	}
 
-	std::cout << "We sent to fd:" << client_fd << std::endl;
+	std::cout << "=======================We sent to fd:" << client_fd << std::endl;
 	std::cout << raw << std::endl;
-	_client_info[client_fd].responses.pop(); // Remove the sent response
-	// Check if the response indicates that the connection should be kept alive
+	std::cout << "==================================================" << std::endl;
+	_client_info[client_fd].responses.pop();
 	if (!response.isConnectionClose()) {
 		std::cout << "Connection: keep-alive - keeping the connection open" << std::endl;
 		// We should not close the client connection, but just reset the POLLOUT flag if needed
@@ -380,6 +352,6 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 	} else {
 		// If it's not keep-alive, close the connection
 		std::cout << "Connection: close - closing the connection" << std::endl;
-		cleanupClientConnectionClose(client_fd, index); // Close the connection
+		cleanupClientConnectionClose(client_fd, index);
 	}
 }

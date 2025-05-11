@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 14:13:06 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:43:09 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,4 +161,12 @@ class SocketManager {
 		 * @param index Index of the fd in the `_poll_fds` vector.
 		 */
 		void checkClientTimeouts( int client_fd, size_t index );
+		/**
+		 * @brief Handles poll errors and cleans up the client connection.
+		 *
+		 * @param fd File descriptor of the socket with error.
+		 * @param index Index of the fd in the `_poll_fds` vector.
+		 * @param revents Events that occurred on the socket.
+		 */
+		void handlePollError( int fd, size_t index, short revents );
 };
