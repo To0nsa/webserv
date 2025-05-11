@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:37 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 13:10:21 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:38:18 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ public:
 	void setStatus( int code, const std::string& message );
 	void setHeader( const std::string& key, const std::string& value );
 	void setBody( const std::string& body );
+	bool isConnectionClose( void ) const;
 
 	std::string toString( void ) const;
 };

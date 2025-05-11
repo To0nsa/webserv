@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:56:54 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 11:10:44 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:38:16 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,16 @@ void HttpResponse :: setHeader(const std::string& key, const std::string& value)
 
 void HttpResponse :: setBody(const std::string& body) {
 	_body = body;
+}
+
+bool HttpResponse::isConnectionClose() const {
+	std::map<std::string, std::string>::const_iterator it = _headers.find("Connection");
+	if (it != _headers.end()) {
+		std::string value = it->second;
+		std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+		return value == "close";
+	}
+	return false;
 }
 
 std::string HttpResponse :: toString( void ) const {
