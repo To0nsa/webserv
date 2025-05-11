@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 13:09:09 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:45:50 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ namespace MessageHandler {
 			{403, "Forbidden"},
 			{404, "Not Found"},
 			{405, "Method Not Allowed"},
+			{408, "Request Timeout"},
 			{413, "Payload Too Large"},
 			{500, "Internal Server Error"},
 			{502, "Bad Gateway"},
@@ -53,9 +54,9 @@ namespace ResponseBuilder {
 		response.setBody(body);
 
 		std::string conn = request.getHeader("Connection");
-		bool close_connection = (conn == "close");
+		bool keep_connection = (conn == "keep-alive");
 
-		if (close_connection)
+		if (!keep_connection)
 			response.setHeader("Connection", "close");
 		else
 			response.setHeader("Connection", "keep-alive");
@@ -90,13 +91,12 @@ namespace ResponseBuilder {
 		response.setStatus(status_code, message);
 		response.setHeader("Content-Type", "text/html");
 		std::string conn = request.getHeader("Connection");
-		bool close_connection = (conn == "close");
+		bool keep_connection = (conn == "keep-alive");
 
-		if (close_connection)
+		if (!keep_connection)
 			response.setHeader("Connection", "close");
 		else
 			response.setHeader("Connection", "keep-alive");
-		response.setBody(body);
 
 		return response;
 	}
