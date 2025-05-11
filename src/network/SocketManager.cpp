@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 17:49:00 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:22:35 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,11 @@ SocketManager::SocketManager(const std::vector<Server>& servers) {
 	setupSockets(servers);
 }
 
-// Destructor: closes all open file descriptors
 SocketManager::~SocketManager() {
 	for (const pollfd& pfd : _poll_fds)
 		close(pfd.fd);
 }
 
-// Utility function to clean up client connections
 void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
 	_poll_fds.erase(_poll_fds.begin() + index);
 	_client_info.erase(client_fd);
@@ -47,7 +45,6 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
 
 void SocketManager::checkClientTimeouts( int client_fd, size_t index ) {
 	time_t now = time(NULL);
-	// Check if client has timed out
 	if (_client_info.count(client_fd) && now - _client_info[client_fd].lastRequestTime > TIMEOUT) {
 		std::cout << "Client fd " << client_fd << " timed out is "<< TIMEOUT << std::endl;
 		cleanupClientConnectionClose(client_fd, index);
@@ -59,8 +56,60 @@ void SocketManager::handlePollError(int fd, size_t index, short revents) {
 		std::cout << "Socket error on fd: " << fd << std::endl;
 	if (revents & POLLHUP)
 		std::cout << "Client disconnected (POLLHUP) on fd: " << fd << std::endl;
-
 	cleanupClientConnectionClose(fd, index);
+}
+
+bool SocketManager::receiveFromClient(int client_fd, size_t index) {
+	char buffer[RECV_BUFFER];
+	_client_info[client_fd].lastRequestTime = time(NULL);
+	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); // MacOS only
+	//int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
+	if (bytes == 0) {
+		std::cout << "Client fd " << client_fd << " disconnected." << std::endl;
+		cleanupClientConnectionClose(client_fd, index);
+		return false;
+	}
+	if (bytes < 0) {
+		std::cout << "recv() failed: " << std::strerror(errno) << std::endl;
+		cleanupClientConnectionClose(client_fd, index);
+		return false;
+	}
+	buffer[bytes] = '\0';
+	std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes <<  std::endl;
+	std::cout << "==================================================" << std::endl;
+	_client_info[client_fd].headerBytesReceived += bytes;
+	std::string single_msg(buffer, bytes);
+	_client_info[client_fd].requestBuffer += single_msg;
+	return true;
+}
+
+void SocketManager::respondError(int fd, int status_code) {
+	HttpRequest empty;
+	HttpResponse err = ResponseBuilder::generateError(status_code, _client_info[fd].serverConfig, empty);
+	_client_info[fd].responses.push(err);
+}
+
+bool SocketManager::checkRequestLimits(int fd) {
+	size_t max_size = _client_info[fd].serverConfig.getClientMaxBodySize();
+	if (_client_info[fd].headerBytesReceived > max_size ||
+		_client_info[fd].requestBuffer.size() > HEADER_MAX_LENGTH) {
+		std::cout << "Request too large from fd: " << fd << std::endl;
+		respondError(fd, 413);
+		return true;
+	}
+	return false;
+}
+
+bool SocketManager::isHeaderTimeout(int fd) {
+	if (_client_info[fd].headerBytesReceived < HEADER_MIN_LENGTH) {
+		time_t now = time(NULL);
+		if (now - _client_info[fd].connectionStartTime > HEADER_TIMEOUT_SECONDS) {
+			std::cout << "Header timeout on fd: " << fd << std::endl;
+			respondError(fd, 408);
+			return true;
+		}
+	}
+	return false;
 }
 
 // Custom exception for socket errors
@@ -193,64 +242,12 @@ void SocketManager::handleNewConnection(int listen_fd) {
 
 // Read data from client, send fixed response, then close
 bool SocketManager::handleClientData(int client_fd, size_t index) {
-	char buffer[RECV_BUFFER];
-	_client_info[client_fd].lastRequestTime = time(NULL);
-	int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); // MacOS only
-	//int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
-	if (bytes == 0) {
-		std::cout << "Client fd " << client_fd << " disconnected." << std::endl;
-		cleanupClientConnectionClose(client_fd, index);
+	if (!receiveFromClient(client_fd, index))
 		return false;
-	}
-	if (bytes < 0) {
-		std::cout << "recv() failed: " << std::strerror(errno) << std::endl;
-		cleanupClientConnectionClose(client_fd, index);
-		return false;
-	}
-	if (static_cast<size_t>(bytes) >_client_info[client_fd].serverConfig.getClientMaxBodySize()) {
-		std::cout << "Client fd " << client_fd << " sent too big request." << std::endl;
-		HttpRequest empty;
-		HttpResponse errorResp = ResponseBuilder::generateError(413, _client_info[client_fd].serverConfig, empty);
-		_client_info[client_fd].responses.push(errorResp);
+	if (checkRequestLimits(client_fd))
 		return true;
-	}
-
-	buffer[bytes] = '\0';
-	std::cout << std::endl;
-	std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes <<  std::endl;
-	std::cout << "==================================================" << std::endl;
-	
-	std::string single_msg(buffer, bytes);
-	_client_info[client_fd].requestBuffer += single_msg;
-
-	
-	_client_info[client_fd].headerBytesReceived += bytes; // Think! What kinda type is better to use here.
-	if (_client_info[client_fd].headerBytesReceived > _client_info[client_fd].serverConfig.getClientMaxBodySize()) {
-		HttpRequest empty2;
-		HttpResponse errorResp = ResponseBuilder::generateError(413, _client_info[client_fd].serverConfig, empty2);
-		_client_info[client_fd].responses.push(errorResp);
+	if (isHeaderTimeout(client_fd))
 		return true;
-	}
-		
-	if (_client_info[client_fd].requestBuffer.size() > HEADER_MAX_LENGTH &&
-		_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
-		std::cout << "Client fd " << client_fd << " sent too big header." << std::endl;
-		HttpRequest empty3;
-		HttpResponse errorResp = ResponseBuilder::generateError(413, _client_info[client_fd].serverConfig, empty3);
-		_client_info[client_fd].responses.push(errorResp);
-		return true;
-	}
-	
-	if (_client_info[client_fd].headerBytesReceived < HEADER_MIN_LENGTH) {
-		time_t now = time(NULL);
-		if (now - _client_info[client_fd].connectionStartTime > HEADER_TIMEOUT_SECONDS) {
-			std::cout << "Client fd " << client_fd << " sent header too slow (rate limit)." << std::endl;
-			HttpRequest too_slow;
-			HttpResponse errorResp = ResponseBuilder::generateError(408, _client_info[client_fd].serverConfig, too_slow);
-			_client_info[client_fd].responses.push(errorResp);
-			return true;
-		}
-	}
 
 	// Check if we have a complete HTTP request header, if not, wait for more data
 	if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {

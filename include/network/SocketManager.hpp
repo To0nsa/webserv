@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 17:43:09 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:29:07 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,4 +169,36 @@ class SocketManager {
 		 * @param revents Events that occurred on the socket.
 		 */
 		void handlePollError( int fd, size_t index, short revents );
+		/**
+		 * @brief Receives data from a client socket.
+		 *
+		 * @param fd File descriptor of the connected client.
+		 * @param index Index of the fd in the `_poll_fds` vector.
+		 * @return Bool indicating success if data is successfully received.
+		 */
+		bool receiveFromClient( int fd, size_t index );
+		/**
+		 * @brief Sends an error response to the client.
+		 *
+		 * @details The error response is generated based on the provided HTTP status code
+		 * and is added to the client's response queue for sending.
+		 *
+		 * @param fd File descriptor of the connected client.
+		 * @param status_code HTTP status code to be sent in the error response.
+		 */
+		void respondError(int fd, int status_code);
+		/**
+		 * @brief Checks if the client's request exceeds predefined limits.
+		 *
+		 * @param fd File descriptor of the connected client.
+		 * @return Bool indicating whether the request violates any limits.
+		 */
+		bool checkRequestLimits(int fd);
+		/**
+		 * @brief Checks if the client header has timed out.
+		 *
+		 * @param fd File descriptor of the connected client.
+		 * @return Bool indicating whether the header timeout has occurred.
+		 */
+		bool isHeaderTimeout(int fd);
 };
