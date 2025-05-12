@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/09 08:42:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/12 21:04:11 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +241,8 @@ const std::unordered_map<std::string, LocationHandler>& locationHandlers() {
              }
              // Define the set of valid HTTP methods
              static const std::set<std::string> valid_methods = {
-                 "GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"};
+                 "GET", /* "HEAD", */ "POST",
+                 /* "PUT", */ "DELETE" /* , "CONNECT", "OPTIONS", "TRACE", "PATCH" */};
              // Iterate through each provided method, validating and adding them
              for (const auto& m : v) {
                  // Check if the method is valid, otherwise throw an error
