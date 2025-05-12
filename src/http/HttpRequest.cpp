@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 19:43:06 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 13:55:24 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ bool HttpRequest::parse(const std::string& raw_request) {
     _method  = line.substr(0, method_end);
     _path    = line.substr(method_end + 1, path_end - method_end - 1);
     _version = line.substr(path_end + 1);
+    _version.erase(_version.find_last_not_of("\r\n") + 1);  // trim \r and \n
 
     // Parse headers
     while (std::getline(stream, line) && !line.empty() && line != "\r") {
