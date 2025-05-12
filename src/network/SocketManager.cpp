@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 16:26:06 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 23:33:24 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,8 +329,9 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     // The request handler would process the parsed request and generate an appropriate response.
 
     /* Example code (uncomment when implementing request handling):
-    const Server& server = _client_map[client_fd];  // Get the server configuration
-    RequestHandler(server, request);  // Handle the request
+                const Server& server = _client_info[client_fd].serverConfig;
+                HttpResponse response = handleRequest(request, server);
+                _client_info[client_fd].responses.push(response);
     */
 
     // Temporary HTTP response logic for now (simple hardcoded response)
