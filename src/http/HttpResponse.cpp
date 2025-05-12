@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:56:54 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 14:16:03 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 23:09:06 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,49 @@ void HttpResponse ::setBody(const std::string& body) {
     _body = body;
 }
 
+/**
+ * @brief Stores HTTP version and Connection header from the request.
+ *
+ * @details This metadata is required to determine whether the connection should be
+ * kept alive or closed after the response is sent. The HTTP version and the client's
+ * `Connection` header together define the default persistence behavior according to
+ * RFC 7230 §6.3. This method must be called before sending the response to ensure
+ * proper behavior in `isConnectionClose()`.
+ *
+ * @param version The HTTP version from the client's request (e.g., "HTTP/1.1").
+ * @param conn    The value of the Connection header from the client's request.
+ */
+void HttpResponse::setRequestMeta(const std::string& version, const std::string& conn) {
+    _http_version      = version;
+    _connection_header = conn;
+}
+
+/**
+ * @brief Determines whether the connection should be closed after the response.
+ *
+ * @details This logic properly accounts for the HTTP version and the client's
+ * Connection header to implement persistent connections correctly.
+ *
+ * Unlike the previous version, which only checked if `Connection: close` was present,
+ * this method enforces the default semantics of each protocol version:
+ * - HTTP/1.1 assumes keep-alive unless explicitly closed.
+ * - HTTP/1.0 assumes close unless explicitly kept alive.
+ *
+ * This behavior is compliant with RFC 7230 §6.3 and avoids premature connection
+ * termination when clients do not send a `Connection` header.
+ *
+ * @return `true` if the connection should be closed, `false` to keep it alive.
+ */
 bool HttpResponse::isConnectionClose() const {
-    std::map<std::string, std::string>::const_iterator it = _headers.find("Connection");
-    if (it != _headers.end()) {
-        std::string value = it->second;
-        std::transform(value.begin(), value.end(), value.begin(), ::tolower);
-        return value == "close";
-    }
-    return false;
+    std::string conn = _connection_header;
+    std::transform(conn.begin(), conn.end(), conn.begin(), ::tolower);
+
+    if (_http_version == "HTTP/1.1")
+        return conn == "close"; // Keep-alive by default
+    if (_http_version == "HTTP/1.0")
+        return conn != "keep-alive"; // Close by default
+
+    return true; // Unknown version Close by default
 }
 
 std::string HttpResponse ::toHttpString(void) const {
