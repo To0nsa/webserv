@@ -431,7 +431,7 @@ CheckOptions:
     value:           PascalCase
   - key:             readability-identifier-naming.FunctionCase
     value:           camelCase
-  - key:             readability-identifier-naming.PrivateMemberSuffix
+  - key:             readability-identifier-naming.PrivateMemberPrefix
     value:           _
 ```
 

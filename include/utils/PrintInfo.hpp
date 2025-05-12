@@ -1,15 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   PrintInfo.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 17:30:22 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/02 17:30:23 by nlouis           ###   ########.fr       */
+/*   Created: 2025/05/03 14:01:52 by irychkov          #+#    #+#             */
+/*   Updated: 2025/05/03 15:28:11 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int main() {
-    return 0;
-}
+#pragma once
+#include "config/Config.hpp"
+#include "core/Location.hpp"
+#include "core/Server.hpp"
+#include <iostream>
+
+void print_usage(void);
+void print_config(Config& config);

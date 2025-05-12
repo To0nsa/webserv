@@ -6,13 +6,14 @@
 #    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/26 16:00:00 by nlouis            #+#    #+#              #
-#    Updated: 2025/05/09 11:06:47 by nlouis           ###   ########.fr        #
+#    Updated: 2025/05/12 19:52:57 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Compiler settings
 CXX        := c++
-CXXFLAGS   := -Wall -Wextra -Werror -I include -g
+CXXFLAGS   := -Wall -Wextra -Werror -I include
+CXXFLAGS   += -std=c++17
 DEBUGFLAGS := -g3 -O0 -DDEBUG
 OPTFLAGS   := -O3
 
