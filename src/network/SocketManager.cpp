@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 15:57:22 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:26:06 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,9 @@ void SocketManager::checkClientTimeouts(int client_fd, size_t index) {
     if (!_client_info.count(client_fd))
         return;
     time_t now = time(NULL);
-    if (now - _client_info[client_fd].lastRequestTime > TIMEOUT) {
+    if (_client_info[client_fd].responses.empty() &&
+        _client_info[client_fd].current_raw_response.empty() &&
+        now - _client_info[client_fd].lastRequestTime > TIMEOUT) {
         std::cout << "Client fd " << client_fd << " timed out is " << TIMEOUT << std::endl;
         cleanupClientConnectionClose(client_fd, index);
         return;
