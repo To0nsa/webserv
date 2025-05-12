@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 19:50:30 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:42:11 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,11 @@ struct ClientInfo {
     int                      client_fd;       // File descriptor of the client socket
     time_t                   lastRequestTime; // Last request time for timeout management
     time_t                   connectionStartTime;
+    time_t                   lastSendAttemptTime;
     size_t                   headerBytesReceived;
+    size_t                   bytes_sent;
     std::string              requestBuffer;
+    std::string              current_raw_response;
     bool                     keepAlive;    // Keep-alive flag
     Server                   serverConfig; // The server config the client is connected to
     std::queue<HttpResponse> responses;    // Queue of responses to be sent to the client

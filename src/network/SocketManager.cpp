@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 14:16:13 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:55:12 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,20 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
 }
 
 void SocketManager::checkClientTimeouts(int client_fd, size_t index) {
+    if (!_client_info.count(client_fd))
+        return;
     time_t now = time(NULL);
-    if (_client_info.count(client_fd) && now - _client_info[client_fd].lastRequestTime > TIMEOUT) {
+    if (now - _client_info[client_fd].lastRequestTime > TIMEOUT) {
         std::cout << "Client fd " << client_fd << " timed out is " << TIMEOUT << std::endl;
+        cleanupClientConnectionClose(client_fd, index);
+        return;
+    }
+    std::cout << _client_info[client_fd].lastSendAttemptTime << std::endl;
+    std::cout << now << std::endl;
+    if (!_client_info[client_fd].responses.empty() &&
+        !_client_info[client_fd].current_raw_response.empty() &&
+        now - _client_info[client_fd].lastSendAttemptTime > TIMEOUT) {
+        std::cout << "Client fd " << client_fd << " too slow to read response (send timeout)" << std::endl;
         cleanupClientConnectionClose(client_fd, index);
     }
 }
@@ -75,9 +86,9 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
         return false;
     }
     buffer[bytes] = '\0';
-    std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes
+    /* std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes
               << std::endl;
-    std::cout << "==================================================" << std::endl;
+    std::cout << "==================================================" << std::endl; */
     _client_info[client_fd].headerBytesReceived += bytes;
     std::string single_msg(buffer, bytes);
     _client_info[client_fd].requestBuffer += single_msg;
@@ -131,7 +142,7 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
         if (fd < 0)
             throw SocketError("socket() failed: " + std::string(std::strerror(errno)));
 
-		int opt = 1; // To tell the OS: "I want to reuse this port immediately, even if it's in TIME_WAIT
+        int opt = 1; // To tell the OS: "I want to reuse this port immediately, even if it's in TIME_WAIT
         if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
             close(fd);
             throw SocketError("setsockopt() failed: " + std::string(std::strerror(errno)));
@@ -155,7 +166,7 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 
         if (bind(fd, (sockaddr*) &addr, sizeof(addr)) < 0) { // Bind socket to IP:port
             close(fd);
-			throw SocketError("bind() failed on " + servers[i].getHost() + ":" + std::to_string(servers[i].getPort()) + ": " + strerror(errno));
+            throw SocketError("bind() failed on " + servers[i].getHost() + ":" + std::to_string(servers[i].getPort()) + ": " + strerror(errno));
         }
 
         if (listen(fd, SOMAXCONN) < 0) { // Start listening for incoming connections
@@ -177,7 +188,7 @@ void SocketManager::run() {
     while (running) {
         int n = poll(&_poll_fds[0], _poll_fds.size(), 1000); // Poll each 1sec (timeout = 1sec)
         if (n < 0) {
-			if (errno == EINTR) { // we can try to handle signal here (A signal was caught during poll().)
+            if (errno == EINTR) { // we can try to handle signal here (A signal was caught during poll().)
                 running = 0;
                 continue;
             }
@@ -201,7 +212,7 @@ void SocketManager::run() {
                     _poll_fds[i].events |= POLLOUT;
                 }
             }
-			if ((revents & POLLOUT) && !_client_info[current_fd].responses.empty()) { // Ready to write (can send data)
+            if ((revents & POLLOUT) && !_client_info[current_fd].responses.empty()) { // Ready to write (can send data)
                 sendResponse(current_fd, i);
             }
             checkClientTimeouts(current_fd, i); // If connection keep-alive but client idle we close
@@ -237,6 +248,7 @@ void SocketManager::handleNewConnection(int listen_fd) {
     info.lastRequestTime     = time(NULL);
     info.connectionStartTime = time(NULL);
     info.headerBytesReceived = 0;
+    info.bytes_sent          = 0;
     info.keepAlive           = true;
     info.serverConfig        = _listen_map[listen_fd];
 
@@ -326,9 +338,17 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 // Accept new client and add to poll list
 void SocketManager::sendResponse(int client_fd, size_t index) {
     HttpResponse response = _client_info[client_fd].responses.front();
-    std::string  raw = response.toHttpString();
+
+    if (_client_info[client_fd].current_raw_response.empty()) {
+        _client_info[client_fd].current_raw_response = response.toHttpString();
+        _client_info[client_fd].bytes_sent = 0;
+    }
+    
+    std::string& raw = _client_info[client_fd].current_raw_response;
+    size_t sent_already = _client_info[client_fd].bytes_sent;
+
     // ssize_t bytes_sent = send(client_fd, raw.c_str(), raw.size(), 0); // MacOS only
-    ssize_t bytes_sent = send(client_fd, raw.c_str(), raw.size(), MSG_DONTWAIT);
+    ssize_t bytes_sent = send(client_fd, raw.c_str() + sent_already, raw.size() - sent_already, MSG_DONTWAIT);
     if (bytes_sent < 0) {
         std::cerr << "send() failed on fd " << client_fd << ": " << std::strerror(errno)
                   << std::endl;
@@ -336,26 +356,26 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         return;
     }
 
-    if (static_cast<size_t>(bytes_sent) < raw.size()) {
-        // Not all data sent — this is a partial send, ideally handle it (advanced)
-        std::cerr << "Warning: partial send on fd " << client_fd << std::endl;
-        // We can requeue the rest of the response or store a "bytesSent" counter in ClientInfo
-        // For now, we close
-        cleanupClientConnectionClose(client_fd, index);
-        return;
-    }
-
     std::cout << "=======================We sent to fd:" << client_fd << std::endl;
     std::cout << raw << std::endl;
     std::cout << "==================================================" << std::endl;
-    _client_info[client_fd].responses.pop();
-    if (!response.isConnectionClose()) {
-        std::cout << "Connection: keep-alive - keeping the connection open" << std::endl;
-        // We should not close the client connection, but just reset the POLLOUT flag if needed
-		_poll_fds[index].events &= ~POLLOUT; // Reset POLLOUT flag if the connection should stay open
-    } else {
-        // If it's not keep-alive, close the connection
-        std::cout << "Connection: close - closing the connection" << std::endl;
-        cleanupClientConnectionClose(client_fd, index);
+
+    _client_info[client_fd].bytes_sent += bytes_sent;
+    _client_info[client_fd].lastSendAttemptTime = time(NULL);
+    if (_client_info[client_fd].bytes_sent == raw.size()) {
+        _client_info[client_fd].responses.pop();
+        _client_info[client_fd].current_raw_response.clear();
+        _client_info[client_fd].bytes_sent = 0;
+    
+        if (!response.isConnectionClose()) {
+            std::cout << "Connection: keep-alive - keeping the connection open" << std::endl;
+            // We should not close the client connection, but just reset the POLLOUT flag if needed
+            _poll_fds[index].events &= ~POLLOUT; // Reset POLLOUT flag if the connection should stay open
+        } else {
+            // If it's not keep-alive, close the connection
+            std::cout << "Connection: close - closing the connection" << std::endl;
+            cleanupClientConnectionClose(client_fd, index);
+        }
     }
+    // else: partial send, keep waiting for POLLOUT and continue sending later
 }
