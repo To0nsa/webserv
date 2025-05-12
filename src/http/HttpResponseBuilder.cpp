@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 14:07:10 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:33:56 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ namespace ResponseBuilder {
             ss << "<html><body><h1>" << status_code << " " << message << "</h1></body></html>";
             body = ss.str();
         }
-
+        response.setBody(body);
         response.setStatus(status_code, message);
         response.setHeader("Content-Type", "text/html");
 
