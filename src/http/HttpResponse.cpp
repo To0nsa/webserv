@@ -6,12 +6,13 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:56:54 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 14:38:16 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 13:57:29 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/HttpResponse.hpp"
 #include <sstream>
+#include <algorithm>
 
 HttpResponse ::HttpResponse(void) {
     _status_code    = 200;
