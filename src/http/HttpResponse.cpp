@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:56:54 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 13:57:29 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:16:03 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ bool HttpResponse::isConnectionClose() const {
     return false;
 }
 
-std::string HttpResponse ::toString(void) const {
+std::string HttpResponse ::toHttpString(void) const {
     std::stringstream ss;
 
     ss << "HTTP/1.1 " << _status_code << " " << _status_message << "\r\n";

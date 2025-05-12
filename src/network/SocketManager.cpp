@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 19:48:43 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:16:13 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,7 +326,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 // Accept new client and add to poll list
 void SocketManager::sendResponse(int client_fd, size_t index) {
     HttpResponse response = _client_info[client_fd].responses.front();
-    std::string  raw = response.toString();
+    std::string  raw = response.toHttpString();
     // ssize_t bytes_sent = send(client_fd, raw.c_str(), raw.size(), 0); // MacOS only
     ssize_t bytes_sent = send(client_fd, raw.c_str(), raw.size(), MSG_DONTWAIT);
     if (bytes_sent < 0) {

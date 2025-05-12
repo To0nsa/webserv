@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:37 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 19:37:38 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:15:54 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,5 @@ class HttpResponse {
     void setHeader(const std::string& key, const std::string& value);
     void setBody(const std::string& body);
     bool isConnectionClose(void) const;
-    std::string toString(void) const;
+    std::string toHttpString(void) const;
 };
