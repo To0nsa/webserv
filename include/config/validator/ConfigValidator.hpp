@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 00:11:16 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/11 23:03:23 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/12 20:31:30 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ class ConfigValidator {
      *
      * @throws SyntaxError If any rule is violated in the configuration.
      */
-    void validate(const Config& config);
+    static void validate(const Config& config);
 
   private:
     /**
@@ -73,7 +73,7 @@ class ConfigValidator {
      *
      * @throws SyntaxError If any server lacks at least one location block.
      */
-    void validateHasLocation(const std::vector<Server>& servers);
+    static void validateHasLocation(const std::vector<Server>& servers);
     /**
      * @brief Validates uniqueness of virtual host definitions per host:port.
      *
@@ -85,7 +85,7 @@ class ConfigValidator {
      *
      * @throws SyntaxError If two servers share the same host, port, and server_name.
      */
-    void validateUniquePorts(const std::vector<Server>& servers);
+    static void validateUniquePorts(const std::vector<Server>& servers);
     /**
      * @brief Validates the minimal structure of each location block.
      *
@@ -98,7 +98,7 @@ class ConfigValidator {
      * @throws SyntaxError If a location is structurally incomplete or contains conflicting
      * directives.
      */
-    void validateLocationDefaults(const std::vector<Server>& servers);
+    static void validateLocationDefaults(const std::vector<Server>& servers);
     /**
      * @brief Ensures no duplicate server names within a single server block.
      *
@@ -110,7 +110,7 @@ class ConfigValidator {
      *
      * @throws SyntaxError If a server block declares the same server_name more than once.
      */
-    void validateUniqueServerNames(const std::vector<Server>& servers);
+    static void validateUniqueServerNames(const std::vector<Server>& servers);
     /**
      * @brief Validates that all error_page codes are within the valid HTTP error range.
      *
@@ -121,7 +121,7 @@ class ConfigValidator {
      *
      * @throws SyntaxError If an invalid error code is found.
      */
-    void validateErrorPageCodes(const std::vector<Server>& servers);
+    static void validateErrorPageCodes(const std::vector<Server>& servers);
     /**
      * @brief Validates that all redirect codes are valid HTTP 3xx status codes.
      *
@@ -132,7 +132,7 @@ class ConfigValidator {
      *
      * @throws SyntaxError If a redirect code is outside the 300–399 range.
      */
-    void validateRedirectCodes(const std::vector<Server>& servers);
+    static void validateRedirectCodes(const std::vector<Server>& servers);
     /**
      * @brief Validates that all declared HTTP methods are standard and recognized.
      *
@@ -144,7 +144,7 @@ class ConfigValidator {
      *
      * @throws SyntaxError If an unknown or invalid HTTP method is encountered.
      */
-    void validateAllowedMethods(const std::vector<Server>& servers);
+    static void validateAllowedMethods(const std::vector<Server>& servers);
     /**
      * @brief Validates that the client_max_body_size directive is strictly positive.
      *
@@ -156,7 +156,7 @@ class ConfigValidator {
      *
      * @throws SyntaxError If any server sets a body size limit of zero.
      */
-    void validateClientMaxBodySize(const std::vector<Server>& servers);
+    static void validateClientMaxBodySize(const std::vector<Server>& servers);
     /**
      * @brief Validates the correctness and safety of upload_store paths.
      *
@@ -169,7 +169,7 @@ class ConfigValidator {
      *
      * @throws SyntaxError If an upload_store path is invalid or unsafe.
      */
-    void validateUploadStorePaths(const std::vector<Server>& servers);
+    static void validateUploadStorePaths(const std::vector<Server>& servers);
     /**
      * @brief Validates CGI extensions declared in each location block.
      *
@@ -181,5 +181,5 @@ class ConfigValidator {
      *
      * @throws SyntaxError If any CGI extension is invalid or improperly formatted.
      */
-    void validateCgiExtensions(const std::vector<Server>& servers);
+    static void validateCgiExtensions(const std::vector<Server>& servers);
 };

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponseBuilder.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 14:33:56 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 20:29:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,14 +119,22 @@ HttpResponse generateRedirect(int status_code, const std::string& location,
     response.setStatus(status_code, message);
     response.setHeader("Location", location);
     response.setHeader("Content-Length", "0");
-    std::string conn       = request.getHeader("Connection");
-    std::string version    = request.getVersion();
-    bool        keep_alive = false;
 
-    if (version == "HTTP/1.1")
-        keep_alive = (conn != "close");
-    else if (version == "HTTP/1.0")
-        keep_alive = (conn == "keep-alive");
+    (void) request; // Suppress unused variable warning
+                    // THIS COMMENT SECTION CAN BE DELETED
+    // No Connection header strictly needed for redirects (doesnt compile: ‘keep_alive’ set but not
+    // used)
+    // - HTTP/1.1 defaults to keep-alive if the header is omitted.
+    // - We send Content-Length: 0, so the response end is unambiguous.
+    // - This is compliant with RFC 7230 and matches NGINX behavior for 3xx.
+    /*     std::string conn       = request.getHeader("Connection");
+        std::string version    = request.getVersion();
+        bool        keep_alive = false;
+
+        if (version == "HTTP/1.1")
+            keep_alive = (conn != "close");
+        else if (version == "HTTP/1.0")
+            keep_alive = (conn == "keep-alive"); */
     return response;
 }
 } // namespace ResponseBuilder
