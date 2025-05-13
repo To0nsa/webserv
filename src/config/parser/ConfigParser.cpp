@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 08:46:22 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/09 09:38:32 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 21:17:21 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,9 +207,17 @@ Location ConfigParser::parseLocation() {
 
     Location location;
 
-    // Parse the location path (either a string or an unquoted identifier)
-    location.setPath(
-        expectOneOf({TokenType::STRING, TokenType::IDENTIFIER}, "location path").value);
+    // Validate path token exists and is of correct type
+    TokenType type = current().type;
+    if (type != TokenType::STRING && type != TokenType::IDENTIFIER) {
+        throw SyntaxError(formatError("Expected location path after 'location', but got '" +
+                                          current().value + "'",
+                                      current().line, current().column),
+                          getContextWindow());
+    }
+
+    location.setPath(current().value);
+    advance(); // consume the path token
 
     expect(TokenType::LBRACE, "start of location block"); // Expect opening brace '{'
 

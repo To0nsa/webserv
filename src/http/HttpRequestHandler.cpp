@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/12 23:14:03 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 21:02:10 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "core/Location.hpp"
 #include "http/HttpResponseBuilder.hpp"
 
-HttpResponse handleGet(const HttpRequest&, const Server&, const Location&);
+/* HttpResponse handleGet(const HttpRequest&, const Server&, const Location&);
 HttpResponse handlePost(const HttpRequest&, const Server&, const Location&);
 HttpResponse handleDelete(const HttpRequest&, const Server&, const Location&);
 HttpResponse handleCgi(const HttpRequest&, const Server&, const Location&);
@@ -64,4 +64,4 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     }
 
     return ResponseBuilder::generateError(501, server, request); // Not implemented
-}
+} */
