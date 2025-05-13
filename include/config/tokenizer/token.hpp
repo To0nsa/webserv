@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 00:55:06 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/08 16:54:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 22:39:29 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ enum class TokenType {
     LBRACE,      ///< `{` — begins a block
     RBRACE,      ///< `}` — ends a block
     SEMICOLON,   ///< `;` — terminates a directive
+    COMMA,       ///< `,` — separates arguments
     END_OF_FILE, ///< Special token marking the end of the input
 
     // ───── Keywords ─────

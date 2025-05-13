@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 22:19:17 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 22:52:56 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 #include "utils/stringUtils.hpp"
 #include <charconv>
+#include <sstream>
 #include <stdexcept>
 
 int parseInt(const std::string& value) {
@@ -108,4 +109,30 @@ std::string toLower(const std::string& str) {
     });
 
     return result; // Return the transformed string
+}
+
+std::string formatBytes(std::size_t bytes) {
+    const char* suffixes[] = {"B", "KiB", "MiB", "GiB", "TiB"};
+    double      size       = static_cast<double>(bytes);
+    int         i          = 0;
+
+    while (size >= 1024.0 && i < 4) {
+        size /= 1024.0;
+        ++i;
+    }
+
+    std::ostringstream oss;
+    oss.precision(2);
+    oss << std::fixed << size << ' ' << suffixes[i];
+    return oss.str();
+}
+
+std::string joinStrings(const std::vector<std::string>& list, const std::string& delim) {
+    std::ostringstream oss;
+    for (std::size_t i = 0; i < list.size(); ++i) {
+        oss << list[i];
+        if (i + 1 < list.size())
+            oss << delim;
+    }
+    return oss.str();
 }

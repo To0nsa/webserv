@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 22:15:54 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 22:35:19 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ static void requireMinArgCount(const std::vector<std::string>& args, std::size_t
     }
 }
 
-void validateIPv4Address(const std::string& ip, int line, int column,
-                         const std::function<std::string()>& context_provider) {
+static void validateIPv4Address(const std::string& ip, int line, int column,
+                                const std::function<std::string()>& context_provider) {
     std::istringstream iss(ip);   // Stream to split the IP string by '.'
     std::string        segment;   // Holds each individual octet string
     int                count = 0; // Number of octets parsed
@@ -108,6 +108,24 @@ void validateIPv4Address(const std::string& ip, int line, int column,
         throw SyntaxError(
             formatError("Invalid IP address format (expected 4 octets): " + ip, line, column),
             context_provider());
+    }
+}
+
+static void validateCgiExtension(const std::string& ext, int line, int column,
+                                 const std::function<std::string()>& context_provider) {
+    if (ext.empty() || ext == "." || ext[0] != '.') {
+        throw SyntaxError(formatError("Invalid CGI extension: '" + ext + "'", line, column),
+                          context_provider());
+    }
+
+    // Check all characters after the dot
+    for (std::size_t i = 1; i < ext.size(); ++i) {
+        char c = ext[i];
+        if (!std::isalnum(c)) {
+            throw SyntaxError(
+                formatError("Invalid character in CGI extension: '" + ext + "'", line, column),
+                context_provider());
+        }
     }
 }
 
@@ -311,20 +329,22 @@ const std::unordered_map<std::string, LocationHandler>& locationHandlers() {
         // extension and adds each valid extension to the Location object using addCgiExtension().
         {"cgi_extension",
          [](Location& loc, const auto& args, int line, int column, const std::string& ctx) {
-             // Ensure at least one argument is provided for the "cgi_extension" directive
              requireMinArgCount(args, 1, "cgi_extension", line, column, ctx);
-             // Process each extension (can be comma-separated) and add it to the Location object
              for (const std::string& raw : args) {
                  size_t start = 0, end;
                  while ((end = raw.find(',', start)) != std::string::npos) {
                      std::string ext = raw.substr(start, end - start);
-                     if (!ext.empty())
-                         loc.addCgiExtension(ext); // Add the CGI extension to the Location object
+                     if (!ext.empty()) {
+                         validateCgiExtension(ext, line, column, [&]() { return ctx; });
+                         loc.addCgiExtension(ext);
+                     }
                      start = end + 1;
                  }
                  std::string ext = raw.substr(start);
-                 if (!ext.empty())
-                     loc.addCgiExtension(ext); // Add the last CGI extension if exists
+                 if (!ext.empty()) {
+                     validateCgiExtension(ext, line, column, [&]() { return ctx; });
+                     loc.addCgiExtension(ext);
+                 }
              }
          }},
         // Handle the "return" directive, which defines an HTTP redirection for this location.

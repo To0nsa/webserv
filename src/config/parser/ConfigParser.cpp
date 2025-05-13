@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 08:46:22 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 21:17:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 22:45:36 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,12 +334,31 @@ std::vector<std::string> ConfigParser::collectArgs(std::initializer_list<TokenTy
     while (!isAtEnd()) {
         TokenType t = current().type;
 
-        // Stop if the current token is not in the valid type list
         if (std::find(validTypes.begin(), validTypes.end(), t) == validTypes.end())
             break;
 
-        values.push_back(current().value); // Save the token value
-        advance();                         // Consume the token
+        std::string val = current().value;
+        advance();
+
+        // Now check for ",value" groups
+        while (match(TokenType::COMMA)) {
+            if (isAtEnd() || std::find(validTypes.begin(), validTypes.end(), current().type) ==
+                                 validTypes.end()) {
+                throw SyntaxError(
+                    formatError("Expected value after comma", getLine(), current().column),
+                    getContextWindow());
+            }
+            val += "," + current().value;
+            advance();
+        }
+
+        // split val on commas into multiple entries
+        std::istringstream ss(val);
+        std::string        token;
+        while (std::getline(ss, token, ',')) {
+            if (!token.empty())
+                values.push_back(token);
+        }
     }
 
     return values; // Return the collected argument values

@@ -6,29 +6,14 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 14:01:22 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/13 22:24:01 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 22:50:10 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/PrintInfo.hpp"
+#include "utils/stringUtils.hpp"
 
 #include <sstream>
-
-inline std::string formatBytes(std::size_t bytes) {
-    const char* suffixes[] = {"B", "KiB", "MiB", "GiB", "TiB"};
-    double      size       = static_cast<double>(bytes);
-    int         i          = 0;
-
-    while (size >= 1024.0 && i < 4) {
-        size /= 1024.0;
-        ++i;
-    }
-
-    std::ostringstream oss;
-    oss.precision(2);
-    oss << std::fixed << size << ' ' << suffixes[i];
-    return oss.str();
-}
 
 void print_usage(void) {
     std::cout << "\n=========USAGE=========" << std::endl;
@@ -97,8 +82,8 @@ void print_config(Config& config) {
             }
 
             // CGI
-            if (!loc.getCgiExtension().empty()) {
-                std::cout << "    cgi_pass: " << loc.getCgiExtension() << std::endl;
+            if (!loc.getCgiExtensions().empty()) {
+                std::cout << "    cgi_pass: " << joinStrings(loc.getCgiExtensions()) << std::endl;
             }
         }
     }
