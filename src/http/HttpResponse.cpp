@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "http/HttpResponse.hpp"
-#include <sstream>
 #include <algorithm>
+#include <sstream>
 
 HttpResponse ::HttpResponse(void) {
     _status_code    = 200;

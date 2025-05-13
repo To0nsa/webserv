@@ -207,17 +207,31 @@ ___
 
 ### Dev 3 - Configuration Parser
 
-- Parse `.conf` files inspired by Nginx syntax.
-- Support multiple `server` blocks with:
-  - Listen ports.
-  - Server names.
-  - Roots.
-  - Error pages.
-  - Upload paths.
-  - Accepted methods.
-- Map configuration into in-memory structures.
+Parse `.conf` files inspired by NGINX syntax.
 
-**Output**: Server config fully loaded before boot.
+- Support multiple `server` blocks with:
+  - Listen ports
+  - Server names
+  - Roots and index files
+  - Error pages
+  - Client max body size
+  - Upload paths
+  - Accepted HTTP methods
+  - Redirects and CGI extensions
+
+- Normalize missing values:
+  - Apply defaults for error pages, body size, root, index, and methods
+
+- Validate configuration before server boot:
+  - Reject duplicate directives
+  - Require at least one location per server
+  - Enforce unique (host:port, server_name) bindings
+  - Validate error codes and redirect status ranges
+  - Check all required fields and constraints
+
+- Report detailed syntax and semantic errors with line, column, and context window
+
+- Output: Fully normalized and validated `Config` in memory, ready for runtime use
 
 ### Dev 2 - Extended HTTP Parsing and Responses
 
@@ -343,14 +357,28 @@ ___
 
 **Output**: Server supports dynamic scripting (PHP, Python, etc.).
 
-#### Dev 3 - Advanced Configuration and Error Management
+#### Dev 3 - Runtime Error Handling
 
-- Extend configuration parsing:
-  - Define allowed methods, upload directories, CGI handlers per route.
-- Implement error handling:
-  - Serve 400 (Bad Request), 403 (Forbidden), 404 (Not Found), 413 (Payload Too Large), 500 (Server Error) pages.
+##### Implement centralized error response logic:
+- [ ] Add `respondWithError(int code)` to `HttpResponseBuilder` or controller layer.
+- [ ] Lookup error page path using `server.getErrorPages()` with fallback to `/error.html`.
+- [ ] Load file contents (with safety fallback to basic HTML if missing or unreadable).
+- [ ] Build and return an HTTP response with:
+  - Correct status line (e.g. `HTTP/1.1 404 Not Found`)
+  - `Content-Type: text/html`
+  - File contents as body
 
-**Output**: Server configurable for routes, methods, uploads, error pages.
+##### Trigger the error response in relevant places:
+- [ ] `400 Bad Request` → malformed headers or syntax errors
+- [ ] `403 Forbidden` → access denied (e.g., autoindex disabled + no index file)
+- [ ] `404 Not Found` → file or route not found
+- [ ] `413 Payload Too Large` → body exceeds `client_max_body_size`
+- [ ] `500 Internal Server Error` → unhandled exceptions, CGI crashes, etc.
+
+- Avoid recursion when the error page itself is missing — fallback to a hardcoded message.
+- You may stub some cases at first (e.g., only serve 404 + 500), then expand.
+
+> Server **serves appropriate error pages at runtime**, based on configuration.
 
 ___
 

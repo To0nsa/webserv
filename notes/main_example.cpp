@@ -10,71 +10,67 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <arpa/inet.h>
 #include <iostream>
 #include <netinet/in.h>
+#include <string>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <string>
-#include <arpa/inet.h>
 
 struct s_server_data {
-	std::string server_name;
-	int listen;
+    std::string server_name;
+    int         listen;
 };
 
-int	main(int ac, char **av)
-{
-	std::string config_file;
-	if (ac == 1)
-		config_file = "default.conf";
-	else if (ac == 2)
-		config_file = av[1];
-	else
-	{
-		std::cout << "\n=========USAGE=========" << std::endl;
-		std::cout << "  ./webserv            # Uses default.conf" << std::endl;
-		std::cout << "  ./webserv config.conf" << std::endl;
-		return(0);
-	}
-	
-	s_server_data config;
-	config.server_name = "localhost";
-	config.listen = 8080;
+int main(int ac, char** av) {
+    std::string config_file;
+    if (ac == 1)
+        config_file = "default.conf";
+    else if (ac == 2)
+        config_file = av[1];
+    else {
+        std::cout << "\n=========USAGE=========" << std::endl;
+        std::cout << "  ./webserv            # Uses default.conf" << std::endl;
+        std::cout << "  ./webserv config.conf" << std::endl;
+        return (0);
+    }
 
-	int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-	sockaddr_in serverAddress;
-	serverAddress.sin_family = AF_INET;
-	serverAddress.sin_port = htons(8080);
-	if (config.server_name == "localhost")
-		serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
-	else
-		serverAddress.sin_addr.s_addr = INADDR_ANY;
-	// binding socket.
-	bind(serverSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
+    s_server_data config;
+    config.server_name = "localhost";
+    config.listen      = 8080;
 
-	// listening to the assigned socket
-	listen(serverSocket, 5);
+    int         serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+    sockaddr_in serverAddress;
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_port   = htons(8080);
+    if (config.server_name == "localhost")
+        serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
+    else
+        serverAddress.sin_addr.s_addr = INADDR_ANY;
+    // binding socket.
+    bind(serverSocket, (struct sockaddr*) &serverAddress, sizeof(serverAddress));
 
-	// accepting connection request
-	int clientSocket = accept(serverSocket, nullptr, nullptr);
+    // listening to the assigned socket
+    listen(serverSocket, 5);
 
-	// receiving data
-	char buffer[1024] = { 0 };
-	recv(clientSocket, buffer, sizeof(buffer), 0);
-	std::cout << "Message from client: " << buffer << std::endl;
+    // accepting connection request
+    int clientSocket = accept(serverSocket, nullptr, nullptr);
 
-	std::string response =
-	"HTTP/1.1 200 OK\r\n"
-	"Content-Type: text/html\r\n"
-	"Content-Length: 29\r\n"
-	"\r\n"
-	"<h1>Hello from Webserv!</h1>";
+    // receiving data
+    char buffer[1024] = {0};
+    recv(clientSocket, buffer, sizeof(buffer), 0);
+    std::cout << "Message from client: " << buffer << std::endl;
 
-	send(clientSocket, response.c_str(), response.size(), 0);
+    std::string response = "HTTP/1.1 200 OK\r\n"
+                           "Content-Type: text/html\r\n"
+                           "Content-Length: 29\r\n"
+                           "\r\n"
+                           "<h1>Hello from Webserv!</h1>";
 
-	close(clientSocket);
-	close(serverSocket);
-	
+    send(clientSocket, response.c_str(), response.size(), 0);
 
-	return 0;
+    close(clientSocket);
+    close(serverSocket);
+
+    return 0;
 }

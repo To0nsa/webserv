@@ -1,7 +1,6 @@
 # .gitignore - Webserv project
 
 # Ignore build system artifacts
-build/
 compile_commands.json
 
 # Ignore Makefile outputs

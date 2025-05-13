@@ -112,8 +112,9 @@ class SocketManager {
     };
 
   private:
-    std::vector<pollfd> _poll_fds;          ///< Monitored file descriptors for poll().
-    std::map<int, Server> _listen_map;      ///< Maps listening socket fds to their corresponding server configurations.
+    std::vector<pollfd> _poll_fds; ///< Monitored file descriptors for poll().
+    std::map<int, Server>
+        _listen_map; ///< Maps listening socket fds to their corresponding server configurations.
     std::map<int, ClientInfo> _client_info; /// Stores all information about each client
 
     /**

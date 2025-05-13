@@ -55,7 +55,7 @@ bool HttpRequest::parse(const std::string& raw_request) {
     _method  = line.substr(0, method_end);
     _path    = line.substr(method_end + 1, path_end - method_end - 1);
     _version = line.substr(path_end + 1);
-    _version.erase(_version.find_last_not_of("\r\n") + 1);  // trim \r and \n
+    _version.erase(_version.find_last_not_of("\r\n") + 1); // trim \r and \n
 
     // Parse headers
     while (std::getline(stream, line) && !line.empty() && line != "\r") {
@@ -98,8 +98,8 @@ const std::string& HttpRequest::getVersion(void) const {
 }
 
 const std::string& HttpRequest::getHeader(const std::string& key) const {
-    static const std::string empty = "";
-    std::map<std::string, std::string>::const_iterator it = _headers.find(key);
+    static const std::string                           empty = "";
+    std::map<std::string, std::string>::const_iterator it    = _headers.find(key);
     if (it != _headers.end())
         return (it->second);
     return (empty);

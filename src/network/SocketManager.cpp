@@ -57,7 +57,8 @@ void SocketManager::checkClientTimeouts(int client_fd, size_t index) {
     if (!_client_info[client_fd].responses.empty() &&
         !_client_info[client_fd].current_raw_response.empty() &&
         now - _client_info[client_fd].lastSendAttemptTime > TIMEOUT) {
-        std::cout << "Client fd " << client_fd << " too slow to read response (send timeout)" << std::endl;
+        std::cout << "Client fd " << client_fd << " too slow to read response (send timeout)"
+                  << std::endl;
         cleanupClientConnectionClose(client_fd, index);
     }
 }
@@ -142,7 +143,8 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
         if (fd < 0)
             throw SocketError("socket() failed: " + std::string(std::strerror(errno)));
 
-        int opt = 1; // To tell the OS: "I want to reuse this port immediately, even if it's in TIME_WAIT
+        int opt =
+            1; // To tell the OS: "I want to reuse this port immediately, even if it's in TIME_WAIT
         if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
             close(fd);
             throw SocketError("setsockopt() failed: " + std::string(std::strerror(errno)));
@@ -166,7 +168,8 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 
         if (bind(fd, (sockaddr*) &addr, sizeof(addr)) < 0) { // Bind socket to IP:port
             close(fd);
-            throw SocketError("bind() failed on " + servers[i].getHost() + ":" + std::to_string(servers[i].getPort()) + ": " + strerror(errno));
+            throw SocketError("bind() failed on " + servers[i].getHost() + ":" +
+                              std::to_string(servers[i].getPort()) + ": " + strerror(errno));
         }
 
         if (listen(fd, SOMAXCONN) < 0) { // Start listening for incoming connections
@@ -175,7 +178,7 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
         }
 
         // Register fd in poll list
-        _poll_fds.push_back((pollfd) {fd, POLLIN, 0});
+        _poll_fds.push_back((pollfd){fd, POLLIN, 0});
         _listen_map[fd] = servers[i]; // Map fd to its corresponding server
 
         std::cout << "Listening on " << servers[i].getHost() << ":" << servers[i].getPort()
@@ -188,7 +191,8 @@ void SocketManager::run() {
     while (running) {
         int n = poll(&_poll_fds[0], _poll_fds.size(), 1000); // Poll each 1sec (timeout = 1sec)
         if (n < 0) {
-            if (errno == EINTR) { // we can try to handle signal here (A signal was caught during poll().)
+            if (errno ==
+                EINTR) { // we can try to handle signal here (A signal was caught during poll().)
                 running = 0;
                 continue;
             }
@@ -212,7 +216,8 @@ void SocketManager::run() {
                     _poll_fds[i].events |= POLLOUT;
                 }
             }
-            if ((revents & POLLOUT) && !_client_info[current_fd].responses.empty()) { // Ready to write (can send data)
+            if ((revents & POLLOUT) &&
+                !_client_info[current_fd].responses.empty()) { // Ready to write (can send data)
                 sendResponse(current_fd, i);
             }
             checkClientTimeouts(current_fd, i); // If connection keep-alive but client idle we close
@@ -239,7 +244,7 @@ void SocketManager::handleNewConnection(int listen_fd) {
         return; // Shall we log it?
     }
 
-    _poll_fds.push_back((pollfd) {client_fd, POLLIN, 0});
+    _poll_fds.push_back((pollfd){client_fd, POLLIN, 0});
     std::cout << std::endl;
     std::cout << "Accepted client on fd: " << client_fd << std::endl;
 
@@ -341,14 +346,15 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 
     if (_client_info[client_fd].current_raw_response.empty()) {
         _client_info[client_fd].current_raw_response = response.toHttpString();
-        _client_info[client_fd].bytes_sent = 0;
+        _client_info[client_fd].bytes_sent           = 0;
     }
-    
-    std::string& raw = _client_info[client_fd].current_raw_response;
-    size_t sent_already = _client_info[client_fd].bytes_sent;
+
+    std::string& raw          = _client_info[client_fd].current_raw_response;
+    size_t       sent_already = _client_info[client_fd].bytes_sent;
 
     // ssize_t bytes_sent = send(client_fd, raw.c_str(), raw.size(), 0); // MacOS only
-    ssize_t bytes_sent = send(client_fd, raw.c_str() + sent_already, raw.size() - sent_already, MSG_DONTWAIT);
+    ssize_t bytes_sent =
+        send(client_fd, raw.c_str() + sent_already, raw.size() - sent_already, MSG_DONTWAIT);
     if (bytes_sent < 0) {
         std::cerr << "send() failed on fd " << client_fd << ": " << std::strerror(errno)
                   << std::endl;
@@ -366,11 +372,12 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         _client_info[client_fd].responses.pop();
         _client_info[client_fd].current_raw_response.clear();
         _client_info[client_fd].bytes_sent = 0;
-    
+
         if (!response.isConnectionClose()) {
             std::cout << "Connection: keep-alive - keeping the connection open" << std::endl;
             // We should not close the client connection, but just reset the POLLOUT flag if needed
-            _poll_fds[index].events &= ~POLLOUT; // Reset POLLOUT flag if the connection should stay open
+            _poll_fds[index].events &=
+                ~POLLOUT; // Reset POLLOUT flag if the connection should stay open
         } else {
             // If it's not keep-alive, close the connection
             std::cout << "Connection: close - closing the connection" << std::endl;

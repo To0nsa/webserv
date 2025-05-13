@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/03 15:36:52 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:58:07 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,19 @@
  *
  * @details Provides setters, getters, and helper logic for path-based configuration
  * blocks, including method filtering, path resolution, CGI detection, and more.
- * @ingroup core
+ * @ingroup config
  */
 
 #include "core/Location.hpp"
 
+///////////////////////
 // --- Constructor ---
 
-/**
- * @brief Constructs a Location with default values.
- *
- * @details Initializes autoindex to false and return code to 0.
- */
 Location::Location() : _autoindex(false), _return_code(0) {
 }
 
-// --- Setters ---
+///////////////
+// --- Setters
 
 void Location::setPath(const std::string& path) {
     _path = path;
@@ -41,12 +38,19 @@ void Location::addMethod(const std::string& method) {
     _methods.insert(method);
 }
 
+void Location::setAllowedMethods(const std::vector<std::string>& methods) {
+    _methods.clear();
+    for (std::vector<std::string>::const_iterator it = methods.begin(); it != methods.end(); ++it) {
+        addMethod(*it);
+    }
+}
+
 void Location::setRoot(const std::string& root) {
     _root = root;
 }
 
-void Location::setIndex(const std::string& index) {
-    _index = index;
+void Location::addIndexFile(const std::string& idx) {
+    _index_files.push_back(idx);
 }
 
 void Location::setAutoindex(bool enabled) {
@@ -62,11 +66,12 @@ void Location::setUploadStore(const std::string& path) {
     _upload_store = path;
 }
 
-void Location::setCgiExtension(const std::string& ext) {
-    _cgi_extension = ext;
+void Location::addCgiExtension(const std::string& ext) {
+    _cgi_extensions.push_back(ext);
 }
 
-// --- Getters ---
+///////////////
+// --- Getters
 
 const std::string& Location::getPath() const {
     return _path;
@@ -81,7 +86,12 @@ const std::string& Location::getRoot() const {
 }
 
 const std::string& Location::getIndex() const {
-    return _index;
+    static const std::string empty;
+    return _index_files.empty() ? empty : _index_files.front();
+}
+
+const std::vector<std::string>& Location::getIndexFiles() const {
+    return _index_files;
 }
 
 bool Location::isAutoindexEnabled() const {
@@ -105,78 +115,53 @@ const std::string& Location::getUploadStore() const {
 }
 
 const std::string& Location::getCgiExtension() const {
-    return _cgi_extension;
+    static const std::string empty;
+    return _cgi_extensions.empty() ? empty : _cgi_extensions.front();
 }
 
-// --- Logic Helpers ---
+const std::vector<std::string>& Location::getCgiExtensions() const {
+    return _cgi_extensions;
+}
 
-/**
- * @brief Verifies if the given HTTP method is allowed for this location.
- *
- * @details Checks whether the method exists in the set of allowed methods
- * configured for this location (e.g., "GET", "POST", "DELETE").
- *
- * @param method The HTTP method string to check.
- * @return True if the method is allowed, false otherwise.
- */
+/////////////////////
+// --- Logic Helpers
+
+bool Location::hasAllowedMethods() const {
+    return !_methods.empty();
+}
+
 bool Location::isMethodAllowed(const std::string& method) const {
     return _methods.count(method) > 0;
 }
 
-/**
- * @brief Checks if this location matches a given request URI.
- *
- * @details This is typically a prefix match. For example, if the path is "/api",
- * then this method returns true for "/api/users" and "/api/status".
- *
- * @param uri The full request URI to match.
- * @return True if the location path is a prefix of the URI.
- */
 bool Location::matchesPath(const std::string& uri) const {
-    return uri.rfind(_path, 0) == 0; // _path is a prefix of uri
+    return uri.rfind(_path, 0) == 0;
 }
 
-/**
- * @brief Resolves a request URI into a full filesystem path.
- *
- * @details Joins the root directory and the URI suffix after the location path.
- * Returns an empty string if the URI does not match this location.
- *
- * @param uri The full request URI.
- * @return The absolute path to the requested resource.
- */
 std::string Location::resolveAbsolutePath(const std::string& uri) const {
     if (!matchesPath(uri))
         return "";
     return _root + uri.substr(_path.length());
 }
 
-/**
- * @brief Indicates whether file uploads are allowed for this location.
- *
- * @return True if an upload directory is configured, false otherwise.
- */
 bool Location::isUploadEnabled() const {
     return !_upload_store.empty();
 }
 
-/**
- * @brief Determines if the URI targets a CGI script.
- *
- * @param uri The requested URI.
- * @return True if the URI ends with the configured CGI extension.
- */
 bool Location::isCgiRequest(const std::string& uri) const {
-    return !_cgi_extension.empty() && uri.size() >= _cgi_extension.size() &&
-           uri.compare(uri.size() - _cgi_extension.size(), _cgi_extension.size(), _cgi_extension) ==
-               0;
+    for (const std::string& ext : _cgi_extensions) {
+        // Skip empty extensions and ensure URI is long enough
+        if (!ext.empty() && uri.size() >= ext.size() &&
+            // Check if URI ends with the current CGI extension
+            uri.compare(uri.size() - ext.size(), ext.size(), ext) == 0) {
+            return true; // Match found: this is a CGI request
+        }
+    }
+    return false; // No matching extension found
 }
 
-/**
- * @brief Returns the full path to the index file, if one is set.
- *
- * @return The absolute path to the index file or an empty string.
- */
 std::string Location::getEffectiveIndexPath() const {
-    return _index.empty() ? "" : _root + "/" + _index;
+    if (_index_files.empty())
+        return "";
+    return _root + "/" + _index_files.front();
 }

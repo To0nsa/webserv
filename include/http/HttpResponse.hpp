@@ -28,9 +28,9 @@ class HttpResponse {
     HttpResponse(const HttpResponse& other)            = default;
     HttpResponse& operator=(const HttpResponse& other) = default;
 
-    void setStatus(int code, const std::string& message);
-    void setHeader(const std::string& key, const std::string& value);
-    void setBody(const std::string& body);
-    bool isConnectionClose(void) const;
+    void        setStatus(int code, const std::string& message);
+    void        setHeader(const std::string& key, const std::string& value);
+    void        setBody(const std::string& body);
+    bool        isConnectionClose(void) const;
     std::string toHttpString(void) const;
 };

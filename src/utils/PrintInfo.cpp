@@ -23,9 +23,8 @@ void print_config(Config& config) {
     for (size_t i = 0; i < servers.size(); ++i) {
         const Server& server = servers[i];
 
-        std::cout << "Server " << i + 1 << ": "
-                  << server.getHost() << ":"
-                  << server.getPort() << std::endl;
+        std::cout << "Server " << i + 1 << ": " << server.getHost() << ":" << server.getPort()
+                  << std::endl;
 
         // Server Names
         const std::vector<std::string>& names = server.getServerNames();
