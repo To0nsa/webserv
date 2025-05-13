@@ -6,13 +6,14 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 14:36:36 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:13:28 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/HttpRequestHandler.hpp"
 #include "core/Location.hpp"
 #include "http/HttpResponseBuilder.hpp"
+#include <iostream>
 
 HttpResponse handleGet(const HttpRequest&, const Server&, const Location&);
 HttpResponse handlePost(const HttpRequest&, const Server&, const Location&);
@@ -26,6 +27,7 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     // Find matching location
     const Location* matched = nullptr;
     for (const Location& loc : server.getLocations()) {
+		std::cout << "{" << loc.getPath() << "}" << std::endl;
         if (loc.matchesPath(path)) {
             matched = &loc;
             break;
@@ -67,6 +69,7 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
 }
 
 HttpResponse handleGet(const HttpRequest &request, const Server&, const Location&) {
+	std::cout << "We are here" << std::endl;
 	return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
 }
 
