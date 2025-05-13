@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponseBuilder.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 22:58:48 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 13:05:38 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ std::string getDefaultMessage(int status_code) {
                                                      {413, "Payload Too Large"},
                                                      {500, "Internal Server Error"},
                                                      {502, "Bad Gateway"},
-                                                     {503, "Service Unavailable"}};
+                                                     {503, "Service Unavailable"}}; //501
     // Attempt to find the status code in the map
     StatusMessageMap::const_iterator it = status_messages.find(status_code);
     // Return the associated message or a fallback if unknown

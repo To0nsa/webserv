@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Tokenizer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 01:06:09 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/08 16:49:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 12:43:45 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -431,7 +431,7 @@ bool Tokenizer::looksLikeIpAddress() const {
     }
 
     // A valid IPv4 address has at least two dots (e.g., 127.0.0.1)
-    return dots >= 2;
+    return dots == 3;
 }
 
 void Tokenizer::dispatchToken() {
