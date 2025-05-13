@@ -6,11 +6,11 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 10:29:54 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:36:36 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* #include "http/HttpRequestHandler.hpp"
+#include "http/HttpRequestHandler.hpp"
 #include "core/Location.hpp"
 #include "http/HttpResponseBuilder.hpp"
 
@@ -65,4 +65,20 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
 
     return ResponseBuilder::generateError(501, server, request); // Not implemented
 }
- */
+
+HttpResponse handleGet(const HttpRequest &request, const Server&, const Location&) {
+	return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
+}
+
+HttpResponse handlePost(const HttpRequest &request, const Server&, const Location&) {
+	return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
+}
+
+HttpResponse handleDelete(const HttpRequest &request, const Server&, const Location&) {
+	return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
+}
+
+HttpResponse handleCgi(const HttpRequest &request, const Server&, const Location&) {
+	return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
+}
+
