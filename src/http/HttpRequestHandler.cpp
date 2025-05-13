@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequestHandler.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 09:40:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 10:29:54 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "http/HttpRequestHandler.hpp"
+/* #include "http/HttpRequestHandler.hpp"
 #include "core/Location.hpp"
 #include "http/HttpResponseBuilder.hpp"
 
@@ -65,3 +65,4 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
 
     return ResponseBuilder::generateError(501, server, request); // Not implemented
 }
+ */

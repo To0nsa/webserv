@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   filesystemUtils.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 09:54:47 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 10:30:19 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utilis/filesystemUtils.hpp"
+#include "utils/filesystemUtils.hpp"
 #include "http/HttpResponseBuilder.hpp"
-
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
