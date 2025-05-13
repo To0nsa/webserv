@@ -6,11 +6,11 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 21:22:05 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 21:39:08 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* #include "http/HttpRequestHandler.hpp"
+#include "http/HttpRequestHandler.hpp"
 #include "core/Location.hpp"
 #include "http/HttpResponseBuilder.hpp"
 

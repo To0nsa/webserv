@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/12 21:04:11 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 22:15:54 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 #include "utils/stringUtils.hpp"
 
 #include <set>
+#include <sstream>
 
 /**
  * @namespace directive
@@ -77,6 +78,39 @@ static void requireMinArgCount(const std::vector<std::string>& args, std::size_t
     }
 }
 
+void validateIPv4Address(const std::string& ip, int line, int column,
+                         const std::function<std::string()>& context_provider) {
+    std::istringstream iss(ip);   // Stream to split the IP string by '.'
+    std::string        segment;   // Holds each individual octet string
+    int                count = 0; // Number of octets parsed
+
+    // Split the input string into segments using '.' as the delimiter
+    while (std::getline(iss, segment, '.')) {
+        if (++count > 4) {
+            // Too many segments — a valid IPv4 address has exactly 4
+            throw SyntaxError(formatError("Too many octets in IP address: " + ip, line, column),
+                              context_provider());
+        }
+
+        // Parse the segment into an integer
+        int octet = parseInt(segment, "host", line, column, context_provider);
+
+        // Each octet must be between 0 and 255
+        if (octet < 0 || octet > 255) {
+            throw SyntaxError(
+                formatError("Invalid IP octet '" + segment + "' in host: " + ip, line, column),
+                context_provider());
+        }
+    }
+
+    // After parsing, there must be exactly 4 octets for a valid IPv4 address
+    if (count != 4) {
+        throw SyntaxError(
+            formatError("Invalid IP address format (expected 4 octets): " + ip, line, column),
+            context_provider());
+    }
+}
+
 const std::unordered_map<std::string, ServerHandler>& serverHandlers() {
     // Define a static unordered_map to hold server directive handlers.
     // The map keys are directive names (e.g., "listen", "host"), and the values are
@@ -117,10 +151,17 @@ const std::unordered_map<std::string, ServerHandler>& serverHandlers() {
         // and then sets it on the Server object using the setHost() method.
         {"host",
          [](Server& s, const auto& v, int line, int column, const std::string& ctx) {
-             // Ensure exactly one argument is provided for the "host" directive
+             // Ensure exactly one argument is provided (the IP address)
              requireArgCount(v, 1, "host", line, column, ctx);
-             // Set the host IP address on the Server object
-             s.setHost(v[0]);
+
+             const std::string& ip = v[0]; // Extract the host IP string from arguments
+
+             // Validate the IP address format (must be valid IPv4 like 127.0.0.1)
+             // Throws a SyntaxError with context if the format is invalid
+             validateIPv4Address(ip, line, column, [&]() { return ctx; });
+
+             // If validation passed, set the host value on the Server object
+             s.setHost(ip);
          }},
         // Handle the "server_name" directive, which defines the aliases for the server's name.
         // The handler ensures that at least one argument is provided (the server name),
@@ -145,7 +186,8 @@ const std::unordered_map<std::string, ServerHandler>& serverHandlers() {
              requireArgCount(v, 1, "client_max_body_size", line, column, ctx);
 
              // Parse the byte size and set it on the Server object
-             s.setClientMaxBodySize(parseByteSize(v[0]));
+             s.setClientMaxBodySize(
+                 parseByteSize(v[0], "client_max_body_size", line, column, [&]() { return ctx; }));
          }},
         // Handle the "error_page" directive, which maps HTTP error codes to custom error page URIs.
         // The handler ensures at least two arguments are provided (error code and URI).

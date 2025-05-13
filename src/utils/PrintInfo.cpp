@@ -3,14 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   PrintInfo.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 14:01:22 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 19:51:23 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/13 22:24:01 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/PrintInfo.hpp"
+
+#include <sstream>
+
+inline std::string formatBytes(std::size_t bytes) {
+    const char* suffixes[] = {"B", "KiB", "MiB", "GiB", "TiB"};
+    double      size       = static_cast<double>(bytes);
+    int         i          = 0;
+
+    while (size >= 1024.0 && i < 4) {
+        size /= 1024.0;
+        ++i;
+    }
+
+    std::ostringstream oss;
+    oss.precision(2);
+    oss << std::fixed << size << ' ' << suffixes[i];
+    return oss.str();
+}
 
 void print_usage(void) {
     std::cout << "\n=========USAGE=========" << std::endl;
@@ -40,7 +58,8 @@ void print_config(Config& config) {
         }
 
         // Client Body Size
-        std::cout << "  client_max_body_size: " << server.getClientMaxBodySize() << std::endl;
+        std::cout << "  client_max_body_size: " << formatBytes(server.getClientMaxBodySize())
+                  << std::endl;
 
         // Locations
         const std::vector<Location>& locations = server.getLocations();
