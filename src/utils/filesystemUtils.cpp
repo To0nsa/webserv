@@ -15,9 +15,9 @@
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <map>
 #include <sstream>
 #include <string>
-#include <map>
 
 bool isDirectory(const std::string& path) {
     return std::filesystem::is_directory(path);
@@ -30,30 +30,20 @@ bool fileExists(const std::string& path) {
 std::string detectMimeType(const std::string& file_path) {
     // Static MIME type mapping: file extension → MIME type
     static const std::map<std::string, std::string> mime_types = {
-        {".html", "text/html"},
-        {".htm", "text/html"},
-        {".css", "text/css"},
-        {".js", "application/javascript"},
-        {".json", "application/json"},
-        {".txt", "text/plain"},
-        {".jpg", "image/jpeg"},
-        {".jpeg", "image/jpeg"},
-        {".png", "image/png"},
-        {".gif", "image/gif"},
-        {".svg", "image/svg+xml"},
-        {".ico", "image/x-icon"},
-        {".pdf", "application/pdf"},
-        {".zip", "application/zip"},
-        {".tar", "application/x-tar"},
-        {".xml", "application/xml"},
-        {".mp3", "audio/mpeg"},
-        {".mp4", "video/mp4"},
-        {".wasm", "application/wasm"}
-    };
+        {".html", "text/html"},        {".htm", "text/html"},
+        {".css", "text/css"},          {".js", "application/javascript"},
+        {".json", "application/json"}, {".txt", "text/plain"},
+        {".jpg", "image/jpeg"},        {".jpeg", "image/jpeg"},
+        {".png", "image/png"},         {".gif", "image/gif"},
+        {".svg", "image/svg+xml"},     {".ico", "image/x-icon"},
+        {".pdf", "application/pdf"},   {".zip", "application/zip"},
+        {".tar", "application/x-tar"}, {".xml", "application/xml"},
+        {".mp3", "audio/mpeg"},        {".mp4", "video/mp4"},
+        {".wasm", "application/wasm"}};
 
     // Extract the file extension from the path (e.g., ".html")
     std::filesystem::path path(file_path);
-    std::string ext = path.extension().string();
+    std::string           ext = path.extension().string();
 
     // Convert the extension to lowercase to ensure case-insensitive matching
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
@@ -68,8 +58,7 @@ std::string detectMimeType(const std::string& file_path) {
 }
 
 HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
-    std::string content_type)
-{
+                       std::string content_type) {
     // Check if the file exists and is a regular file (not a directory, socket, etc.)
     if (!fileExists(file_path)) {
         return ResponseBuilder::generateError(404, Server(), request);

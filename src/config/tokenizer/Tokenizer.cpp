@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 01:06:09 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 12:43:45 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:37:15 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -473,6 +473,10 @@ void Tokenizer::dispatchToken() {
         case ';':
             advance();
             _tokens.push_back(makeToken(TokenType::SEMICOLON, ";"));
+            break;
+        case ',':
+            advance();
+            _tokens.push_back(makeToken(TokenType::COMMA, ","));
             break;
         default:
             // Any other character is invalid here

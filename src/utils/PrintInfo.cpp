@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   PrintInfo.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 14:01:22 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 19:51:23 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/13 22:50:10 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/PrintInfo.hpp"
+#include "utils/stringUtils.hpp"
+
+#include <sstream>
 
 void print_usage(void) {
     std::cout << "\n=========USAGE=========" << std::endl;
@@ -40,7 +43,8 @@ void print_config(Config& config) {
         }
 
         // Client Body Size
-        std::cout << "  client_max_body_size: " << server.getClientMaxBodySize() << std::endl;
+        std::cout << "  client_max_body_size: " << formatBytes(server.getClientMaxBodySize())
+                  << std::endl;
 
         // Locations
         const std::vector<Location>& locations = server.getLocations();
@@ -78,8 +82,8 @@ void print_config(Config& config) {
             }
 
             // CGI
-            if (!loc.getCgiExtension().empty()) {
-                std::cout << "    cgi_pass: " << loc.getCgiExtension() << std::endl;
+            if (!loc.getCgiExtensions().empty()) {
+                std::cout << "    cgi_pass: " << joinStrings(loc.getCgiExtensions()) << std::endl;
             }
         }
     }

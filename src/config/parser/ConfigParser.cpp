@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 08:46:22 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/09 09:38:32 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/14 09:59:42 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void parseDirective(T& target, const Token& key, std::vector<std::string>& value
         // Re-throw std conversion errors as SyntaxError for unified parser error reporting
         throw SyntaxError(formatError(e.what(), line, column), ctx);
     } catch (const std::out_of_range& e) {
-        // Handle cases like `stoi()` out-of-bound input
+        // Handle cases like out-of-bound input
         throw SyntaxError(formatError(e.what(), line, column), ctx);
     }
 }
@@ -207,9 +207,17 @@ Location ConfigParser::parseLocation() {
 
     Location location;
 
-    // Parse the location path (either a string or an unquoted identifier)
-    location.setPath(
-        expectOneOf({TokenType::STRING, TokenType::IDENTIFIER}, "location path").value);
+    // Validate path token exists and is of correct type
+    TokenType type = current().type;
+    if (type != TokenType::STRING && type != TokenType::IDENTIFIER) {
+        throw SyntaxError(formatError("Expected location path after 'location', but got '" +
+                                          current().value + "'",
+                                      current().line, current().column),
+                          getContextWindow());
+    }
+
+    location.setPath(current().value);
+    advance(); // consume the path token
 
     expect(TokenType::LBRACE, "start of location block"); // Expect opening brace '{'
 
@@ -326,12 +334,31 @@ std::vector<std::string> ConfigParser::collectArgs(std::initializer_list<TokenTy
     while (!isAtEnd()) {
         TokenType t = current().type;
 
-        // Stop if the current token is not in the valid type list
         if (std::find(validTypes.begin(), validTypes.end(), t) == validTypes.end())
             break;
 
-        values.push_back(current().value); // Save the token value
-        advance();                         // Consume the token
+        std::string val = current().value;
+        advance();
+
+        // Now check for ",value" groups
+        while (match(TokenType::COMMA)) {
+            if (isAtEnd() || std::find(validTypes.begin(), validTypes.end(), current().type) ==
+                                 validTypes.end()) {
+                throw SyntaxError(
+                    formatError("Expected value after comma", getLine(), current().column),
+                    getContextWindow());
+            }
+            val += "," + current().value;
+            advance();
+        }
+
+        // split val on commas into multiple entries
+        std::istringstream ss(val);
+        std::string        token;
+        while (std::getline(ss, token, ',')) {
+            if (!token.empty())
+                values.push_back(token);
+        }
     }
 
     return values; // Return the collected argument values

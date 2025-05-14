@@ -12,15 +12,13 @@
 
 #pragma once
 
-#include <string>
 #include "http/HttpRequest.hpp"
 #include "http/HttpResponse.hpp"
+#include <string>
 
-bool isDirectory(const std::string& path);
-bool fileExists(const std::string& path);
-HttpResponse serveFile(const std::string& file_path,
-                       const HttpRequest& request,
+bool         isDirectory(const std::string& path);
+bool         fileExists(const std::string& path);
+HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
                        std::string content_type = "");
-std::string detectMimeType(const std::string& file_path);
-std::string generateAutoindexHTML(const std::string& directory_path, const std::string& uri_path);
-
+std::string  detectMimeType(const std::string& file_path);
+std::string  generateAutoindexHTML(const std::string& directory_path, const std::string& uri_path);
