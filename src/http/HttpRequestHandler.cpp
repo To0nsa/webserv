@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/14 10:38:52 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:51:58 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     // Find matching location
     const Location* matched = nullptr;
     for (const Location& loc : server.getLocations()) {
-		std::cout << "{" << loc.getPath() << "}" << std::endl;
         if (loc.matchesPath(path)) {
             matched = &loc;
             break;
@@ -69,7 +68,6 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
 }
 
 HttpResponse handleGet(const HttpRequest &request, const Server&, const Location&) {
-	std::cout << "We are here" << std::endl;
 	return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
 }
 
