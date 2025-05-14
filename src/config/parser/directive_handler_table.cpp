@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 22:35:19 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/14 09:57:54 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ const std::unordered_map<std::string, ServerHandler>& serverHandlers() {
          }},
         // Handle the "host" directive, which defines the server's binding address.
         // The handler checks that exactly one argument is provided (the host IP address),
+        // and validates the format of the IP address (must be a valid IPv4 address)
         // and then sets it on the Server object using the setHost() method.
         {"host",
          [](Server& s, const auto& v, int line, int column, const std::string& ctx) {
@@ -175,7 +176,6 @@ const std::unordered_map<std::string, ServerHandler>& serverHandlers() {
              const std::string& ip = v[0]; // Extract the host IP string from arguments
 
              // Validate the IP address format (must be valid IPv4 like 127.0.0.1)
-             // Throws a SyntaxError with context if the format is invalid
              validateIPv4Address(ip, line, column, [&]() { return ctx; });
 
              // If validation passed, set the host value on the Server object
@@ -196,7 +196,7 @@ const std::unordered_map<std::string, ServerHandler>& serverHandlers() {
         // Handle the "client_max_body_size" directive, which sets the maximum allowed body size for
         // client requests.
         // The handler ensures exactly one argument is provided (the size), and then parses the size
-        // using parseByteSize().
+        // using parseByteSize() that enforces the format and set a limit to 4 GiB.
         // The parsed size is then set on the Server object using setClientMaxBodySize().
         {"client_max_body_size",
          [](Server& s, const auto& v, int line, int column, const std::string& ctx) {
@@ -325,8 +325,8 @@ const std::unordered_map<std::string, LocationHandler>& locationHandlers() {
          }},
         // Handle the "cgi_extension" directive, which defines file extensions that should be
         // handled via CGI (e.g., ".php", ".py"). The handler ensures at least one argument is
-        // provided, processes the extensions (which can be comma-separated), and adds each valid
-        // extension and adds each valid extension to the Location object using addCgiExtension().
+        // provided, processes the extensions (which can be comma-separated),
+        // and adds each valid extension to the Location object using addCgiExtension().
         {"cgi_extension",
          [](Location& loc, const auto& args, int line, int column, const std::string& ctx) {
              requireMinArgCount(args, 1, "cgi_extension", line, column, ctx);

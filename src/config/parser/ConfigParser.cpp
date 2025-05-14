@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 08:46:22 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 22:45:36 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/14 09:59:42 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void parseDirective(T& target, const Token& key, std::vector<std::string>& value
         // Re-throw std conversion errors as SyntaxError for unified parser error reporting
         throw SyntaxError(formatError(e.what(), line, column), ctx);
     } catch (const std::out_of_range& e) {
-        // Handle cases like `stoi()` out-of-bound input
+        // Handle cases like out-of-bound input
         throw SyntaxError(formatError(e.what(), line, column), ctx);
     }
 }
