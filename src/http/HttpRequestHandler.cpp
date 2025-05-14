@@ -6,16 +6,20 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/14 14:48:21 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:06:52 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/HttpRequestHandler.hpp"
 #include "core/Location.hpp"
 #include "http/HttpResponseBuilder.hpp"
+#include "utils/filesystemUtils.hpp"
+#include "utils/buildFilePath.hpp"
 #include <iostream>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <dirent.h>
+#include <sstream>
 
 HttpResponse handleGet(const HttpRequest&, const Server&, const Location&);
 HttpResponse handlePost(const HttpRequest&, const Server&, const Location&);
@@ -70,9 +74,44 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
 }
 
 HttpResponse handleGet(const HttpRequest &request, const Server &server, const Location &loc) {
-	(void)loc;
-	(void)server;
-	return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
+	std::string filepath = buildFilePath(request, loc);
+	std::cout << "Resolved file path: " << filepath << std::endl;
+
+	// Check if path is a directory
+	bool isDirectory = false;
+	struct stat fileStat;
+	if (stat(filepath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode)) {
+		std::cout << "Path is a directory.\n";
+		isDirectory = true;
+	}
+	std::string body;
+	if (isDirectory) {
+		if (loc.isAutoindexEnabled()) {
+			DIR* dir = opendir(filepath.c_str());
+			if (dir == NULL) {
+				std::cout << "[AUTOINDEX] Failed to open directory!" << std::endl;
+			}
+			if (dir) {
+				struct dirent* entry;
+				std::stringstream indexStream;
+				indexStream << "<html><body><h1>Index of " << request.getPath() << "</h1><ul>";
+				while ((entry = readdir(dir)) != NULL) {
+					indexStream << "<li><a href='" << entry->d_name << "'>" << entry->d_name << "</a></li>"; // Think about .. and .
+				}
+				indexStream << "</ul></body></html>";
+				closedir(dir);
+				body = indexStream.str();
+			}
+		}
+	} else {
+		return serveFile(filepath, request, "");
+		
+	}
+
+	if (body.empty()) {
+		return ResponseBuilder::generateError(404, server, request);
+	}
+	return ResponseBuilder::generateSuccess(200, body, "text/html", request);
 }
 
 HttpResponse handlePost(const HttpRequest &request, const Server &server, const Location &loc) {
