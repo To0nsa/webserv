@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/14 14:23:57 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/14 14:48:21 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,14 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
 }
 
 HttpResponse handleGet(const HttpRequest &request, const Server &server, const Location &loc) {
+	(void)loc;
+	(void)server;
 	return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
 }
 
 HttpResponse handlePost(const HttpRequest &request, const Server &server, const Location &loc) {
+	(void)loc;
+	(void)server;
 	return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
 }
 
@@ -96,10 +100,12 @@ HttpResponse handleDelete(const HttpRequest &request, const Server &server, cons
 		return ResponseBuilder::generateError(403, server, request);
 	if (unlink(filepath.c_str()) != 0)
 		return ResponseBuilder::generateError(500, server, request);
-	return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
+	return ResponseBuilder::generateSuccess(200, "<h1>File " + suffix + " deleted.</h1>", "text/html", request);
 }
 
 HttpResponse handleCgi(const HttpRequest &request, const Server &server, const Location &loc) {
+	(void)loc;
+	(void)server;
 	return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
 }
 
