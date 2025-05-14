@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:51:19 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 19:57:28 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/12 22:05:25 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,21 +74,17 @@ void Server::addLocation(const Location& location) {
 
 int Server::getPort() const noexcept {
     return _port;
-    return _port;
 }
 
 const std::string& Server::getHost() const noexcept {
-    return _host;
     return _host;
 }
 
 const std::vector<std::string>& Server::getServerNames() const noexcept {
     return _server_names;
-    return _server_names;
 }
 
 const std::map<int, std::string>& Server::getErrorPages() const noexcept {
-    return _error_pages;
     return _error_pages;
 }
 

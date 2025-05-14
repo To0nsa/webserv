@@ -6,7 +6,7 @@
 #    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/26 16:00:00 by nlouis            #+#    #+#              #
-#    Updated: 2025/05/12 20:13:10 by nlouis           ###   ########.fr        #
+#    Updated: 2025/05/14 10:31:37 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,11 +91,16 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	fi
 	@echo "$(GREEN)🛠️  Compiled:$(RESET) $<"
 
-OBJS_NO_MAIN := $(filter-out $(OBJDIR)/main.o, $(OBJS))
+OBJS_NO_MAIN := $(filter-out %/main.o, $(OBJS))
 $(BINDIR)/tests/%: $(TESTDIR)/%.cpp
 	@mkdir -p $(dir $@)
 	@$(CXX) $(CXXFLAGS) $< $(OBJS_NO_MAIN) -o $@
 	@echo "$(GREEN)🛠️  Built test executable:$(RESET) $@"
+
+$(BINDIR)/tests/slow_%: $(TESTDIR)/slow_%.cpp
+	@mkdir -p $(dir $@)
+	@$(CXX) $(CXXFLAGS) $< -o $@
+	@echo "$(GREEN)🛠️  Built standalone test:$(RESET) $@"
 
 # Cleaning
 clean:
@@ -130,16 +135,33 @@ run: all
 
 # Test shortcut
 test: prepare_dirs $(TARGET) $(TESTBINS)
+	@echo "$(CYAN)🧪 Launching web server in background...$(RESET)"
+	@./$(TARGET) & echo $$! > .webserv_test.pid
+
+	@sleep 1  # give the server a second to bind to port
+
 	@echo "$(CYAN)🧪 Running all tests...$(RESET)"
 	@if [ -z "$(TESTBINS)" ]; then \
 		echo "$(YELLOW)⚠️  No test files found. Skipping tests.$(RESET)"; \
 	else \
+		FAILED=0; \
 		for test_bin in $(TESTBINS); do \
 			echo "$(CYAN)➡️  Running $$test_bin$(RESET)"; \
-			./$$test_bin || (echo "$(RED)❌ Test failed: $$test_bin$(RESET)" && exit 1); \
+			./$$test_bin || { echo "$(RED)❌ Test failed: $$test_bin$(RESET)"; FAILED=1; }; \
 		done; \
-		echo "$(GREEN)🏆 All tests passed successfully!$(RESET)"; \
+		if [ $$FAILED -eq 0 ]; then \
+			echo "$(GREEN)🏆 All tests passed successfully!$(RESET)"; \
+		else \
+			echo "$(RED)❌ Some tests failed.$(RESET)"; \
+			kill `cat .webserv_test.pid` >/dev/null 2>&1 || true; \
+			rm -f .webserv_test.pid; \
+			exit 1; \
+		fi \
 	fi
+
+	@echo "$(CYAN)🧹 Shutting down test server...$(RESET)"
+	@kill `cat .webserv_test.pid` >/dev/null 2>&1 || true
+	@rm -f .webserv_test.pid
 
 # Code Quality Targets
 format:

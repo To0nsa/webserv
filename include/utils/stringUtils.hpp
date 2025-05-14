@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:44 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/07 11:56:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/13 22:51:44 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,7 @@ std::size_t parseByteSize(const std::string& value, const std::string& field, in
  * @return A lowercase copy of the input string.
  */
 std::string toLower(const std::string&);
+std::string formatBytes(std::size_t bytes);
+std::string joinStrings(const std::vector<std::string>& list, const std::string& delim = ", ");
 
 /** @} */ // end of StringUtils
