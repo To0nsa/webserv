@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/13 13:05:38 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/14 14:52:59 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ std::string getDefaultMessage(int status_code) {
     // Static map ensures it's initialized once and reused on every call
     static const StatusMessageMap status_messages = {{200, "OK"},
                                                      {201, "Created"},
-                                                     {204, "No Content"},
                                                      {301, "Moved Permanently"},
                                                      {302, "Found"},
                                                      {400, "Bad Request"},
@@ -35,8 +34,9 @@ std::string getDefaultMessage(int status_code) {
                                                      {408, "Request Timeout"},
                                                      {413, "Payload Too Large"},
                                                      {500, "Internal Server Error"},
+                                                     {501, "Not Implemented"},
                                                      {502, "Bad Gateway"},
-                                                     {503, "Service Unavailable"}}; //501
+                                                     {503, "Service Unavailable"}};
     // Attempt to find the status code in the map
     StatusMessageMap::const_iterator it = status_messages.find(status_code);
     // Return the associated message or a fallback if unknown
