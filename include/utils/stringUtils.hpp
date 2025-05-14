@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stringUtils.hpp                                    :+:      :+:    :+:   */
+/*   StringUtils.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:44 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 22:51:44 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/14 23:02:50 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 #include <cstddef>
 #include <functional>
 #include <string>
+#include <vector>
 
 /**
  * @brief Parses an integer from a string.
