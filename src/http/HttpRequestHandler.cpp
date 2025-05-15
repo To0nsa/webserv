@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/15 20:22:49 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/15 20:53:30 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "http/handle_get.hpp"
 #include <sys/stat.h>
 #include <unistd.h>
+#include <fstream>
 
 HttpResponse handlePost(const HttpRequest&, const Server&, const Location&);
 HttpResponse handleDelete(const HttpRequest&, const Server&, const Location&);
@@ -69,9 +70,36 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
 }
 
 HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc) {
-    (void) loc;
-    (void) server;
-    return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
+    if (request.getBody().empty()) {
+        return ResponseBuilder::generateError(400, server, request);
+    }
+    if (request.getBody().size() > server.getClientMaxBodySize()) {
+        return ResponseBuilder::generateError(413, server, request);
+    }
+    if (loc.getUploadStore().empty()) {
+        return ResponseBuilder::generateError(403, server, request);
+    }
+    std::string filepath = buildFilePath(request, loc);
+    std::string filename = request.getPath().substr(request.getPath().find_last_of("/") + 1); // We need valid filename!!!
+    /* (Reject empty filenames
+    Reject things like ../somefile
+    Limit file extensions) */
+    std::string dirpath  = joinPath(loc.getRoot(), loc.getUploadStore());
+    std::string fullpath = joinPath(dirpath, filename);
+    if (mkdir(dirpath.c_str(), 0777) == -1 && errno != EEXIST) {
+        return ResponseBuilder::generateError(500, server, request);
+    }
+    std::ofstream file(fullpath.c_str());
+    if (!file) {
+        return ResponseBuilder::generateError(500, server, request);
+    }
+    file << request.getBody();
+    file.close();
+    if (file.fail()) {
+        return ResponseBuilder::generateError(500, server, request);
+    }
+    return ResponseBuilder::generateSuccess(201, "<h1>File " + filename +
+                                            " created.</h1>", "text/html", request);
 }
 
 HttpResponse handleDelete(const HttpRequest& request, const Server& server, const Location& loc) {
