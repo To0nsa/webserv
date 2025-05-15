@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/15 10:46:29 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:48:54 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -354,7 +354,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
     }
 
     std::cout << "=======================We sent to fd:" << client_fd << std::endl;
-    std::cout << raw << std::endl;
+    //std::cout << raw << std::endl;
     std::cout << "==================================================" << std::endl;
 
     _client_info[client_fd].bytes_sent += bytes_sent;

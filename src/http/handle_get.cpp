@@ -6,11 +6,12 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/15 13:15:48 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/15 17:26:55 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handle_get.hpp"
+#include <string_view>
 
 static std::string truncateName(const std::string& name, std::size_t maxLen) {
 	if (name.length() <= maxLen)
@@ -24,13 +25,17 @@ HttpResponse handleGet(const HttpRequest &request, const Server &server, const L
 	std::string filepath = buildFilePath(request, loc);
 	std::cout << "Resolved file path: " << filepath << std::endl;
 
-	// Check if path is a directory
-	bool isDirectory = false;
+	// Redirect if directory is missing trailing slash
 	struct stat fileStat;
 	if (stat(filepath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode)) {
-		std::cout << "Path is a directory.\n";
-		isDirectory = true;
+		const std::string& path = request.getPath();
+		if (path.empty() || path.back() != '/') {
+			std::string location = request.getPath() + "/";
+			return ResponseBuilder::generateRedirect(301, location, request);
+		}
 	}
+
+	bool isDirectory = stat(filepath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode);
 	std::string body;
 	if (isDirectory) {
 		if (loc.isAutoindexEnabled()) {
