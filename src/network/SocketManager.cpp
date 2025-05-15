@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/13 15:01:21 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/15 10:46:29 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,8 +284,8 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         size_t      headersEnd  = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
         std::string headersPart = _client_info[client_fd].requestBuffer.substr(0, headersEnd);
 
-        std::cout << "===============Headers part: " << headersPart << std::endl;
-        std::cout << "==================================================" << std::endl;
+        /* std::cout << "===============Headers part: " << headersPart << std::endl;
+        std::cout << "==================================================" << std::endl; */
 
         /* HttpRequest tmpRequest;
         if (!tmpRequest.parseHeadersOnly(headersPart)) {
