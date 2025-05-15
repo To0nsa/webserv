@@ -6,12 +6,21 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/15 17:26:55 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/15 19:12:43 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handle_get.hpp"
 #include <string_view>
+#include "utils/buildFilePath.hpp"
+
+static std::string joinPath(const std::string& base, const std::string& suffix) {
+    if (base.empty())
+        return suffix;
+    if (base.back() == '/')
+        return base + suffix;
+    return base + '/' + suffix;
+}
 
 static std::string truncateName(const std::string& name, std::size_t maxLen) {
 	if (name.length() <= maxLen)
@@ -27,22 +36,34 @@ HttpResponse handleGet(const HttpRequest &request, const Server &server, const L
 
 	// Redirect if directory is missing trailing slash
 	struct stat fileStat;
-	if (stat(filepath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode)) {
-		const std::string& path = request.getPath();
-		if (path.empty() || path.back() != '/') {
-			std::string location = request.getPath() + "/";
-			return ResponseBuilder::generateRedirect(301, location, request);
+	if (stat(filepath.c_str(), &fileStat) == 0) {
+		// Redirect to add trailing slash if it's a directory but URI lacks slash
+		if (S_ISDIR(fileStat.st_mode)) {
+			const std::string& uri = request.getPath();
+			if (!uri.empty() && uri.back() != '/') {
+				std::string redirectUri = uri + "/";
+				return ResponseBuilder::generateRedirect(301, redirectUri, request);
+			}
 		}
-	}
+		if (S_ISREG(fileStat.st_mode)) {
+			// It's a regular file
+			return serveFile(filepath, request, "");
+		} else if (S_ISDIR(fileStat.st_mode)) {
+			// It's a directory
+			std::string index_file = loc.getIndex();
+			if (!index_file.empty()) {
+				std::string index_path = joinPath(filepath, index_file);
+				if (fileExists(index_path)) {
+					return serveFile(index_path, request, "");
+				}
+			}
 
-	bool isDirectory = stat(filepath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode);
-	std::string body;
-	if (isDirectory) {
 		if (loc.isAutoindexEnabled()) {
 			DIR* dir = opendir(filepath.c_str());
 			if (dir == NULL) {
 				return ResponseBuilder::generateError(403, server, request);
 			}
+			std::string body;
 			if (dir) {
 				struct dirent* entry;
 				std::vector<std::string> dirs;
@@ -136,15 +157,10 @@ HttpResponse handleGet(const HttpRequest &request, const Server &server, const L
 
 				indexStream << "</table></body></html>";
 				body = indexStream.str();
+				return ResponseBuilder::generateSuccess(200, body, "text/html", request);
+				}
 			}
-		}
-	} else {
-		return serveFile(filepath, request, "");
-		
+		} 
 	}
-
-	if (body.empty()) {
-		return ResponseBuilder::generateError(404, server, request);
-	}
-	return ResponseBuilder::generateSuccess(200, body, "text/html", request);
+	return ResponseBuilder::generateError(404, server, request);
 }
