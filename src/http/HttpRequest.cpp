@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 13:55:24 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/15 00:44:22 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,18 @@ bool HttpRequest::parse(const std::string& raw_request) {
         return (false);
 
     _method  = line.substr(0, method_end);
-    _path    = line.substr(method_end + 1, path_end - method_end - 1);
     _version = line.substr(path_end + 1);
     _version.erase(_version.find_last_not_of("\r\n") + 1); // trim \r and \n
+
+    std::string full_uri = line.substr(method_end + 1, path_end - method_end - 1);
+    size_t      qmark    = full_uri.find('?');
+    if (qmark != std::string::npos) {
+        _path  = full_uri.substr(0, qmark);
+        _query = full_uri.substr(qmark + 1);
+    } else {
+        _path = full_uri;
+        _query.clear();
+    }
 
     // Parse headers
     while (std::getline(stream, line) && !line.empty() && line != "\r") {
@@ -107,4 +116,8 @@ const std::string& HttpRequest::getHeader(const std::string& key) const {
 
 const std::string& HttpRequest::getBody(void) const {
     return (_body);
+}
+
+const std::string& HttpRequest::getQuery() const {
+    return _query;
 }

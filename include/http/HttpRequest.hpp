@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:10 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/11 12:31:20 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/15 00:35:40 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ class HttpRequest {
     std::string                        _version;
     std::map<std::string, std::string> _headers;
     std::string                        _body;
+    std::string                        _query; ///< extracted from URI after '?'
 
   public:
     HttpRequest(void);
@@ -35,4 +36,5 @@ class HttpRequest {
     const std::string& getVersion(void) const;
     const std::string& getHeader(const std::string& key) const;
     const std::string& getBody(void) const;
+    const std::string& getQuery() const;
 };
