@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:12:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/14 18:06:27 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/15 09:51:11 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,18 @@ static std::string joinPath(const std::string& root, const std::string& suffix) 
 	return result;
 }
 
-// Determine full file path based on server config, request, and location
+// Determine full file path based on request, and location
 std::string buildFilePath(const HttpRequest& request, const Location& loc) {
-	std::string request_path = request.getPath();
+	std::string request_path = request.getPath(); // /delete.html
+	std::string location_root = loc.getRoot(); // /home/irychkov/Desktop/webserv_team/serverfiles/html
+	std::string location_path = loc.getPath();// /
 	std::string fullPath;
 
-	std::string suffix = request_path.substr(loc.getPath().length());
+	std::string suffix = request_path.substr(location_path.length());
 	if (!suffix.empty() && suffix[0] == '/')
 		suffix = suffix.substr(1);
 
-	fullPath = joinPath(loc.getRoot(), suffix);
+	fullPath = joinPath(location_root, suffix);
 
 	bool endsWithSlash = false;
 	if (!request_path.empty()) {
@@ -42,7 +44,7 @@ std::string buildFilePath(const HttpRequest& request, const Location& loc) {
 
 	if (!loc.getIndex().empty()) {
 		if (endsWithSlash || suffixEmpty) {
-			fullPath = joinPath(loc.getRoot(), loc.getIndex());
+			fullPath = joinPath(location_root, loc.getIndex());
 		}
 	}
 
