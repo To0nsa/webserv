@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/15 12:46:58 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/15 20:22:49 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,7 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
 
 HttpResponse handleDelete(const HttpRequest& request, const Server& server, const Location& loc) {
     // Build full file path
-    const std::string& request_path = request.getPath();
-    std::string        suffix       = request_path.substr(loc.getPath().length());
-    if (!suffix.empty() && suffix[0] == '/')
-        suffix = suffix.substr(1);
-    std::string filepath = loc.getRoot();
-    if (!filepath.empty() && filepath[filepath.size() - 1] != '/')
-        filepath += "/";
-    filepath += suffix;
+    std::string filepath = buildFilePath(request, loc);
 
     // Check if file exists and delete
     struct stat s;
@@ -93,7 +86,8 @@ HttpResponse handleDelete(const HttpRequest& request, const Server& server, cons
         return ResponseBuilder::generateError(403, server, request);
     if (unlink(filepath.c_str()) != 0)
         return ResponseBuilder::generateError(500, server, request);
-    return ResponseBuilder::generateSuccess(200, "<h1>File " + suffix + " deleted.</h1>",
+    std::string filename = request.getPath().substr(request.getPath().find_last_of("/") + 1);
+    return ResponseBuilder::generateSuccess(200, "<h1>File " + filename + " deleted.</h1>",
                                             "text/html", request);
 }
 
