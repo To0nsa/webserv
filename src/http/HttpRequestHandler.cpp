@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/15 10:02:37 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/15 10:54:51 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,11 @@ HttpResponse handleGet(const HttpRequest &request, const Server &server, const L
 				indexStream << "<html><body><h1>Index of " << request.getPath() << "</h1><ul>";
 				while ((entry = readdir(dir)) != NULL) {
 					std::string name = entry->d_name;
-					indexStream << "<li><a href='" << baseUri << name << "'>" << name << "</a></li>"; // Think about .. and .
+					if (name == ".")
+						continue;
+					if (name == "..")
+						name += "/";
+					indexStream << "<li style=\"list-style: none;\"><a href='" << baseUri << name << "'>" << name << "</a></li>"; // Think about .. and .
 				}
 				indexStream << "</ul></body></html>";
 				closedir(dir);
