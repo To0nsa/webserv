@@ -12,9 +12,9 @@
 
 #include "network/SocketManager.hpp"
 #include "http/HttpRequest.hpp"
+#include "http/HttpRequestHandler.hpp"
 #include "http/HttpResponse.hpp"
 #include "http/HttpResponseBuilder.hpp"
-#include "http/HttpRequestHandler.hpp"
 #include <sstream> // For stringstream, we will remove it later
 
 // Signal handler for exiting the server
@@ -179,7 +179,7 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
         }
 
         // Register fd in poll list
-        _poll_fds.push_back((pollfd){fd, POLLIN, 0});
+        _poll_fds.push_back((pollfd) {fd, POLLIN, 0});
         _listen_map[fd] = servers[i]; // Map fd to its corresponding server
 
         std::cout << "Listening on " << servers[i].getHost() << ":" << servers[i].getPort()
@@ -245,7 +245,7 @@ void SocketManager::handleNewConnection(int listen_fd) {
         return; // Shall we log it?
     }
 
-    _poll_fds.push_back((pollfd){client_fd, POLLIN, 0});
+    _poll_fds.push_back((pollfd) {client_fd, POLLIN, 0});
     std::cout << std::endl;
     std::cout << "Accepted client on fd: " << client_fd << std::endl;
 
@@ -325,8 +325,8 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     request.printRequest();
     _client_info[client_fd].requestBuffer.clear();
 
-    const Server& server = _client_info[client_fd].serverConfig;
-    HttpResponse response = handleRequest(request, server);
+    const Server& server   = _client_info[client_fd].serverConfig;
+    HttpResponse  response = handleRequest(request, server);
     _client_info[client_fd].responses.push(response);
     return (true);
 }
@@ -354,7 +354,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
     }
 
     std::cout << "=======================We sent to fd:" << client_fd << std::endl;
-    //std::cout << raw << std::endl;
+    // std::cout << raw << std::endl;
     std::cout << "==================================================" << std::endl;
 
     _client_info[client_fd].bytes_sent += bytes_sent;
