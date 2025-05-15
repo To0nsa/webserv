@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/15 10:54:51 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:34:47 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <chrono>
+#include <iomanip>
 #include <sstream>
 
 HttpResponse handleGet(const HttpRequest&, const Server&, const Location&);
@@ -97,16 +99,48 @@ HttpResponse handleGet(const HttpRequest &request, const Server &server, const L
 				std::string baseUri = request.getPath();
 				if (baseUri.empty() || baseUri.back() != '/')
 					baseUri += '/';
-				indexStream << "<html><body><h1>Index of " << request.getPath() << "</h1><ul>";
+				indexStream << "<html><body><h1> &nbsp;&nbsp; Index of " << request.getPath() << "</h1><table><tr><th>Name</th><th>Last Modified (UTC)</th><th>Size (bytes)</th></tr>";
 				while ((entry = readdir(dir)) != NULL) {
-					std::string name = entry->d_name;
-					if (name == ".")
-						continue;
-					if (name == "..")
-						name += "/";
-					indexStream << "<li style=\"list-style: none;\"><a href='" << baseUri << name << "'>" << name << "</a></li>"; // Think about .. and .
+				std::string name = entry->d_name;
+				if (name == ".")
+					continue;
+				if (name == "..") {
+					name += "/";
+					indexStream << "<tr><td><a href='" << baseUri << name << "'>" << name << "</a></td></tr>";
+					continue;
 				}
-				indexStream << "</ul></body></html>";
+
+				std::string fullPath = filepath + "/" + name;
+				struct stat fileStat;
+				if (stat(fullPath.c_str(), &fileStat) == -1) {
+					perror(("stat failed for " + fullPath).c_str());
+					continue;
+				}
+
+				std::stringstream sizeStream;
+				sizeStream << fileStat.st_size << " bytes";
+
+				auto mod_time = std::chrono::system_clock::from_time_t(fileStat.st_mtime);
+				std::time_t time = std::chrono::system_clock::to_time_t(mod_time);
+				std::stringstream timeStream;
+				timeStream << std::put_time(std::gmtime(&time), "%d-%b-%Y %H:%M");
+
+				std::string displayName = name;
+				if (S_ISDIR(fileStat.st_mode))
+					displayName += "/";
+
+				indexStream << "<tr>";
+				indexStream << "<td><a href='" << baseUri << name << "'>" << displayName << "</a></td>";
+				indexStream << "<td>" << timeStream.str() << "</td>";
+				// Only show size for regular files
+				if (S_ISREG(fileStat.st_mode)) {
+					indexStream << "<td>" << fileStat.st_size << "</td>";
+				} else {
+					indexStream << "<td>_</td>";
+				}
+				indexStream << "</tr>";
+			}
+				indexStream << "</table></body></html>";
 				closedir(dir);
 				body = indexStream.str();
 			}
