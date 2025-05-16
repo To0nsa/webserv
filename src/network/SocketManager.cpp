@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/16 14:56:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/17 00:04:52 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
             _client_info[client_fd].headerBytesReceived = pos + 4;
     }
     std::string single_msg(buffer, bytes);
-    _client_info[client_fd].requestBuffer += single_msg;
     return true;
 }
 
@@ -277,75 +276,74 @@ void SocketManager::handleNewConnection(int listen_fd) {
     _client_info[client_fd] = info;
 }
 
+bool hasFullChunkedBody(const std::string& buffer, size_t bodyStart) {
+    size_t end = buffer.find("0\r\n\r\n", bodyStart);
+    return end != std::string::npos;
+}
+
 // Read data from client, send fixed response, then close
 bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (!receiveFromClient(client_fd, index))
         return false;
+
     if (checkRequestLimits(client_fd))
         return true;
+
     if (isHeaderTimeout(client_fd))
         return true;
 
-    // Check if we have a complete HTTP request header, if not, wait for more data
-    if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
-        std::cout << "==============Request for Client fd " << client_fd << " is in process."
-                  << std::endl;
-        std::cout << "==================================================" << std::endl;
+    std::string& buffer     = _client_info[client_fd].requestBuffer;
+    size_t       headersEnd = buffer.find("\r\n\r\n");
+
+    // Wait for complete headers
+    if (headersEnd == std::string::npos)
         return false;
+
+    std::string headersPart = buffer.substr(0, headersEnd + 4);
+
+    HttpRequest tmpRequest;
+    if (!tmpRequest.parseHeadersOnly(headersPart)) {
+        respondError(client_fd, 400);
+        return true;
     }
 
-    if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") != std::string::npos) {
-        // We have a complete HTTP request header
+    std::string contentLengthStr = tmpRequest.getHeader("Content-Length");
+    std::string transferEncoding = tmpRequest.getHeader("Transfer-Encoding");
 
-        size_t      headersEnd  = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
-        std::string headersPart = _client_info[client_fd].requestBuffer.substr(0, headersEnd);
+    size_t bodyStart = headersEnd + 4;
+    size_t totalSize = buffer.size();
 
-        std::cout << "===============Headers part: " << headersPart << std::endl;
-        std::cout << "==================================================" << std::endl;
-
-        /* HttpRequest tmpRequest;
-        if (!tmpRequest.parseHeadersOnly(headersPart)) {
-                // not a valid HTTP header
-                cleanupClientConnectionClose(client_fd, index);
-                return "";
-        }
-
-        if (tmpRequest.headers.count("Content-Length")) {
-                size_t bodySize = std::stoi(tmpRequest.headers["Content-Length"]);
-                if (_client_info[client_fd].requestBuffer.size() >= headersEnd + 4 + bodySize) {
-                        // Body is fully received, start parsing
-                        // Parse the body and headers
-                } else {
-                        // Wait for more data...
-                }
-        } else if (tmpRequest.headers["Transfer-Encoding"] == "chunked") {
-                if (hasFullChunkedBody(requestBuffer, headersEnd + 4)) {
-                        // Chunked body is fully received, start parsing
-                        // Parse the body and headers
-                } else {
-                        // Wait for more data...
-                }
-        } else {
-                // Request without body
-                // Parse the headers and body
-        } */
+    // Handle Content-Length (fixed-length body)
+    if (!contentLengthStr.empty()) {
+        size_t contentLength = std::strtoul(contentLengthStr.c_str(), NULL, 10);
+        if (totalSize < bodyStart + contentLength)
+            return false; // wait for full body
     }
+    // Handle chunked body
+    else if (transferEncoding == "chunked") {
+        if (!hasFullChunkedBody(buffer, bodyStart))
+            return false; // wait for 0\r\n\r\n
+    }
+    // Else: no body → proceed
+
+    // Parse full request now
     HttpRequest request;
-    if (!request.parse(_client_info[client_fd].requestBuffer)) {
+    if (!request.parse(buffer)) {
         std::cerr << "Failed to parse HTTP request.\n";
         HttpResponse badRequest =
             ResponseBuilder::generateError(400, _client_info[client_fd].serverConfig, request);
         _client_info[client_fd].responses.push(badRequest);
         return true;
     }
+
     request.printRequest();
-    _client_info[client_fd].requestBuffer.clear();
+    buffer.clear();
 
     const Server& server   = _client_info[client_fd].serverConfig;
     HttpResponse  response = handleRequest(request, server);
     _client_info[client_fd].responses.push(response);
 
-    return (true);
+    return true;
 }
 
 // Accept new client and add to poll list

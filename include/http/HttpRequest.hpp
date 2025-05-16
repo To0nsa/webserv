@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:10 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/16 11:33:51 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 23:24:17 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class HttpRequest {
     bool parseHeaders(std::istream& stream);
     void parseBody(std::istream& stream);
     bool parse(const std::string& raw_request);
+    bool parseHeadersOnly(const std::string& raw_headers);
     void printRequest(void) const;
 
     const std::string&                        getMethod(void) const;

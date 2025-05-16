@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/16 14:38:47 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 23:52:57 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,16 +88,83 @@ bool HttpRequest::parseHeaders(std::istream& stream) {
     return true;
 }
 
+bool decodeChunkedBody(std::string& body, std::string& error) {
+    std::string        decoded;
+    std::istringstream stream(body);
+
+    while (true) {
+        std::string line;
+        if (!std::getline(stream, line)) {
+            error = "Missing chunk size line";
+            return false;
+        }
+        if (line.empty() || line.back() != '\r') {
+            error = "Chunk size line missing CR";
+            return false;
+        }
+        line.pop_back(); // Remove CR
+
+        // Parse chunk size (hex)
+        std::istringstream size_stream(line);
+        size_t             chunk_size = 0;
+        size_stream >> std::hex >> chunk_size;
+
+        if (size_stream.fail()) {
+            error = "Invalid chunk size";
+            return false;
+        }
+
+        if (chunk_size == 0)
+            break; // last chunk
+
+        // Read exactly `chunk_size` bytes
+        char* buffer = new char[chunk_size];
+        stream.read(buffer, chunk_size);
+        if (stream.gcount() != static_cast<std::streamsize>(chunk_size)) {
+            delete[] buffer;
+            error = "Incomplete chunk data";
+            return false;
+        }
+        decoded.append(buffer, chunk_size);
+        delete[] buffer;
+
+        // Expect CRLF after chunk data
+        std::string crlf;
+        std::getline(stream, crlf);
+        if (crlf != "\r" && crlf != "") {
+            error = "Missing CRLF after chunk";
+            return false;
+        }
+    }
+
+    body.swap(decoded);
+    return true;
+}
+
 void HttpRequest::parseBody(std::istream& stream) {
-    std::string len_str = getHeader("Content-Length");
-    if (len_str.empty())
-        return;
+    const std::string& transferEncoding = getHeader("Transfer-Encoding");
+    const std::string& len_str          = getHeader("Content-Length");
 
-    size_t len = static_cast<size_t>(
-        parseInt(len_str, "Content-Length", -1, -1, [] { return "[parsing HTTP request body]"; }));
+    if (transferEncoding == "chunked") {
+        // Read the entire remaining stream as-is (preserve exact CRLF structure)
+        std::string raw_chunked((std::istreambuf_iterator<char>(stream)),
+                                std::istreambuf_iterator<char>());
 
-    _body.resize(len);
-    stream.read(&_body[0], len);
+        std::string error;
+        if (!decodeChunkedBody(raw_chunked, error)) {
+            std::cerr << "[parse] failed to decode chunked body: " << error << '\n';
+            throw std::runtime_error("Invalid chunked body");
+        }
+
+        _body.swap(raw_chunked); // decoded result is now in _body
+        _headers["content-length"] = std::to_string(_body.size());
+        _headers.erase("transfer-encoding");
+    } else if (!len_str.empty()) {
+        size_t len = static_cast<size_t>(parseInt(len_str, "Content-Length", -1, -1,
+                                                  [] { return "[parsing HTTP request body]"; }));
+        _body.resize(len);
+        stream.read(&_body[0], len);
+    }
 }
 
 bool HttpRequest::parse(const std::string& raw_request) {
@@ -114,6 +181,23 @@ bool HttpRequest::parse(const std::string& raw_request) {
         return false;
 
     parseBody(stream);
+
+    return true;
+}
+
+bool HttpRequest::parseHeadersOnly(const std::string& raw_headers) {
+    std::istringstream stream(raw_headers);
+    std::string        line;
+
+    if (!std::getline(stream, line) || line.empty())
+        return false;
+
+    if (!parseRequestLine(line))
+        return false;
+
+    if (!parseHeaders(stream))
+        return false;
+
     return true;
 }
 
