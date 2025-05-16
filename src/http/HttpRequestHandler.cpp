@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/16 11:57:33 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:33:59 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     // Find matching location
     const Location* matched = nullptr;
     for (const Location& loc : server.getLocations()) {
+		std::cout << "Upload store for {" << loc.getPath() << "} : {" << loc.getUploadStore() << "}" << std::endl;
         if (loc.matchesPath(path)) {
             matched = &loc;
             break;
