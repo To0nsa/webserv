@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:44 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 22:51:44 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/15 21:38:08 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,6 @@ std::size_t parseByteSize(const std::string& value, const std::string& field, in
 std::string toLower(const std::string&);
 std::string formatBytes(std::size_t bytes);
 std::string joinStrings(const std::vector<std::string>& list, const std::string& delim = ", ");
+std::string trim(const std::string& str);
 
 /** @} */ // end of StringUtils
