@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/15 20:55:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 14:56:06 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,14 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
     /* std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes
               << std::endl;
     std::cout << "==================================================" << std::endl; */
-    _client_info[client_fd].headerBytesReceived += bytes;
+    std::string& bufferRef = _client_info[client_fd].requestBuffer;
+    bufferRef.append(buffer, bytes);
+
+    if (_client_info[client_fd].headerBytesReceived == 0) {
+        size_t pos = bufferRef.find("\r\n\r\n");
+        if (pos != std::string::npos)
+            _client_info[client_fd].headerBytesReceived = pos + 4;
+    }
     std::string single_msg(buffer, bytes);
     _client_info[client_fd].requestBuffer += single_msg;
     return true;
@@ -105,13 +112,22 @@ void SocketManager::respondError(int fd, int status_code) {
 }
 
 bool SocketManager::checkRequestLimits(int fd) {
-    size_t max_size = _client_info[fd].serverConfig.getClientMaxBodySize();
-    if (_client_info[fd].headerBytesReceived > max_size ||
-        _client_info[fd].requestBuffer.size() > HEADER_MAX_LENGTH) {
-        std::cout << "Request too large from fd: " << fd << std::endl;
-        respondError(fd, 413);
+    size_t max_body_size = _client_info[fd].serverConfig.getClientMaxBodySize();
+
+    // Enforce header size limit separately
+    if (_client_info[fd].headerBytesReceived > HEADER_MAX_LENGTH) {
+        std::cout << "Headers too large from fd: " << fd << std::endl;
+        respondError(fd, 431); // 431 = Request Header Fields Too Large
         return true;
     }
+
+    // Enforce total request buffer limit (body size)
+    if (_client_info[fd].requestBuffer.size() > max_body_size) {
+        std::cout << "Body too large from fd: " << fd << std::endl;
+        respondError(fd, 413); // 413 = Payload Too Large
+        return true;
+    }
+
     return false;
 }
 
