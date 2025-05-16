@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:10 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/15 00:35:40 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 11:33:51 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,17 @@ class HttpRequest {
     HttpRequest(void);
     ~HttpRequest(void);
 
+    bool parseRequestLine(const std::string& line);
+    bool parseHeaders(std::istream& stream);
+    void parseBody(std::istream& stream);
     bool parse(const std::string& raw_request);
     void printRequest(void) const;
 
-    const std::string& getMethod(void) const;
-    const std::string& getPath(void) const;
-    const std::string& getVersion(void) const;
-    const std::string& getHeader(const std::string& key) const;
-    const std::string& getBody(void) const;
-    const std::string& getQuery() const;
+    const std::string&                        getMethod(void) const;
+    const std::string&                        getPath(void) const;
+    const std::string&                        getVersion(void) const;
+    const std::string&                        getHeader(const std::string& key) const;
+    const std::map<std::string, std::string>& getHeaders() const;
+    const std::string&                        getBody(void) const;
+    const std::string&                        getQuery() const;
 };
