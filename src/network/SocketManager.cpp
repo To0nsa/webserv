@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/16 12:51:41 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:39:29 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ bool SocketManager::checkRequestLimits(int fd) {
     if (_client_info[fd].headerBytesReceived > max_size ||
         _client_info[fd].requestBuffer.size() > HEADER_MAX_LENGTH) {
         std::cout << "Request too large from fd: " << fd << std::endl;
-        respondError(fd, 413);
-        return true;
+        respondError(fd, 413); // comment here
+        return false;
     }
     return false;
 }
