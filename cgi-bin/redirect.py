@@ -1,3 +1,8 @@
 #!/usr/bin/env python3
-print("Status: 302 Found\r\nLocation: /new/location\r\n\r\n")
-print("Redirecting...")
+import sys
+
+sys.stdout.write("Status: 302 Found\r\n")
+sys.stdout.write("Location: /new/location\r\n")
+sys.stdout.write("Content-Type: text/plain\r\n")
+sys.stdout.write("\r\n")
+sys.stdout.write("Redirecting...\n")
