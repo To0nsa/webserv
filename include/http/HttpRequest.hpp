@@ -22,6 +22,7 @@ class HttpRequest {
     std::string                        _version;
     std::map<std::string, std::string> _headers;
     std::string                        _body;
+    std::size_t                        _contentLength { 0 };
 
   public:
     HttpRequest(void);
@@ -35,4 +36,11 @@ class HttpRequest {
     const std::string& getVersion(void) const;
     const std::string& getHeader(const std::string& key) const;
     const std::string& getBody(void) const;
+
+    void setMethod(const std::string& method);
+    void setPath(const std::string& path);
+    void setVersion(const std::string& version);
+    void setHeader(const std::string& key, const std::string& value);
+    void setBody(const std::string& body);
+    void setContentLength(size_t len);
 };

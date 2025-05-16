@@ -108,3 +108,27 @@ const std::string& HttpRequest::getHeader(const std::string& key) const {
 const std::string& HttpRequest::getBody(void) const {
     return (_body);
 }
+
+void HttpRequest::setMethod(const std::string& method) {
+    _method = method;
+}
+
+void HttpRequest::setPath(const std::string& path) {
+    _path = path;
+}
+
+void HttpRequest::setVersion(const std::string& version) {
+    _version = version;
+}
+
+void HttpRequest::setHeader(const std::string& key, const std::string& value) {
+    _headers[key] = value;
+}
+
+void HttpRequest::setBody(const std::string& body) {
+    _body = body;
+}
+
+void HttpRequest::setContentLength(size_t len) {
+    _contentLength = len;
+}
