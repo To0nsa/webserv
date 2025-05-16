@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/15 20:53:30 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/16 11:57:33 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
 }
 
 HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc) {
+	std::cout << "{" << loc.getUploadStore() << "}" << std::endl;
     if (request.getBody().empty()) {
         return ResponseBuilder::generateError(400, server, request);
     }
