@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 22:52:56 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/14 10:12:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ std::size_t parseByteSize(const std::string& value) {
 
 int parseInt(const std::string& value, const std::string& field, int line, int column,
              const std::function<std::string()>& context_provider) {
+    (void) line;
+    (void) column;
     int result = 0;
 
     // Try to convert the full string to an integer using from_chars (no allocations, fast)
@@ -44,9 +46,8 @@ int parseInt(const std::string& value, const std::string& field, int line, int c
     // Check if conversion failed, or if there were leftover characters, or if result is negative
     if (ec != std::errc() || ptr != value.data() + value.size() || result < 0) {
         // Throw an error with precise source location and contextual snippet for diagnostics
-        throw std::invalid_argument("Line " + std::to_string(line) + ", column " +
-                                    std::to_string(column) + ": Invalid number for '" + field +
-                                    "': " + value + "\n" + context_provider());
+        throw std::invalid_argument("Invalid number for '" + field + "': " + value + "\n" +
+                                    context_provider());
     }
 
     return result;

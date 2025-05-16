@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/14 09:57:54 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/14 10:18:14 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,11 @@ static void validateIPv4Address(const std::string& ip, int line, int column,
     std::istringstream iss(ip);   // Stream to split the IP string by '.'
     std::string        segment;   // Holds each individual octet string
     int                count = 0; // Number of octets parsed
+
+    // Allow special-case loopback hosts used for local development.
+    // 'localhost' is standard for IPv4
+    if (ip == "localhost")
+        return;
 
     // Split the input string into segments using '.' as the delimiter
     while (std::getline(iss, segment, '.')) {
