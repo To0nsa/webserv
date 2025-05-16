@@ -6,7 +6,7 @@
 #    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/26 16:00:00 by nlouis            #+#    #+#              #
-#    Updated: 2025/05/14 10:31:37 by nlouis           ###   ########.fr        #
+#    Updated: 2025/05/16 19:08:31 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -162,6 +162,14 @@ test: prepare_dirs $(TARGET) $(TESTBINS)
 	@echo "$(CYAN)🧹 Shutting down test server...$(RESET)"
 	@kill `cat .webserv_test.pid` >/dev/null 2>&1 || true
 	@rm -f .webserv_test.pid
+
+	@echo "$(CYAN)🧪 Running Python CGI tests...$(RESET)"
+	@python3 tests/test_cgi.py || { \
+		echo "$(RED)❌ Python CGI tests failed.$(RESET)"; \
+		kill `cat .webserv_test.pid` >/dev/null 2>&1 || true; \
+		rm -f .webserv_test.pid; \
+		exit 1; \
+	}
 
 # Code Quality Targets
 format:

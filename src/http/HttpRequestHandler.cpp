@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/16 11:28:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 19:26:16 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,10 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
             return handleDelete(request, server, location);
         } */
 
-    return ResponseBuilder::generateError(500, server, request);
+    // return ResponseBuilder::generateError(500, server, request);
+
+    // Temporary fallback
+    std::string body = "<html><body><h1>OK</h1></body></html>";
+    return ResponseBuilder::generateSuccess(
+        200, "<html><body><h1>Hello you what's up ?</h1></body></html>", "text/html", request);
 }
