@@ -6,11 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/16 11:33:33 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 14:38:47 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/HttpRequest.hpp"
+#include "utils/stringUtils.hpp"
+
 #include <algorithm>
 #include <iostream>
 #include <set>
@@ -87,14 +89,15 @@ bool HttpRequest::parseHeaders(std::istream& stream) {
 }
 
 void HttpRequest::parseBody(std::istream& stream) {
-    std::string line;
-    while (std::getline(stream, line)) {
-        _body += line + "\n";
-    }
+    std::string len_str = getHeader("Content-Length");
+    if (len_str.empty())
+        return;
 
-    if (!_body.empty() && _body.back() == '\n') {
-        _body.pop_back();
-    }
+    size_t len = static_cast<size_t>(
+        parseInt(len_str, "Content-Length", -1, -1, [] { return "[parsing HTTP request body]"; }));
+
+    _body.resize(len);
+    stream.read(&_body[0], len);
 }
 
 bool HttpRequest::parse(const std::string& raw_request) {
