@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:17:47 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/08 17:09:43 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 11:58:05 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -385,15 +385,6 @@ class Tokenizer {
      */
     void skipOtherWhitespace();
     /**
-     * @brief Skips a C++-style comment starting with `//`.
-     *
-     * @details
-     * Advances the cursor past the `//` and continues until a newline or end of input.
-     * Used to ignore single-line comments during tokenization.
-     * @ingroup config
-     */
-    void skipDoubleSlashComment();
-    /**
      * @brief Skips a shell-style comment starting with `#`.
      *
      * @details
@@ -402,18 +393,6 @@ class Tokenizer {
      * @ingroup config
      */
     void skipHashComment();
-    /**
-     * @brief Skips a C-style block comment (`/ * ... * /`).
-     *
-     * @details
-     * Advances the cursor past the opening `/ *` and continues until the closing `* /`.
-     * Tracks newlines to maintain accurate line and column info.
-     * If the comment is unterminated (i.e., reaches EOF first), throws a `TokenizerError`.
-     *
-     * @throws TokenizerError If the block comment is not properly closed.
-     * @ingroup config
-     */
-    void skipMultiLineComment();
 
     //////////////////////
     // --- Token Dispatch

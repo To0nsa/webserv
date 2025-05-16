@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/15 15:48:54 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:51:41 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,6 +328,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     const Server& server   = _client_info[client_fd].serverConfig;
     HttpResponse  response = handleRequest(request, server);
     _client_info[client_fd].responses.push(response);
+
     return (true);
 }
 

@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/16 12:33:59 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:52:49 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "core/Location.hpp"
 #include "http/HttpResponseBuilder.hpp"
 #include "http/handle_get.hpp"
+/* #include "http/handleCgi.hpp" */
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fstream>
@@ -27,12 +28,15 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     const std::string& path   = request.getPath();
 
     // Find matching location
-    const Location* matched = nullptr;
+    const Location* matched     = nullptr;
+    size_t          maxMatchLen = 0;
+
     for (const Location& loc : server.getLocations()) {
-		std::cout << "Upload store for {" << loc.getPath() << "} : {" << loc.getUploadStore() << "}" << std::endl;
-        if (loc.matchesPath(path)) {
-            matched = &loc;
-            break;
+        const std::string& locPath = loc.getPath();
+        std::cout << "Upload store for {" << loc.getPath() << "} : {" << loc.getUploadStore() << "}" << std::endl;
+        if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
+            matched     = &loc;
+            maxMatchLen = locPath.size();
         }
     }
 
@@ -46,6 +50,11 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     if (location.hasRedirect()) {
         return ResponseBuilder::generateRedirect(location.getReturnCode(), location.getRedirect(),
                                                  request);
+    }
+
+    static const std::set<std::string> implemented = {"GET", "POST", "DELETE"};
+    if (implemented.find(method) == implemented.end()) {
+        return ResponseBuilder::generateError(501, server, request);
     }
 
     // Method not allowed
@@ -67,11 +76,11 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
         return handleDelete(request, server, location);
     }
 
-    return ResponseBuilder::generateError(501, server, request); // Not implemented
+    return ResponseBuilder::generateError(500, server, request);
 }
 
 HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc) {
-	std::cout << "{" << loc.getUploadStore() << "}" << std::endl;
+    std::cout << "{" << loc.getUploadStore() << "}" << std::endl;
     if (request.getBody().empty()) {
         return ResponseBuilder::generateError(400, server, request);
     }
