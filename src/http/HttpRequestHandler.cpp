@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/15 21:07:33 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 11:28:24 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
                                                  request);
     }
 
+    static const std::set<std::string> implemented = {"GET", "POST", "DELETE"};
+    if (implemented.find(method) == implemented.end()) {
+        return ResponseBuilder::generateError(501, server, request);
+    }
+
     // Method not allowed
     if (!location.isMethodAllowed(method)) {
         return ResponseBuilder::generateError(405, server, request);
@@ -69,5 +74,5 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
             return handleDelete(request, server, location);
         } */
 
-    return ResponseBuilder::generateError(501, server, request); // Not implemented
+    return ResponseBuilder::generateError(500, server, request);
 }
