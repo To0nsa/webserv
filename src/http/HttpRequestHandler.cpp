@@ -6,29 +6,35 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 21:39:08 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 11:28:24 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/HttpRequestHandler.hpp"
 #include "core/Location.hpp"
 #include "http/HttpResponseBuilder.hpp"
+#include "http/handleCgi.hpp"
 
-/* HttpResponse handleGet(const HttpRequest&, const Server&, const Location&);
+#include <iostream>
+
+HttpResponse handleGet(const HttpRequest&, const Server&, const Location&);
 HttpResponse handlePost(const HttpRequest&, const Server&, const Location&);
 HttpResponse handleDelete(const HttpRequest&, const Server&, const Location&);
-HttpResponse handleCgi(const HttpRequest&, const Server&, const Location&);
+// HttpResponse handleCgi(const HttpRequest&, const Server&, const Location&);
 
 HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     const std::string& method = request.getMethod();
     const std::string& path   = request.getPath();
 
     // Find matching location
-    const Location* matched = nullptr;
+    const Location* matched     = nullptr;
+    size_t          maxMatchLen = 0;
+
     for (const Location& loc : server.getLocations()) {
-        if (loc.matchesPath(path)) {
-            matched = &loc;
-            break;
+        const std::string& locPath = loc.getPath();
+        if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
+            matched     = &loc;
+            maxMatchLen = locPath.size();
         }
     }
 
@@ -44,6 +50,11 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
                                                  request);
     }
 
+    static const std::set<std::string> implemented = {"GET", "POST", "DELETE"};
+    if (implemented.find(method) == implemented.end()) {
+        return ResponseBuilder::generateError(501, server, request);
+    }
+
     // Method not allowed
     if (!location.isMethodAllowed(method)) {
         return ResponseBuilder::generateError(405, server, request);
@@ -55,14 +66,13 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     }
 
     // Delegate based on method
-    if (method == "GET") {
-        return handleGet(request, server, location);
-    } else if (method == "POST") {
-        return handlePost(request, server, location);
-    } else if (method == "DELETE") {
-        return handleDelete(request, server, location);
-    }
+    /*     if (method == "GET") {
+            return handleGet(request, server, location);
+        } else if (method == "POST") {
+            return handlePost(request, server, location);
+        } else if (method == "DELETE") {
+            return handleDelete(request, server, location);
+        } */
 
-    return ResponseBuilder::generateError(501, server, request); // Not implemented
+    return ResponseBuilder::generateError(500, server, request);
 }
- */

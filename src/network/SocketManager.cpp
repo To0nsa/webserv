@@ -6,12 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 23:33:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/15 20:55:59 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/SocketManager.hpp"
 #include "http/HttpRequest.hpp"
+#include "http/HttpRequestHandler.hpp"
 #include "http/HttpResponse.hpp"
 #include "http/HttpResponseBuilder.hpp"
 #include <sstream> // For stringstream, we will remove it later
@@ -324,20 +325,10 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     request.printRequest();
     _client_info[client_fd].requestBuffer.clear();
 
-    /*==== Here we will have RequestHandler ====*/
-    // You might want to handle the parsed request based on HTTP methods, route, etc.
-    // The request handler would process the parsed request and generate an appropriate response.
-
-    /* Example code (uncomment when implementing request handling):
-                const Server& server = _client_info[client_fd].serverConfig;
-                HttpResponse response = handleRequest(request, server);
-                _client_info[client_fd].responses.push(response);
-    */
-
-    // Temporary HTTP response logic for now (simple hardcoded response)
-    HttpResponse response =
-        ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
+    const Server& server   = _client_info[client_fd].serverConfig;
+    HttpResponse  response = handleRequest(request, server);
     _client_info[client_fd].responses.push(response);
+
     return (true);
 }
 

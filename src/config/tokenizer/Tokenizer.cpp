@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 01:06:09 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 22:40:22 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 11:57:28 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,12 +123,8 @@ void Tokenizer::skipWhitespaceAndComments() {
             skipNewline();
         } else if (std::isspace(c)) {
             skipOtherWhitespace();
-        } else if (c == '/' && peekNext() == '/') {
-            skipDoubleSlashComment();
         } else if (c == '#') {
             skipHashComment();
-        } else if (c == '/' && peekNext() == '*') {
-            skipMultiLineComment();
         } else {
             return; // Stop when encountering non-whitespace, non-comment character
         }
@@ -360,54 +356,12 @@ void Tokenizer::skipOtherWhitespace() {
     ++_column;
 }
 
-void Tokenizer::skipDoubleSlashComment() {
-    _pos += 2;
-    _column += 2;
-    while (!isAtEnd() && peek() != '\n') {
-        ++_pos;
-        ++_column;
-    }
-}
-
 void Tokenizer::skipHashComment() {
     ++_pos;
     ++_column;
     while (!isAtEnd() && peek() != '\n') {
         ++_pos;
         ++_column;
-    }
-}
-
-void Tokenizer::skipMultiLineComment() {
-    _pos += 2; // Skip the opening "/*"
-    _column += 2;
-    bool closed = false;
-
-    while (!isAtEnd()) {
-        unsigned char d = peek();
-
-        // Check for closing "*/"
-        if (d == '*' && peekNext() == '/') {
-            _pos += 2; // Skip the closing "*/"
-            _column += 2;
-            closed = true;
-            break;
-        }
-
-        if (d == '\n') {
-            ++_pos;
-            ++_line; // Track newlines to maintain accurate line info
-            _column = 1;
-        } else {
-            ++_pos;
-            ++_column;
-        }
-    }
-
-    // If comment wasn't closed, throw an error
-    if (!closed) {
-        throw TokenizerError(formatError("Unterminated block comment", _line, _column),
-                             extractLine(_pos));
     }
 }
 

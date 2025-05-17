@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 08:46:22 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/14 09:59:42 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 11:48:57 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,14 @@ Location ConfigParser::parseLocation() {
                           getContextWindow());
     }
 
-    location.setPath(current().value);
+    Token pathTok = current();
+    if (pathTok.value.empty() || pathTok.value[0] != '/') {
+        throw SyntaxError(
+            formatError("Location path must start with '/' (got '" + pathTok.value + "')",
+                        pathTok.line, pathTok.column),
+            getContextWindow());
+    }
+    location.setPath(pathTok.value);
     advance(); // consume the path token
 
     expect(TokenType::LBRACE, "start of location block"); // Expect opening brace '{'

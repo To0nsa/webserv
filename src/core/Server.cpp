@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:51:19 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 22:05:25 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 08:03:18 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,10 @@ int Server::getPort() const noexcept {
 
 const std::string& Server::getHost() const noexcept {
     return _host;
+}
+
+const std::string Server::getDefaultServerName() const {
+    return _server_names.empty() ? "localhost" : _server_names.front();
 }
 
 const std::vector<std::string>& Server::getServerNames() const noexcept {

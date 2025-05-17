@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:37:06 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 19:56:45 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/16 08:03:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ class Server {
      * @ingroup config
      */
     const std::vector<std::string>& getServerNames() const noexcept;
+    const std::string               getDefaultServerName() const;
     /**
      * @brief Returns the mapping of HTTP error codes to custom error pages.
      *

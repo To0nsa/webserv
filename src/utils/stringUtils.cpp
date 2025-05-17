@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/14 10:12:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/15 21:35:52 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,4 +136,12 @@ std::string joinStrings(const std::vector<std::string>& list, const std::string&
             oss << delim;
     }
     return oss.str();
+}
+
+std::string trim(const std::string& s) {
+    size_t start = s.find_first_not_of(" \t\r\n");
+    size_t end   = s.find_last_not_of(" \t\r\n");
+    return (start == std::string::npos || end == std::string::npos)
+               ? ""
+               : s.substr(start, end - start + 1);
 }

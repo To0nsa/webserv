@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 19:58:07 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/15 01:15:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
  */
 
 #include "core/Location.hpp"
+
+#include <algorithm>
+#include <filesystem>
+#include <vector>
 
 ///////////////////////
 // --- Constructor ---
@@ -148,16 +152,9 @@ bool Location::isUploadEnabled() const {
     return !_upload_store.empty();
 }
 
-bool Location::isCgiRequest(const std::string& uri) const {
-    for (const std::string& ext : _cgi_extensions) {
-        // Skip empty extensions and ensure URI is long enough
-        if (!ext.empty() && uri.size() >= ext.size() &&
-            // Check if URI ends with the current CGI extension
-            uri.compare(uri.size() - ext.size(), ext.size(), ext) == 0) {
-            return true; // Match found: this is a CGI request
-        }
-    }
-    return false; // No matching extension found
+bool Location::isCgiRequest(const std::string& path) const {
+    std::string ext = std::filesystem::path(path).extension().string();
+    return std::find(_cgi_extensions.begin(), _cgi_extensions.end(), ext) != _cgi_extensions.end();
 }
 
 std::string Location::getEffectiveIndexPath() const {
