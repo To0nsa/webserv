@@ -112,6 +112,12 @@ std::string toLower(const std::string& str) {
     return result; // Return the transformed string
 }
 
+std::string toUpper(const std::string& s) {
+    std::string res = s;
+    std::transform(res.begin(), res.end(), res.begin(), ::toupper);
+    return res;
+}
+
 std::string formatBytes(std::size_t bytes) {
     const char* suffixes[] = {"B", "KiB", "MiB", "GiB", "TiB"};
     double      size       = static_cast<double>(bytes);

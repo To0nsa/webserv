@@ -2,10 +2,12 @@
 #pragma once
 
 #include "http/HttpRequest.hpp"
+#include "utils/stringUtils.hpp"
 
 class HttpRequestParser
 {
-    static bool parse(HttpRequest &req, const std::string& raw_req);
+    public:
+        static bool parse(HttpRequest &req, const std::string& raw_req, std::size_t clientMaxBodySize);
     private:
         HttpRequestParser() = delete;
         ~HttpRequestParser() = delete;

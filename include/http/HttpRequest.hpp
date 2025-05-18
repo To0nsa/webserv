@@ -11,8 +11,12 @@
 /* ************************************************************************** */
 
 #pragma once
+
+#include "http/Url.hpp"
+#include "utils/stringUtils.hpp"
 #include <map>
 #include <string>
+
 
 class HttpRequest {
 
@@ -23,6 +27,8 @@ class HttpRequest {
     std::map<std::string, std::string> _headers;
     std::string                        _body;
     std::size_t                        _contentLength { 0 };
+    std::string                        _uri;
+    Url                                _url;
 
   public:
     HttpRequest(void);
@@ -36,6 +42,8 @@ class HttpRequest {
     const std::string& getVersion(void) const;
     const std::string& getHeader(const std::string& key) const;
     const std::string& getBody(void) const;
+    std::size_t getContentLength(void) const;
+    const std::string& getUri(void) const;
 
     void setMethod(const std::string& method);
     void setPath(const std::string& path);
@@ -43,4 +51,5 @@ class HttpRequest {
     void setHeader(const std::string& key, const std::string& value);
     void setBody(const std::string& body);
     void setContentLength(size_t len);
+    void setUrl(const Url& url);
 };
