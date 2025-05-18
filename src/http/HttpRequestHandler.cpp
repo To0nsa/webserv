@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/18 10:42:50 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/18 16:26:41 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,30 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         return ResponseBuilder::generateError(403, server, request);
     }
 
-    std::string filename = request.getPath().substr(request.getPath().find_last_of("/") + 1);
+    std::string relative = request.getPath().substr(loc.getPath().length());
+    if (!relative.empty() && relative[0] == '/')
+        relative = relative.substr(1);
+    // check it in parser
+    if (relative.find("..") != std::string::npos) {
+        std::cerr << "[POST] Invalid relative: " << relative << std::endl;
+        return ResponseBuilder::generateError(400, server, request);
+    }
+    std::cout << "[POST] Relative: " << relative << std::endl;
+
+    size_t pos = relative.find_last_of('/');
+    std::string relativeDir;
+    std::string filename;
+    if (pos == std::string::npos) {
+        relativeDir = "";
+        filename = relative;
+    } else {
+        relativeDir = relative.substr(0, pos);
+        filename = relative.substr(pos + 1);
+    }
+    if (filename.empty()) {
+            filename = "upload_" + std::to_string(std::time(nullptr)) + ".txt";
+        }
+
     std::string dirpath;
     if (loc.getUploadStore().empty()) {
         return ResponseBuilder::generateError(403, server, request);
@@ -110,17 +133,22 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     } else {
         dirpath = joinPath(loc.getRoot(), loc.getUploadStore());
     }
-    std::string fullpath = joinPath(dirpath, filename);
+    std::string fullDirPath = joinPath(dirpath, relativeDir);
+    std::string fullpath = joinPath(fullDirPath, filename);
 
-    std::cout << "[POST] Upload directory: " << dirpath << std::endl;
-    std::cout << "[POST] Target filename: " << filename << std::endl;
-    std::cout << "[POST] Full file path: " << fullpath << std::endl;
+    std::cout << "[POST] fullDirPath: " << fullDirPath << std::endl;
+    std::cout << "[POST] dirpath: " << dirpath << std::endl;
+    std::cout << "[POST] filename: {" << filename << "}" << std::endl;
+    std::cout << "[POST] fullpath " << fullpath << std::endl;
 
-    if (mkdir(dirpath.c_str(), 0777) == -1 && errno != EEXIST) {
-        std::cerr << "[POST] Failed to create directory: " << dirpath << " — errno: " << strerror(errno) << std::endl;
+    if (!mkdirRecursive(fullDirPath)) {
         return ResponseBuilder::generateError(500, server, request);
     }
 
+    if (fileExists(fullpath)) { //Think. We have to overwrite I guess.
+        std::cerr << "[POST] File already exists: " << fullpath << std::endl;
+        return ResponseBuilder::generateError(400, Server(), request);
+    }
     std::ofstream file(fullpath.c_str());
     if (!file) {
         std::cerr << "[POST] Failed to open file: " << fullpath << std::endl;
@@ -134,6 +162,10 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         std::cerr << "[POST] Failed to write or close file: " << fullpath << std::endl;
         return ResponseBuilder::generateError(500, server, request);
     }
+   /*  HttpResponse response = ResponseBuilder::generateSuccess(201, body, "text/html", request);
+    response.setHeader("Location", joinPath(request.getPath(), filename));  // Do we need it?
+
+    return response; */
 
     std::cout << "[POST] File saved successfully: " << fullpath << std::endl;
     return ResponseBuilder::generateSuccess(201, "<h1>File " + filename + " created.</h1>", "text/html", request);
