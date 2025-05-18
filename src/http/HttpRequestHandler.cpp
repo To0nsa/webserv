@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/16 13:15:10 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/18 10:42:50 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 #include "core/Location.hpp"
 #include "http/HttpResponseBuilder.hpp"
 #include "http/handle_get.hpp"
-/* #include "http/handleCgi.hpp" */
+#include "http/handleCgi.hpp"
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fstream>
 
 HttpResponse handlePost(const HttpRequest&, const Server&, const Location&);
 HttpResponse handleDelete(const HttpRequest&, const Server&, const Location&);
-HttpResponse handleCgi(const HttpRequest&, const Server&, const Location&);
 
 HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     const std::string& method = request.getMethod();
@@ -156,10 +155,4 @@ HttpResponse handleDelete(const HttpRequest& request, const Server& server, cons
     std::string filename = request.getPath().substr(request.getPath().find_last_of("/") + 1);
     return ResponseBuilder::generateSuccess(200, "<h1>File " + filename + " deleted.</h1>",
                                             "text/html", request);
-}
-
-HttpResponse handleCgi(const HttpRequest& request, const Server& server, const Location& loc) {
-    (void) loc;
-    (void) server;
-    return ResponseBuilder::generateSuccess(200, "<h1>Success</h1><p>OK</p>", "text/html", request);
 }
