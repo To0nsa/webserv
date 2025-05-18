@@ -38,27 +38,30 @@ std::string buildFilePath(const HttpRequest& request, const Location& loc) {
 
 static std::vector<std::string> splitPath(const std::string& path) {
     std::vector<std::string> parts;
-    std::stringstream ss(path);
-    std::string part;
+    std::stringstream        ss(path);
+    std::string              part;
     while (std::getline(ss, part, '/')) {
-        if (!part.empty()) parts.push_back(part);
+        if (!part.empty())
+            parts.push_back(part);
     }
     return parts;
 }
 
 bool mkdirRecursive(const std::string& path) {
-    std::vector<std::string> parts = splitPath(path);
-    std::string current = path[0] == '/' ? "/" : "";
+    std::vector<std::string> parts   = splitPath(path);
+    std::string              current = path[0] == '/' ? "/" : "";
 
     for (size_t i = 0; i < parts.size(); ++i) {
         current = joinPath(current, parts[i]);
-		if (fileExists(current)) {
-            std::cerr << "[mkdirRecursive] Path exists and is a file (not directory): " << current << std::endl;
+        if (fileExists(current)) {
+            std::cerr << "[mkdirRecursive] Path exists and is a file (not directory): " << current
+                      << std::endl;
             return false;
         }
         if (mkdir(current.c_str(), 0777) == -1) {
             if (errno != EEXIST) {
-                std::cerr << "[mkdirRecursive] Failed to create directory: " << current << " — errno: " << strerror(errno) << std::endl;
+                std::cerr << "[mkdirRecursive] Failed to create directory: " << current
+                          << " — errno: " << strerror(errno) << std::endl;
                 return false;
             }
         }

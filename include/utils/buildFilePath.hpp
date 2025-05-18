@@ -15,12 +15,12 @@
 #include "core/Location.hpp"
 #include "core/Server.hpp"
 #include "http/HttpRequest.hpp"
-#include <string>
 #include <cstring>
-#include <sstream>
-#include <sys/stat.h>
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <sys/stat.h>
 
 std::string joinPath(const std::string& base, const std::string& suffix);
 std::string buildFilePath(const HttpRequest& request, const Location& loc);
-bool mkdirRecursive(const std::string& path);
+bool        mkdirRecursive(const std::string& path);

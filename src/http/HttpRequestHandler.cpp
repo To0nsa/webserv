@@ -13,11 +13,11 @@
 #include "http/HttpRequestHandler.hpp"
 #include "core/Location.hpp"
 #include "http/HttpResponseBuilder.hpp"
-#include "http/handle_get.hpp"
 #include "http/handleCgi.hpp"
+#include "http/handle_get.hpp"
+#include <fstream>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <fstream>
 
 HttpResponse handlePost(const HttpRequest&, const Server&, const Location&);
 HttpResponse handleDelete(const HttpRequest&, const Server&, const Location&);
@@ -34,10 +34,12 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     std::cout << "Requested method: {" << method << "}" << std::endl;
     for (const Location& loc : server.getLocations()) {
         const std::string& locPath = loc.getPath();
-        std::cout << "Upload store for {" << loc.getPath() << "} : {" << loc.getUploadStore() << "}" << std::endl;
+        std::cout << "Upload store for {" << loc.getPath() << "} : {" << loc.getUploadStore() << "}"
+                  << std::endl;
         if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
-            matched     = &loc;
-            std::cout << "Upload store MATCHED for {" << loc.getPath() << "} : {" << loc.getUploadStore() << "}" << std::endl;
+            matched = &loc;
+            std::cout << "Upload store MATCHED for {" << loc.getPath() << "} : {"
+                      << loc.getUploadStore() << "}" << std::endl;
             maxMatchLen = locPath.size();
         }
     }
@@ -92,7 +94,8 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     }
 
     if (request.getBody().size() > server.getClientMaxBodySize()) {
-        std::cout << "[POST] Body too large (" << request.getBody().size() << " bytes) — returning 413" << std::endl;
+        std::cout << "[POST] Body too large (" << request.getBody().size()
+                  << " bytes) — returning 413" << std::endl;
         return ResponseBuilder::generateError(413, server, request);
     }
 
@@ -111,19 +114,19 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     }
     std::cout << "[POST] Relative: " << relative << std::endl;
 
-    size_t pos = relative.find_last_of('/');
+    size_t      pos = relative.find_last_of('/');
     std::string relativeDir;
     std::string filename;
     if (pos == std::string::npos) {
         relativeDir = "";
-        filename = relative;
+        filename    = relative;
     } else {
         relativeDir = relative.substr(0, pos);
-        filename = relative.substr(pos + 1);
+        filename    = relative.substr(pos + 1);
     }
     if (filename.empty()) {
-            filename = "upload_" + std::to_string(std::time(nullptr)) + ".txt";
-        }
+        filename = "upload_" + std::to_string(std::time(nullptr)) + ".txt";
+    }
 
     std::string dirpath;
     if (loc.getUploadStore().empty()) {
@@ -134,7 +137,7 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         dirpath = joinPath(loc.getRoot(), loc.getUploadStore());
     }
     std::string fullDirPath = joinPath(dirpath, relativeDir);
-    std::string fullpath = joinPath(fullDirPath, filename);
+    std::string fullpath    = joinPath(fullDirPath, filename);
 
     std::cout << "[POST] fullDirPath: " << fullDirPath << std::endl;
     std::cout << "[POST] dirpath: " << dirpath << std::endl;
@@ -145,7 +148,7 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         return ResponseBuilder::generateError(500, server, request);
     }
 
-    if (fileExists(fullpath)) { //Think. We have to overwrite I guess.
+    if (fileExists(fullpath)) { // Think. We have to overwrite I guess.
         std::cerr << "[POST] File already exists: " << fullpath << std::endl;
         return ResponseBuilder::generateError(400, Server(), request);
     }
@@ -162,15 +165,15 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         std::cerr << "[POST] Failed to write or close file: " << fullpath << std::endl;
         return ResponseBuilder::generateError(500, server, request);
     }
-   /*  HttpResponse response = ResponseBuilder::generateSuccess(201, body, "text/html", request);
-    response.setHeader("Location", joinPath(request.getPath(), filename));  // Do we need it?
+    /*  HttpResponse response = ResponseBuilder::generateSuccess(201, body, "text/html", request);
+     response.setHeader("Location", joinPath(request.getPath(), filename));  // Do we need it?
 
-    return response; */
+     return response; */
 
     std::cout << "[POST] File saved successfully: " << fullpath << std::endl;
-    return ResponseBuilder::generateSuccess(201, "<h1>File " + filename + " created.</h1>", "text/html", request);
+    return ResponseBuilder::generateSuccess(201, "<h1>File " + filename + " created.</h1>",
+                                            "text/html", request);
 }
-
 
 HttpResponse handleDelete(const HttpRequest& request, const Server& server, const Location& loc) {
     // Build full file path
