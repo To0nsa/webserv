@@ -6,11 +6,48 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/19 10:22:00 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/19 11:07:35 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handle_post.hpp"
+
+std::string urlDecode(const std::string& encoded) {
+    std::string decoded;
+    char ch;
+    size_t i;
+    int j;
+    for (i = 0; i < encoded.length(); i++) {
+        if (encoded[i] == '%') {
+            sscanf(encoded.substr(i + 1, 2).c_str(), "%x", &j);
+            ch = static_cast<char>(j);
+            decoded += ch;
+            i += 2;
+        } else if (encoded[i] == '+') {
+            decoded += ' ';
+        } else {
+            decoded += encoded[i];
+        }
+    }
+    return decoded;
+}
+
+std::map<std::string, std::string> parseUrlEncodedForm(const std::string& body) {
+    std::map<std::string, std::string> form;
+    std::istringstream ss(body);
+    std::string pair;
+
+    while (std::getline(ss, pair, '&')) {
+        size_t eq = pair.find('=');
+        if (eq != std::string::npos) {
+            std::string key = urlDecode(pair.substr(0, eq));
+            std::string value = urlDecode(pair.substr(eq + 1));
+            form[key] = value;
+        }
+    }
+
+    return form;
+}
 
 HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc) {
     std::cout << "[POST] Upload store: {" << loc.getUploadStore() << "}" << std::endl;
@@ -52,7 +89,7 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         filename    = relative.substr(pos + 1);
     }
     if (filename.empty()) {
-        filename = "upload_" + std::to_string(std::time(nullptr)) + ".txt";
+        filename = "upload_" + std::to_string(std::time(nullptr)) + ".html";
     }
 
     std::string dirpath;
@@ -85,7 +122,26 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         return ResponseBuilder::generateError(500, server, request);
     }
 
-    file << request.getBody();
+    if (request.getHeader("Content-Type").find("application/x-www-form-urlencoded") != std::string::npos)
+    {
+        std::map<std::string, std::string> form = parseUrlEncodedForm(request.getBody());
+        std::string html = "<html><body><h1>Form Received</h1>";
+        for (auto it = form.begin(); it != form.end(); ++it) {
+            html += "<p><b>" + it->first + ":</b> " + it->second + "</p>";
+        }
+        html += "</body></html>";
+        file << html;
+         file.close();
+
+        if (file.fail()) {
+            std::cerr << "[POST] Failed to write or close file: " << fullpath << std::endl;
+            return ResponseBuilder::generateError(500, server, request);
+        }
+        std::cout << "[POST] Form Received successfully: " << fullpath << std::endl;
+        return ResponseBuilder::generateSuccess(201, "<h1>Form Received. File " + filename + " created.</h1>",
+                                                "text/html", request);
+    } else
+        file << request.getBody();
     file.close();
 
     if (file.fail()) {
@@ -98,6 +154,6 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
      return response; */
 
     std::cout << "[POST] File saved successfully: " << fullpath << std::endl;
-    return ResponseBuilder::generateSuccess(201, "<h1>File " + filename + " created.</h1>",
+    return ResponseBuilder::generateSuccess(201, "<html><body><h1>File " + filename + " created.</h1></body></html>",
                                             "text/html", request);
 }
