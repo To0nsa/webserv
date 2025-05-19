@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/19 11:07:35 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/19 13:30:43 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         filename    = relative.substr(pos + 1);
     }
     if (filename.empty()) {
-        filename = "upload_" + std::to_string(std::time(nullptr)) + ".html";
+        filename = "upload_" + std::to_string(std::time(nullptr))/*  + ".html" */;
     }
 
     std::string dirpath;
@@ -122,9 +122,14 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         return ResponseBuilder::generateError(500, server, request);
     }
 
-    if (request.getHeader("Content-Type").find("application/x-www-form-urlencoded") != std::string::npos)
-    {
+    std::string contentType = request.getHeader("Content-Type");
+
+    if (!contentType.empty() && contentType.find("application/x-www-form-urlencoded") != std::string::npos) {
         std::map<std::string, std::string> form = parseUrlEncodedForm(request.getBody());
+        if (form.empty()) {
+            std::cerr << "[POST] Invalid or empty form data." << std::endl;
+            return ResponseBuilder::generateError(400, server, request);
+        }
         std::string html = "<html><body><h1>Form Received</h1>";
         for (auto it = form.begin(); it != form.end(); ++it) {
             html += "<p><b>" + it->first + ":</b> " + it->second + "</p>";
@@ -140,13 +145,14 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         std::cout << "[POST] Form Received successfully: " << fullpath << std::endl;
         return ResponseBuilder::generateSuccess(201, "<h1>Form Received. File " + filename + " created.</h1>",
                                                 "text/html", request);
-    } else
+    } else {
         file << request.getBody();
-    file.close();
+        file.close();
 
-    if (file.fail()) {
-        std::cerr << "[POST] Failed to write or close file: " << fullpath << std::endl;
-        return ResponseBuilder::generateError(500, server, request);
+        if (file.fail()) {
+            std::cerr << "[POST] Failed to write or close file: " << fullpath << std::endl;
+            return ResponseBuilder::generateError(500, server, request);
+        }
     }
     /*  HttpResponse response = ResponseBuilder::generateSuccess(201, body, "text/html", request);
      response.setHeader("Location", joinPath(request.getPath(), filename));  // Do we need it?
