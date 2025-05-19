@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/19 13:30:43 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:50:11 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,31 @@
 
 std::string urlDecode(const std::string& encoded) {
     std::string decoded;
-    char ch;
-    size_t i;
-    int j;
-    for (i = 0; i < encoded.length(); i++) {
+    decoded.reserve(encoded.size());  // optional: performance
+
+    for (size_t i = 0; i < encoded.length(); ++i) {
         if (encoded[i] == '%') {
-            sscanf(encoded.substr(i + 1, 2).c_str(), "%x", &j);
-            ch = static_cast<char>(j);
-            decoded += ch;
-            i += 2;
+            if (i + 2 < encoded.length()) {
+                std::istringstream iss(encoded.substr(i + 1, 2));
+                int hex = 0;
+                if (iss >> std::hex >> hex) {
+                    decoded += static_cast<char>(hex);
+                    i += 2;
+                } else {
+                    // malformed % sequence, copy literally
+                    decoded += '%';
+                }
+            } else {
+                // malformed % at end of string
+                decoded += '%';
+            }
         } else if (encoded[i] == '+') {
             decoded += ' ';
         } else {
             decoded += encoded[i];
         }
     }
+
     return decoded;
 }
 
@@ -127,7 +137,7 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     if (!contentType.empty() && contentType.find("application/x-www-form-urlencoded") != std::string::npos) {
         std::map<std::string, std::string> form = parseUrlEncodedForm(request.getBody());
         if (form.empty()) {
-            std::cerr << "[POST] Invalid or empty form data." << std::endl;
+            std::cerr << "[POST] Invalid or empty form data." << std::endl; // check nginx
             return ResponseBuilder::generateError(400, server, request);
         }
         std::string html = "<html><body><h1>Form Received</h1>";
