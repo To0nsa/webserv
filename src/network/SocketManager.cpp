@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/20 12:06:46 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/20 13:47:21 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,7 +318,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (!request.parse(_client_info[client_fd].requestBuffer)) {
         std::cerr << "Failed to parse HTTP request.\n";
         HttpResponse badRequest =
-            ResponseBuilder::generateError(400, _client_info[client_fd].serverConfig, request);
+		/* ResponseBuilder::generateError(400, _client_info[client_fd].serverConfig, request); */ResponseBuilder::generateError(405, _client_info[client_fd].serverConfig, request);
         _client_info[client_fd].responses.push(badRequest);
         return true;
     }

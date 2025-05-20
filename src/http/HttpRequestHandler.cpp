@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/19 10:20:28 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/20 13:46:20 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     std::cout << "Requested path: {" << path << "}" << std::endl;
     std::cout << "Requested method: {" << method << "}" << std::endl;
     for (const Location& loc : server.getLocations()) {
-        const std::string& locPath = loc.getPath();
+        const std::string& locPath = normalizePath(loc.getPath());
         std::cout << "Upload store for {" << loc.getPath() << "} : {" << loc.getUploadStore() << "}"
                   << std::endl;
         if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
@@ -58,7 +58,7 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
 
     static const std::set<std::string> implemented = {"GET", "POST", "DELETE"};
     if (implemented.find(method) == implemented.end()) {
-        return ResponseBuilder::generateError(501, server, request);
+        return ResponseBuilder::generateError(405, server, request); /* return ResponseBuilder::generateError(501, server, request); */
     }
 
     // Method not allowed

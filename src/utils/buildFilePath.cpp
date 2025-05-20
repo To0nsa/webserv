@@ -6,12 +6,23 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 16:12:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/18 16:13:03 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/20 13:49:06 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/buildFilePath.hpp"
 #include "utils/filesystemUtils.hpp"
+
+std::string normalizePath(const std::string& path) {
+    if (path.empty())
+        return "/";
+    std::string result = path;
+
+    if (result.size() > 1 && result.back() == '/')
+        result.pop_back();
+
+    return result;
+}
 
 std::string joinPath(const std::string& base, const std::string& suffix) {
     if (base.empty())
@@ -22,9 +33,9 @@ std::string joinPath(const std::string& base, const std::string& suffix) {
 }
 
 std::string buildFilePath(const HttpRequest& request, const Location& loc) {
-    std::string request_path  = request.getPath();
-    std::string location_path = loc.getPath();
-    std::string location_root = loc.getRoot();
+    std::string request_path  = normalizePath(request.getPath());
+    std::string location_path = normalizePath(loc.getPath());
+    std::string location_root = normalizePath(loc.getRoot());
 
     std::string suffix;
     if (request_path.find(location_path) == 0)
