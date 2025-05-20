@@ -6,11 +6,48 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/19 15:50:11 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/20 09:18:13 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handle_post.hpp"
+
+bool parseMultipart(const std::string& body, const std::string& boundary,
+                    std::string& filename, std::string& fileContent) {
+    std::string delimiter = "--" + boundary;
+    size_t pos = body.find(delimiter);
+    if (pos == std::string::npos)
+        return false;
+
+    pos += delimiter.length() + 2; // Skip "\r\n"
+    size_t end = body.find(delimiter + "--");
+    if (end == std::string::npos)
+        return false;
+
+    std::string part = body.substr(pos, end - pos);
+
+    // Separate headers from content
+    size_t headerEnd = part.find("\r\n\r\n");
+    if (headerEnd == std::string::npos)
+        return false;
+
+    std::string headers = part.substr(0, headerEnd);
+    fileContent = part.substr(headerEnd + 4); // after CRLFCRLF
+
+    // Extract filename
+    size_t fnamePos = headers.find("filename=\"");
+    if (fnamePos == std::string::npos)
+        return false;
+
+    fnamePos += 10; // strlen("filename=\"")
+    size_t endQuote = headers.find("\"", fnamePos);
+    if (endQuote == std::string::npos)
+        return false;
+
+    filename = headers.substr(fnamePos, endQuote - fnamePos);
+    return true;
+}
+
 
 std::string urlDecode(const std::string& encoded) {
     std::string decoded;
@@ -133,6 +170,44 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     }
 
     std::string contentType = request.getHeader("Content-Type");
+
+    if (!contentType.empty() && contentType.find("multipart/form-data") != std::string::npos) {
+        size_t bpos = contentType.find("boundary=");
+        if (bpos == std::string::npos) {
+            return ResponseBuilder::generateError(400, server, request);
+        }
+
+        std::string boundary = contentType.substr(bpos + 9); // after "boundary="
+
+        std::string filename, fileContent;
+        if (!parseMultipart(request.getBody(), boundary, filename, fileContent)) {
+            return ResponseBuilder::generateError(400, server, request);
+        }
+
+        if (filename.empty())
+            filename = "upload_" + std::to_string(std::time(nullptr));
+
+        std::string dirpath = joinPath(loc.getRoot(), loc.getUploadStore());
+        std::string fullpath = joinPath(dirpath, filename);
+
+        if (!mkdirRecursive(dirpath)) {
+            return ResponseBuilder::generateError(500, server, request);
+        }
+
+        std::ofstream out(fullpath.c_str());
+        if (!out)
+            return ResponseBuilder::generateError(500, server, request);
+
+        out << fileContent;
+        out.close();
+
+        if (out.fail())
+            return ResponseBuilder::generateError(500, server, request);
+
+        return ResponseBuilder::generateSuccess(201,
+            "<html><body><h1>Uploaded: " + filename + "</h1></body></html>",
+            "text/html", request);
+    }
 
     if (!contentType.empty() && contentType.find("application/x-www-form-urlencoded") != std::string::npos) {
         std::map<std::string, std::string> form = parseUrlEncodedForm(request.getBody());
