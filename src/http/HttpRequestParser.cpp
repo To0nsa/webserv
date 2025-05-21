@@ -10,15 +10,18 @@
 // CLASS METHODS
 //----------------------------------------
 
-bool parseReqHeader(HttpRequest &req, const std::string& headerPart);
-void parseReqBody(HttpRequest&req, const std::string& bodyPart, std::size_t clientMaxBodySize);
+bool parseReqHeader(HttpRequest &req, const std::string& headerPart, int& errorCode);
+bool parseReqBody(HttpRequest&req, const std::string& bodyPart, std::size_t clientMaxBodySize, int& errorCode);
+bool isChunkedBodyComplete(const std::string& bodyPart);
 Url parseUrl(const std::string& url);
 
 
-bool HttpRequestParser::parse(HttpRequest &req, const std::string& raw_req, std::size_t clientMaxBodySize)
+bool HttpRequestParser::parse(HttpRequest &req, const std::string& raw_req, std::size_t clientMaxBodySize, int& errorCode)
 {
     std::size_t headerEndPos = raw_req.find("\r\n\r\n");
     if (headerEndPos == std::string::npos) {
+        errorCode = 0; // Incomplete request
+        std::cout << "Incomplete header, we read again" << std::endl;
         return false;
     }
     std::string headerPart = raw_req.substr(0, headerEndPos);
@@ -27,16 +30,19 @@ bool HttpRequestParser::parse(HttpRequest &req, const std::string& raw_req, std:
     // std::cout << "HPART: " << headerPart << std::endl;
     // std::cout << "BPART: " << bodyPart << std::endl;
 
-    parseReqHeader(req, headerPart);
-    parseReqBody(req, bodyPart, clientMaxBodySize);
+    if (!parseReqHeader(req, headerPart, errorCode))
+        return false;
+    if (!parseReqBody(req, bodyPart, clientMaxBodySize, errorCode))
+        return false;
     return true;
 }
 
-bool parseReqHeader(HttpRequest &req, const std::string& headerPart)
+bool parseReqHeader(HttpRequest &req, const std::string& headerPart, int& errorCode)
 {
     std::istringstream stream(headerPart);
     std::string line;
     if (!std::getline(stream, line) || line.empty()) {
+        errorCode = 400;
         return false;
     }
     std::istringstream requestLineStream(line);
@@ -44,6 +50,7 @@ bool parseReqHeader(HttpRequest &req, const std::string& headerPart)
     requestLineStream >> method >> path >> version;
 
     if (method.empty() || path.empty() || version.empty()) {
+        errorCode = 400;
         return false;
     }
 
@@ -67,35 +74,52 @@ bool parseReqHeader(HttpRequest &req, const std::string& headerPart)
         value.erase(0, value.find_first_not_of(" \t\r\n")); // remove leading whitespace
 
         if ((key == "TRANSFER-ENCODING") && value == "chunked" && req.getMethod() == "GET") {
-            throw std::invalid_argument("Chunked transfer encoding is not allowed in GET requests");
+            std::cerr << "Chunked transfer encoding is not allowed in GET requests" << std::endl;
+            errorCode = 400;
+            return false;
         }
 
         if (key == "CONTENT-LENGTH") {
             if (value.empty() || !std::all_of(value.begin(), value.end(),
     [](char c) { return std::isdigit(static_cast<unsigned char>(c)); })) {
-                throw std::invalid_argument("Invalid Content-Length: " + value);
+                std::cerr << "Invalid Content-Length value" << std::endl;
+                errorCode = 411;
+                return false;
             }
 
             try {
                 req.setContentLength(std::stoull(value));
 
             } catch(const std::exception& e) {
-                throw std::invalid_argument("Invalid Content-Length: " + value);
+                std::cerr << "Invalid Content-Length value: " << e.what() << std::endl;
+                errorCode = 411;
+                return false;
             }
         }
         req.setHeader(key, value);
     }
     if (req.getHeader("HOST").empty()) {
-        throw std::invalid_argument("No Host found in header request");
+        std::cerr << "Missing HOST header" << std::endl;
+        errorCode = 400;
+        return false;
     }
-    Url url = parseUrl(req.getHeader("HOST") + req.getPath());
-    req.setUrl(url);
+    try {
+        Url url = parseUrl(req.getHeader("HOST") + req.getPath());
+        req.setUrl(url);
+    } catch (...) {
+        errorCode = 400;
+        return false;
+    }
 
 
     return true;
 }
 
-void chunkReqHandlder(HttpRequest& req, const std::string& bodyPart, std::size_t clientMaxBodySize) {
+bool isChunkedBodyComplete(const std::string& bodyPart) {
+    return bodyPart.find("\r\n0\r\n\r\n") != std::string::npos;
+}
+
+void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t clientMaxBodySize, int& errorCode) {
     std::istringstream stream(bodyPart);
     std::string chunkLine;
     std::string fullBody;
@@ -110,7 +134,9 @@ void chunkReqHandlder(HttpRequest& req, const std::string& bodyPart, std::size_t
         try {
             chunkSize = std::stoul(chunkLine, nullptr, 16);  // Hexadecimal
         } catch (...) {
-            throw std::invalid_argument("Invalid chunk size format");
+            errorCode = 400;
+            std::cerr << "Invalid chunk size format" << std::endl;
+            return;
         }
 
         if (chunkSize == 0) {
@@ -118,7 +144,9 @@ void chunkReqHandlder(HttpRequest& req, const std::string& bodyPart, std::size_t
         }
 
         if (totalSize + chunkSize > clientMaxBodySize) {
-            throw std::invalid_argument("Exceeded request max body size in chunked transfer");
+            std::cerr << "Exceeded request max body size in chunked transfer" << std::endl;
+            errorCode = 413;
+            return;
         }
 
         std::string chunkData(chunkSize, '\0');
@@ -132,31 +160,45 @@ void chunkReqHandlder(HttpRequest& req, const std::string& bodyPart, std::size_t
     }
 
     req.setBody(fullBody);
+    errorCode = 0;
 }
 
 
 
-void parseReqBody(HttpRequest&req, const std::string& bodyPart, std::size_t clientMaxBodySize) {
+bool parseReqBody(HttpRequest&req, const std::string& bodyPart, std::size_t clientMaxBodySize, int& errorCode) {
     if (req.getMethod() == "GET") {
-        return;
+        errorCode = 0;
+        return true;
     }
-    const std::string& transferEncoding = req.getHeader("TRANSFERENCODING");
+    const std::string& transferEncoding = req.getHeader("TRANSFER-ENCODING");
 
     if (transferEncoding == "chunked") {
-        return chunkReqHandlder(req, bodyPart, clientMaxBodySize);
+        if (!isChunkedBodyComplete(bodyPart)) {
+            std::cout << "Incomplete chunked body, we read again" << std::endl;
+            errorCode = 0;
+            return false;
+        }
+        chunkReqHandler(req, bodyPart, clientMaxBodySize, errorCode);
+        return errorCode == 0;
     }
 
     std::size_t contentLength = req.getContentLength();
     if (contentLength >= clientMaxBodySize) {
-        throw std::invalid_argument("Exceeded request max body size");
+        std::cerr << "Exceeded request max body size" << std::endl;
+        errorCode = 413;
+        return false;
     }
 
     if (bodyPart.size() < contentLength) {
-        return;
+        std::cerr << "Incomplete request body, we read again" << std::endl;
+        errorCode = 400;
+        return false;
     }
 
     std::string bodyContent = bodyPart.substr(0, contentLength);
     req.setBody(bodyContent);
+    errorCode = 0;
+    return true;
 }
 
 Url parseUrl(const std::string& url) {

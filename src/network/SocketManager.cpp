@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 11:04:37 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:16:15 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,7 +270,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (isHeaderTimeout(client_fd))
         return true;
 
-    // Check if we have a complete HTTP request header, if not, wait for more data
+   /*  // Check if we have a complete HTTP request header, if not, wait for more data
     if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
         std::cout << "==============Request for Client fd " << client_fd << " is in process."
                   << std::endl;
@@ -285,7 +285,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         std::string headersPart = _client_info[client_fd].requestBuffer.substr(0, headersEnd);
 
         std::cout << "===============Headers part: " << headersPart << std::endl;
-        std::cout << "==================================================" << std::endl;
+        std::cout << "==================================================" << std::endl; */
 
         /* HttpRequest tmpRequest;
         if (!tmpRequest.parseHeadersOnly(headersPart)) {
@@ -313,7 +313,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
                 // Request without body
                 // Parse the headers and body
         } */
-    }
+    //}
 
 
     /* HttpRequest request;
@@ -325,11 +325,20 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         return true;
     } */
    HttpRequest request;
-    if (!HttpRequestParser::parse(
-        request,
-        _client_info[client_fd].requestBuffer,
-        _client_info[client_fd].serverConfig.getClientMaxBodySize()))
-        return false;
+    int errorCode = 0;
+    if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer, _client_info[client_fd].serverConfig.getClientMaxBodySize(), errorCode)) {
+        
+        if (errorCode == 0)
+            return false; // Incomplete data — wait for more
+        else {
+            HttpResponse err = ResponseBuilder::generateError(
+                errorCode,
+                _client_info[client_fd].serverConfig,
+                request);
+            _client_info[client_fd].responses.push(err);
+            return true; // We queued a response
+        }
+    }
     request.printRequest();
     _client_info[client_fd].requestBuffer.clear();
 

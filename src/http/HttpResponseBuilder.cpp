@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/14 14:52:59 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:42:16 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ std::string getDefaultMessage(int status_code) {
                                                      {404, "Not Found"},
                                                      {405, "Method Not Allowed"},
                                                      {408, "Request Timeout"},
+                                                     {411, "Length Required"},
                                                      {413, "Payload Too Large"},
                                                      {500, "Internal Server Error"},
                                                      {501, "Not Implemented"},
