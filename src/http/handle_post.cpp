@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 13:07:59 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:59:12 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,10 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         return ResponseBuilder::generateError(403, server, request);
     }
 
-    std::string relative = request.getPath().substr(loc.getPath().length());
+    std::string locPath = normalizePath(loc.getPath());
+    std::string reqPath = normalizePath(request.getPath());
+    std::string relative = reqPath.substr(locPath.length());
+
     if (!relative.empty() && relative[0] == '/')
         relative = relative.substr(1);
     // check it in parser
@@ -139,21 +142,24 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         filename = "upload_" + std::to_string(std::time(nullptr))/*  + ".html" */;
     }
 
+    std::string uploadStore = normalizePath(loc.getUploadStore());
+    std::string root = normalizePath(loc.getRoot());
+
     std::string dirpath;
-    if (loc.getUploadStore().empty()) {
+    if (uploadStore.empty()) {
         return ResponseBuilder::generateError(403, server, request);
-    } else if (loc.getUploadStore()[0] == '/') {
-        dirpath = loc.getUploadStore();
+    } else if (uploadStore[0] == '/') {
+        dirpath = uploadStore;
     } else {
-        dirpath = joinPath(loc.getRoot(), loc.getUploadStore());
+        dirpath = joinPath(root, uploadStore);
     }
     std::string fullDirPath = joinPath(dirpath, relativeDir);
     std::string fullpath    = joinPath(fullDirPath, filename);
 
-    /* std::cout << "[POST] fullDirPath: " << fullDirPath << std::endl;
+    std::cout << "[POST] fullDirPath: " << fullDirPath << std::endl;
     std::cout << "[POST] dirpath: " << dirpath << std::endl;
     std::cout << "[POST] filename: {" << filename << "}" << std::endl;
-    std::cout << "[POST] fullpath " << fullpath << std::endl; */
+    std::cout << "[POST] fullpath " << fullpath << std::endl;
 
     if (!mkdirRecursive(fullDirPath)) {
         return ResponseBuilder::generateError(500, server, request);
@@ -162,11 +168,6 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     if (fileExists(fullpath)) { // Think. We have to overwrite I guess.
         std::cerr << "[POST] File already exists: " << fullpath << std::endl;
         return ResponseBuilder::generateError(400, Server(), request);
-    }
-    std::ofstream file(fullpath.c_str());
-    if (!file) {
-        std::cerr << "[POST] Failed to open file: " << fullpath << std::endl;
-        return ResponseBuilder::generateError(500, server, request);
     }
 
     std::string contentType = request.getHeader("Content-Type");
@@ -179,19 +180,14 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
 
         std::string boundary = contentType.substr(bpos + 9); // after "boundary="
 
-        std::string filename, fileContent;
-        if (!parseMultipart(request.getBody(), boundary, filename, fileContent)) {
+        std::string extractedFilename, fileContent;
+        if (!parseMultipart(request.getBody(), boundary, extractedFilename, fileContent)) {
             return ResponseBuilder::generateError(400, server, request);
         }
 
-        if (filename.empty())
-            filename = "upload_" + std::to_string(std::time(nullptr));
-
-        std::string dirpath = joinPath(loc.getRoot(), loc.getUploadStore());
-        std::string fullpath = joinPath(dirpath, filename);
-
-        if (!mkdirRecursive(dirpath)) {
-            return ResponseBuilder::generateError(500, server, request);
+        if (!extractedFilename.empty()) {
+            filename = extractedFilename;
+            fullpath = joinPath(fullDirPath, filename);
         }
 
         std::ofstream out(fullpath.c_str());
@@ -220,6 +216,9 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
             html += "<p><b>" + it->first + ":</b> " + it->second + "</p>";
         }
         html += "</body></html>";
+        std::ofstream file(fullpath.c_str());
+        if (!file)
+            return ResponseBuilder::generateError(500, server, request);
         file << html;
          file.close();
 
@@ -231,6 +230,9 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         return ResponseBuilder::generateSuccess(201, "<h1>Form Received. File " + filename + " created.</h1>",
                                                 "text/html", request);
     } else {
+        std::ofstream file(fullpath.c_str());
+        if (!file)
+            return ResponseBuilder::generateError(500, server, request);
         file << request.getBody();
         file.close();
 
