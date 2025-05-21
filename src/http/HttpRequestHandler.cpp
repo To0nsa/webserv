@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/20 13:46:20 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:06:52 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     std::cout << "Requested method: {" << method << "}" << std::endl;
     for (const Location& loc : server.getLocations()) {
         const std::string& locPath = normalizePath(loc.getPath());
-        std::cout << "Upload store for {" << loc.getPath() << "} : {" << loc.getUploadStore() << "}"
-                  << std::endl;
+        /* std::cout << "Upload store for {" << loc.getPath() << "} : {" << loc.getUploadStore() << "}"
+                  << std::endl; */
         if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
             matched = &loc;
             std::cout << "Upload store MATCHED for {" << loc.getPath() << "} : {"

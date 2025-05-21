@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/20 09:18:13 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:07:59 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ std::string urlDecode(const std::string& encoded) {
                     decoded += static_cast<char>(hex);
                     i += 2;
                 } else {
-                    // malformed % sequence, copy literally
+                    // malformed % sequence, copy literally (we have return an error)
                     decoded += '%';
                 }
             } else {
-                // malformed % at end of string
+                // malformed % at end of string (we have return an error)
                 decoded += '%';
             }
         } else if (encoded[i] == '+') {
@@ -123,7 +123,7 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         std::cerr << "[POST] Invalid relative: " << relative << std::endl;
         return ResponseBuilder::generateError(400, server, request);
     }
-    std::cout << "[POST] Relative: " << relative << std::endl;
+    /* std::cout << "[POST] Relative: " << relative << std::endl; */
 
     size_t      pos = relative.find_last_of('/');
     std::string relativeDir;
@@ -150,10 +150,10 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     std::string fullDirPath = joinPath(dirpath, relativeDir);
     std::string fullpath    = joinPath(fullDirPath, filename);
 
-    std::cout << "[POST] fullDirPath: " << fullDirPath << std::endl;
+    /* std::cout << "[POST] fullDirPath: " << fullDirPath << std::endl;
     std::cout << "[POST] dirpath: " << dirpath << std::endl;
     std::cout << "[POST] filename: {" << filename << "}" << std::endl;
-    std::cout << "[POST] fullpath " << fullpath << std::endl;
+    std::cout << "[POST] fullpath " << fullpath << std::endl; */
 
     if (!mkdirRecursive(fullDirPath)) {
         return ResponseBuilder::generateError(500, server, request);
