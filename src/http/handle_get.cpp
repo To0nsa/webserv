@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/15 20:12:56 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:33:14 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static std::string truncateName(const std::string& name, std::size_t maxLen) {
     return name.substr(0, maxLen - 2) + "..";
 }
 
-HttpResponse generateAutoindex(const std::string& filepath, const std::string& uri,
+static HttpResponse generateAutoindex(const std::string& filepath, const std::string& uri,
                                const HttpRequest& request, const Server& server) {
     DIR* dir = opendir(filepath.c_str());
     if (!dir)
