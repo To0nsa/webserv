@@ -191,7 +191,7 @@ bool parseReqBody(HttpRequest&req, const std::string& bodyPart, std::size_t clie
 
     if (bodyPart.size() < contentLength) {
         std::cerr << "Incomplete request body, we read again" << std::endl;
-        errorCode = 400;
+        errorCode = 0;
         return false;
     }
 
