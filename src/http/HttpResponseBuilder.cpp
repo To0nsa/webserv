@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponseBuilder.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 22:58:48 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 11:42:16 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ std::string getDefaultMessage(int status_code) {
     // Static map ensures it's initialized once and reused on every call
     static const StatusMessageMap status_messages = {{200, "OK"},
                                                      {201, "Created"},
-                                                     {204, "No Content"},
                                                      {301, "Moved Permanently"},
                                                      {302, "Found"},
                                                      {400, "Bad Request"},
@@ -33,8 +32,10 @@ std::string getDefaultMessage(int status_code) {
                                                      {404, "Not Found"},
                                                      {405, "Method Not Allowed"},
                                                      {408, "Request Timeout"},
+                                                     {411, "Length Required"},
                                                      {413, "Payload Too Large"},
                                                      {500, "Internal Server Error"},
+                                                     {501, "Not Implemented"},
                                                      {502, "Bad Gateway"},
                                                      {503, "Service Unavailable"}};
     // Attempt to find the status code in the map

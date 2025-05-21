@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/15 20:55:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 15:53:34 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/SocketManager.hpp"
 #include "http/HttpRequest.hpp"
 #include "http/HttpRequestHandler.hpp"
+#include "http/HttpRequestParser.hpp"
 #include "http/HttpResponse.hpp"
 #include "http/HttpResponseBuilder.hpp"
 #include <sstream> // For stringstream, we will remove it later
@@ -109,8 +110,8 @@ bool SocketManager::checkRequestLimits(int fd) {
     if (_client_info[fd].headerBytesReceived > max_size ||
         _client_info[fd].requestBuffer.size() > HEADER_MAX_LENGTH) {
         std::cout << "Request too large from fd: " << fd << std::endl;
-        respondError(fd, 413);
-        return true;
+        // respondError(fd, 413); // comment here
+        return false;
     }
     return false;
 }
@@ -179,7 +180,7 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
         }
 
         // Register fd in poll list
-        _poll_fds.push_back((pollfd){fd, POLLIN, 0});
+        _poll_fds.push_back((pollfd) {fd, POLLIN, 0});
         _listen_map[fd] = servers[i]; // Map fd to its corresponding server
 
         std::cout << "Listening on " << servers[i].getHost() << ":" << servers[i].getPort()
@@ -245,7 +246,7 @@ void SocketManager::handleNewConnection(int listen_fd) {
         return; // Shall we log it?
     }
 
-    _poll_fds.push_back((pollfd){client_fd, POLLIN, 0});
+    _poll_fds.push_back((pollfd) {client_fd, POLLIN, 0});
     std::cout << std::endl;
     std::cout << "Accepted client on fd: " << client_fd << std::endl;
 
@@ -270,57 +271,20 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (isHeaderTimeout(client_fd))
         return true;
 
-    // Check if we have a complete HTTP request header, if not, wait for more data
-    if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
-        std::cout << "==============Request for Client fd " << client_fd << " is in process."
-                  << std::endl;
-        std::cout << "==================================================" << std::endl;
-        return false;
-    }
-
-    if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") != std::string::npos) {
-        // We have a complete HTTP request header
-
-        size_t      headersEnd  = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
-        std::string headersPart = _client_info[client_fd].requestBuffer.substr(0, headersEnd);
-
-        std::cout << "===============Headers part: " << headersPart << std::endl;
-        std::cout << "==================================================" << std::endl;
-
-        /* HttpRequest tmpRequest;
-        if (!tmpRequest.parseHeadersOnly(headersPart)) {
-                // not a valid HTTP header
-                cleanupClientConnectionClose(client_fd, index);
-                return "";
-        }
-
-        if (tmpRequest.headers.count("Content-Length")) {
-                size_t bodySize = std::stoi(tmpRequest.headers["Content-Length"]);
-                if (_client_info[client_fd].requestBuffer.size() >= headersEnd + 4 + bodySize) {
-                        // Body is fully received, start parsing
-                        // Parse the body and headers
-                } else {
-                        // Wait for more data...
-                }
-        } else if (tmpRequest.headers["Transfer-Encoding"] == "chunked") {
-                if (hasFullChunkedBody(requestBuffer, headersEnd + 4)) {
-                        // Chunked body is fully received, start parsing
-                        // Parse the body and headers
-                } else {
-                        // Wait for more data...
-                }
-        } else {
-                // Request without body
-                // Parse the headers and body
-        } */
-    }
     HttpRequest request;
-    if (!request.parse(_client_info[client_fd].requestBuffer)) {
-        std::cerr << "Failed to parse HTTP request.\n";
-        HttpResponse badRequest =
-            ResponseBuilder::generateError(400, _client_info[client_fd].serverConfig, request);
-        _client_info[client_fd].responses.push(badRequest);
-        return true;
+    int         errorCode = 0;
+    if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
+                                  _client_info[client_fd].serverConfig.getClientMaxBodySize(),
+                                  errorCode)) {
+
+        if (errorCode == 0)
+            return false; // Incomplete data — wait for more
+        else {
+            HttpResponse err = ResponseBuilder::generateError(
+                errorCode, _client_info[client_fd].serverConfig, request);
+            _client_info[client_fd].responses.push(err);
+            return true; // We queued a response
+        }
     }
     request.printRequest();
     _client_info[client_fd].requestBuffer.clear();
@@ -354,9 +318,9 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         return;
     }
 
-    std::cout << "=======================We sent to fd:" << client_fd << std::endl;
-    std::cout << raw << std::endl;
-    std::cout << "==================================================" << std::endl;
+    std::cout << "[✅DONE] We sent RESPONSE to fd:" << client_fd << std::endl;
+    /* std::cout << raw << std::endl;
+    std::cout << "==================================================" << std::endl; */
 
     _client_info[client_fd].bytes_sent += bytes_sent;
     _client_info[client_fd].lastSendAttemptTime = time(NULL);

@@ -3,24 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequestHandler.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/16 11:28:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 15:43:48 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "http/HttpRequestHandler.hpp"
-#include "core/Location.hpp"
-#include "http/HttpResponseBuilder.hpp"
 #include "http/handleCgi.hpp"
-
-#include <iostream>
-
-HttpResponse handleGet(const HttpRequest&, const Server&, const Location&);
-HttpResponse handlePost(const HttpRequest&, const Server&, const Location&);
-HttpResponse handleDelete(const HttpRequest&, const Server&, const Location&);
-// HttpResponse handleCgi(const HttpRequest&, const Server&, const Location&);
+#include "http/handle_delete.hpp"
+#include "http/handle_get.hpp"
+#include "http/handle_post.hpp"
+#include <fstream>
 
 HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     const std::string& method = request.getMethod();
@@ -31,7 +25,7 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     size_t          maxMatchLen = 0;
 
     for (const Location& loc : server.getLocations()) {
-        const std::string& locPath = loc.getPath();
+        const std::string& locPath = normalizePath(loc.getPath());
         if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
             matched     = &loc;
             maxMatchLen = locPath.size();
@@ -66,13 +60,13 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     }
 
     // Delegate based on method
-    /*     if (method == "GET") {
-            return handleGet(request, server, location);
-        } else if (method == "POST") {
-            return handlePost(request, server, location);
-        } else if (method == "DELETE") {
-            return handleDelete(request, server, location);
-        } */
+    if (method == "GET") {
+        return handleGet(request, server, location);
+    } else if (method == "POST") {
+        return handlePost(request, server, location);
+    } else if (method == "DELETE") {
+        return handleDelete(request, server, location);
+    }
 
     return ResponseBuilder::generateError(500, server, request);
 }

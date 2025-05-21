@@ -28,3 +28,8 @@ printf "G\r\n" | nc 127.0.0.1 8080
 echo -ne 'GET / HTTP/1.1\r\n\r\n' | nc 127.0.0.1 8080
 
 echo -ne 'GET / HTTP/1.0\r\n\r\n' | nc 127.0.0.1 8080
+
+
+curl -X POST http://localhost:8001/uploads/ACTIONPLAN.md \
+     --data-binary "@/home/irychkov/Desktop/webserv_team/ACTIONPLAN.md"
+
