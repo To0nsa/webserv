@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:17:47 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 12:07:19 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 21:36:52 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ class Tokenizer {
 
     ////////////////
     // --- Main API
-
     [[nodiscard]] std::vector<Token> tokenize();
 
     ////////////////////
@@ -42,7 +41,7 @@ class Tokenizer {
     bool          match(char expected) noexcept;
     unsigned char peek() const noexcept;
     unsigned char peekNext() const noexcept;
-    char          advance() noexcept;
+    unsigned char advance() noexcept;
 
     ////////////////////////////
     // --- Classification Logic
@@ -66,7 +65,6 @@ class Tokenizer {
 
     //////////////////////
     // --- String Parsing
-    // std::string parseEscapeSequence(unsigned char quote);
     void  throwUnterminatedString(const std::string& reason);
     Token parseStringLiteral();
 

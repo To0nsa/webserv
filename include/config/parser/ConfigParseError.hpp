@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:13:44 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 13:43:56 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 21:37:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 class ConfigParseError : public std::exception {
   public:
     ConfigParseError(const std::string& message, const std::string& context = "");
-
-    // explicit ConfigParseError(std::string&& fullMessage);
 
     const char* what() const noexcept override;
 

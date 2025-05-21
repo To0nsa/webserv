@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 00:55:06 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/20 23:50:46 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 21:36:18 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ enum class TokenType {
     SEMICOLON,   ///< `;` — terminates a directive
     COMMA,       ///< `,` — separates arguments
     END_OF_FILE, ///< Special token marking the end of the input
-
-    // ───── Keywords ─────
 
     KEYWORD_SERVER,               ///< `server` block keyword
     KEYWORD_LOCATION,             ///< `location` block keyword

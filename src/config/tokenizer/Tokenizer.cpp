@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 01:06:09 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 21:09:15 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 21:25:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ unsigned char Tokenizer::peekNext() const noexcept {
     return static_cast<unsigned char>(_input[_pos + 1]);
 }
 
-char Tokenizer::advance() noexcept {
+unsigned char Tokenizer::advance() noexcept {
     char c = _input[_pos++]; // Consume current character and move cursor forward
     if (c == '\n') {
         _line++;     // Increment line number on newline
@@ -272,6 +272,7 @@ Token Tokenizer::parseStringLiteral() {
 
     unsigned char quote = advance(); // Consume opening quote (' or ")
     std::string   content;
+    content.reserve(MAX_STRING_LITERAL_LENGTH); // Preallocate for performance
 
     while (!isAtEnd()) {
         unsigned char c = peek();
@@ -286,12 +287,12 @@ Token Tokenizer::parseStringLiteral() {
             return makeToken(TokenType::STRING, content); // Closing quote — done
         }
 
-        content += c; // Append literally (includes backslash)
-
-        if (content.size() > MAX_STRING_LITERAL_LENGTH) {
+        if (content.size() + 1 > MAX_STRING_LITERAL_LENGTH) {
             throw TokenizerError(formatError("String literal exceeds 64 KiB limit", _line, _column),
                                  extractLine(_pos));
         }
+
+        content += c;
     }
 
     throwUnterminatedString("end of input");                // Reached EOF before closing quote
@@ -346,8 +347,6 @@ bool Tokenizer::looksLikeIpAddress() const {
 
     // A valid IPv4 address has at least two dots (e.g., 127.0.0.1)
     return dots == 3;
-    // A valid IPv4 address has at least three dots (e.g., 127.0.0.1)
-    return dots >= 3;
 }
 
 void Tokenizer::dispatchToken() {

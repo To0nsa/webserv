@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_get.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 17:33:14 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:28:25 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ HttpResponse handleGet(const HttpRequest& request, const Server& server, const L
             if (!index_file.empty()) {
                 // Serve index.html if it exists in the directory
                 std::string index_path = joinPath(filepath, index_file);
-                if (fileExists(index_path)) {
+                if (isFile(index_path)) {
                     return serveFile(index_path, request, "");
                 }
             }

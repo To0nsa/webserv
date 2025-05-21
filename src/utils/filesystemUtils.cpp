@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   filesystemUtils.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 10:30:19 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:35:44 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/filesystemUtils.hpp"
 #include "http/HttpResponseBuilder.hpp"
+
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <map>
 #include <sstream>
 #include <string>
 
-bool isDirectory(const std::string& path) {
-    return std::filesystem::is_directory(path);
-}
+namespace fs = std::filesystem;
 
-bool fileExists(const std::string& path) {
-    return std::filesystem::exists(path) && std::filesystem::is_regular_file(path);
+bool isFile(const std::string& path) {
+    return fs::exists(path) && fs::is_regular_file(path);
 }
 
 std::string detectMimeType(const std::string& file_path) {
@@ -42,8 +42,8 @@ std::string detectMimeType(const std::string& file_path) {
         {".wasm", "application/wasm"}};
 
     // Extract the file extension from the path (e.g., ".html")
-    std::filesystem::path path(file_path);
-    std::string           ext = path.extension().string();
+    fs::path    path(file_path);
+    std::string ext = path.extension().string();
 
     // Convert the extension to lowercase to ensure case-insensitive matching
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
@@ -60,7 +60,7 @@ std::string detectMimeType(const std::string& file_path) {
 HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
                        std::string content_type) {
     // Check if the file exists and is a regular file (not a directory, socket, etc.)
-    if (!fileExists(file_path)) {
+    if (!isFile(file_path)) {
         return ResponseBuilder::generateError(404, Server(), request);
     }
 
@@ -83,4 +83,35 @@ HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
 
     // Return a successful HTTP response with the file content and correct MIME type
     return ResponseBuilder::generateSuccess(200, body, content_type, request);
+}
+
+std::string normalizePath(const std::string& path) {
+    return fs::path(path).lexically_normal().string();
+}
+
+std::string joinPath(const std::string& base, const std::string& suffix) {
+    return (fs::path(base) / suffix).lexically_normal().string();
+}
+
+std::string buildFilePath(const HttpRequest& request, const Location& loc) {
+    fs::path request_path  = request.getPath();
+    fs::path location_path = loc.getPath();
+    fs::path location_root = loc.getRoot();
+
+    std::string suffix_str;
+    if (request_path.string().find(location_path.string()) == 0)
+        suffix_str = request_path.string().substr(location_path.string().length());
+
+    fs::path suffix = fs::path(suffix_str).lexically_normal();
+
+    return (location_root / suffix).lexically_normal().string();
+}
+
+bool ensureDirectoryExists(const std::string& path) {
+    try {
+        return fs::create_directories(path);
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "[ensureDirectoryExists] Error creating directories: " << e.what() << '\n';
+        return false;
+    }
 }

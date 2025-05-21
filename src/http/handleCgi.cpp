@@ -502,7 +502,7 @@ HttpResponse handleCgi(const HttpRequest& request, const Server& server, const L
         resolveScriptPath(request.getPath(), location.getPath(), location.getRoot());
 
     // Return 404 if the script file doesn't exist
-    if (!fileExists(scriptPath)) {
+    if (!isFile(scriptPath)) {
         std::cerr << "[CGI] script not found: " << scriptPath << "\n";
         return ResponseBuilder::generateError(404, server, request);
     }

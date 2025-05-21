@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 21:08:02 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 21:18:59 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         }
     }
     request.printRequest();
-    buffer.clear();
+    // buffer.clear();
 
     const Server& server   = _client_info[client_fd].serverConfig;
     HttpResponse  response = handleRequest(request, server);
