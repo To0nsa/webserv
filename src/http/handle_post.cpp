@@ -6,14 +6,14 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 16:51:06 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:01:41 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handle_post.hpp"
 
-bool parseMultipart(const std::string& body, const std::string& boundary, std::string& filename,
-                    std::string& fileContent) {
+static bool parseMultipart(const std::string& body, const std::string& boundary,
+                           std::string& filename, std::string& fileContent) {
     std::string delimiter = "--" + boundary;
     size_t      pos       = body.find(delimiter);
     if (pos == std::string::npos)
@@ -48,26 +48,24 @@ bool parseMultipart(const std::string& body, const std::string& boundary, std::s
     return true;
 }
 
-std::string urlDecode(const std::string& encoded) {
+static std::string urlDecode(const std::string& encoded) {
     std::string decoded;
-    decoded.reserve(encoded.size()); // optional: performance
+    decoded.reserve(encoded.size());
 
     for (size_t i = 0; i < encoded.length(); ++i) {
         if (encoded[i] == '%') {
-            if (i + 2 < encoded.length()) {
-                std::istringstream iss(encoded.substr(i + 1, 2));
-                int                hex = 0;
-                if (iss >> std::hex >> hex) {
-                    decoded += static_cast<char>(hex);
-                    i += 2;
-                } else {
-                    // malformed % sequence, copy literally (we have return an error)
-                    decoded += '%';
-                }
-            } else {
-                // malformed % at end of string (we have return an error)
-                decoded += '%';
-            }
+            if (i + 2 >= encoded.length())
+                throw std::runtime_error("Incomplete percent-encoding at end of string");
+
+            char hex1 = encoded[i + 1];
+            char hex2 = encoded[i + 2];
+            if (!isxdigit(hex1) || !isxdigit(hex2))
+                throw std::runtime_error("Invalid hex in percent-encoding");
+
+            std::string hexStr = encoded.substr(i + 1, 2);
+            int         hex    = std::stoi(hexStr, 0, 16);
+            decoded += static_cast<char>(hex);
+            i += 2;
         } else if (encoded[i] == '+') {
             decoded += ' ';
         } else {
@@ -78,26 +76,32 @@ std::string urlDecode(const std::string& encoded) {
     return decoded;
 }
 
-std::map<std::string, std::string> parseUrlEncodedForm(const std::string& body) {
+static std::map<std::string, std::string> parseUrlEncodedForm(const std::string& body) {
     std::map<std::string, std::string> form;
     std::istringstream                 ss(body);
     std::string                        pair;
 
-    while (std::getline(ss, pair, '&')) {
-        size_t eq = pair.find('=');
-        if (eq != std::string::npos) {
-            std::string key   = urlDecode(pair.substr(0, eq));
-            std::string value = urlDecode(pair.substr(eq + 1));
-            form[key]         = value;
+    try {
+        while (std::getline(ss, pair, '&')) {
+            size_t eq = pair.find('=');
+            if (eq != std::string::npos) {
+                std::string key   = urlDecode(pair.substr(0, eq));
+                std::string value = urlDecode(pair.substr(eq + 1));
+                form[key]         = value;
+            }
         }
+    } catch (const std::exception& e) {
+        std::cerr << "[POST] Malformed URL-encoded data: " << e.what() << std::endl;
+        form.clear();
     }
 
     return form;
 }
 
-static HttpResponse handle_multipart_form(const HttpRequest& request, const Server& server, const std::string& fullDirPath) {
+static HttpResponse handle_multipart_form(const HttpRequest& request, const Server& server,
+                                          const std::string& fullDirPath) {
     std::string contentType = request.getHeader("Content-Type");
-    size_t bpos = contentType.find("boundary=");
+    size_t      bpos        = contentType.find("boundary=");
     if (bpos == std::string::npos) {
         std::cerr << "[POST] Invalid Content-Type: " << contentType << std::endl;
         return ResponseBuilder::generateError(400, server, request);
@@ -123,16 +127,18 @@ static HttpResponse handle_multipart_form(const HttpRequest& request, const Serv
     out.close();
     if (out.fail())
         return ResponseBuilder::generateError(500, server, request);
-    return ResponseBuilder::generateSuccess(201,
-        "<html><body><h1>Uploaded: " + extractedFilename + "</h1></body></html>",
-        "text/html", request);
+    return ResponseBuilder::generateSuccess(
+        201, "<html><body><h1>Uploaded: " + extractedFilename + "</h1></body></html>", "text/html",
+        request);
 }
 
-static HttpResponse handle_url_encoded_form(const HttpRequest& request, const Server& server, const std::string& fullpath, const std::string& filename) {
+static HttpResponse handle_url_encoded_form(const HttpRequest& request, const Server& server,
+                                            const std::string& fullpath,
+                                            const std::string& filename) {
     std::map<std::string, std::string> form = parseUrlEncodedForm(request.getBody());
     if (form.empty()) {
-            std::cerr << "[POST] Invalid or empty form data." << std::endl; // check nginx
-            return ResponseBuilder::generateError(400, server, request);
+        std::cerr << "[POST] Invalid or empty form data." << std::endl; // check nginx
+        return ResponseBuilder::generateError(400, server, request);
     }
     std::string html = "<html><body><h1>Form Received</h1>";
     for (std::map<std::string, std::string>::iterator it = form.begin(); it != form.end(); ++it)
@@ -152,12 +158,12 @@ static HttpResponse handle_url_encoded_form(const HttpRequest& request, const Se
         return ResponseBuilder::generateError(500, server, request);
     }
     std::cout << "[POST] Form Received successfully: " << fullpath << std::endl;
-    return ResponseBuilder::generateSuccess(201, "<h1>Form Received. File " + filename + " created.</h1>",
-                                            "text/html", request);
+    return ResponseBuilder::generateSuccess(
+        201, "<h1>Form Received. File " + filename + " created.</h1>", "text/html", request);
 }
 
 static HttpResponse handle_raw_body(const HttpRequest& request, const Server& server,
-                                  const std::string& fullpath, const std::string& filename) {
+                                    const std::string& fullpath, const std::string& filename) {
     std::cout << "[POST] filename: {" << filename << "}" << std::endl;
     std::cout << "[POST] fullpath: {" << fullpath << "}" << std::endl;
     std::ofstream out(fullpath.c_str());
@@ -169,9 +175,9 @@ static HttpResponse handle_raw_body(const HttpRequest& request, const Server& se
         return ResponseBuilder::generateError(500, server, request);
 
     std::cout << "[POST] File saved successfully: " << fullpath << std::endl;
-    return ResponseBuilder::generateSuccess(201,
-        "<html><body><h1>File " + filename + " created.</h1></body></html>",
-        "text/html", request);
+    return ResponseBuilder::generateSuccess(
+        201, "<html><body><h1>File " + filename + " created.</h1></body></html>", "text/html",
+        request);
 }
 
 HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc) {
@@ -246,7 +252,8 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     std::string contentType = request.getHeader("Content-Type");
     if (!contentType.empty() && contentType.find("multipart/form-data") != std::string::npos)
         return handle_multipart_form(request, server, fullDirPath);
-    if (!contentType.empty() && contentType.find("application/x-www-form-urlencoded") != std::string::npos)
+    if (!contentType.empty() &&
+        contentType.find("application/x-www-form-urlencoded") != std::string::npos)
         return handle_url_encoded_form(request, server, fullpath, filename);
     return handle_raw_body(request, server, fullpath, filename);
 }

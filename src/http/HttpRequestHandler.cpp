@@ -27,7 +27,7 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     for (const Location& loc : server.getLocations()) {
         const std::string& locPath = normalizePath(loc.getPath());
         if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
-            matched = &loc;
+            matched     = &loc;
             maxMatchLen = locPath.size();
         }
     }
