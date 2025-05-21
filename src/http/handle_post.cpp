@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 14:54:44 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:49:29 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,11 +155,6 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     std::string fullDirPath = joinPath(dirpath, relativeDir);
     std::string fullpath    = joinPath(fullDirPath, filename);
 
-    std::cout << "[POST] fullDirPath: " << fullDirPath << std::endl;
-    std::cout << "[POST] dirpath: " << dirpath << std::endl;
-    std::cout << "[POST] filename: {" << filename << "}" << std::endl;
-    std::cout << "[POST] fullpath " << fullpath << std::endl;
-
     if (!mkdirRecursive(fullDirPath)) {
         return ResponseBuilder::generateError(500, server, request);
     }
@@ -190,6 +185,8 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
             filename = extractedFilename;
             fullpath = joinPath(fullDirPath, filename);
         }
+        std::cout << "[POST] filename: {" << filename << "}" << std::endl;
+        std::cout << "[POST] fullpath: {" << fullpath << "}" << std::endl;
 
         std::ofstream out(fullpath.c_str());
         if (!out)
@@ -218,6 +215,10 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
             html += "<p><b>" + it->first + ":</b> " + it->second + "</p>";
         }
         html += "</body></html>";
+
+        std::cout << "[POST] filename: {" << filename << "}" << std::endl;
+        std::cout << "[POST] fullpath: {" << fullpath << "}" << std::endl;
+
         std::ofstream file(fullpath.c_str());
         if (!file)
             return ResponseBuilder::generateError(500, server, request);
@@ -232,6 +233,8 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         return ResponseBuilder::generateSuccess(
             201, "<h1>Form Received. File " + filename + " created.</h1>", "text/html", request);
     }
+    std::cout << "[POST] filename: {" << filename << "}" << std::endl;
+    std::cout << "[POST] fullpath: {" << fullpath << "}" << std::endl;
     std::ofstream file(fullpath.c_str());
     if (!file)
         return ResponseBuilder::generateError(500, server, request);
