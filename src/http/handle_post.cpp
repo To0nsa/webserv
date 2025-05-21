@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 17:01:41 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:32:34 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ static HttpResponse handle_url_encoded_form(const HttpRequest& request, const Se
     }
     std::string html = "<html><body><h1>Form Received</h1>";
     for (std::map<std::string, std::string>::iterator it = form.begin(); it != form.end(); ++it)
-        html += "<p><b>" + it->first + ":</b> " + it->second + "</p>";
+        html += "<p><b>" + it->first + ":</b>" + it->second + "</p>";
     html += "</body></html>";
 
     std::cout << "[POST] filename: {" << filename << "}" << std::endl;
@@ -180,6 +180,44 @@ static HttpResponse handle_raw_body(const HttpRequest& request, const Server& se
         request);
 }
 
+static std::string resolveRelativePath(const HttpRequest& request, const Location& loc) {
+    std::string locPath  = normalizePath(loc.getPath());
+    std::string reqPath  = normalizePath(request.getPath());
+    std::string relative = reqPath.substr(locPath.length());
+    if (!relative.empty() && relative[0] == '/')
+        relative = relative.substr(1);
+    return relative;
+}
+
+static std::string extractFilename(const std::string& relative) {
+    size_t pos = relative.find_last_of('/');
+    if (pos == std::string::npos) {
+        if (relative.empty())
+            return "upload_" + std::to_string(std::time(nullptr));
+        return relative;
+    }
+    std::string filename = relative.substr(pos + 1);
+    if (filename.empty())
+        filename = "upload_" + std::to_string(std::time(nullptr));
+    return filename;
+}
+
+static std::pair<std::string, std::string>
+resolveUploadPaths(const Location& loc, const std::string& relative, const std::string& filename) {
+    std::string uploadStore = normalizePath(loc.getUploadStore());
+    std::string root        = normalizePath(loc.getRoot());
+
+    std::string relativeDir;
+    size_t      pos = relative.find_last_of('/');
+    if (pos != std::string::npos)
+        relativeDir = relative.substr(0, pos);
+
+    std::string dirpath     = (uploadStore[0] == '/') ? uploadStore : joinPath(root, uploadStore);
+    std::string fullDirPath = joinPath(dirpath, relativeDir);
+    std::string fullpath    = joinPath(fullDirPath, filename);
+    return std::make_pair(fullDirPath, fullpath);
+}
+
 HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc) {
     std::cout << "[POST] Upload store: {" << loc.getUploadStore() << "}" << std::endl;
 
@@ -199,46 +237,16 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         return ResponseBuilder::generateError(403, server, request);
     }
 
-    std::string locPath  = normalizePath(loc.getPath());
-    std::string reqPath  = normalizePath(request.getPath());
-    std::string relative = reqPath.substr(locPath.length());
-
-    if (!relative.empty() && relative[0] == '/')
-        relative = relative.substr(1);
-    // check it in parser
+    std::string relative = resolveRelativePath(request, loc);
     if (relative.find("..") != std::string::npos) {
         std::cerr << "[POST] Invalid relative: " << relative << std::endl;
         return ResponseBuilder::generateError(400, server, request);
     }
     /* std::cout << "[POST] Relative: " << relative << std::endl; */
 
-    size_t      pos = relative.find_last_of('/');
-    std::string relativeDir;
-    std::string filename;
-    if (pos == std::string::npos) {
-        relativeDir = "";
-        filename    = relative;
-    } else {
-        relativeDir = relative.substr(0, pos);
-        filename    = relative.substr(pos + 1);
-    }
-    if (filename.empty()) {
-        filename = "upload_" + std::to_string(std::time(nullptr)) /*  + ".html" */;
-    }
-
-    std::string uploadStore = normalizePath(loc.getUploadStore());
-    std::string root        = normalizePath(loc.getRoot());
-
-    std::string dirpath;
-    if (uploadStore.empty()) {
-        return ResponseBuilder::generateError(403, server, request);
-    } else if (uploadStore[0] == '/') {
-        dirpath = uploadStore;
-    } else {
-        dirpath = joinPath(root, uploadStore);
-    }
-    std::string fullDirPath = joinPath(dirpath, relativeDir);
-    std::string fullpath    = joinPath(fullDirPath, filename);
+    std::string filename = extractFilename(relative);
+    std::string fullDirPath, fullpath;
+    std::tie(fullDirPath, fullpath) = resolveUploadPaths(loc, relative, filename);
 
     if (!mkdirRecursive(fullDirPath)) {
         return ResponseBuilder::generateError(500, server, request);
