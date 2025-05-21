@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/16 11:33:33 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 11:14:17 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,13 +127,12 @@ const std::string& HttpRequest::getVersion(void) const {
 }
 
 const std::string& HttpRequest::getHeader(const std::string& key) const {
-    static const std::string empty = "";
-
-    std::string normalized = key;
-    std::transform(normalized.begin(), normalized.end(), normalized.begin(), ::tolower);
-
-    std::map<std::string, std::string>::const_iterator it = _headers.find(normalized);
-    return (it != _headers.end()) ? it->second : empty;
+    const std::string upperKey = toUpper(key);
+    static const std::string                           empty = "";
+    std::map<std::string, std::string>::const_iterator it    = _headers.find(upperKey);
+    if (it != _headers.end())
+        return (it->second);
+    return (empty);
 }
 
 const std::map<std::string, std::string>& HttpRequest::getHeaders() const {
@@ -144,6 +143,41 @@ const std::string& HttpRequest::getBody(void) const {
     return (_body);
 }
 
+std::size_t HttpRequest::getContentLength(void) const {
+    return _contentLength;
+}
+
 const std::string& HttpRequest::getQuery() const {
-    return _query;
+/* const std::string& HttpRequest::getUri(void) const { */
+    return /* _uri; */_query;
+}
+
+void HttpRequest::setMethod(const std::string& method) {
+    _method = method;
+}
+
+void HttpRequest::setPath(const std::string& path) {
+    _path = path;
+}
+
+void HttpRequest::setVersion(const std::string& version) {
+    _version = version;
+}
+
+
+void HttpRequest::setHeader(const std::string& key, const std::string& value) {
+    const std::string upperKey = toUpper(key);
+    _headers[upperKey] = value;
+}
+
+void HttpRequest::setBody(const std::string& body) {
+    _body = body;
+}
+
+void HttpRequest::setContentLength(size_t len) {
+    _contentLength = len;
+}
+
+void HttpRequest::setUrl(const Url& url) {
+    _url = url;
 }

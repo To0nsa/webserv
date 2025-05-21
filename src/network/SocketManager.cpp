@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/20 13:47:21 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:04:37 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "http/HttpRequestHandler.hpp"
 #include "http/HttpResponse.hpp"
 #include "http/HttpResponseBuilder.hpp"
+#include "http/HttpRequestParser.hpp"
 #include <sstream> // For stringstream, we will remove it later
 
 // Signal handler for exiting the server
@@ -144,8 +145,7 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
         if (fd < 0)
             throw SocketError("socket() failed: " + std::string(std::strerror(errno)));
 
-        int opt =
-            1; // To tell the OS: "I want to reuse this port immediately, even if it's in TIME_WAIT
+        int opt = 1; // To tell the OS: "I want to reuse this port immediately, even if it's in TIME_WAIT
         if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
             close(fd);
             throw SocketError("setsockopt() failed: " + std::string(std::strerror(errno)));
@@ -314,14 +314,22 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
                 // Parse the headers and body
         } */
     }
-    HttpRequest request;
+
+
+    /* HttpRequest request;
     if (!request.parse(_client_info[client_fd].requestBuffer)) {
         std::cerr << "Failed to parse HTTP request.\n";
-        HttpResponse badRequest =
-		/* ResponseBuilder::generateError(400, _client_info[client_fd].serverConfig, request); */ResponseBuilder::generateError(405, _client_info[client_fd].serverConfig, request);
-        _client_info[client_fd].responses.push(badRequest);
+        HttpResponse badRequest = */
+		/* ResponseBuilder::generateError(400, _client_info[client_fd].serverConfig, request); *///ResponseBuilder::generateError(405, _client_info[client_fd].serverConfig, request);
+        /* _client_info[client_fd].responses.push(badRequest);
         return true;
-    }
+    } */
+   HttpRequest request;
+    if (!HttpRequestParser::parse(
+        request,
+        _client_info[client_fd].requestBuffer,
+        _client_info[client_fd].serverConfig.getClientMaxBodySize()))
+        return false;
     request.printRequest();
     _client_info[client_fd].requestBuffer.clear();
 

@@ -13,7 +13,7 @@
 # Compiler settings
 CXX        := c++
 CXXFLAGS   := -Wall -Wextra -Werror -I include
-CXXFLAGS   += -std=c++17
+CXXFLAGS   += -std=c++20
 DEBUGFLAGS := -g3 -O0 -DDEBUG
 OPTFLAGS   := -O3
 
