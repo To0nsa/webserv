@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 15:49:29 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:51:06 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,85 @@ std::map<std::string, std::string> parseUrlEncodedForm(const std::string& body) 
     return form;
 }
 
+static HttpResponse handle_multipart_form(const HttpRequest& request, const Server& server, const std::string& fullDirPath) {
+    std::string contentType = request.getHeader("Content-Type");
+    size_t bpos = contentType.find("boundary=");
+    if (bpos == std::string::npos) {
+        std::cerr << "[POST] Invalid Content-Type: " << contentType << std::endl;
+        return ResponseBuilder::generateError(400, server, request);
+    }
+    std::string boundary = contentType.substr(bpos + 9);
+
+    std::string extractedFilename, fileContent;
+    if (!parseMultipart(request.getBody(), boundary, extractedFilename, fileContent)) {
+        std::cerr << "[POST] Failed to parse multipart form data." << std::endl;
+        return ResponseBuilder::generateError(400, server, request);
+    }
+    if (extractedFilename.empty())
+        extractedFilename = "upload_" + std::to_string(std::time(NULL));
+    std::string fullpath = joinPath(fullDirPath, extractedFilename);
+
+    std::cout << "[POST] filename: {" << extractedFilename << "}" << std::endl;
+    std::cout << "[POST] fullpath: {" << fullpath << "}" << std::endl;
+
+    std::ofstream out(fullpath.c_str());
+    if (!out)
+        return ResponseBuilder::generateError(500, server, request);
+    out << fileContent;
+    out.close();
+    if (out.fail())
+        return ResponseBuilder::generateError(500, server, request);
+    return ResponseBuilder::generateSuccess(201,
+        "<html><body><h1>Uploaded: " + extractedFilename + "</h1></body></html>",
+        "text/html", request);
+}
+
+static HttpResponse handle_url_encoded_form(const HttpRequest& request, const Server& server, const std::string& fullpath, const std::string& filename) {
+    std::map<std::string, std::string> form = parseUrlEncodedForm(request.getBody());
+    if (form.empty()) {
+            std::cerr << "[POST] Invalid or empty form data." << std::endl; // check nginx
+            return ResponseBuilder::generateError(400, server, request);
+    }
+    std::string html = "<html><body><h1>Form Received</h1>";
+    for (std::map<std::string, std::string>::iterator it = form.begin(); it != form.end(); ++it)
+        html += "<p><b>" + it->first + ":</b> " + it->second + "</p>";
+    html += "</body></html>";
+
+    std::cout << "[POST] filename: {" << filename << "}" << std::endl;
+    std::cout << "[POST] fullpath: {" << fullpath << "}" << std::endl;
+
+    std::ofstream out(fullpath.c_str());
+    if (!out)
+        return ResponseBuilder::generateError(500, server, request);
+    out << html;
+    out.close();
+    if (out.fail()) {
+        std::cerr << "[POST] Failed to write or close file: " << fullpath << std::endl;
+        return ResponseBuilder::generateError(500, server, request);
+    }
+    std::cout << "[POST] Form Received successfully: " << fullpath << std::endl;
+    return ResponseBuilder::generateSuccess(201, "<h1>Form Received. File " + filename + " created.</h1>",
+                                            "text/html", request);
+}
+
+static HttpResponse handle_raw_body(const HttpRequest& request, const Server& server,
+                                  const std::string& fullpath, const std::string& filename) {
+    std::cout << "[POST] filename: {" << filename << "}" << std::endl;
+    std::cout << "[POST] fullpath: {" << fullpath << "}" << std::endl;
+    std::ofstream out(fullpath.c_str());
+    if (!out)
+        return ResponseBuilder::generateError(500, server, request);
+    out << request.getBody();
+    out.close();
+    if (out.fail())
+        return ResponseBuilder::generateError(500, server, request);
+
+    std::cout << "[POST] File saved successfully: " << fullpath << std::endl;
+    return ResponseBuilder::generateSuccess(201,
+        "<html><body><h1>File " + filename + " created.</h1></body></html>",
+        "text/html", request);
+}
+
 HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc) {
     std::cout << "[POST] Upload store: {" << loc.getUploadStore() << "}" << std::endl;
 
@@ -165,88 +244,9 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     }
 
     std::string contentType = request.getHeader("Content-Type");
-
-    if (!contentType.empty() && contentType.find("multipart/form-data") != std::string::npos) {
-        size_t bpos = contentType.find("boundary=");
-        if (bpos == std::string::npos) {
-            std::cerr << "[POST] Invalid Content-Type: " << contentType << std::endl;
-            return ResponseBuilder::generateError(400, server, request);
-        }
-
-        std::string boundary = contentType.substr(bpos + 9); // after "boundary="
-
-        std::string extractedFilename, fileContent;
-        if (!parseMultipart(request.getBody(), boundary, extractedFilename, fileContent)) {
-            std::cerr << "[POST] Failed to parse multipart data." << std::endl;
-            return ResponseBuilder::generateError(400, server, request);
-        }
-
-        if (!extractedFilename.empty()) {
-            filename = extractedFilename;
-            fullpath = joinPath(fullDirPath, filename);
-        }
-        std::cout << "[POST] filename: {" << filename << "}" << std::endl;
-        std::cout << "[POST] fullpath: {" << fullpath << "}" << std::endl;
-
-        std::ofstream out(fullpath.c_str());
-        if (!out)
-            return ResponseBuilder::generateError(500, server, request);
-
-        out << fileContent;
-        out.close();
-
-        if (out.fail())
-            return ResponseBuilder::generateError(500, server, request);
-
-        return ResponseBuilder::generateSuccess(
-            201, "<html><body><h1>Uploaded: " + filename + "</h1></body></html>", "text/html",
-            request);
-    }
-
-    if (!contentType.empty() &&
-        contentType.find("application/x-www-form-urlencoded") != std::string::npos) {
-        std::map<std::string, std::string> form = parseUrlEncodedForm(request.getBody());
-        if (form.empty()) {
-            std::cerr << "[POST] Invalid or empty form data." << std::endl; // check nginx
-            return ResponseBuilder::generateError(400, server, request);
-        }
-        std::string html = "<html><body><h1>Form Received</h1>";
-        for (auto it = form.begin(); it != form.end(); ++it) {
-            html += "<p><b>" + it->first + ":</b> " + it->second + "</p>";
-        }
-        html += "</body></html>";
-
-        std::cout << "[POST] filename: {" << filename << "}" << std::endl;
-        std::cout << "[POST] fullpath: {" << fullpath << "}" << std::endl;
-
-        std::ofstream file(fullpath.c_str());
-        if (!file)
-            return ResponseBuilder::generateError(500, server, request);
-        file << html;
-        file.close();
-
-        if (file.fail()) {
-            std::cerr << "[POST] Failed to write or close file: " << fullpath << std::endl;
-            return ResponseBuilder::generateError(500, server, request);
-        }
-        std::cout << "[POST] Form Received successfully: " << fullpath << std::endl;
-        return ResponseBuilder::generateSuccess(
-            201, "<h1>Form Received. File " + filename + " created.</h1>", "text/html", request);
-    }
-    std::cout << "[POST] filename: {" << filename << "}" << std::endl;
-    std::cout << "[POST] fullpath: {" << fullpath << "}" << std::endl;
-    std::ofstream file(fullpath.c_str());
-    if (!file)
-        return ResponseBuilder::generateError(500, server, request);
-    file << request.getBody();
-    file.close();
-
-    if (file.fail()) {
-        std::cerr << "[POST] Failed to write or close file: " << fullpath << std::endl;
-        return ResponseBuilder::generateError(500, server, request);
-    }
-    std::cout << "[POST] File saved successfully: " << fullpath << std::endl;
-    return ResponseBuilder::generateSuccess(
-        201, "<html><body><h1>File " + filename + " created.</h1></body></html>", "text/html",
-        request);
+    if (!contentType.empty() && contentType.find("multipart/form-data") != std::string::npos)
+        return handle_multipart_form(request, server, fullDirPath);
+    if (!contentType.empty() && contentType.find("application/x-www-form-urlencoded") != std::string::npos)
+        return handle_url_encoded_form(request, server, fullpath, filename);
+    return handle_raw_body(request, server, fullpath, filename);
 }
