@@ -8,11 +8,11 @@
 #include <filesystem>
 #include <iostream>
 #include <poll.h>
+#include <signal.h>
 #include <sstream>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <vector>
-#include <signal.h>
 
 namespace {
 

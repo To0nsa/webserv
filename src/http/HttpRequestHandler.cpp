@@ -34,7 +34,8 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     std::cout << "Requested method: {" << method << "}" << std::endl;
     for (const Location& loc : server.getLocations()) {
         const std::string& locPath = normalizePath(loc.getPath());
-        /* std::cout << "Upload store for {" << loc.getPath() << "} : {" << loc.getUploadStore() << "}"
+        /* std::cout << "Upload store for {" << loc.getPath() << "} : {" << loc.getUploadStore() <<
+           "}"
                   << std::endl; */
         if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
             matched = &loc;
@@ -58,7 +59,9 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
 
     static const std::set<std::string> implemented = {"GET", "POST", "DELETE"};
     if (implemented.find(method) == implemented.end()) {
-        return ResponseBuilder::generateError(405, server, request); /* return ResponseBuilder::generateError(501, server, request); */
+        return ResponseBuilder::generateError(
+            405, server,
+            request); /* return ResponseBuilder::generateError(501, server, request); */
     }
 
     // Method not allowed

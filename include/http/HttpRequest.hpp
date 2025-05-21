@@ -17,7 +17,6 @@
 #include <map>
 #include <string>
 
-
 class HttpRequest {
 
   private:
@@ -26,8 +25,8 @@ class HttpRequest {
     std::string                        _version;
     std::map<std::string, std::string> _headers;
     std::string                        _body;
-    std::size_t                        _contentLength { 0 };
-    std::string                        /* _uri; */_query; ///< extracted from URI after '?'
+    std::size_t                        _contentLength{0};
+    std::string /* _uri; */            _query; ///< extracted from URI after '?'
     Url                                _url;
 
   public:
@@ -40,14 +39,14 @@ class HttpRequest {
     bool parse(const std::string& raw_request);
     void printRequest(void) const;
 
-    const std::string& getMethod(void) const;
-    const std::string& getPath(void) const;
-    const std::string& getVersion(void) const;
-    const std::string& getHeader(const std::string& key) const;
+    const std::string&                        getMethod(void) const;
+    const std::string&                        getPath(void) const;
+    const std::string&                        getVersion(void) const;
+    const std::string&                        getHeader(const std::string& key) const;
     const std::map<std::string, std::string>& getHeaders() const;
-    const std::string& getBody(void) const;
-    std::size_t getContentLength(void) const;
-    /* const std::string& getUri(void) const; */const std::string&                        getQuery() const;
+    const std::string&                        getBody(void) const;
+    std::size_t                               getContentLength(void) const;
+    /* const std::string& getUri(void) const; */ const std::string& getQuery() const;
 
     void setMethod(const std::string& method);
     void setPath(const std::string& path);

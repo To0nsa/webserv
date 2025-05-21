@@ -6,16 +6,16 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 14:10:23 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:54:44 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handle_post.hpp"
 
-bool parseMultipart(const std::string& body, const std::string& boundary,
-                    std::string& filename, std::string& fileContent) {
+bool parseMultipart(const std::string& body, const std::string& boundary, std::string& filename,
+                    std::string& fileContent) {
     std::string delimiter = "--" + boundary;
-    size_t pos = body.find(delimiter);
+    size_t      pos       = body.find(delimiter);
     if (pos == std::string::npos)
         return false;
 
@@ -32,7 +32,7 @@ bool parseMultipart(const std::string& body, const std::string& boundary,
         return false;
 
     std::string headers = part.substr(0, headerEnd);
-    fileContent = part.substr(headerEnd + 4); // after CRLFCRLF
+    fileContent         = part.substr(headerEnd + 4); // after CRLFCRLF
 
     // Extract filename
     size_t fnamePos = headers.find("filename=\"");
@@ -48,16 +48,15 @@ bool parseMultipart(const std::string& body, const std::string& boundary,
     return true;
 }
 
-
 std::string urlDecode(const std::string& encoded) {
     std::string decoded;
-    decoded.reserve(encoded.size());  // optional: performance
+    decoded.reserve(encoded.size()); // optional: performance
 
     for (size_t i = 0; i < encoded.length(); ++i) {
         if (encoded[i] == '%') {
             if (i + 2 < encoded.length()) {
                 std::istringstream iss(encoded.substr(i + 1, 2));
-                int hex = 0;
+                int                hex = 0;
                 if (iss >> std::hex >> hex) {
                     decoded += static_cast<char>(hex);
                     i += 2;
@@ -81,15 +80,15 @@ std::string urlDecode(const std::string& encoded) {
 
 std::map<std::string, std::string> parseUrlEncodedForm(const std::string& body) {
     std::map<std::string, std::string> form;
-    std::istringstream ss(body);
-    std::string pair;
+    std::istringstream                 ss(body);
+    std::string                        pair;
 
     while (std::getline(ss, pair, '&')) {
         size_t eq = pair.find('=');
         if (eq != std::string::npos) {
-            std::string key = urlDecode(pair.substr(0, eq));
+            std::string key   = urlDecode(pair.substr(0, eq));
             std::string value = urlDecode(pair.substr(eq + 1));
-            form[key] = value;
+            form[key]         = value;
         }
     }
 
@@ -115,8 +114,8 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         return ResponseBuilder::generateError(403, server, request);
     }
 
-    std::string locPath = normalizePath(loc.getPath());
-    std::string reqPath = normalizePath(request.getPath());
+    std::string locPath  = normalizePath(loc.getPath());
+    std::string reqPath  = normalizePath(request.getPath());
     std::string relative = reqPath.substr(locPath.length());
 
     if (!relative.empty() && relative[0] == '/')
@@ -139,11 +138,11 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         filename    = relative.substr(pos + 1);
     }
     if (filename.empty()) {
-        filename = "upload_" + std::to_string(std::time(nullptr))/*  + ".html" */;
+        filename = "upload_" + std::to_string(std::time(nullptr)) /*  + ".html" */;
     }
 
     std::string uploadStore = normalizePath(loc.getUploadStore());
-    std::string root = normalizePath(loc.getRoot());
+    std::string root        = normalizePath(loc.getRoot());
 
     std::string dirpath;
     if (uploadStore.empty()) {
@@ -202,12 +201,13 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         if (out.fail())
             return ResponseBuilder::generateError(500, server, request);
 
-        return ResponseBuilder::generateSuccess(201,
-            "<html><body><h1>Uploaded: " + filename + "</h1></body></html>",
-            "text/html", request);
+        return ResponseBuilder::generateSuccess(
+            201, "<html><body><h1>Uploaded: " + filename + "</h1></body></html>", "text/html",
+            request);
     }
 
-    if (!contentType.empty() && contentType.find("application/x-www-form-urlencoded") != std::string::npos) {
+    if (!contentType.empty() &&
+        contentType.find("application/x-www-form-urlencoded") != std::string::npos) {
         std::map<std::string, std::string> form = parseUrlEncodedForm(request.getBody());
         if (form.empty()) {
             std::cerr << "[POST] Invalid or empty form data." << std::endl; // check nginx
@@ -222,33 +222,28 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         if (!file)
             return ResponseBuilder::generateError(500, server, request);
         file << html;
-         file.close();
-
-        if (file.fail()) {
-            std::cerr << "[POST] Failed to write or close file: " << fullpath << std::endl;
-            return ResponseBuilder::generateError(500, server, request);
-        }
-        std::cout << "[POST] Form Received successfully: " << fullpath << std::endl;
-        return ResponseBuilder::generateSuccess(201, "<h1>Form Received. File " + filename + " created.</h1>",
-                                                "text/html", request);
-    } else {
-        std::ofstream file(fullpath.c_str());
-        if (!file)
-            return ResponseBuilder::generateError(500, server, request);
-        file << request.getBody();
         file.close();
 
         if (file.fail()) {
             std::cerr << "[POST] Failed to write or close file: " << fullpath << std::endl;
             return ResponseBuilder::generateError(500, server, request);
         }
+        std::cout << "[POST] Form Received successfully: " << fullpath << std::endl;
+        return ResponseBuilder::generateSuccess(
+            201, "<h1>Form Received. File " + filename + " created.</h1>", "text/html", request);
     }
-    /*  HttpResponse response = ResponseBuilder::generateSuccess(201, body, "text/html", request);
-     response.setHeader("Location", joinPath(request.getPath(), filename));  // Do we need it?
+    std::ofstream file(fullpath.c_str());
+    if (!file)
+        return ResponseBuilder::generateError(500, server, request);
+    file << request.getBody();
+    file.close();
 
-     return response; */
-
+    if (file.fail()) {
+        std::cerr << "[POST] Failed to write or close file: " << fullpath << std::endl;
+        return ResponseBuilder::generateError(500, server, request);
+    }
     std::cout << "[POST] File saved successfully: " << fullpath << std::endl;
-    return ResponseBuilder::generateSuccess(201, "<html><body><h1>File " + filename + " created.</h1></body></html>",
-                                            "text/html", request);
+    return ResponseBuilder::generateSuccess(
+        201, "<html><body><h1>File " + filename + " created.</h1></body></html>", "text/html",
+        request);
 }

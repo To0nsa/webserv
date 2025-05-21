@@ -13,9 +13,9 @@
 #include "network/SocketManager.hpp"
 #include "http/HttpRequest.hpp"
 #include "http/HttpRequestHandler.hpp"
+#include "http/HttpRequestParser.hpp"
 #include "http/HttpResponse.hpp"
 #include "http/HttpResponseBuilder.hpp"
-#include "http/HttpRequestParser.hpp"
 #include <sstream> // For stringstream, we will remove it later
 
 // Signal handler for exiting the server
@@ -110,7 +110,7 @@ bool SocketManager::checkRequestLimits(int fd) {
     if (_client_info[fd].headerBytesReceived > max_size ||
         _client_info[fd].requestBuffer.size() > HEADER_MAX_LENGTH) {
         std::cout << "Request too large from fd: " << fd << std::endl;
-        //respondError(fd, 413); // comment here
+        // respondError(fd, 413); // comment here
         return false;
     }
     return false;
@@ -145,7 +145,8 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
         if (fd < 0)
             throw SocketError("socket() failed: " + std::string(std::strerror(errno)));
 
-        int opt = 1; // To tell the OS: "I want to reuse this port immediately, even if it's in TIME_WAIT
+        int opt =
+            1; // To tell the OS: "I want to reuse this port immediately, even if it's in TIME_WAIT
         if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
             close(fd);
             throw SocketError("setsockopt() failed: " + std::string(std::strerror(errno)));
@@ -270,71 +271,72 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (isHeaderTimeout(client_fd))
         return true;
 
-   /*  // Check if we have a complete HTTP request header, if not, wait for more data
-    if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
-        std::cout << "==============Request for Client fd " << client_fd << " is in process."
-                  << std::endl;
-        std::cout << "==================================================" << std::endl;
-        return false;
+    /*  // Check if we have a complete HTTP request header, if not, wait for more data
+     if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
+         std::cout << "==============Request for Client fd " << client_fd << " is in process."
+                   << std::endl;
+         std::cout << "==================================================" << std::endl;
+         return false;
+     }
+
+     if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") != std::string::npos) {
+         // We have a complete HTTP request header
+
+         size_t      headersEnd  = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
+         std::string headersPart = _client_info[client_fd].requestBuffer.substr(0, headersEnd);
+
+         std::cout << "===============Headers part: " << headersPart << std::endl;
+         std::cout << "==================================================" << std::endl; */
+
+    /* HttpRequest tmpRequest;
+    if (!tmpRequest.parseHeadersOnly(headersPart)) {
+            // not a valid HTTP header
+            cleanupClientConnectionClose(client_fd, index);
+            return "";
     }
 
-    if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") != std::string::npos) {
-        // We have a complete HTTP request header
-
-        size_t      headersEnd  = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
-        std::string headersPart = _client_info[client_fd].requestBuffer.substr(0, headersEnd);
-
-        std::cout << "===============Headers part: " << headersPart << std::endl;
-        std::cout << "==================================================" << std::endl; */
-
-        /* HttpRequest tmpRequest;
-        if (!tmpRequest.parseHeadersOnly(headersPart)) {
-                // not a valid HTTP header
-                cleanupClientConnectionClose(client_fd, index);
-                return "";
-        }
-
-        if (tmpRequest.headers.count("Content-Length")) {
-                size_t bodySize = std::stoi(tmpRequest.headers["Content-Length"]);
-                if (_client_info[client_fd].requestBuffer.size() >= headersEnd + 4 + bodySize) {
-                        // Body is fully received, start parsing
-                        // Parse the body and headers
-                } else {
-                        // Wait for more data...
-                }
-        } else if (tmpRequest.headers["Transfer-Encoding"] == "chunked") {
-                if (hasFullChunkedBody(requestBuffer, headersEnd + 4)) {
-                        // Chunked body is fully received, start parsing
-                        // Parse the body and headers
-                } else {
-                        // Wait for more data...
-                }
-        } else {
-                // Request without body
-                // Parse the headers and body
-        } */
+    if (tmpRequest.headers.count("Content-Length")) {
+            size_t bodySize = std::stoi(tmpRequest.headers["Content-Length"]);
+            if (_client_info[client_fd].requestBuffer.size() >= headersEnd + 4 + bodySize) {
+                    // Body is fully received, start parsing
+                    // Parse the body and headers
+            } else {
+                    // Wait for more data...
+            }
+    } else if (tmpRequest.headers["Transfer-Encoding"] == "chunked") {
+            if (hasFullChunkedBody(requestBuffer, headersEnd + 4)) {
+                    // Chunked body is fully received, start parsing
+                    // Parse the body and headers
+            } else {
+                    // Wait for more data...
+            }
+    } else {
+            // Request without body
+            // Parse the headers and body
+    } */
     //}
-
 
     /* HttpRequest request;
     if (!request.parse(_client_info[client_fd].requestBuffer)) {
         std::cerr << "Failed to parse HTTP request.\n";
         HttpResponse badRequest = */
-		/* ResponseBuilder::generateError(400, _client_info[client_fd].serverConfig, request); *///ResponseBuilder::generateError(405, _client_info[client_fd].serverConfig, request);
-        /* _client_info[client_fd].responses.push(badRequest);
-        return true;
-    } */
-   HttpRequest request;
-    int errorCode = 0;
-    if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer, _client_info[client_fd].serverConfig.getClientMaxBodySize(), errorCode)) {
-        
+    /* ResponseBuilder::generateError(400, _client_info[client_fd].serverConfig, request); */ // ResponseBuilder::generateError(405,
+                                                                                              // _client_info[client_fd].serverConfig,
+                                                                                              // request);
+    /* _client_info[client_fd].responses.push(badRequest);
+    return true;
+} */
+    HttpRequest request;
+    int         errorCode = 0;
+    if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
+                                  _client_info[client_fd].serverConfig.getClientMaxBodySize(),
+                                  errorCode)) {
+
         if (errorCode == 0)
             return false; // Incomplete data — wait for more
         else {
             HttpResponse err = ResponseBuilder::generateError(
-                errorCode,
-                _client_info[client_fd].serverConfig,
-                request);
+                errorCode, _client_info[client_fd].serverConfig, request);
             _client_info[client_fd].responses.push(err);
             return true; // We queued a response
         }

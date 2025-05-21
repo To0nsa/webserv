@@ -127,9 +127,9 @@ const std::string& HttpRequest::getVersion(void) const {
 }
 
 const std::string& HttpRequest::getHeader(const std::string& key) const {
-    const std::string upperKey = toUpper(key);
-    static const std::string                           empty = "";
-    std::map<std::string, std::string>::const_iterator it    = _headers.find(upperKey);
+    const std::string                                  upperKey = toUpper(key);
+    static const std::string                           empty    = "";
+    std::map<std::string, std::string>::const_iterator it       = _headers.find(upperKey);
     if (it != _headers.end())
         return (it->second);
     return (empty);
@@ -148,8 +148,8 @@ std::size_t HttpRequest::getContentLength(void) const {
 }
 
 const std::string& HttpRequest::getQuery() const {
-/* const std::string& HttpRequest::getUri(void) const { */
-    return /* _uri; */_query;
+    /* const std::string& HttpRequest::getUri(void) const { */
+    return /* _uri; */ _query;
 }
 
 void HttpRequest::setMethod(const std::string& method) {
@@ -164,10 +164,9 @@ void HttpRequest::setVersion(const std::string& version) {
     _version = version;
 }
 
-
 void HttpRequest::setHeader(const std::string& key, const std::string& value) {
     const std::string upperKey = toUpper(key);
-    _headers[upperKey] = value;
+    _headers[upperKey]         = value;
 }
 
 void HttpRequest::setBody(const std::string& body) {

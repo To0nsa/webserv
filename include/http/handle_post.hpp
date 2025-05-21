@@ -15,8 +15,8 @@
 #include "http/HttpResponseBuilder.hpp"
 #include "utils/buildFilePath.hpp"
 #include "utils/filesystemUtils.hpp"
-#include <string.h>
 #include <chrono>
 #include <fstream>
+#include <string.h>
 
 HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc);
