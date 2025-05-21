@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 13:59:12 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:10:23 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     if (!contentType.empty() && contentType.find("multipart/form-data") != std::string::npos) {
         size_t bpos = contentType.find("boundary=");
         if (bpos == std::string::npos) {
+            std::cerr << "[POST] Invalid Content-Type: " << contentType << std::endl;
             return ResponseBuilder::generateError(400, server, request);
         }
 
@@ -182,6 +183,7 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
 
         std::string extractedFilename, fileContent;
         if (!parseMultipart(request.getBody(), boundary, extractedFilename, fileContent)) {
+            std::cerr << "[POST] Failed to parse multipart data." << std::endl;
             return ResponseBuilder::generateError(400, server, request);
         }
 
