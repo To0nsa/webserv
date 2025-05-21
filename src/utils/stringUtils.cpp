@@ -6,20 +6,14 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/15 21:35:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 10:42:52 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * @file    stringUtils.cpp
- * @brief   Implements utility functions for parsing integers and byte sizes.
- *
- * @details Provides robust `parseInt` and `parseByteSize` helpers with
- * contextual error reporting for configuration parsing.
- * @ingroup StringUtils
- */
-
 #include "utils/stringUtils.hpp"
+#include "config/parser/ConfigParseError.hpp"
+#include "utils/errorUtils.hpp"
+
 #include <charconv>
 #include <sstream>
 #include <stdexcept>
@@ -29,15 +23,8 @@ int parseInt(const std::string& value) {
     return parseInt(value, "?", -1, -1, []() { return ""; });
 }
 
-std::size_t parseByteSize(const std::string& value) {
-    // Wrapper with default context: no field name, unknown location, empty diagnostic
-    return parseByteSize(value, "?", -1, -1, []() { return ""; });
-}
-
 int parseInt(const std::string& value, const std::string& field, int line, int column,
              const std::function<std::string()>& context_provider) {
-    (void) line;
-    (void) column;
     int result = 0;
 
     // Try to convert the full string to an integer using from_chars (no allocations, fast)
@@ -46,11 +33,17 @@ int parseInt(const std::string& value, const std::string& field, int line, int c
     // Check if conversion failed, or if there were leftover characters, or if result is negative
     if (ec != std::errc() || ptr != value.data() + value.size() || result < 0) {
         // Throw an error with precise source location and contextual snippet for diagnostics
-        throw std::invalid_argument("Invalid number for '" + field + "': " + value + "\n" +
-                                    context_provider());
+        throw ConfigParseError(
+            formatError("Invalid value for '" + field + "': " + value, line, column),
+            context_provider());
     }
 
     return result;
+}
+
+std::size_t parseByteSize(const std::string& value) {
+    // Wrapper with default context: no field name, unknown location, empty diagnostic
+    return parseByteSize(value, "?", -1, -1, []() { return ""; });
 }
 
 std::size_t parseByteSize(const std::string& value, const std::string& field, int line, int column,

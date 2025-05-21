@@ -1,26 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   normalizeConfig.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 13:11:30 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/20 22:54:15 by nlouis           ###   ########.fr       */
+/*   Created: 2025/05/11 21:02:21 by nlouis            #+#    #+#             */
+/*   Updated: 2025/05/20 22:37:22 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "core/webserv.hpp"
+#pragma once
 
-#include <iostream>
-#include <stdexcept>
+#include "config/Config.hpp"
 
-int main(int argc, char** argv) {
-    try {
-        return runWebserv(argc, argv);
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
-}
+void normalizeConfig(Config& config);

@@ -1,26 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   validateConfig.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 13:11:30 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/20 22:54:15 by nlouis           ###   ########.fr       */
+/*   Created: 2025/05/05 00:11:16 by nlouis            #+#    #+#             */
+/*   Updated: 2025/05/20 23:11:03 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "core/webserv.hpp"
+#pragma once
 
-#include <iostream>
-#include <stdexcept>
+#include "config/Config.hpp"
+#include <vector>
 
-int main(int argc, char** argv) {
-    try {
-        return runWebserv(argc, argv);
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
-}
+void validateConfig(const Config& config);

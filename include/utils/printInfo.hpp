@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   printInfo.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 13:11:30 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/20 22:54:15 by nlouis           ###   ########.fr       */
+/*   Created: 2025/05/03 14:01:52 by irychkov          #+#    #+#             */
+/*   Updated: 2025/05/20 21:45:14 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "core/webserv.hpp"
-
+#pragma once
+#include "config/Config.hpp"
+#include "core/Location.hpp"
+#include "core/Server.hpp"
 #include <iostream>
-#include <stdexcept>
 
-int main(int argc, char** argv) {
-    try {
-        return runWebserv(argc, argv);
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
-}
+std::string printUsage(void);
+void        printConfig(Config& config);

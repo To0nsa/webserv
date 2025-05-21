@@ -6,24 +6,9 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/14 10:18:14 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 10:47:00 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-/**
- * @file    directive_handler_table.cpp
- * @brief   Defines handler dispatch tables for server and location directives.
- *
- * @details This file implements the dispatch tables that map configuration directives
- *          (such as `listen`, `host`, `server_name`, etc.) to their respective handler
- *          functions (`ServerHandler` and `LocationHandler`). These handler functions
- *          are responsible for parsing and applying configuration values to the `Server`
- *          and `Location` objects. The tables are used by the `ConfigParser` during
- *          configuration file parsing, allowing for efficient and extensible handling of
- *          various server and location configuration options.
- *
- * @ingroup config
- */
 
 #include "config/parser/directive_handler_table.hpp"
 #include "config/parser/ConfigParseError.hpp"
@@ -35,24 +20,11 @@
 #include <set>
 #include <sstream>
 
-/**
- * @namespace directive
- * @brief Contains functions and handlers for parsing and processing configuration directives.
- *
- * @details The `directive` namespace groups functions and handler tables responsible for managing
- *          the server and location configuration directives within the web server configuration
- * file. These functions map directives (e.g., `listen`, `root`, `index`) to their respective
- * handlers which modify the `Server` and `Location` objects during the parsing process. By
- * encapsulating directive-specific logic in this namespace, we maintain modularity, avoid name
- * clashes, and facilitate easy expansion for handling new configuration options.
- *
- * @ingroup config
- */
 namespace directive {
 
 static void requireArgCount(const std::vector<std::string>& args, std::size_t expected,
                             const std::string& directive, int line, int column,
-                            const std::string& contextWindow) {
+                            const std::string& ctx) {
     // Check if the number of arguments matches the expected count for the directive
     if (args.size() != expected) {
         // If not, throw a SyntaxError with a descriptive message
@@ -60,7 +32,7 @@ static void requireArgCount(const std::vector<std::string>& args, std::size_t ex
                                           std::to_string(expected) + " argument(s), but got " +
                                           std::to_string(args.size()),
                                       line, column),
-                          contextWindow);
+                          ctx);
     }
 }
 
