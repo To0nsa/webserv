@@ -6,21 +6,15 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 13:06:52 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:10:16 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "http/HttpRequestHandler.hpp"
-#include "core/Location.hpp"
-#include "http/HttpResponseBuilder.hpp"
 #include "http/handleCgi.hpp"
+#include "http/handle_delete.hpp"
 #include "http/handle_get.hpp"
 #include "http/handle_post.hpp"
 #include <fstream>
-#include <sys/stat.h>
-#include <unistd.h>
-
-HttpResponse handleDelete(const HttpRequest&, const Server&, const Location&);
 
 HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     const std::string& method = request.getMethod();
@@ -84,21 +78,4 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     }
 
     return ResponseBuilder::generateError(500, server, request);
-}
-
-HttpResponse handleDelete(const HttpRequest& request, const Server& server, const Location& loc) {
-    // Build full file path
-    std::string filepath = buildFilePath(request, loc);
-
-    // Check if file exists and delete
-    struct stat s;
-    if (stat(filepath.c_str(), &s) != 0)
-        return ResponseBuilder::generateError(404, server, request);
-    if (!S_ISREG(s.st_mode))
-        return ResponseBuilder::generateError(403, server, request);
-    if (unlink(filepath.c_str()) != 0)
-        return ResponseBuilder::generateError(500, server, request);
-    std::string filename = request.getPath().substr(request.getPath().find_last_of("/") + 1);
-    return ResponseBuilder::generateSuccess(200, "<h1>File " + filename + " deleted.</h1>",
-                                            "text/html", request);
 }
