@@ -6,13 +6,14 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/17 00:04:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 21:08:02 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/SocketManager.hpp"
 #include "http/HttpRequest.hpp"
 #include "http/HttpRequestHandler.hpp"
+#include "http/HttpRequestParser.hpp"
 #include "http/HttpResponse.hpp"
 #include "http/HttpResponseBuilder.hpp"
 #include <sstream> // For stringstream, we will remove it later
@@ -111,20 +112,12 @@ void SocketManager::respondError(int fd, int status_code) {
 }
 
 bool SocketManager::checkRequestLimits(int fd) {
-    size_t max_body_size = _client_info[fd].serverConfig.getClientMaxBodySize();
-
-    // Enforce header size limit separately
-    if (_client_info[fd].headerBytesReceived > HEADER_MAX_LENGTH) {
-        std::cout << "Headers too large from fd: " << fd << std::endl;
-        respondError(fd, 431); // 431 = Request Header Fields Too Large
-        return true;
-    }
-
-    // Enforce total request buffer limit (body size)
-    if (_client_info[fd].requestBuffer.size() > max_body_size) {
-        std::cout << "Body too large from fd: " << fd << std::endl;
-        respondError(fd, 413); // 413 = Payload Too Large
-        return true;
+    size_t max_size = _client_info[fd].serverConfig.getClientMaxBodySize();
+    if (_client_info[fd].headerBytesReceived > max_size ||
+        _client_info[fd].requestBuffer.size() > HEADER_MAX_LENGTH) {
+        std::cout << "Request too large from fd: " << fd << std::endl;
+        // respondError(fd, 413); // comment here
+        return false;
     }
 
     return false;
@@ -292,50 +285,21 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (isHeaderTimeout(client_fd))
         return true;
 
-    std::string& buffer     = _client_info[client_fd].requestBuffer;
-    size_t       headersEnd = buffer.find("\r\n\r\n");
-
-    // Wait for complete headers
-    if (headersEnd == std::string::npos)
-        return false;
-
-    std::string headersPart = buffer.substr(0, headersEnd + 4);
-
-    HttpRequest tmpRequest;
-    if (!tmpRequest.parseHeadersOnly(headersPart)) {
-        respondError(client_fd, 400);
-        return true;
-    }
-
-    std::string contentLengthStr = tmpRequest.getHeader("Content-Length");
-    std::string transferEncoding = tmpRequest.getHeader("Transfer-Encoding");
-
-    size_t bodyStart = headersEnd + 4;
-    size_t totalSize = buffer.size();
-
-    // Handle Content-Length (fixed-length body)
-    if (!contentLengthStr.empty()) {
-        size_t contentLength = std::strtoul(contentLengthStr.c_str(), NULL, 10);
-        if (totalSize < bodyStart + contentLength)
-            return false; // wait for full body
-    }
-    // Handle chunked body
-    else if (transferEncoding == "chunked") {
-        if (!hasFullChunkedBody(buffer, bodyStart))
-            return false; // wait for 0\r\n\r\n
-    }
-    // Else: no body → proceed
-
-    // Parse full request now
     HttpRequest request;
-    if (!request.parse(buffer)) {
-        std::cerr << "Failed to parse HTTP request.\n";
-        HttpResponse badRequest =
-            ResponseBuilder::generateError(400, _client_info[client_fd].serverConfig, request);
-        _client_info[client_fd].responses.push(badRequest);
-        return true;
-    }
+    int         errorCode = 0;
+    if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
+                                  _client_info[client_fd].serverConfig.getClientMaxBodySize(),
+                                  errorCode)) {
 
+        if (errorCode == 0)
+            return false; // Incomplete data — wait for more
+        else {
+            HttpResponse err = ResponseBuilder::generateError(
+                errorCode, _client_info[client_fd].serverConfig, request);
+            _client_info[client_fd].responses.push(err);
+            return true; // We queued a response
+        }
+    }
     request.printRequest();
     buffer.clear();
 
@@ -368,9 +332,9 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         return;
     }
 
-    std::cout << "=======================We sent to fd:" << client_fd << std::endl;
-    std::cout << raw << std::endl;
-    std::cout << "==================================================" << std::endl;
+    std::cout << "[✅DONE] We sent RESPONSE to fd:" << client_fd << std::endl;
+    /* std::cout << raw << std::endl;
+    std::cout << "==================================================" << std::endl; */
 
     _client_info[client_fd].bytes_sent += bytes_sent;
     _client_info[client_fd].lastSendAttemptTime = time(NULL);
