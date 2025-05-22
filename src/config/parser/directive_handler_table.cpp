@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 10:47:00 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/22 22:47:34 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ static void validateCgiExtension(const std::string& ext, int line, int column,
                           context_provider());
     }
 
-    // Check all characters after the dot
     for (std::size_t i = 1; i < ext.size(); ++i) {
         char c = ext[i];
         if (!std::isalnum(c)) {
@@ -121,18 +120,7 @@ const std::unordered_map<std::string, ServerHandler>& serverHandlers() {
          [](Server& s, const auto& v, int line, int column, const std::string& ctx) {
              // Ensure exactly one argument is provided for the "listen" directive
              requireArgCount(v, 1, "listen", line, column, ctx);
-             int port;
-             try {
-                 // Attempt to convert the argument to an integer
-                 port = parseInt(v[0]);
-             } catch (const std::invalid_argument&) {
-                 // Catch invalid numeric conversion (e.g. "abc")
-                 throw SyntaxError(formatError("Invalid port number: " + v[0], line, column), ctx);
-             } catch (const std::out_of_range&) {
-                 // Catch number too large or small for int
-                 throw SyntaxError(
-                     formatError("Port number out of integer range: " + v[0], line, column), ctx);
-             }
+             int port = parseInt(v[0], "listen", line, column, [&]() { return ctx; });
              if (port < 0 || port > 65535) {
                  // Validate the port is within allowed range
                  throw SyntaxError(
@@ -197,7 +185,7 @@ const std::unordered_map<std::string, ServerHandler>& serverHandlers() {
 
              // Iterate over the error codes and set the custom error page for each
              for (std::size_t i = 0; i + 1 < v.size(); ++i) {
-                 int code = parseInt(v[i]);
+                 int code = parseInt(v[i], "error_page", line, column, [&]() { return ctx; });
                  s.setErrorPage(code, uri); // Set the error page for each code
              }
          }},
@@ -333,7 +321,7 @@ const std::unordered_map<std::string, LocationHandler>& locationHandlers() {
              // Ensure exactly two arguments are provided for the "return" directive
              requireArgCount(v, 2, "return", line, column, ctx);
              // Parse the HTTP status code (e.g., 301 for permanent redirection)
-             int code = parseInt(v[0]);
+             int code = parseInt(v[0], "return", line, column, [&]() { return ctx; });
              // Set the redirection URI and status code on the Location object
              loc.setRedirect(v[1], code);
          }},

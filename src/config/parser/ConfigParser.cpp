@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 08:46:22 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/22 21:41:13 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/22 22:39:06 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,26 +43,16 @@ bool checkDuplicateDirective(const std::string& name, std::unordered_set<std::st
 template <typename T, typename HandlerMap>
 void parseDirective(T& target, const Token& token, std::vector<std::string>& values,
                     const HandlerMap& handlers, int line, int column, const std::string& ctx) {
-    const std::string name = token.value;
+    const std::string& directiveName = token.value;
 
-    // Attempt to find the directive handler in the provided table
-    typename HandlerMap::const_iterator it = handlers.find(name);
-    if (it == handlers.end()) {
-        // If no matching handler, throw a syntax error for unknown directive
+    auto handlerIt = handlers.find(directiveName);
+    if (handlerIt == handlers.end()) {
         throw SyntaxError(formatError("Unknown directive: '" + token.value + "'", line, column),
                           ctx);
     }
 
-    try {
-        // Call the matched handler with the target object and directive arguments
-        it->second(target, values, line, column, ctx);
-    } catch (const std::invalid_argument& e) {
-        // Re-throw std conversion errors as SyntaxError for unified parser error reporting
-        throw SyntaxError(formatError(e.what(), line, column), ctx);
-    } catch (const std::out_of_range& e) {
-        // Handle cases like out-of-bound input
-        throw SyntaxError(formatError(e.what(), line, column), ctx);
-    }
+    auto& handler = handlerIt->second;
+    handler(target, values, line, column, ctx);
 }
 
 } // namespace
