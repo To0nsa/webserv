@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:06:31 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 11:07:01 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/22 21:03:44 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "config/tokenizer/token.hpp"
 
 #include <set>
+#include <span>
 #include <string>
 #include <vector>
 
@@ -49,7 +50,7 @@ class ConfigParser {
     bool         match(TokenType type);
     void         expect(TokenType expected, const std::string& context);
     Token        expectOneOf(std::initializer_list<TokenType> types, const std::string& context);
-    std::vector<std::string> collectArgs(std::initializer_list<TokenType> validTypes);
+    std::vector<std::string> collectArgs(std::span<const TokenType> validTypes);
 
     /////////////////////
     // --- Error Context

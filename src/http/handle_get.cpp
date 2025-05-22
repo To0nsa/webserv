@@ -6,12 +6,12 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 21:28:25 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/22 21:04:39 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handle_get.hpp"
-#include "utils/buildFilePath.hpp"
+#include "utils/filesystemUtils.hpp"
 #include <string_view>
 
 static std::string truncateName(const std::string& name, std::size_t maxLen) {

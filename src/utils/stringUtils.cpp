@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 10:42:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/21 23:07:01 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,11 @@ std::string toLower(const std::string& str) {
     return result; // Return the transformed string
 }
 
-std::string toUpper(const std::string& s) {
-    std::string res = s;
-    std::transform(res.begin(), res.end(), res.begin(), ::toupper);
-    return res;
+std::string toUpper(const std::string& str) {
+    std::string result = str;
+    std::transform(result.begin(), result.end(), result.begin(),
+                   [](unsigned char c) { return std::toupper(c); });
+    return result;
 }
 
 std::string formatBytes(std::size_t bytes) {

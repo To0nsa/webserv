@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 08:46:22 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 11:06:58 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/22 21:41:13 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,31 +23,34 @@
 #include <charconv>
 #include <functional>
 #include <memory>
+#include <span>
 #include <sstream>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace {
 
-static const std::set<std::string>            kRepeatableServerDirectives   = {"error_page"};
-static const std::set<std::string>            kRepeatableLocationDirectives = {"methods"};
-static const std::initializer_list<TokenType> kArgTokenTypes                = {
-    TokenType::STRING, TokenType::NUMBER, TokenType::IDENTIFIER};
+static const std::unordered_set<std::string> kRepeatableServerDirectives   = {"error_page"};
+static const std::unordered_set<std::string> kRepeatableLocationDirectives = {"methods"};
+static constexpr std::array<TokenType, 3>    kArgTokenTypes = {TokenType::STRING, TokenType::NUMBER,
+                                                               TokenType::IDENTIFIER};
 
-bool checkDuplicateDirective(const std::string& name, std::set<std::string>& seen,
-                             const std::set<std::string>& repeatable) {
-    return repeatable.count(name) || seen.insert(name).second;
+bool checkDuplicateDirective(const std::string& name, std::unordered_set<std::string>& seen,
+                             const std::unordered_set<std::string>& repeatable) {
+    return repeatable.contains(name) || seen.insert(name).second;
 }
 
 template <typename T, typename HandlerMap>
-void parseDirective(T& target, const Token& key, std::vector<std::string>& values,
+void parseDirective(T& target, const Token& token, std::vector<std::string>& values,
                     const HandlerMap& handlers, int line, int column, const std::string& ctx) {
-    const std::string name = toLower(key.value); // Normalize directive name to lowercase
+    const std::string name = token.value;
 
     // Attempt to find the directive handler in the provided table
     typename HandlerMap::const_iterator it = handlers.find(name);
     if (it == handlers.end()) {
         // If no matching handler, throw a syntax error for unknown directive
-        throw SyntaxError(formatError("Unknown directive: '" + key.value + "'", line, column), ctx);
+        throw SyntaxError(formatError("Unknown directive: '" + token.value + "'", line, column),
+                          ctx);
     }
 
     try {
@@ -113,8 +116,8 @@ Server ConfigParser::parseServer() {
     expect(TokenType::KEYWORD_SERVER, "server block");  // Ensure block starts with 'server'
     expect(TokenType::LBRACE, "start of server block"); // Expect opening brace '{'
 
-    Server                server;
-    std::set<std::string> seen; // Track directives to detect duplicates
+    Server                          server;
+    std::unordered_set<std::string> seen; // Track directives to detect duplicates
 
     // Loop until closing '}' or end of file
     while (!isAtEnd() && current().type != TokenType::RBRACE) {
@@ -123,7 +126,7 @@ Server ConfigParser::parseServer() {
             server.addLocation(parseLocation());
         } else {
             // Normalize directive name to lowercase and check for duplicates
-            const std::string name = toLower(current().value);
+            const std::string name = current().value;
             if (!checkDuplicateDirective(name, seen, kRepeatableServerDirectives)) {
                 throw SyntaxError(formatError("Duplicate directive: '" + name + "'", current().line,
                                               current().column),
@@ -177,11 +180,11 @@ Location ConfigParser::parseLocation() {
 
     expect(TokenType::LBRACE, "start of location block"); // Expect opening brace '{'
 
-    std::set<std::string> seen; // Track encountered directives to catch duplicates
+    std::unordered_set<std::string> seen; // Track encountered directives to catch duplicates
 
     // Parse directives until closing brace
     while (!isAtEnd() && current().type != TokenType::RBRACE) {
-        const std::string name = toLower(current().value);
+        const std::string name = current().value;
         if (!checkDuplicateDirective(name, seen, kRepeatableLocationDirectives)) {
             throw SyntaxError(formatError("Duplicate directive: '" + name + "'", current().line,
                                           current().column),
@@ -220,17 +223,20 @@ const Token& ConfigParser::previous() const {
 }
 
 const Token& ConfigParser::peek(std::size_t offset) const {
-    // Compute the absolute index from current position
     std::size_t index = _pos + offset;
-    // Return the token at that index if in bounds, otherwise return the final EOF token
-    return (index < _tokens.size()) ? _tokens.at(index) : _tokens.back();
+    if (index < _tokens.size()) {
+        return _tokens.at(index);
+    }
+    return _tokens.back(); // Fallback to EOF token
 }
 
 const Token& ConfigParser::lookBehind(std::size_t offset) const {
-    // Fallback for underflow
     static Token dummy(TokenType::END_OF_FILE, "", 0, 0, 0);
-    // Return the token `offset` steps before the current position, or dummy if out of bounds
-    return (_pos >= offset) ? _tokens.at(_pos - offset) : dummy;
+
+    if (_pos >= offset) {
+        return _tokens.at(_pos - offset);
+    }
+    return dummy;
 }
 
 const Token& ConfigParser::advance() {
@@ -253,15 +259,23 @@ bool ConfigParser::match(TokenType type) {
 }
 
 void ConfigParser::expect(TokenType expected, const std::string& context) {
-    // If we're at the end or the current token doesn't match the expected type...
+    (void) context;
+
     if (isAtEnd() || _tokens[_pos].type != expected) {
-        const Token& actual = isAtEnd() ? _tokens.back() : _tokens[_pos];
-        // ...throw an error describing what was expected vs. what was found
+        const Token* actual;
+
+        if (isAtEnd()) {
+            actual = &_tokens.back(); // fallback to last token (should be EOF)
+        } else {
+            actual = &_tokens[_pos];
+        }
+
         throw UnexpectedToken(formatError("Expected " + debugTokenType(expected) + ", but got " +
-                                              debugTokenType(actual.type) + " for " + context,
-                                          actual.line, actual.column),
+                                              debugTokenType(actual->type),
+                                          actual->line, actual->column),
                               getLineSnippet());
     }
+
     ++_pos; // Consume the token if it matched
 }
 
@@ -271,16 +285,18 @@ Token ConfigParser::expectOneOf(std::initializer_list<TokenType> types,
 
     // Check if the current token matches any of the expected types
     for (TokenType expected : types) {
-        if (actual == expected)
+        if (actual == expected) {
             return advance(); // If matched, consume and return it
+        }
     }
 
     // If no match, build an error message listing all expected types
     std::ostringstream msg;
     msg << "Expected ";
     for (auto it = types.begin(); it != types.end(); ++it) {
-        if (it != types.begin())
+        if (it != types.begin()) {
             msg << " or ";
+        }
         msg << debugTokenType(*it);
     }
     msg << " for " << context << ", but got " << debugTokenType(actual);
@@ -290,20 +306,18 @@ Token ConfigParser::expectOneOf(std::initializer_list<TokenType> types,
                           getLineSnippet());
 }
 
-std::vector<std::string> ConfigParser::collectArgs(std::initializer_list<TokenType> validTypes) {
+std::vector<std::string> ConfigParser::collectArgs(std::span<const TokenType> validTypes) {
     std::vector<std::string> values;
 
-    // Collect tokens while they match one of the allowed types
     while (!isAtEnd()) {
         TokenType t = current().type;
 
         if (std::find(validTypes.begin(), validTypes.end(), t) == validTypes.end())
             break;
 
-        std::string val = current().value;
+        values.push_back(current().value);
         advance();
 
-        // Now check for ",value" groups
         while (match(TokenType::COMMA)) {
             if (isAtEnd() || std::find(validTypes.begin(), validTypes.end(), current().type) ==
                                  validTypes.end()) {
@@ -311,20 +325,12 @@ std::vector<std::string> ConfigParser::collectArgs(std::initializer_list<TokenTy
                     formatError("Expected value after comma", current().line, current().column),
                     getLineSnippet());
             }
-            val += "," + current().value;
+            values.push_back(current().value);
             advance();
-        }
-
-        // split val on commas into multiple entries
-        std::istringstream ss(val);
-        std::string        token;
-        while (std::getline(ss, token, ',')) {
-            if (!token.empty())
-                values.push_back(token);
         }
     }
 
-    return values; // Return the collected argument values
+    return values;
 }
 
 /////////////////////
