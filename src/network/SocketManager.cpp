@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 15:53:34 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:21:58 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,29 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
     /* std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes
               << std::endl;
     std::cout << "==================================================" << std::endl; */
-    _client_info[client_fd].headerBytesReceived += bytes;
+
     std::string single_msg(buffer, bytes);
     _client_info[client_fd].requestBuffer += single_msg;
+    size_t headerEndPos = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
+
+    if (headerEndPos == std::string::npos) {
+        // Header not complete yet
+        _client_info[client_fd].headerBytesReceived += bytes;
+    } else {
+        if (!_client_info[client_fd].headerComplete) {
+            // First time detecting header end
+            size_t fullHeaderSize = headerEndPos + 4; // Include "\r\n\r\n"
+            size_t oldBufferSize = _client_info[client_fd].requestBuffer.size() - bytes;
+            size_t headerBytesThisTime = std::max((ssize_t)0, (ssize_t)(fullHeaderSize - oldBufferSize));
+            _client_info[client_fd].headerBytesReceived += headerBytesThisTime;
+            _client_info[client_fd].bodyBytesReceived += (bytes - headerBytesThisTime);
+            _client_info[client_fd].headerComplete = true;
+        } else {
+            // Header already counted, this must be body
+            _client_info[client_fd].bodyBytesReceived += bytes;
+        }
+    }
+
     return true;
 }
 
@@ -255,6 +275,8 @@ void SocketManager::handleNewConnection(int listen_fd) {
     info.lastRequestTime     = time(NULL);
     info.connectionStartTime = time(NULL);
     info.headerBytesReceived = 0;
+    info.bodyBytesReceived   = 0;
+    bool headerComplete      = false;
     info.bytes_sent          = 0;
     info.keepAlive           = true;
     info.serverConfig        = _listen_map[listen_fd];
