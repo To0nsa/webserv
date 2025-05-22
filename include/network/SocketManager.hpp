@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 14:13:27 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:19:46 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ struct ClientInfo {
     time_t                   connectionStartTime;
     time_t                   lastSendAttemptTime;
     size_t                   headerBytesReceived;
+    size_t                   bodyBytesReceived;
+    bool                     headerComplete;
     size_t                   bytes_sent;
     std::string              requestBuffer;
     std::string              current_raw_response;
