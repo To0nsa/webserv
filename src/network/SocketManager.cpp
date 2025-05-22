@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/22 22:21:22 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/22 22:28:29 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -396,7 +396,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         }
     }
     request.printRequest();
-    _client_info[client_fd].requestBuffer.clear();
+    resetRequestState(client_fd);
 
     const Server& server   = _client_info[client_fd].serverConfig;
     HttpResponse  response = handleRequest(request, server);
@@ -437,7 +437,6 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         _client_info[client_fd].responses.pop();
         _client_info[client_fd].current_raw_response.clear();
         _client_info[client_fd].bytes_sent = 0;
-        resetRequestState(client_fd);
 
         if (!response.isConnectionClose()) {
             std::cout << "Connection: keep-alive - keeping the connection open" << std::endl;
