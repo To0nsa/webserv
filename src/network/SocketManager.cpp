@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/22 11:42:03 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:29:38 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "http/HttpRequestParser.hpp"
 #include "http/HttpResponse.hpp"
 #include "http/HttpResponseBuilder.hpp"
+#include "utils/buildFilePath.hpp"
 #include <sstream> // For stringstream, we will remove it later
 
 // Signal handler for exiting the server
@@ -45,24 +46,62 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
     std::cout << "We close FD(Connection: close): " << client_fd << std::endl;
 }
 
-void SocketManager::checkClientTimeouts(int client_fd, size_t index) {
+bool SocketManager::isHeaderTimeout(int fd, time_t now) {
+    ClientInfo& client = _client_info[fd];
+    if (client.headerBytesReceived < HEADER_MIN_LENGTH &&
+        now - client.connectionStartTime > HEADER_TIMEOUT_SECONDS) {
+        std::cout << "Header timeout on fd: " << fd << std::endl;
+        respondError(fd, 408);
+        return true;
+    }
+    return false;
+}
+
+bool SocketManager::isBodyTimeout(int fd, time_t now) {
+    ClientInfo& client = _client_info[fd];
+    if (client.headerComplete &&
+        now - client.lastRequestTime > TIMEOUT) {
+        std::cout << "Body timeout on fd: " << fd << std::endl;
+        respondError(fd, 408);
+        return true;
+    }
+    return false;
+}
+
+bool SocketManager::isSendTimeout(int fd, time_t now) {
+    ClientInfo& client = _client_info[fd];
+    if (!client.responses.empty() && !client.current_raw_response.empty() &&
+        now - client.lastSendAttemptTime > TIMEOUT) {
+        std::cout << "Send timeout on fd: " << fd << std::endl;
+        return true;
+    }
+    return false;
+}
+
+bool SocketManager::isIdleTimeout(int fd, time_t now) {
+    ClientInfo& client = _client_info[fd];
+    if (client.responses.empty() && client.current_raw_response.empty() &&
+        !client.headerComplete &&
+        now - client.lastRequestTime > TIMEOUT) {
+        std::cout << "Idle timeout on fd: " << fd << std::endl;
+        return true;
+    }
+    return false;
+}
+
+bool SocketManager::checkClientTimeouts(int client_fd, size_t index) {
     if (!_client_info.count(client_fd))
-        return;
+        return false;
+
     time_t now = time(NULL);
-    if (_client_info[client_fd].responses.empty() &&
-        _client_info[client_fd].current_raw_response.empty() &&
-        now - _client_info[client_fd].lastRequestTime > TIMEOUT) {
-        std::cout << "Client fd " << client_fd << " timed out is " << TIMEOUT << std::endl;
+    if (isIdleTimeout(client_fd, now) || isSendTimeout(client_fd, now)) {
         cleanupClientConnectionClose(client_fd, index);
-        return;
+        return false;
     }
-    if (!_client_info[client_fd].responses.empty() &&
-        !_client_info[client_fd].current_raw_response.empty() &&
-        now - _client_info[client_fd].lastSendAttemptTime > TIMEOUT) {
-        std::cout << "Client fd " << client_fd << " too slow to read response (send timeout)"
-                  << std::endl;
-        cleanupClientConnectionClose(client_fd, index);
+    if (isHeaderTimeout(client_fd, now) || isBodyTimeout(client_fd, now)) {
+        return true;
     }
+    return false;
 }
 
 void SocketManager::handlePollError(int fd, size_t index, short revents) {
@@ -89,9 +128,9 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
         return false;
     }
     buffer[bytes] = '\0';
-    /* std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes
+    std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes
               << std::endl;
-    std::cout << "==================================================" << std::endl; */
+    std::cout << "==================================================" << std::endl;
 
     std::string single_msg(buffer, bytes);
     _client_info[client_fd].requestBuffer += single_msg;
@@ -99,10 +138,12 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
 
     if (headerEndPos == std::string::npos) {
         // Header not complete yet
+        std::cout << "we didn't find end of header" << std::endl;
         _client_info[client_fd].headerBytesReceived += bytes;
     } else {
         if (!_client_info[client_fd].headerComplete) {
             // First time detecting header end
+            std::cout << "we found end of header" << std::endl;
             size_t fullHeaderSize = headerEndPos + 4; // Include "\r\n\r\n"
             size_t oldBufferSize = _client_info[client_fd].requestBuffer.size() - bytes;
             size_t headerBytesThisTime = std::max((ssize_t)0, (ssize_t)(fullHeaderSize - oldBufferSize));
@@ -132,18 +173,6 @@ bool SocketManager::checkRequestLimits(int fd) {
         std::cout << "Request too large from fd: " << fd << std::endl;
         respondError(fd, 413);
         return true;
-    }
-    return false;
-}
-
-bool SocketManager::isHeaderTimeout(int fd) {
-    if (_client_info[fd].headerBytesReceived < HEADER_MIN_LENGTH) {
-        time_t now = time(NULL);
-        if (now - _client_info[fd].connectionStartTime > HEADER_TIMEOUT_SECONDS) {
-            std::cout << "Header timeout on fd: " << fd << std::endl;
-            respondError(fd, 408);
-            return true;
-        }
     }
     return false;
 }
@@ -242,7 +271,8 @@ void SocketManager::run() {
                 !_client_info[current_fd].responses.empty()) { // Ready to write (can send data)
                 sendResponse(current_fd, i);
             }
-            checkClientTimeouts(current_fd, i); // If connection keep-alive but client idle we close
+            if (checkClientTimeouts(current_fd, i))
+                _poll_fds[i].events |= POLLOUT; // If connection keep-alive but client idle we close
         }
     }
     std::cout << std::endl;
@@ -284,13 +314,49 @@ void SocketManager::handleNewConnection(int listen_fd) {
     _client_info[client_fd] = info;
 }
 
+bool isValidParsedHeaderMethod(const HttpRequest& request, const Server& server, int& errorCode) {
+    static const std::set<std::string> implemented = {"GET", "POST", "DELETE"};
+
+    const std::string& method = request.getMethod();
+    const std::string& path   = request.getPath();
+
+    if (implemented.find(method) == implemented.end()) {
+        errorCode = 501;
+        return false;
+    }
+
+     // Find matching location
+    const Location* matched     = nullptr;
+    size_t          maxMatchLen = 0;
+
+    for (const Location& loc : server.getLocations()) {
+        const std::string& locPath = normalizePath(loc.getPath());
+        if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
+            matched     = &loc;
+            maxMatchLen = locPath.size();
+        }
+    }
+
+    if (!matched) {
+        errorCode = 404;
+        return false;
+    }
+
+    const Location& location = *matched;
+
+    if (!location.isMethodAllowed(method)) {
+        errorCode = 405;
+        return false;
+    }
+
+    return true;
+}
+
 // Read data from client, send fixed response, then close
 bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (!receiveFromClient(client_fd, index))
         return false;
     if (checkRequestLimits(client_fd))
-        return true;
-    if (isHeaderTimeout(client_fd))
         return true;
 
     HttpRequest request;
@@ -299,8 +365,16 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
                                   _client_info[client_fd].serverConfig.getClientMaxBodySize(),
                                   errorCode)) {
 
-        if (errorCode == 0)
+        if (errorCode == 0){
+            if (_client_info[client_fd].headerComplete && !isValidParsedHeaderMethod(request, _client_info[client_fd].serverConfig, errorCode)) {
+                std::cout << "Invalid\n";
+                HttpResponse err = ResponseBuilder::generateError(
+                    errorCode, _client_info[client_fd].serverConfig, request);
+                _client_info[client_fd].responses.push(err);
+                return true;
+            }
             return false; // Incomplete data — wait for more
+        }
         else {
             HttpResponse err = ResponseBuilder::generateError(
                 errorCode, _client_info[client_fd].serverConfig, request);
@@ -341,8 +415,8 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
     }
 
     std::cout << "[✅DONE] We sent RESPONSE to fd:" << client_fd << std::endl;
-    /* std::cout << raw << std::endl;
-    std::cout << "==================================================" << std::endl; */
+    std::cout << raw << std::endl;
+    std::cout << "==================================================" << std::endl;
 
     _client_info[client_fd].bytes_sent += bytes_sent;
     _client_info[client_fd].lastSendAttemptTime = time(NULL);

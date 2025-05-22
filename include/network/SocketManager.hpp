@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/22 11:37:36 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:40:30 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 #include <unistd.h>
 #include <vector>
 
-#define TIMEOUT 60
+#define TIMEOUT 30
 #define HEADER_TIMEOUT_SECONDS 10
 #define HEADER_MIN_LENGTH 15
 #define HEADER_MAX_LENGTH 8192
@@ -160,13 +160,8 @@ class SocketManager {
      * @param index Index of the fd in the `_poll_fds` vector.
      */
     void cleanupClientConnectionClose(int client_fd, size_t index);
-    /**
-     * @brief Check timeout for connection. Closes fd and erases fds if idle > TIMEOUT.
-     *
-     * @param client_fd File descriptor of the connected client.
-     * @param index Index of the fd in the `_poll_fds` vector.
-     */
-    void checkClientTimeouts(int client_fd, size_t index);
+
+    bool checkClientTimeouts(int client_fd, size_t index);
     /**
      * @brief Handles poll errors and cleans up the client connection.
      *
@@ -200,11 +195,9 @@ class SocketManager {
      * @return Bool indicating whether the request violates any limits.
      */
     bool checkRequestLimits(int fd);
-    /**
-     * @brief Checks if the client header has timed out.
-     *
-     * @param fd File descriptor of the connected client.
-     * @return Bool indicating whether the header timeout has occurred.
-     */
-    bool isHeaderTimeout(int fd);
+
+    bool isHeaderTimeout(int fd, time_t now);
+	bool isBodyTimeout(int fd, time_t now);
+	bool isSendTimeout(int fd, time_t now);
+	bool isIdleTimeout(int fd, time_t now);
 };
