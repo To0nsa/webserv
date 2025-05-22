@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/22 14:40:30 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/22 21:38:50 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,8 @@ class SocketManager {
     bool checkRequestLimits(int fd);
 
     bool isHeaderTimeout(int fd, time_t now);
-	bool isBodyTimeout(int fd, time_t now);
-	bool isSendTimeout(int fd, time_t now);
-	bool isIdleTimeout(int fd, time_t now);
+    bool isBodyTimeout(int fd, time_t now);
+    bool isSendTimeout(int fd, time_t now);
+    bool isIdleTimeout(int fd, time_t now);
+    void resetRequestState(int client_fd);
 };
