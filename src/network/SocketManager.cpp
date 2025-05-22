@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/22 11:21:58 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:42:03 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,11 +127,11 @@ void SocketManager::respondError(int fd, int status_code) {
 
 bool SocketManager::checkRequestLimits(int fd) {
     size_t max_size = _client_info[fd].serverConfig.getClientMaxBodySize();
-    if (_client_info[fd].headerBytesReceived > max_size ||
-        _client_info[fd].requestBuffer.size() > HEADER_MAX_LENGTH) {
+    if (_client_info[fd].bodyBytesReceived > max_size ||
+        _client_info[fd].headerBytesReceived > HEADER_MAX_LENGTH) {
         std::cout << "Request too large from fd: " << fd << std::endl;
-        // respondError(fd, 413); // comment here
-        return false;
+        respondError(fd, 413);
+        return true;
     }
     return false;
 }
@@ -276,7 +276,7 @@ void SocketManager::handleNewConnection(int listen_fd) {
     info.connectionStartTime = time(NULL);
     info.headerBytesReceived = 0;
     info.bodyBytesReceived   = 0;
-    bool headerComplete      = false;
+    info.headerComplete      = false;
     info.bytes_sent          = 0;
     info.keepAlive           = true;
     info.serverConfig        = _listen_map[listen_fd];

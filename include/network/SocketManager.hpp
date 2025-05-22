@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/22 11:19:46 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:37:36 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 #include <vector>
 
 #define TIMEOUT 60
-#define HEADER_TIMEOUT_SECONDS 5
+#define HEADER_TIMEOUT_SECONDS 10
 #define HEADER_MIN_LENGTH 15
 #define HEADER_MAX_LENGTH 8192
 #define RECV_BUFFER HEADER_MAX_LENGTH * 2
