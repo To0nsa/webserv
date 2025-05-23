@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 21:35:44 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/23 11:25:00 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,4 +114,25 @@ bool ensureDirectoryExists(const std::string& path) {
         std::cerr << "[ensureDirectoryExists] Error creating directories: " << e.what() << '\n';
         return false;
     }
+}
+
+bool isAbsolutePath(const std::string& pathStr) {
+    return fs::path(pathStr).is_absolute();
+}
+
+bool containsTraversal(const std::string& pathStr) {
+    fs::path normalized = fs::path(pathStr).lexically_normal();
+    for (const auto& part : normalized) {
+        if (part == "..")
+            return true;
+    }
+    return false;
+}
+
+bool containsSlash(const std::string& str) {
+    return str.find('/') != std::string::npos;
+}
+
+bool isSuspiciousFilename(const std::string& pathStr) {
+    return containsSlash(pathStr) || containsTraversal(pathStr);
 }

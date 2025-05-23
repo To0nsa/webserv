@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 01:06:09 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/22 21:11:48 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/23 10:14:39 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,10 +217,8 @@ Token Tokenizer::parseIdentifierOrKeyword() {
     scanIdentifier();          // Consume all valid identifier characters
     validateIdentifier(start); // Ensure it's non-empty and well-formed
     std::string word = _input.substr(start, _pos - start); // Extract the identifier text
-
-    std::string lowerWord = toLower(word);
-    TokenType   type      = resolveKeywordType(lowerWord);
-    return makeToken(type, lowerWord);
+    TokenType   type      = resolveKeywordType(word);
+    return makeToken(type, word);
 }
 
 /////////////////////////////

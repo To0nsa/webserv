@@ -6,17 +6,21 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 23:23:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 14:52:20 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/23 11:24:39 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config/validateConfig.hpp"
 #include "config/parser/ConfigParseError.hpp"
 #include "utils/errorUtils.hpp"
+#include "utils/filesystemUtils.hpp"
 
 #include <iostream>
 #include <string>
 #include <unordered_set>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 namespace {
 void validateHasLocation(const std::vector<Server>& servers) {
@@ -296,41 +300,6 @@ void validateClientMaxBodySize(const std::vector<Server>& servers) {
     }
 }
 
-void validateUploadStorePaths(const std::vector<Server>& servers) {
-    for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
-        const Server&                server    = servers[serverIndex];
-        const std::vector<Location>& locations = server.getLocations();
-
-        for (const Location& loc : locations) {
-            if (!loc.isUploadEnabled())
-                continue;
-
-            const std::string& path = loc.getUploadStore();
-
-            if (path.empty()) {
-                throw ValidationError(
-                    "Empty upload_store path in location '" + loc.getPath() + "' of server #" +
-                    std::to_string(serverIndex + 1) +
-                    "\n→ Specify a non-empty absolute directory path for 'upload_store'");
-            }
-
-            if (path[0] != '/') {
-                throw ValidationError(
-                    "Relative upload_store path in location '" + loc.getPath() + "' of server #" +
-                    std::to_string(serverIndex + 1) +
-                    "\n→ Upload store paths must start with '/' (absolute paths only)");
-            }
-
-            if (path.find("..") != std::string::npos) {
-                throw ValidationError(
-                    "Directory traversal detected in upload_store path in location '" +
-                    loc.getPath() + "' of server #" + std::to_string(serverIndex + 1) +
-                    "\n→ '..' is not allowed in upload paths for security reasons");
-            }
-        }
-    }
-}
-
 void validateCgiExtensions(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
         const Server&                server    = servers[serverIndex];
@@ -368,14 +337,58 @@ void validateIndexFiles(const std::vector<Server>& servers) {
                     " defines an 'index' without a 'root'" +
                     "\n→ The 'index' directive requires a valid 'root' to resolve file paths");
             }
+        }
+    }
+}
 
-            if (!index.empty()) {
-                if (index.find('/') != std::string::npos || index.find("..") != std::string::npos) {
-                    throw ValidationError("Suspicious index filename '" + index +
-                                          "' in location '" + path + "' of server #" +
-                                          std::to_string(serverIndex + 1) +
-                                          "\n→ Index must be a filename without slashes or '..'");
+void validateAbsolutePaths(const std::vector<Server>& servers) {
+    for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
+        const Server& server = servers[serverIndex];
+
+        // --- error_page paths
+        for (const auto& [code, pathStr] : server.getErrorPages()) {
+            fs::path errorPath(pathStr);
+            if (pathStr.empty() || !errorPath.is_absolute() || containsTraversal(pathStr)) {
+                throw ValidationError("Invalid error_page path '" + pathStr + "' in server #" +
+                                      std::to_string(serverIndex + 1) +
+                                      "\n→ Must be an absolute path and must not contain '..'");
+            }
+        }
+
+        for (const Location& loc : server.getLocations()) {
+            const std::string& locationPath = loc.getPath();
+
+            // --- Root
+            const std::string& rootStr = loc.getRoot();
+            if (!rootStr.empty()) {
+                fs::path rootPath(rootStr);
+                if (!rootPath.is_absolute() || containsTraversal(rootStr)) {
+                    throw ValidationError("Invalid root path '" + rootStr + "' in location '" +
+                                        locationPath + "' of server #" + std::to_string(serverIndex + 1) +
+                                        "\n→ Must be an absolute path and must not contain '..'");
                 }
+            }
+
+            // --- Upload store
+            if (loc.isUploadEnabled()) {
+                const std::string& uploadStr = loc.getUploadStore();
+                fs::path uploadPath(uploadStr);
+
+                if (uploadStr.empty() || !uploadPath.is_absolute() || containsTraversal(uploadStr)) {
+                    throw ValidationError("Invalid upload_store path '" + uploadStr +
+                                        "' in location '" + locationPath + "' of server #" +
+                                        std::to_string(serverIndex + 1) +
+                                        "\n→ Must be an absolute path and must not contain '..'");
+                }
+            }
+
+            // --- Index (must be bare filename)
+            const std::string& index = loc.getIndex();
+            if (!index.empty() && isSuspiciousFilename(index)) {
+                throw ValidationError("Invalid index file '" + index +
+                                      "' in location '" + locationPath + "' of server #" +
+                                      std::to_string(serverIndex + 1) +
+                                      "\n→ Must be a filename only (no slashes or '..')");
             }
         }
     }
@@ -394,7 +407,7 @@ void validateConfig(const Config& config) {
     validateRedirectCodes(servers);
     validateAllowedMethods(servers);
     validateClientMaxBodySize(servers);
-    validateUploadStorePaths(servers);
     validateCgiExtensions(servers);
     validateIndexFiles(servers);
+    validateAbsolutePaths(servers);
 }
