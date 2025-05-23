@@ -5,32 +5,29 @@
 #include <ranges>
 #include <regex>
 #include <sstream>
-
-//----------------------------------------
-// CLASS METHODS
-//----------------------------------------
+#include <set>
 
 bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorCode);
 bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t clientMaxBodySize,
                   int& errorCode);
 bool isChunkedBodyComplete(const std::string& bodyPart);
-Url  parseUrl(const std::string& url);
+Url parseUrl(HttpRequest& req, const std::string& url);
+bool validateReq(HttpRequest& req, int& errorCode) ;
 
 bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
                               std::size_t clientMaxBodySize, int& errorCode) {
     std::size_t headerEndPos = raw_req.find("\r\n\r\n");
     if (headerEndPos == std::string::npos) {
         errorCode = 0; // Incomplete request
-        std::cout << "Incomplete header, we read again" << std::endl;
+        std::cout << "[INFO] HttpRequestParser: Incomplete header, server reads again" << std::endl;
         return false;
     }
     std::string headerPart = raw_req.substr(0, headerEndPos);
     std::string bodyPart   = raw_req.substr(headerEndPos + 4);
 
-    // std::cout << "HPART: " << headerPart << std::endl;
-    // std::cout << "BPART: " << bodyPart << std::endl;
-
     if (!parseReqHeader(req, headerPart, errorCode))
+        return false;
+    if (!validateReq(req, errorCode))
         return false;
     if (!parseReqBody(req, bodyPart, clientMaxBodySize, errorCode))
         return false;
@@ -72,41 +69,44 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         value.erase(0, value.find_first_not_of(" \t\r\n")); // remove leading whitespace
 
         if ((key == "TRANSFER-ENCODING") && value == "chunked" && req.getMethod() == "GET") {
-            std::cerr << "Chunked transfer encoding is not allowed in GET requests" << std::endl;
+            std::cerr << "[ERROR] HttpRequestParser: Chunked transfer encoding is not allowed in GET requests" << std::endl;
             errorCode = 400;
             return false;
         }
-
         if (key == "CONTENT-LENGTH") {
             if (value.empty() || !std::all_of(value.begin(), value.end(), [](char c) {
                     return std::isdigit(static_cast<unsigned char>(c));
                 })) {
-                std::cerr << "Invalid Content-Length value" << std::endl;
+                std::cerr << "[ERROR] HttpRequestParser: Invalid Content-Length value:" << std::endl;
                 errorCode = 411;
                 return false;
             }
 
             try {
                 req.setContentLength(std::stoull(value));
-
             } catch (const std::exception& e) {
-                std::cerr << "Invalid Content-Length value: " << e.what() << std::endl;
+                std::cerr << "[ERROR] HttpRequestParser: Invalid Content-Length value:" << e.what() << std::endl;
                 errorCode = 411;
                 return false;
             }
         }
+
+        // Handling duplicated header
+        auto existing = req.getHeader(key);
+        if (!existing.empty()) {
+            req.setHeader(key, existing + ", " + value);
+        } else {
+            req.setHeader(key, value);
+        }
         req.setHeader(key, value);
     }
-    if (req.getHeader("HOST").empty()) {
-        std::cerr << "Missing HOST header" << std::endl;
-        errorCode = 400;
-        return false;
-    }
+
     try {
-        Url url = parseUrl(req.getHeader("HOST") + req.getPath());
+        Url url = parseUrl(req, req.getHeader("HOST") + req.getPath());
         req.setUrl(url);
-    } catch (...) {
+    } catch (const std::exception& e) {
         errorCode = 400;
+        std::cerr << "[ERROR] HttpRequestParser: " << e.what() << std::endl;
         return false;
     }
 
@@ -134,7 +134,7 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
             chunkSize = std::stoul(chunkLine, nullptr, 16); // Hexadecimal
         } catch (...) {
             errorCode = 400;
-            std::cerr << "Invalid chunk size format" << std::endl;
+            std::cerr << "[ERROR] HttpRequestParser: Invalid chunk size format" << std::endl;
             return;
         }
 
@@ -143,7 +143,7 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
         }
 
         if (totalSize + chunkSize > clientMaxBodySize) {
-            std::cerr << "Exceeded request max body size in chunked transfer" << std::endl;
+            std::cerr << "[ERROR] HttpRequestParser: Exceeded request max body size in chunked transfer" << std::endl;
             errorCode = 413;
             return;
         }
@@ -172,7 +172,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
 
     if (transferEncoding == "chunked") {
         if (!isChunkedBodyComplete(bodyPart)) {
-            std::cout << "Incomplete chunked body, we read again" << std::endl;
+            std::cout << "[INFO] HttpRequestParser: Incomplete chunked body, server reads again" << std::endl;
             errorCode = 0;
             return false;
         }
@@ -182,13 +182,13 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
 
     std::size_t contentLength = req.getContentLength();
     if (contentLength >= clientMaxBodySize) {
-        std::cerr << "Exceeded request max body size" << std::endl;
+        std::cerr << "[ERROR] HttpRequestParser: Exceeded request max body size" << std::endl;
         errorCode = 413;
         return false;
     }
 
     if (bodyPart.size() < contentLength) {
-        std::cerr << "Incomplete request body, we read again" << std::endl;
+        std::cout << "[INFO] HttpRequestParser: Incomplete request body, server reads again" << std::endl;
         errorCode = 0;
         return false;
     }
@@ -199,7 +199,10 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
     return true;
 }
 
-Url parseUrl(const std::string& url) {
+Url parseUrl(HttpRequest& req, const std::string& url) {
+    if (req.getHeader("HOST").empty()) {
+        throw std::invalid_argument("Missing HOST header");
+    }
     Url        res;
     std::regex urlRegex(
         R"((https?://)?(?:([^:@]+)(?::([^:@]*))?@)?([^:/?#]+)(?::(\d+))?(/[^?#]*)?(?:\?([^#]*))?(?:#(.*))?)");
@@ -218,4 +221,18 @@ Url parseUrl(const std::string& url) {
     res.query    = matches[7].str();
     res.fragment = matches[8].str();
     return res;
+}
+
+bool validateReq(HttpRequest& req, int& errorCode) {
+    const std::set<std::string> validMethods = {"GET", "POST", "DELETE"};
+    if (validMethods.find(req.getMethod()) == validMethods.end()) {
+        errorCode = 405; // Method Not Allowed
+        return false;
+    }
+
+    if (req.getVersion() != "HTTP/1.0" && req.getVersion() != "HTTP/1.1") {
+        errorCode = 505; // HTTP Version Not Supported
+        return false;
+    }
+    return true;
 }
