@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/23 10:59:32 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/23 15:33:58 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
         return false;
     }
     buffer[bytes] = '\0';
-    /* std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes
+/*     std::cout << "======================Received RAW request: {" << buffer << "} bytes: {" << bytes << "}"
               << std::endl;
     std::cout << "==================================================" << std::endl; */
 
@@ -373,34 +373,49 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 
     HttpRequest request;
     int         errorCode = 0;
+	std::size_t consumedBytes = 0;
     if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
                                   _client_info[client_fd].serverConfig.getClientMaxBodySize(),
-                                  errorCode)) {
+                                  errorCode, consumedBytes)) {
 
         if (errorCode == 0){
-/*             std::cout << "Incomplete request, waiting for more data" << std::endl;
-            std::cout << "_client_info[client_fd].headerComplete: "
+             std::cout << "Incomplete request, waiting for more data" << std::endl;
+/*            std::cout << "_client_info[client_fd].headerComplete: "
                       << _client_info[client_fd].headerComplete << std::endl; */
-            if (_client_info[client_fd].headerComplete && !isValidParsedHeaderMethod(request, _client_info[client_fd].serverConfig, errorCode)) {
+            /* if (_client_info[client_fd].headerComplete && !isValidParsedHeaderMethod(request, _client_info[client_fd].serverConfig, errorCode)) {
                 HttpResponse err = ResponseBuilder::generateError(
                     errorCode, _client_info[client_fd].serverConfig, request);
 				resetRequestState(client_fd);
+				std::cout << "[1]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
+				std::cout << "[1]consumedBytes size is {" << consumedBytes << "}" << std::endl;
+				std::cout << "[1]requestBuffer size after erase is {" << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}" << std::endl;
+				_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
+				_client_info[client_fd].requestBuffer.clear();
                 _client_info[client_fd].responses.push(err);
                 return true;
-            }
+            } */
             return false; // Incomplete data — wait for more
         }
         else {
             HttpResponse err = ResponseBuilder::generateError(
                 errorCode, _client_info[client_fd].serverConfig, request);
 			resetRequestState(client_fd);
+			request.printRequest();
+			std::cout << "[2]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
+				std::cout << "[2]consumedBytes size is {" << consumedBytes << "}" << std::endl;
+				std::cout << "[2]requestBuffer size after erase is {" << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}" << std::endl;
+			_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
+			_client_info[client_fd].requestBuffer.clear();
             _client_info[client_fd].responses.push(err);
             return true; // We queued a response
         }
     }
     request.printRequest();
     resetRequestState(client_fd);
-	_client_info[client_fd].requestBuffer.clear();
+	std::cout << "[3]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
+				std::cout << "[3]consumedBytes size is {" << consumedBytes << "}" << std::endl;
+				std::cout << "[3]requestBuffer size after erase is {" << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}" << std::endl;
+	_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
 
     const Server& server   = _client_info[client_fd].serverConfig;
     HttpResponse  response = handleRequest(request, server);

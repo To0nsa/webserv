@@ -9,13 +9,13 @@
 
 bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorCode);
 bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t clientMaxBodySize,
-                  int& errorCode);
+                  int& errorCode, std::size_t& consumedBytes);
 bool isChunkedBodyComplete(const std::string& bodyPart);
 Url parseUrl(HttpRequest& req, const std::string& url);
 bool validateReq(HttpRequest& req, int& errorCode) ;
 
 bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
-                              std::size_t clientMaxBodySize, int& errorCode) {
+                              std::size_t clientMaxBodySize, int& errorCode, std::size_t& consumedBytes) {
     std::size_t headerEndPos = raw_req.find("\r\n\r\n");
     if (headerEndPos == std::string::npos) {
         errorCode = 0; // Incomplete request
@@ -25,11 +25,12 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
     std::string headerPart = raw_req.substr(0, headerEndPos);
     std::string bodyPart   = raw_req.substr(headerEndPos + 4);
 
+	consumedBytes = headerEndPos + 4;
     if (!parseReqHeader(req, headerPart, errorCode))
         return false;
     if (!validateReq(req, errorCode))
         return false;
-    if (!parseReqBody(req, bodyPart, clientMaxBodySize, errorCode))
+    if (!parseReqBody(req, bodyPart, clientMaxBodySize, errorCode, consumedBytes))
         return false;
     return true;
 }
@@ -38,6 +39,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     std::istringstream stream(headerPart);
     std::string        line;
     if (!std::getline(stream, line) || line.empty()) {
+		std::cerr << "[ERROR] HttpRequestParser: Empty line" << std::endl;
         errorCode = 400;
         return false;
     }
@@ -46,6 +48,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     requestLineStream >> method >> path >> version;
 
     if (method.empty() || path.empty() || version.empty()) {
+		std::cerr << "[ERROR] HttpRequestParser: Invalid request startline" << std::endl;
         errorCode = 400;
         return false;
     }
@@ -98,7 +101,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         } else {
             req.setHeader(key, value);
         }
-        req.setHeader(key, value);
+        //req.setHeader(key, value);
     }
 
     try {
@@ -114,17 +117,19 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
 }
 
 bool isChunkedBodyComplete(const std::string& bodyPart) {
-    return bodyPart.find("\r\n0\r\n\r\n") != std::string::npos;
+    return bodyPart.find("0\r\n\r\n") != std::string::npos;
 }
 
 void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t clientMaxBodySize,
-                     int& errorCode) {
+                     int& errorCode, std::size_t& consumedBytes) {
     std::istringstream stream(bodyPart);
     std::string        chunkLine;
     std::string        fullBody;
     std::size_t        totalSize = 0;
+	std::size_t        localConsumed = 0;
 
     while (std::getline(stream, chunkLine)) {
+		localConsumed += chunkLine.size() + 1; // +1 for '\n'
         if (!chunkLine.empty() && chunkLine.back() == '\r') {
             chunkLine.pop_back();
         }
@@ -134,40 +139,51 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
             chunkSize = std::stoul(chunkLine, nullptr, 16); // Hexadecimal
         } catch (...) {
             errorCode = 400;
+			consumedBytes += localConsumed;
             std::cerr << "[ERROR] HttpRequestParser: Invalid chunk size format" << std::endl;
             return;
         }
 
         if (chunkSize == 0) {
+			// final chunk, consume \r\n
+            std::string lastLine;
+            std::getline(stream, lastLine);
+            localConsumed += lastLine.size() + 1; // Usually just \r\n
             break; // End of chunks
         }
 
         if (totalSize + chunkSize > clientMaxBodySize) {
             std::cerr << "[ERROR] HttpRequestParser: Exceeded request max body size in chunked transfer" << std::endl;
+			consumedBytes += localConsumed + chunkSize;
             errorCode = 413;
             return;
         }
 
         std::string chunkData(chunkSize, '\0');
         stream.read(&chunkData[0], chunkSize);
+		std::streamsize bytesRead = stream.gcount();
+        localConsumed += bytesRead;
 
         fullBody += chunkData;
-        totalSize += chunkSize;
+        totalSize += bytesRead;
 
         // Consume trailing "\r\n" after the chunk
-        std::getline(stream, chunkLine);
+        std::string trailing;
+        std::getline(stream, trailing);
+        localConsumed += trailing.size() + 1; // for \n
     }
 
     req.setBody(fullBody);
     errorCode = 0;
+	consumedBytes += localConsumed;
 }
 
 bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t clientMaxBodySize,
-                  int& errorCode) {
-    if (req.getMethod() == "GET") {
+                  int& errorCode, std::size_t& consumedBytes) {
+    /* if (req.getMethod() == "GET") {
         errorCode = 0;
         return true;
-    }
+    } */
     const std::string& transferEncoding = req.getHeader("TRANSFER-ENCODING");
 
     if (transferEncoding == "chunked") {
@@ -176,7 +192,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
             errorCode = 0;
             return false;
         }
-        chunkReqHandler(req, bodyPart, clientMaxBodySize, errorCode);
+        chunkReqHandler(req, bodyPart, clientMaxBodySize, errorCode, consumedBytes);
         return errorCode == 0;
     }
 
@@ -184,6 +200,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
     if (contentLength >= clientMaxBodySize) {
         std::cerr << "[ERROR] HttpRequestParser: Exceeded request max body size" << std::endl;
         errorCode = 413;
+		consumedBytes += bodyPart.size();
         return false;
     }
 
@@ -194,7 +211,9 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
     }
 
     std::string bodyContent = bodyPart.substr(0, contentLength);
+	consumedBytes += bodyContent.size();
     req.setBody(bodyContent);
+
     errorCode = 0;
     return true;
 }
@@ -227,11 +246,13 @@ bool validateReq(HttpRequest& req, int& errorCode) {
     const std::set<std::string> validMethods = {"GET", "POST", "DELETE"};
     if (validMethods.find(req.getMethod()) == validMethods.end()) {
         errorCode = 405; // Method Not Allowed
+		std::cerr << "[ERROR] HttpRequestParser: Invalid method" << std::endl;
         return false;
     }
 
     if (req.getVersion() != "HTTP/1.0" && req.getVersion() != "HTTP/1.1") {
         errorCode = 505; // HTTP Version Not Supported
+		std::cerr << "[ERROR] HttpRequestParser: Invalid HTTP version" << std::endl;
         return false;
     }
     return true;
