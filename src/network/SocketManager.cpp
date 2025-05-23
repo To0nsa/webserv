@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/22 22:28:29 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/23 10:59:32 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void SocketManager::resetRequestState(int client_fd) {
     _client_info[client_fd].headerComplete = false;
     _client_info[client_fd].headerBytesReceived = 0;
     _client_info[client_fd].bodyBytesReceived = 0;
-    _client_info[client_fd].requestBuffer.clear();
 }
 
 bool SocketManager::isHeaderTimeout(int fd, time_t now) {
@@ -137,9 +136,9 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
         return false;
     }
     buffer[bytes] = '\0';
-    std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes
+    /* std::cout << "======================Received RAW request: " << buffer << " bytes: " << bytes
               << std::endl;
-    std::cout << "==================================================" << std::endl;
+    std::cout << "==================================================" << std::endl; */
 
     std::string single_msg(buffer, bytes);
     _client_info[client_fd].requestBuffer += single_msg;
@@ -176,7 +175,7 @@ void SocketManager::respondError(int fd, int status_code) {
 }
 
 bool SocketManager::checkRequestLimits(int fd) {
-    size_t max_size = _client_info[fd].serverConfig.getClientMaxBodySize();
+    size_t max_size = _client_info[fd].serverConfig.getClientMaxBodySize(); // body check is wrong
     if (_client_info[fd].bodyBytesReceived > max_size ||
         _client_info[fd].headerBytesReceived > HEADER_MAX_LENGTH) {
         std::cout << "Request too large from fd: " << fd << std::endl;
@@ -366,8 +365,11 @@ bool isValidParsedHeaderMethod(const HttpRequest& request, const Server& server,
 bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (!receiveFromClient(client_fd, index))
         return false;
-    if (checkRequestLimits(client_fd))
+    if (checkRequestLimits(client_fd)) {
+		resetRequestState(client_fd);
+		_client_info[client_fd].requestBuffer.clear();
         return true;
+	}
 
     HttpRequest request;
     int         errorCode = 0;
@@ -376,13 +378,13 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
                                   errorCode)) {
 
         if (errorCode == 0){
-            std::cout << "Incomplete request, waiting for more data" << std::endl;
+/*             std::cout << "Incomplete request, waiting for more data" << std::endl;
             std::cout << "_client_info[client_fd].headerComplete: "
-                      << _client_info[client_fd].headerComplete << std::endl;
+                      << _client_info[client_fd].headerComplete << std::endl; */
             if (_client_info[client_fd].headerComplete && !isValidParsedHeaderMethod(request, _client_info[client_fd].serverConfig, errorCode)) {
-                std::cout << "Invalid\n";
                 HttpResponse err = ResponseBuilder::generateError(
                     errorCode, _client_info[client_fd].serverConfig, request);
+				resetRequestState(client_fd);
                 _client_info[client_fd].responses.push(err);
                 return true;
             }
@@ -391,12 +393,14 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         else {
             HttpResponse err = ResponseBuilder::generateError(
                 errorCode, _client_info[client_fd].serverConfig, request);
+			resetRequestState(client_fd);
             _client_info[client_fd].responses.push(err);
             return true; // We queued a response
         }
     }
     request.printRequest();
     resetRequestState(client_fd);
+	_client_info[client_fd].requestBuffer.clear();
 
     const Server& server   = _client_info[client_fd].serverConfig;
     HttpResponse  response = handleRequest(request, server);
