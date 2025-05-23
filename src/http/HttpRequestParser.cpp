@@ -12,7 +12,8 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
                   int& errorCode);
 bool isChunkedBodyComplete(const std::string& bodyPart);
 Url parseUrl(HttpRequest& req, const std::string& url);
-bool validateReq(HttpRequest& req, int& errorCode) ;
+bool validateReq(HttpRequest& req, int& errorCode);
+bool isValidHeader(std::strin& key);
 
 bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
                               std::size_t clientMaxBodySize, int& errorCode) {
@@ -68,6 +69,11 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         key.erase(key.find_last_not_of(" \t\r\n") + 1);     // remove trailing whitespace
         value.erase(0, value.find_first_not_of(" \t\r\n")); // remove leading whitespace
 
+        if (!isValidHeader(key)) {
+            std::cerr << "[ERROR] HttpRequestParser: Invalid header key: " << key << std::endl;
+            errorCode = 400;
+            return false;
+        }
         if ((key == "TRANSFER-ENCODING") && value == "chunked" && req.getMethod() == "GET") {
             std::cerr << "[ERROR] HttpRequestParser: Chunked transfer encoding is not allowed in GET requests" << std::endl;
             errorCode = 400;
@@ -176,6 +182,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
             errorCode = 0;
             return false;
         }
+        std::cout << "[DEBUG] HttpRequestParser: Handling chunked request" << std::endl;
         chunkReqHandler(req, bodyPart, clientMaxBodySize, errorCode);
         return errorCode == 0;
     }
@@ -234,5 +241,70 @@ bool validateReq(HttpRequest& req, int& errorCode) {
         errorCode = 505; // HTTP Version Not Supported
         return false;
     }
+
+    if (req.getPath()[0] != '/') {
+        errorCode = 400;
+        return false;
+    }
+
+    if (!transferEncoding.empty() && req.getContentLength() > 0) {
+        errorCode = 400; // Bad Request
+        std::cerr << "Conflicting Transfer-Encoding and Content-Length" << std::endl;
+        return false;
+    }
+
+    // validate header keys and values
+
     return true;
+}
+
+bool isValidHeader(std::strin& key){
+    switch (key) {
+        case "CONTENT-TYPE": return true;
+        case "CONTENT-ENCODING": return true;
+        case "CONTENT-LANGUAGE": return true;
+        case "CONTENT-LOCATION": return true;
+        case "CONTENT-LENGTH": return true;
+        case "CONTENT_RANGE": return true;
+        case "TRAILER": return true;
+        case "TRANSFER-ENCODING": return true;
+        case "CACHE-CONTROL": return true;
+        case "CONNECTION": return true;
+        case "EXPECT": return true;
+        case "HOST": return true;
+        case "MAX-FORWARDS": return true;
+        case "PRAGMA": return true;
+        case "RANGE": return true;
+        case "TE": return true;
+        case "IF-MATCH": return true;
+        case "IF-NONE-MATCH": return true;
+        case "IF-MODIFIED-SINCE": return true;
+        case "IF-UNMODIFIED-SINCE": return true;
+        case "IF-RANGE": return true;
+        case "ACCEPT": return true;
+        case "ACCEPT-CHARSET": return true;
+        case "ACCEPT-ENCODING": return true;
+        case "ACCEPT-LANGUAGE": return true
+        case "AUTHORIZATION": return true;
+        case "PROXY-AUTHORIZATION": return true;
+        case "FROM": return true;
+        case "REFERER": return true;
+        case "USER-AGENT": return true;
+        case "AGE": return true;
+        case "EXPIRES": return true;
+        case "DATE": return true;
+        case "LOCATION": return true;
+        case "RETRY-AFTER": return true;
+        case "VARY": return true;
+        case "WARNING": return true;
+        case "ETAG": return true;
+        case "LAST-MODIFIED": return true;
+        case "WWW-AUTHENTICATE": return true;
+        case "PROXY-AUTHENTICATE": return true;
+        case "ACCEPT-RANGES": return true;
+        case "ALLOW": return true;
+        case "SERVER": return true;
+        case "MIME_VERSION": return true;
+        default: return false;
+    }
 }

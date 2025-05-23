@@ -279,48 +279,24 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 
     if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") != std::string::npos) {
         // We have a complete HTTP request header
-
         size_t      headersEnd  = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
         std::string headersPart = _client_info[client_fd].requestBuffer.substr(0, headersEnd);
 
         std::cout << "===============Headers part: " << headersPart << std::endl;
         std::cout << "==================================================" << std::endl;
-
-        /* HttpRequest tmpRequest;
-        if (!tmpRequest.parseHeadersOnly(headersPart)) {
-                // not a valid HTTP header
-                cleanupClientConnectionClose(client_fd, index);
-                return "";
-        }
-
-        if (tmpRequest.headers.count("Content-Length")) {
-                size_t bodySize = std::stoi(tmpRequest.headers["Content-Length"]);
-                if (_client_info[client_fd].requestBuffer.size() >= headersEnd + 4 + bodySize) {
-                        // Body is fully received, start parsing
-                        // Parse the body and headers
-                } else {
-                        // Wait for more data...
-                }
-        } else if (tmpRequest.headers["Transfer-Encoding"] == "chunked") {
-                if (hasFullChunkedBody(requestBuffer, headersEnd + 4)) {
-                        // Chunked body is fully received, start parsing
-                        // Parse the body and headers
-                } else {
-                        // Wait for more data...
-                }
-        } else {
-                // Request without body
-                // Parse the headers and body
-        } */
     }
 
 
     HttpRequest request;
+    int errorCode = 0;
 
     HttpRequestParser::parse(
         request,
         _client_info[client_fd].requestBuffer,
-        _client_info[client_fd].serverConfig.getClientMaxBodySize());
+        _client_info[client_fd].serverConfig.getClientMaxBodySize(),
+        errorCode);
+
+    printf("[DEBUG] Error code: %d\n", errorCode);
 
     // if (!request.parse(_client_info[client_fd].requestBuffer)) {
     //     std::cerr << "Failed to parse HTTP request.\n";
