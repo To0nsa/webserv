@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/23 11:25:00 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/23 12:40:21 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <regex>
 
 namespace fs = std::filesystem;
 
@@ -116,23 +117,57 @@ bool ensureDirectoryExists(const std::string& path) {
     }
 }
 
-bool isAbsolutePath(const std::string& pathStr) {
-    return fs::path(pathStr).is_absolute();
-}
-
 bool containsTraversal(const std::string& pathStr) {
-    fs::path normalized = fs::path(pathStr).lexically_normal();
-    for (const auto& part : normalized) {
+    fs::path raw = fs::path(pathStr);
+    for (const auto& part : raw) {
         if (part == "..")
             return true;
     }
     return false;
 }
 
-bool containsSlash(const std::string& str) {
-    return str.find('/') != std::string::npos;
+bool isInvalidAbsolutePath(const std::string& pathStr) {
+    if (pathStr.empty())
+        return true;
+
+    fs::path raw(pathStr);
+    if (!raw.is_absolute())
+        return true;
+
+    // Check for `..` anywhere in the original path
+    for (const auto& part : raw) {
+        if (part == "..")
+            return true;
+    }
+
+    // Check for segments that *start* with `..` (e.g., `..private`)
+    for (const auto& part : raw) {
+        const std::string& seg = part.string();
+        if (seg.rfind("..", 0) == 0) // starts with ".."
+            return true;
+    }
+
+    // Redundant slashes in raw input
+    if (pathStr.find("//") != std::string::npos)
+        return true;
+
+    return false;
 }
 
-bool isSuspiciousFilename(const std::string& pathStr) {
-    return containsSlash(pathStr) || containsTraversal(pathStr);
+bool isSuspiciousFilename(const std::string& filename) {
+    if (filename.empty() || filename.size() > 256)
+        return true;
+
+    fs::path p(filename);
+
+    if (p.has_parent_path() || filename.find('/') != std::string::npos || containsTraversal(filename))
+        return true;
+
+    // Must not start with a dot or dash
+    if (!std::isalnum(static_cast<unsigned char>(filename[0])))
+        return true;
+
+    // Enforce strict whitelist pattern: no multiple dots, only one extension, valid suffix
+    static const std::regex strictPattern(R"(^[a-zA-Z0-9_-]+\.(html?|txt|php|cgi)$)");
+    return !std::regex_match(filename, strictPattern);
 }

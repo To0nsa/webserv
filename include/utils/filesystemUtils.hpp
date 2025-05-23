@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:38:32 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/23 11:24:51 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/23 12:28:43 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,5 @@ std::string  joinPath(const std::string& base, const std::string& suffix);
 std::string  buildFilePath(const HttpRequest& request, const Location& loc);
 bool         ensureDirectoryExists(const std::string& path);
 
-bool isAbsolutePath(const std::string& pathStr);
-bool containsTraversal(const std::string& pathStr);
-bool containsSlash(const std::string& str);
+bool isInvalidAbsolutePath(const std::string& pathStr);
 bool isSuspiciousFilename(const std::string& pathStr);

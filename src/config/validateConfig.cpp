@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 23:23:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/23 11:24:39 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/23 12:52:54 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,31 +35,31 @@ void validateHasLocation(const std::vector<Server>& servers) {
 
 void validateLocationPaths(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
-        const Server&                   server = servers[serverIndex];
+        const Server& server = servers[serverIndex];
         std::unordered_set<std::string> seenPaths;
 
         for (const Location& loc : server.getLocations()) {
             const std::string& path = loc.getPath();
 
-            // Must not be empty
-            if (path.empty()) {
-                throw ValidationError(
-                    "Empty location path in server #" + std::to_string(serverIndex + 1) +
-                    "\n→ All location paths must start with '/' and not be empty.");
+            if (path.empty() || path[0] != '/') {
+                throw ValidationError("Invalid location path '" + path +
+                                      "' in server #" + std::to_string(serverIndex + 1) +
+                                      "\n→ Must start with '/'");
+            }
+            
+            fs::path locPath(path);
+            for (const auto& part : locPath) {
+                const std::string seg = part.string();
+                if (!seg.empty() && seg[0] == '.') {
+                    throw ValidationError("Invalid location path '" + path +
+                                        "' in server #" + std::to_string(serverIndex + 1) +
+                                        "\n→ Path segments must not begin with '.' (e.g. '.', '..', '...', '.hidden')");
+                }
             }
 
-            // Must start with '/'
-            if (path[0] != '/') {
-                throw ValidationError("Invalid location path '" + path + "' in server #" +
-                                      std::to_string(serverIndex + 1) +
-                                      "\n→ Location paths must start with '/'.");
-            }
-
-            // Duplicate path detection
             if (!seenPaths.insert(path).second) {
-                throw ValidationError("Duplicate location path '" + path + "' in server #" +
-                                      std::to_string(serverIndex + 1) +
-                                      "\n→ Each location path must be unique per server.");
+                throw ValidationError("Duplicate location path '" + path +
+                                      "' in server #" + std::to_string(serverIndex + 1));
             }
         }
     }
@@ -347,11 +347,10 @@ void validateAbsolutePaths(const std::vector<Server>& servers) {
 
         // --- error_page paths
         for (const auto& [code, pathStr] : server.getErrorPages()) {
-            fs::path errorPath(pathStr);
-            if (pathStr.empty() || !errorPath.is_absolute() || containsTraversal(pathStr)) {
+            if (isInvalidAbsolutePath(pathStr)) {
                 throw ValidationError("Invalid error_page path '" + pathStr + "' in server #" +
                                       std::to_string(serverIndex + 1) +
-                                      "\n→ Must be an absolute path and must not contain '..'");
+                                      "\n→ Must be a normalized absolute path with no '..' or '//' segments");
             }
         }
 
@@ -360,39 +359,72 @@ void validateAbsolutePaths(const std::vector<Server>& servers) {
 
             // --- Root
             const std::string& rootStr = loc.getRoot();
-            if (!rootStr.empty()) {
-                fs::path rootPath(rootStr);
-                if (!rootPath.is_absolute() || containsTraversal(rootStr)) {
-                    throw ValidationError("Invalid root path '" + rootStr + "' in location '" +
-                                        locationPath + "' of server #" + std::to_string(serverIndex + 1) +
-                                        "\n→ Must be an absolute path and must not contain '..'");
-                }
+            if (!rootStr.empty() && isInvalidAbsolutePath(rootStr)) {
+                throw ValidationError("Invalid root path '" + rootStr + "' in location '" +
+                                      locationPath + "' of server #" + std::to_string(serverIndex + 1) +
+                                      "\n→ Must be a normalized absolute path with no '..' or '//' segments");
             }
 
             // --- Upload store
             if (loc.isUploadEnabled()) {
                 const std::string& uploadStr = loc.getUploadStore();
-                fs::path uploadPath(uploadStr);
-
-                if (uploadStr.empty() || !uploadPath.is_absolute() || containsTraversal(uploadStr)) {
+                if (isInvalidAbsolutePath(uploadStr)) {
                     throw ValidationError("Invalid upload_store path '" + uploadStr +
-                                        "' in location '" + locationPath + "' of server #" +
-                                        std::to_string(serverIndex + 1) +
-                                        "\n→ Must be an absolute path and must not contain '..'");
+                                          "' in location '" + locationPath + "' of server #" +
+                                          std::to_string(serverIndex + 1) +
+                                          "\n→ Must be a normalized absolute path with no '..' or '//' segments");
                 }
             }
 
-            // --- Index (must be bare filename)
-            const std::string& index = loc.getIndex();
-            if (!index.empty() && isSuspiciousFilename(index)) {
-                throw ValidationError("Invalid index file '" + index +
-                                      "' in location '" + locationPath + "' of server #" +
-                                      std::to_string(serverIndex + 1) +
-                                      "\n→ Must be a filename only (no slashes or '..')");
+            // --- Index files
+            const std::vector<std::string>& indices = loc.getIndexFiles();
+            for (const std::string& index : indices) {
+                if (!index.empty() && isSuspiciousFilename(index)) {
+                    throw ValidationError("Invalid index file '" + index + "' in location '" +
+                                          locationPath + "' of server #" + std::to_string(serverIndex + 1) +
+                                          "\n→ Must be a clean filename (no '/', '..', or special characters)");
+                }
             }
         }
     }
 }
+
+void validateFilesystem(const std::vector<Server>& servers) {
+    for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
+        const Server& server = servers[serverIndex];
+
+        for (const Location& loc : server.getLocations()) {
+            const std::string& locationPath = loc.getPath();
+
+            // --- Root
+            const std::string& rootStr = loc.getRoot();
+            if (!rootStr.empty()) {
+                if (!fs::exists(rootStr)) {
+                    throw ValidationError("Root path '" + rootStr + "' does not exist in location '" +
+                                          locationPath + "' of server #" + std::to_string(serverIndex + 1));
+                }
+                if (!fs::is_directory(rootStr)) {
+                    throw ValidationError("Root path '" + rootStr + "' is not a directory in location '" +
+                                          locationPath + "' of server #" + std::to_string(serverIndex + 1));
+                }
+            }
+
+            // --- Upload Store
+            if (loc.isUploadEnabled()) {
+                const std::string& uploadStr = loc.getUploadStore();
+                if (!fs::exists(uploadStr)) {
+                    throw ValidationError("Upload store '" + uploadStr + "' does not exist in location '" +
+                                          locationPath + "' of server #" + std::to_string(serverIndex + 1));
+                }
+                if (!fs::is_directory(uploadStr)) {
+                    throw ValidationError("Upload store '" + uploadStr + "' is not a directory in location '" +
+                                          locationPath + "' of server #" + std::to_string(serverIndex + 1));
+                }
+            }
+        }
+    }
+}
+
 } // namespace
 
 void validateConfig(const Config& config) {
@@ -410,4 +442,5 @@ void validateConfig(const Config& config) {
     validateCgiExtensions(servers);
     validateIndexFiles(servers);
     validateAbsolutePaths(servers);
+    validateFilesystem(servers);
 }
