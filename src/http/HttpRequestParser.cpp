@@ -12,7 +12,8 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
                   int& errorCode, std::size_t& consumedBytes);
 bool isChunkedBodyComplete(const std::string& bodyPart);
 Url parseUrl(HttpRequest& req, const std::string& url);
-bool validateReq(HttpRequest& req, int& errorCode) ;
+bool validateReq(HttpRequest& req, int& errorCode);
+bool isValidHeader(std::string& key);
 
 bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
                               std::size_t clientMaxBodySize, int& errorCode, std::size_t& consumedBytes) {
@@ -71,6 +72,11 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         key.erase(key.find_last_not_of(" \t\r\n") + 1);     // remove trailing whitespace
         value.erase(0, value.find_first_not_of(" \t\r\n")); // remove leading whitespace
 
+        if (!isValidHeader(key)) {
+            std::cerr << "[ERROR] HttpRequestParser: Invalid header key: " << key << std::endl;
+            errorCode = 400;
+            return false;
+        }
         if ((key == "TRANSFER-ENCODING") && value == "chunked" && req.getMethod() == "GET") {
             std::cerr << "[ERROR] HttpRequestParser: Chunked transfer encoding is not allowed in GET requests" << std::endl;
             errorCode = 400;
@@ -101,7 +107,6 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         } else {
             req.setHeader(key, value);
         }
-        //req.setHeader(key, value);
     }
 
     try {
@@ -192,6 +197,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
             errorCode = 0;
             return false;
         }
+        std::cout << "[DEBUG] HttpRequestParser: Handling chunked request" << std::endl;
         chunkReqHandler(req, bodyPart, clientMaxBodySize, errorCode, consumedBytes);
         return errorCode == 0;
     }
@@ -255,5 +261,71 @@ bool validateReq(HttpRequest& req, int& errorCode) {
 		std::cerr << "[ERROR] HttpRequestParser: Invalid HTTP version" << std::endl;
         return false;
     }
+
+    if (req.getPath()[0] != '/') {
+        errorCode = 400;
+        return false;
+    }
+
+    const std::string& transferEncoding = req.getHeader("TRANSFER-ENCODING");
+    if (!transferEncoding.empty() && req.getContentLength() > 0) {
+        errorCode = 400; // Bad Request
+        std::cerr << "Conflicting Transfer-Encoding and Content-Length" << std::endl;
+        return false;
+    }
+
+    // validate header keys and values
+
     return true;
+}
+
+bool isValidHeader(std::string& key) {
+    static const std::set<std::string> validHeaders = {
+        "CONTENT-TYPE",
+        "CONTENT-ENCODING",
+        "CONTENT-LANGUAGE",
+        "CONTENT-LOCATION",
+        "CONTENT-LENGTH",
+        "CONTENT_RANGE",
+        "TRAILER",
+        "TRANSFER-ENCODING",
+        "CACHE-CONTROL",
+        "CONNECTION",
+        "EXPECT",
+        "HOST",
+        "MAX-FORWARDS",
+        "PRAGMA",
+        "RANGE",
+        "TE",
+        "IF-MATCH",
+        "IF-NONE-MATCH",
+        "IF-MODIFIED-SINCE",
+        "IF-UNMODIFIED-SINCE",
+        "IF-RANGE",
+        "ACCEPT",
+        "ACCEPT-CHARSET",
+        "ACCEPT-ENCODING",
+        "ACCEPT-LANGUAGE",
+        "AUTHORIZATION",
+        "PROXY-AUTHORIZATION",
+        "FROM",
+        "REFERER",
+        "USER-AGENT",
+        "AGE",
+        "EXPIRES",
+        "DATE",
+        "LOCATION",
+        "RETRY-AFTER",
+        "VARY",
+        "WARNING",
+        "ETAG",
+        "LAST-MODIFIED",
+        "WWW-AUTHENTICATE",
+        "PROXY-AUTHENTICATE",
+        "ACCEPT-RANGES",
+        "ALLOW",
+        "SERVER",
+        "MIME_VERSION"
+    };
+    return validHeaders.find(key) != validHeaders.end();
 }

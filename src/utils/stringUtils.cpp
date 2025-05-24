@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stringUtils.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/15 21:35:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/24 12:03:28 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <charconv>
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 
 int parseInt(const std::string& value) {
     // Wrapper with default context: no field name, unknown location, empty diagnostic
