@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 21:57:56 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/20 23:16:42 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/24 23:25:23 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include <stdexcept>
 
 namespace {
-const std::string DEFAULT_CONFIG_PATH = "./configs/default.conf";
+inline constexpr std::string_view DEFAULT_CONFIG_PATH{"./configs/default.conf"};
 
 std::string resolveConfigPath(int argc, char** argv) {
     std::string config_path;
@@ -31,7 +31,6 @@ std::string resolveConfigPath(int argc, char** argv) {
     } else if (argc == 2) {
         config_path = argv[1];
     } else if (argc > 2) {
-        printUsage();
         throw std::runtime_error(printUsage());
     }
     return config_path;
@@ -48,7 +47,7 @@ std::string extractFileContent(const std::string& config_path) {
     return buffer.str();
 }
 
-Config loadConfig(std::string& fileContent) {
+Config loadConfig(const std::string& fileContent) {
     ConfigParser parser(fileContent);
     return parser.parseConfig();
 }

@@ -217,7 +217,7 @@ Token Tokenizer::parseIdentifierOrKeyword() {
     scanIdentifier();          // Consume all valid identifier characters
     validateIdentifier(start); // Ensure it's non-empty and well-formed
     std::string word = _input.substr(start, _pos - start); // Extract the identifier text
-    TokenType   type      = resolveKeywordType(word);
+    TokenType   type = resolveKeywordType(word);
     return makeToken(type, word);
 }
 

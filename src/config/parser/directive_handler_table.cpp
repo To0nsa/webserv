@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/23 11:29:20 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/24 14:57:11 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@
 #include "utils/errorUtils.hpp"
 #include "utils/stringUtils.hpp"
 
+#include <filesystem>
 #include <set>
 #include <sstream>
+#include <unistd.h>
 
 namespace directive {
 
@@ -184,8 +186,7 @@ const std::unordered_map<std::string, LocationHandler>& locationHandlers() {
                                  column),
                      ctx);
              }
-             static const std::set<std::string> valid_methods = {
-                 "GET", "POST", "DELETE"};
+             static const std::set<std::string> valid_methods = {"GET", "POST", "DELETE"};
              for (const auto& m : v) {
                  if (!valid_methods.count(m)) {
                      throw SyntaxError(formatError("Invalid HTTP method: " + m, line, column), ctx);
@@ -217,6 +218,25 @@ const std::unordered_map<std::string, LocationHandler>& locationHandlers() {
                      loc.addCgiExtension(ext);
                  }
              }
+         }},
+        {"cgi_interpreter",
+         [](Location& loc, const auto& v, int line, int column, const std::string& ctx) {
+             requireArgCount(v, 2, "cgi_interpreter", line, column, ctx);
+             const std::string& ext  = v[0];
+             const std::string& path = v[1];
+             validateCgiExtension(ext, line, column, [&]() { return ctx; });
+             if (!std::filesystem::is_regular_file(path) || access(path.c_str(), X_OK) != 0) {
+                 throw SyntaxError(
+                     formatError("Interpreter not executable or not found: " + path, line, column),
+                     ctx);
+             }
+             if (!loc.getCgiInterpreter(ext).empty()) {
+                 throw SyntaxError(
+                     formatError("Duplicate cgi_interpreter for " + ext + ": already defined", line,
+                                 column),
+                     ctx);
+             }
+             loc.addCgiInterpreter(ext, path);
          }},
         {"return",
          [](Location& loc, const auto& v, int line, int column, const std::string& ctx) {

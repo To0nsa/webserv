@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 08:46:22 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/22 22:39:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/24 14:30:58 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@
 namespace {
 
 static const std::unordered_set<std::string> kRepeatableServerDirectives   = {"error_page"};
-static const std::unordered_set<std::string> kRepeatableLocationDirectives = {"methods"};
+static const std::unordered_set<std::string> kRepeatableLocationDirectives = {"methods",
+                                                                              "cgi_interpreter"};
 static constexpr std::array<TokenType, 3>    kArgTokenTypes = {TokenType::STRING, TokenType::NUMBER,
                                                                TokenType::IDENTIFIER};
 

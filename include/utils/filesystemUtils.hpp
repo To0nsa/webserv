@@ -17,11 +17,11 @@
 #include "http/HttpRequest.hpp"
 #include "http/HttpResponse.hpp"
 #include <cstring>
+#include <filesystem>
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <sys/stat.h>
-#include <filesystem>
 
 bool         isFile(const std::string& path);
 HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,

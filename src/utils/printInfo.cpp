@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 14:01:22 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/20 23:31:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/24 15:07:38 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,19 @@ void printConfig(Config& config) {
                     if (ci + 1 < cgi.size())
                         std::cout << ", ";
                 }
-                std::cout << "\n\n";
+                std::cout << "\n";
+
+                std::cout << "      - interpreter :\n";
+                bool found = false;
+                for (size_t ci = 0; ci < cgi.size(); ++ci) {
+                    std::string interp = loc.getCgiInterpreter(cgi[ci]);
+                    if (!interp.empty()) {
+                        std::cout << "          - " << cgi[ci] << " → " << interp << "\n";
+                        found = true;
+                    }
+                }
+                if (!found)
+                    std::cout << "          (none)\n";
             }
         }
     }

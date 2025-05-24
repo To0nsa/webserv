@@ -18,9 +18,9 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <regex>
 #include <sstream>
 #include <string>
-#include <regex>
 
 namespace fs = std::filesystem;
 
@@ -160,7 +160,8 @@ bool isSuspiciousFilename(const std::string& filename) {
 
     fs::path p(filename);
 
-    if (p.has_parent_path() || filename.find('/') != std::string::npos || containsTraversal(filename))
+    if (p.has_parent_path() || filename.find('/') != std::string::npos ||
+        containsTraversal(filename))
         return true;
 
     // Must not start with a dot or dash
