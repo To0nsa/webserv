@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 11:42:16 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/24 12:13:53 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ HttpResponse generateRedirect(int status_code, const std::string& location,
     // Set the Location header to indicate the redirect target
     response.setHeader("Location", location);
     // No body is sent in most redirects → explicitly set Content-Length to 0
-    response.setHeader("Content-Length", "0");
+    //response.setHeader("Content-Length", "0");
     return response;
 }
 
