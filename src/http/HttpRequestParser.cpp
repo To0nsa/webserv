@@ -13,7 +13,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
 bool isChunkedBodyComplete(const std::string& bodyPart);
 Url parseUrl(HttpRequest& req, const std::string& url);
 bool validateReq(HttpRequest& req, int& errorCode);
-bool isValidHeader(std::strin& key);
+bool isValidHeader(std::string& key);
 
 bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
                               std::size_t clientMaxBodySize, int& errorCode) {
@@ -104,7 +104,6 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         } else {
             req.setHeader(key, value);
         }
-        req.setHeader(key, value);
     }
 
     try {
@@ -247,6 +246,7 @@ bool validateReq(HttpRequest& req, int& errorCode) {
         return false;
     }
 
+    const std::string& transferEncoding = req.getHeader("TRANSFER-ENCODING");
     if (!transferEncoding.empty() && req.getContentLength() > 0) {
         errorCode = 400; // Bad Request
         std::cerr << "Conflicting Transfer-Encoding and Content-Length" << std::endl;
@@ -258,53 +258,53 @@ bool validateReq(HttpRequest& req, int& errorCode) {
     return true;
 }
 
-bool isValidHeader(std::strin& key){
-    switch (key) {
-        case "CONTENT-TYPE": return true;
-        case "CONTENT-ENCODING": return true;
-        case "CONTENT-LANGUAGE": return true;
-        case "CONTENT-LOCATION": return true;
-        case "CONTENT-LENGTH": return true;
-        case "CONTENT_RANGE": return true;
-        case "TRAILER": return true;
-        case "TRANSFER-ENCODING": return true;
-        case "CACHE-CONTROL": return true;
-        case "CONNECTION": return true;
-        case "EXPECT": return true;
-        case "HOST": return true;
-        case "MAX-FORWARDS": return true;
-        case "PRAGMA": return true;
-        case "RANGE": return true;
-        case "TE": return true;
-        case "IF-MATCH": return true;
-        case "IF-NONE-MATCH": return true;
-        case "IF-MODIFIED-SINCE": return true;
-        case "IF-UNMODIFIED-SINCE": return true;
-        case "IF-RANGE": return true;
-        case "ACCEPT": return true;
-        case "ACCEPT-CHARSET": return true;
-        case "ACCEPT-ENCODING": return true;
-        case "ACCEPT-LANGUAGE": return true
-        case "AUTHORIZATION": return true;
-        case "PROXY-AUTHORIZATION": return true;
-        case "FROM": return true;
-        case "REFERER": return true;
-        case "USER-AGENT": return true;
-        case "AGE": return true;
-        case "EXPIRES": return true;
-        case "DATE": return true;
-        case "LOCATION": return true;
-        case "RETRY-AFTER": return true;
-        case "VARY": return true;
-        case "WARNING": return true;
-        case "ETAG": return true;
-        case "LAST-MODIFIED": return true;
-        case "WWW-AUTHENTICATE": return true;
-        case "PROXY-AUTHENTICATE": return true;
-        case "ACCEPT-RANGES": return true;
-        case "ALLOW": return true;
-        case "SERVER": return true;
-        case "MIME_VERSION": return true;
-        default: return false;
-    }
+bool isValidHeader(std::string& key) {
+    static const std::set<std::string> validHeaders = {
+        "CONTENT-TYPE",
+        "CONTENT-ENCODING",
+        "CONTENT-LANGUAGE",
+        "CONTENT-LOCATION",
+        "CONTENT-LENGTH",
+        "CONTENT_RANGE",
+        "TRAILER",
+        "TRANSFER-ENCODING",
+        "CACHE-CONTROL",
+        "CONNECTION",
+        "EXPECT",
+        "HOST",
+        "MAX-FORWARDS",
+        "PRAGMA",
+        "RANGE",
+        "TE",
+        "IF-MATCH",
+        "IF-NONE-MATCH",
+        "IF-MODIFIED-SINCE",
+        "IF-UNMODIFIED-SINCE",
+        "IF-RANGE",
+        "ACCEPT",
+        "ACCEPT-CHARSET",
+        "ACCEPT-ENCODING",
+        "ACCEPT-LANGUAGE",
+        "AUTHORIZATION",
+        "PROXY-AUTHORIZATION",
+        "FROM",
+        "REFERER",
+        "USER-AGENT",
+        "AGE",
+        "EXPIRES",
+        "DATE",
+        "LOCATION",
+        "RETRY-AFTER",
+        "VARY",
+        "WARNING",
+        "ETAG",
+        "LAST-MODIFIED",
+        "WWW-AUTHENTICATE",
+        "PROXY-AUTHENTICATE",
+        "ACCEPT-RANGES",
+        "ALLOW",
+        "SERVER",
+        "MIME_VERSION"
+    };
+    return validHeaders.find(key) != validHeaders.end();
 }
