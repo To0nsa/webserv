@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/24 12:07:20 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/24 18:44:58 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,103 +323,70 @@ void SocketManager::handleNewConnection(int listen_fd) {
     _client_info[client_fd] = info;
 }
 
-bool isValidParsedHeaderMethod(const HttpRequest& request, const Server& server, int& errorCode) {
-    static const std::set<std::string> implemented = {"GET", "POST", "DELETE"};
-
-    const std::string& method = request.getMethod();
-    const std::string& path   = request.getPath();
-
-    if (implemented.find(method) == implemented.end()) {
-        errorCode = 501;
-        return false;
-    }
-
-     // Find matching location
-    const Location* matched     = nullptr;
-    size_t          maxMatchLen = 0;
-
-    for (const Location& loc : server.getLocations()) {
-        const std::string& locPath = normalizePath(loc.getPath());
-        if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
-            matched     = &loc;
-            maxMatchLen = locPath.size();
-        }
-    }
-
-    if (!matched) {
-        errorCode = 404;
-        return false;
-    }
-
-    const Location& location = *matched;
-
-    if (!location.isMethodAllowed(method)) {
-        errorCode = 405;
-        return false;
-    }
-
-    return true;
-}
-
 // Read data from client, send fixed response, then close
 bool SocketManager::handleClientData(int client_fd, size_t index) {
-    if (!receiveFromClient(client_fd, index))
+    if (!receiveFromClient(client_fd, index)) {
         return false;
-    if (checkRequestLimits(client_fd)) {
-		resetRequestState(client_fd);
-		_client_info[client_fd].requestBuffer.clear();
-        return true;
 	}
-
-    HttpRequest request;
-    int         errorCode = 0;
-	std::size_t consumedBytes = 0;
-    if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
-                                  _client_info[client_fd].serverConfig.getClientMaxBodySize(),
-                                  errorCode, consumedBytes)) {
-
-        if (errorCode == 0){
-             std::cout << "Incomplete request, waiting for more data" << std::endl;
-/*            std::cout << "_client_info[client_fd].headerComplete: "
-                      << _client_info[client_fd].headerComplete << std::endl; */
-            /* if (_client_info[client_fd].headerComplete && !isValidParsedHeaderMethod(request, _client_info[client_fd].serverConfig, errorCode)) {
-                HttpResponse err = ResponseBuilder::generateError(
-                    errorCode, _client_info[client_fd].serverConfig, request);
-				resetRequestState(client_fd);
-				std::cout << "[1]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
-				std::cout << "[1]consumedBytes size is {" << consumedBytes << "}" << std::endl;
-				std::cout << "[1]requestBuffer size after erase is {" << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}" << std::endl;
-				_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
-				_client_info[client_fd].requestBuffer.clear();
-                _client_info[client_fd].responses.push(err);
-                return true;
-            } */
-            return false; // Incomplete data — wait for more
-        }
-        else {
-            HttpResponse err = ResponseBuilder::generateError(
-                errorCode, _client_info[client_fd].serverConfig, request);
+	while (true) {
+		if (checkRequestLimits(client_fd)) {
 			resetRequestState(client_fd);
-			request.printRequest();
-			std::cout << "[2]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
-				std::cout << "[2]consumedBytes size is {" << consumedBytes << "}" << std::endl;
-				std::cout << "[2]requestBuffer size after erase is {" << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}" << std::endl;
-			_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
 			_client_info[client_fd].requestBuffer.clear();
-            _client_info[client_fd].responses.push(err);
-            return true; // We queued a response
-        }
-    }
-    request.printRequest();
-    resetRequestState(client_fd);
-	std::cout << "[3]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
-				std::cout << "[3]consumedBytes size is {" << consumedBytes << "}" << std::endl;
-				std::cout << "[3]requestBuffer size after erase is {" << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}" << std::endl;
-	_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
+			return true;
+		}
+		HttpRequest request;
+		int         errorCode = 0;
+		std::size_t consumedBytes = 0;
+		if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
+									_client_info[client_fd].serverConfig.getClientMaxBodySize(),
+									errorCode, consumedBytes)) {
 
-    const Server& server   = _client_info[client_fd].serverConfig;
-    HttpResponse  response = handleRequest(request, server);
-    _client_info[client_fd].responses.push(response);
+			if (errorCode == 0){
+				std::cout << "Incomplete request, waiting for more data" << std::endl;
+				return false; // Incomplete data — wait for more
+			}
+			else {
+				HttpResponse err = ResponseBuilder::generateError(
+					errorCode, _client_info[client_fd].serverConfig, request);
+				resetRequestState(client_fd);
+				request.printRequest();
+				std::cout << "[2]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
+					std::cout << "[2]consumedBytes size is {" << consumedBytes << "}" << std::endl;
+					std::cout << "[2]requestBuffer size after erase is {" << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}" << std::endl;
+				_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
+				_client_info[client_fd].responses.push(err);
+				// If keep-alive is false, break the loop to close connection
+				if (err.isConnectionClose()) {
+					break;
+				}
+		
+				// If no more complete request left, break
+				if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
+					break;
+				}
+				continue; // We queued a response and continue processing the next request in pipeline
+			}
+		}
+		request.printRequest();
+		resetRequestState(client_fd);
+		std::cout << "[3]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
+		std::cout << "[3]consumedBytes size is {" << consumedBytes << "}" << std::endl;
+		std::cout << "[3]requestBuffer size after erase is {" << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}" << std::endl;
+		_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
+
+		const Server& server   = _client_info[client_fd].serverConfig;
+		HttpResponse  response = handleRequest(request, server);
+		_client_info[client_fd].responses.push(response);
+		// If keep-alive is false, break the loop to close connection
+        if (response.isConnectionClose()) {
+            break;
+        }
+
+        // If no more complete request left, break
+        if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
+            break;
+        }
+	}
 
     return (true);
 }
@@ -459,9 +426,11 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 
         if (!response.isConnectionClose()) {
             std::cout << "Connection: keep-alive - keeping the connection open" << std::endl;
+			if (_client_info[client_fd].responses.empty()) {
             // We should not close the client connection, but just reset the POLLOUT flag if needed
             _poll_fds[index].events &=
                 ~POLLOUT; // Reset POLLOUT flag if the connection should stay open
+			}
         } else {
             // If it's not keep-alive, close the connection
             std::cout << "Connection: close - closing the connection" << std::endl;
