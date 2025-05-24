@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/24 12:13:53 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/24 13:43:42 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,17 +117,21 @@ HttpResponse generateError(int status_code, const Server& server, const HttpRequ
             body.assign((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     }
     // If no custom page or file is missing, generate a simple default HTML message
-    if (body.empty()) {
+    /* if (body.empty()) {
         std::ostringstream ss;
         ss << "<html><body><h1>" << status_code << " " << message << "</h1></body></html>";
         body = ss.str();
-    }
+    } */
     // Set status, connection headers, and keep-alive logic
     initializeResponse(response, status_code, message, request);
     // Always serve error pages as text/html
     response.setHeader("Content-Type", "text/html");
     // Attach the generated or loaded error page body
-    response.setBody(body);
+	if (!body.empty()) {
+		response.setBody(body);
+	}
+    /* response.setBody(body); */
+	
     return response;
 }
 
