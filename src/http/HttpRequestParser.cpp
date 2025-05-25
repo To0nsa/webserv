@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 13:09:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/25 14:37:28 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 20:10:11 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,13 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
 
     // 1) Locate end of headers
     auto headerEndPos = raw_req.find(HEADER_BODY_DELIM);
-    if (headerEndPos == std::string::npos) // header incomplete
+    if (headerEndPos == std::string::npos) {
+        // incomplete or malformed header block
+        if (raw_req.find('\n') != std::string::npos) {
+            errorCode = 400; // header contains \n but not properly delimited
+        }
         return false;
+    }
 
     size_t      headerLen  = headerEndPos + HEADER_BODY_DELIM_LEN;
     std::string headerPart = raw_req.substr(0, headerEndPos);
@@ -103,6 +108,12 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
         return false;
 
     req.setBody(bodyPart.substr(0, len));
+    std::string tail = bodyPart.substr(len);
+    if (!tail.empty() && tail.find("HTTP/1.1") != std::string::npos) {
+        // looks like a rogue header line inside a body
+        errorCode = 400;
+        return false;
+    }
     consumed = headerLen + len;
     return true;
 }

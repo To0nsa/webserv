@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 13:30:02 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 20:12:57 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,51 +173,74 @@ const char* SocketManager::SocketError::what() const throw() {
 // Set up sockets for each server (host:port)
 void SocketManager::setupSockets(const std::vector<Server>& servers) {
     for (size_t i = 0; i < servers.size(); ++i) {
+        // 1. Create socket
         int fd = socket(AF_INET, SOCK_STREAM, 0);
-        // int fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0); // Create a TCP socket
-        if (fd < 0)
+        if (fd < 0) {
             throw SocketError("socket() failed: " + std::string(std::strerror(errno)));
+        }
 
-        int opt =
-            1; // To tell the OS: "I want to reuse this port immediately, even if it's in TIME_WAIT
+        // 2. Allow immediate port reuse (TIME_WAIT)
+        int opt = 1;
         if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
             close(fd);
-            throw SocketError("setsockopt() failed: " + std::string(std::strerror(errno)));
+            throw SocketError("setsockopt(SO_REUSEADDR) failed: " +
+                              std::string(std::strerror(errno)));
         }
 
-        // MacOS
-        if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0) { // Make socket non-blocking
+        // 3. Allow multiple binds on same port (optional, safe fallback)
+#ifdef SO_REUSEPORT
+        if (setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(opt)) < 0) {
             close(fd);
-            throw SocketError("fcntl() failed: " + std::string(std::strerror(errno)));
+            throw SocketError("setsockopt(SO_REUSEPORT) failed: " +
+                              std::string(std::strerror(errno)));
+        }
+#endif
+
+        // 4. Set socket to non-blocking mode (required for poll/epoll)
+        if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0) {
+            close(fd);
+            throw SocketError("fcntl(O_NONBLOCK) failed: " + std::string(std::strerror(errno)));
         }
 
-        sockaddr_in addr;
-        addr.sin_family = AF_INET;
-        addr.sin_port   = htons(servers[i].getPort()); // Convert port to network byte order
+        // 5. Apply read timeout to prevent hangs on partial recv
+        struct timeval timeout;
+        timeout.tv_sec  = 5; // 5 second timeout
+        timeout.tv_usec = 0;
+        if (setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) < 0) {
+            close(fd);
+            throw SocketError("setsockopt(SO_RCVTIMEO) failed: " +
+                              std::string(std::strerror(errno)));
+        }
 
-        // Convert hostname to IP address
-        if (servers[i].getHost() == "localhost")
+        // 6. Bind to the appropriate IP + port
+        sockaddr_in addr = {};
+        addr.sin_family  = AF_INET;
+        addr.sin_port    = htons(servers[i].getPort());
+
+        const std::string& host = servers[i].getHost();
+        if (host == "localhost") {
             addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-        else
-            addr.sin_addr.s_addr = inet_addr(servers[i].getHost().c_str());
-
-        if (bind(fd, (sockaddr*) &addr, sizeof(addr)) < 0) { // Bind socket to IP:port
-            close(fd);
-            throw SocketError("bind() failed on " + servers[i].getHost() + ":" +
-                              std::to_string(servers[i].getPort()) + ": " + strerror(errno));
+        } else {
+            addr.sin_addr.s_addr = inet_addr(host.c_str());
         }
 
-        if (listen(fd, SOMAXCONN) < 0) { // Start listening for incoming connections
+        if (bind(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
+            close(fd);
+            throw SocketError("bind() failed on " + host + ":" +
+                              std::to_string(servers[i].getPort()) + ": " + std::strerror(errno));
+        }
+
+        // 7. Start listening
+        if (listen(fd, SOMAXCONN) < 0) {
             close(fd);
             throw SocketError("listen() failed: " + std::string(std::strerror(errno)));
         }
 
-        // Register fd in poll list
-        _poll_fds.push_back((pollfd){fd, POLLIN, 0});
-        _listen_map[fd] = servers[i]; // Map fd to its corresponding server
+        // 8. Register in poll list and server map
+        _poll_fds.push_back(pollfd{fd, POLLIN, 0});
+        _listen_map[fd] = servers[i];
 
-        std::cout << "Listening on " << servers[i].getHost() << ":" << servers[i].getPort()
-                  << std::endl;
+        std::cout << "Listening on " << host << ":" << servers[i].getPort() << std::endl;
     }
 }
 
