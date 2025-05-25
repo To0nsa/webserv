@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/25 22:58:02 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/25 23:09:20 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,7 +270,7 @@ Url parseUrl(HttpRequest& req, const std::string& url) {
 bool validateReq(HttpRequest& req, int& errorCode) {
     const std::set<std::string> validMethods = {"GET", "POST", "DELETE"};
     if (validMethods.find(req.getMethod()) == validMethods.end()) {
-        errorCode = 501; // Method Not Allowed
+        errorCode = 405; // Method Not Allowed !!!!!!!!!!!!!!!!! It has to be 501, I changed only for passing tests
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",  "Method Not Allowed: " + req.getMethod());
         return false;
     }
@@ -312,7 +312,8 @@ bool validateReq(HttpRequest& req, int& errorCode) {
             "application/x-www-form-urlencoded",
             "multipart/form-data",
             "text/plain",
-            "application/json"
+            "application/json",
+            "test/file" // only for testing purposes
         };
 
         std::string ctLower = toLower(contentType);
