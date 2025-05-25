@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 23:23:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/25 14:26:17 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 21:13:37 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,7 +341,7 @@ void validateIndexFiles(const std::vector<Server>& servers) {
     }
 }
 
-void validateAbsolutePaths(const std::vector<Server>& servers) {
+/* void validateAbsolutePaths(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
         const Server& server = servers[serverIndex];
 
@@ -379,20 +379,18 @@ void validateAbsolutePaths(const std::vector<Server>& servers) {
             }
 
             // --- Index files
-            /*             const std::vector<std::string>& indices = loc.getIndexFiles();
-                        for (const std::string& index : indices) {
-                            if (!index.empty() && isSuspiciousFilename(index)) {
-                                throw ValidationError(
-                                    "Invalid index file '" + index + "' in location '" +
-               locationPath +
-                                    "' of server #" + std::to_string(serverIndex + 1) +
-                                    "\n→ Must be a clean filename (no '/', '..', or special
-               characters)");
-                            }
-                        } */
+            const std::vector<std::string>& indices = loc.getIndexFiles();
+            for (const std::string& index : indices) {
+                if (!index.empty() && isSuspiciousFilename(index)) {
+                    throw ValidationError(
+                        "Invalid index file '" + index + "' in location '" + locationPath +
+                        "' of server #" + std::to_string(serverIndex + 1) +
+                        "\n→ Must be a clean filename (no '/', '..', or special characters)");
+                }
+            }
         }
     }
-}
+} */
 
 void validateCgiInterpreters(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
@@ -430,7 +428,7 @@ void validateCgiInterpreters(const std::vector<Server>& servers) {
     }
 }
 
-void validateFilesystem(const std::vector<Server>& servers) {
+/* void validateFilesystem(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
         const Server& server = servers[serverIndex];
 
@@ -468,7 +466,7 @@ void validateFilesystem(const std::vector<Server>& servers) {
             }
         }
     }
-}
+} */
 
 } // namespace
 
@@ -486,7 +484,7 @@ void validateConfig(const Config& config) {
     validateClientMaxBodySize(servers);
     validateCgiExtensions(servers);
     validateIndexFiles(servers);
-    validateAbsolutePaths(servers);
+    // validateAbsolutePaths(servers);
     validateCgiInterpreters(servers);
-    validateFilesystem(servers);
+    // validateFilesystem(servers);
 }
