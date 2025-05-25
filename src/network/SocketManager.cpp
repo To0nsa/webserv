@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 23:13:28 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/25 23:19:33 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "http/HttpRequestParser.hpp"
 #include "http/HttpResponse.hpp"
 #include "http/HttpResponseBuilder.hpp"
+#include "utils/filesystemUtils.hpp"
 #include <sstream> // For stringstream, we will remove it later
 
 // Signal handler for exiting the server
@@ -485,7 +486,7 @@ bool SocketManager::handleCgiRequest(int client_fd, const HttpRequest& request,
     return true; // handled as CGI
 }
 
-static const Location* findMatchingLocation(const std::string& path, const Server& server) {
+/* static const Location* findMatchingLocation(const std::string& path, const Server& server) {
     const Location* best = nullptr;
     size_t          max  = 0;
     for (const Location& loc : server.getLocations()) {
@@ -495,7 +496,7 @@ static const Location* findMatchingLocation(const std::string& path, const Serve
         }
     }
     return best;
-}
+} */
 
 bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (!receiveFromClient(client_fd, index)) {
@@ -548,20 +549,34 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 		_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
 
 		const Server&   server   = _client_info[client_fd].serverConfig;
-        const Location* location = findMatchingLocation(request.getPath(), server);
+         // Find matching location
+         const std::string& method = request.getMethod();
+        const std::string& path   = request.getPath();
+        const Location* matched     = nullptr;
+        size_t          maxMatchLen = 0;
 
-        if (!location) {
+        for (const Location& loc : server.getLocations()) {
+            const std::string& locPath = normalizePath(loc.getPath());
+            if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
+                matched     = &loc;
+                maxMatchLen = locPath.size();
+            }
+        }
+
+        if (!matched) {
             respondError(client_fd, 404);
             return true;
         }
 
-        if (!location->isMethodAllowed(request.getMethod())) {
+        const Location& location = *matched;
+
+        if (!location.isMethodAllowed(method)) {
             respondError(client_fd, 405);
             return true;
         }
 
-        if (location->isCgiRequest(request.getPath())) {
-            return handleCgiRequest(client_fd, request, server, *location);
+        if (location.isCgiRequest(path)) {
+            return handleCgiRequest(client_fd, request, server, location);
         }
 
         // Fallback to standard GET/POST/DELETE handler
