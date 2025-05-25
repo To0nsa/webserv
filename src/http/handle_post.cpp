@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 15:11:54 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 19:39:20 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,15 +251,17 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     // 5) Derive filename + full paths
     std::string filename;
     if (relative.empty())
-        filename = "upload_" + std::to_string(std::time(nullptr));
+        filename = generateUniqueFilename();
     else
         filename = extractFilename(relative);
     std::string fullDirPath, fullpath;
     std::tie(fullDirPath, fullpath) = resolveUploadPaths(loc, relative, filename);
 
     // 6) Ensure directory exists and no overwrite
-    if (!ensureDirectoryExists(fullDirPath))
+    if (!ensureDirectoryExists(fullDirPath)) {
+        std::cerr << "[POST] Failed to create directory: " << fullDirPath << std::endl;
         return ResponseBuilder::generateError(500, server, request);
+    }
     if (isFile(fullpath)) {
         std::cerr << "[POST] File already exists: " << fullpath << std::endl;
         return ResponseBuilder::generateError(400, server, request);

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/23 12:40:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 19:39:02 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,9 @@ std::string buildFilePath(const HttpRequest& request, const Location& loc) {
 
 bool ensureDirectoryExists(const std::string& path) {
     try {
+        if (fs::exists(path)) {
+            return fs::is_directory(path);
+        }
         return fs::create_directories(path);
     } catch (const fs::filesystem_error& e) {
         std::cerr << "[ensureDirectoryExists] Error creating directories: " << e.what() << '\n';
@@ -171,4 +174,14 @@ bool isSuspiciousFilename(const std::string& filename) {
     // Enforce strict whitelist pattern: no multiple dots, only one extension, valid suffix
     static const std::regex strictPattern(R"(^[a-zA-Z0-9_-]+\.(html?|txt|php|cgi)$)");
     return !std::regex_match(filename, strictPattern);
+}
+
+std::string generateUniqueFilename() {
+    auto now = std::chrono::system_clock::now();
+    auto micros =
+        std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch()).count();
+
+    std::ostringstream oss;
+    oss << "upload_" << micros;
+    return oss.str();
 }
