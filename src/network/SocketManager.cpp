@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 12:55:50 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/25 13:41:14 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,9 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
     if (headerEndPos == std::string::npos) {
         // Header not complete yet
         std::cout << "we didn't find end of header" << std::endl;
+		if (_client_info[client_fd].headerBytesReceived == 0) {
+			_client_info[client_fd].connectionStartTime = time(NULL);
+		}
         _client_info[client_fd].headerBytesReceived += bytes;
     } else {
         if (!_client_info[client_fd].headerComplete) {
@@ -175,9 +178,7 @@ void SocketManager::respondError(int fd, int status_code) {
 }
 
 bool SocketManager::checkRequestLimits(int fd) {
-    size_t max_size = _client_info[fd].serverConfig.getClientMaxBodySize(); // body check is wrong
-    if (_client_info[fd].bodyBytesReceived > max_size ||
-        _client_info[fd].headerBytesReceived > HEADER_MAX_LENGTH) {
+    if (_client_info[fd].headerBytesReceived > HEADER_MAX_LENGTH) {
         std::cout << "Request too large from fd: " << fd << std::endl;
         respondError(fd, 413);
         return true;
