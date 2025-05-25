@@ -6,7 +6,7 @@
 #    By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/12 14:38:20 by irychkov          #+#    #+#              #
-#    Updated: 2025/05/12 14:58:24 by irychkov         ###   ########.fr        #
+#    Updated: 2025/05/25 20:25:02 by irychkov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,12 +14,12 @@ import socket
 import time
 
 HOST = '127.0.0.1'  # Replace with your server's IP if remote
-PORT = 8080         # Adjust to match your server port
+PORT = 8001         # Adjust to match your server port
 REQUEST = b"GET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n"
 
 # How many bytes to read per chunk
 READ_CHUNK = 1  # Very small to simulate a slow reader
-READ_DELAY = 2  # Delay between reads in seconds
+READ_DELAY = 3  # Delay between reads in seconds
 
 def slow_read_client():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
