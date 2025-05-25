@@ -14,7 +14,7 @@
 
 constexpr size_t               DEFAULT_CLIENT_MAX_BODY_SIZE = 1 * 1024 * 1024;
 const std::string              DEFAULT_ERROR_PAGE_PATH      = "/error.html";
-const std::string              DEFAULT_ROOT                 = "/var/www";
+const std::string              DEFAULT_ROOT                 = "/Users/irychkov/Desktop/webserv_team"; //!!!!!!!!!
 const std::string              DEFAULT_INDEX                = "index.html";
 const std::vector<std::string> DEFAULT_METHODS              = {"GET", "POST", "DELETE"};
 

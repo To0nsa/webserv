@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 21:56:10 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/25 22:13:43 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,7 +410,7 @@ void SocketManager::run() {
                     if (!handleClientData(current_fd, i))
                         continue;
                     // we have a response queued, request poll‐out
-                    pfd.events |= POLLOUT;
+                    _poll_fds[i].events |= POLLOUT;
                 }
             }
 

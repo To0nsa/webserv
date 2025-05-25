@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validateConfig.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 23:23:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/24 15:06:17 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 22:30:44 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,7 +378,7 @@ void validateAbsolutePaths(const std::vector<Server>& servers) {
                 }
             }
 
-            // --- Index files
+            /* // --- Index files /// !!!!!!!!!!!!!!!!!!!!!!!
             const std::vector<std::string>& indices = loc.getIndexFiles();
             for (const std::string& index : indices) {
                 if (!index.empty() && isSuspiciousFilename(index)) {
@@ -387,7 +387,7 @@ void validateAbsolutePaths(const std::vector<Server>& servers) {
                         "' of server #" + std::to_string(serverIndex + 1) +
                         "\n→ Must be a clean filename (no '/', '..', or special characters)");
                 }
-            }
+            } */
         }
     }
 }
@@ -428,7 +428,7 @@ void validateCgiInterpreters(const std::vector<Server>& servers) {
     }
 }
 
-void validateFilesystem(const std::vector<Server>& servers) {
+/* void validateFilesystem(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
         const Server& server = servers[serverIndex];
 
@@ -466,7 +466,7 @@ void validateFilesystem(const std::vector<Server>& servers) {
             }
         }
     }
-}
+} */
 
 } // namespace
 
@@ -486,5 +486,5 @@ void validateConfig(const Config& config) {
     validateIndexFiles(servers);
     validateAbsolutePaths(servers);
     validateCgiInterpreters(servers);
-    validateFilesystem(servers);
+    /* validateFilesystem(servers); */
 }
