@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 00:03:11 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 13:30:02 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -447,51 +447,71 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (!receiveFromClient(client_fd, index))
         return false;
 
-    if (checkRequestLimits(client_fd))
+    if (checkRequestLimits(client_fd) || isHeaderTimeout(client_fd))
         return true;
 
-    if (isHeaderTimeout(client_fd))
-        return true;
+    auto& buf        = _client_info[client_fd].requestBuffer;
+    auto  maxBody    = _client_info[client_fd].serverConfig.getClientMaxBodySize();
+    bool  didEnqueue = false;
 
-    HttpRequest request;
-    int         errorCode = 0;
+    // Parse as many complete requests as are sitting in buf (pipelining!)
+    while (true) {
+        HttpRequest request;
+        int         errorCode = 0;
+        size_t      consumed  = 0;
 
-    if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
-                                  _client_info[client_fd].serverConfig.getClientMaxBodySize(),
-                                  errorCode)) {
-        if (errorCode == 0)
-            return false; // Incomplete data — wait for more
-        else {
+        bool complete = HttpRequestParser::parse(request, buf, maxBody, errorCode, consumed);
+
+        if (!complete) {
+            if (errorCode == 0) {
+                // Incomplete → need more bytes before we can parse another request
+                break;
+            }
+            // Protocol error → send an error response, drop buffer, stop parsing
             HttpResponse err = ResponseBuilder::generateError(
                 errorCode, _client_info[client_fd].serverConfig, request);
             _client_info[client_fd].responses.push(err);
-            return true; // We queued a response
+            buf.clear();
+            didEnqueue = true;
+            break;
         }
+
+        // We have a full request in buf[0..consumed)
+        buf.erase(0, consumed);
+
+        // Dispatch exactly as before
+        request.printRequest();
+        const Server&   server   = _client_info[client_fd].serverConfig;
+        const Location* location = findMatchingLocation(request.getPath(), server);
+
+        if (!location) {
+            respondError(client_fd, 404);
+            didEnqueue = true;
+            continue;
+        }
+
+        if (!location->isMethodAllowed(request.getMethod())) {
+            respondError(client_fd, 405);
+            didEnqueue = true;
+            continue;
+        }
+
+        if (location->isCgiRequest(request.getPath())) {
+            // CGI may do its own enqueuing
+            didEnqueue |= handleCgiRequest(client_fd, request, server, *location);
+        } else {
+            // Normal GET/POST/DELETE
+            HttpResponse response = handleRequest(request, server);
+            _client_info[client_fd].responses.push(response);
+            didEnqueue = true;
+        }
+
+        // If this request asked for Connection: close, break here
+        if (request.getHeader("CONNECTION") == "close")
+            break;
     }
 
-    request.printRequest();
-
-    const Server&   server   = _client_info[client_fd].serverConfig;
-    const Location* location = findMatchingLocation(request.getPath(), server);
-
-    if (!location) {
-        respondError(client_fd, 404);
-        return true;
-    }
-
-    if (!location->isMethodAllowed(request.getMethod())) {
-        respondError(client_fd, 405);
-        return true;
-    }
-
-    if (location->isCgiRequest(request.getPath())) {
-        return handleCgiRequest(client_fd, request, server, *location);
-    }
-
-    // Fallback to standard GET/POST/DELETE handler
-    HttpResponse response = handleRequest(request, server);
-    _client_info[client_fd].responses.push(response);
-    return true;
+    return didEnqueue || !buf.empty();
 }
 
 // Accept new client and add to poll list

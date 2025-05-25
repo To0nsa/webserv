@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 21:09:34 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 14:18:17 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <set>
 #include <sstream>
 
-HttpRequest::HttpRequest(void) {
+HttpRequest::HttpRequest(void) : _contentLength(0) {
 }
 
 HttpRequest::~HttpRequest(void) {
@@ -116,4 +116,8 @@ void HttpRequest::setContentLength(size_t len) {
 
 void HttpRequest::setUrl(const Url& url) {
     _url = url;
+}
+
+void HttpRequest::setQuery(const std::string& query) {
+    _query = query;
 }

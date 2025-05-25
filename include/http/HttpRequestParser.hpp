@@ -6,8 +6,8 @@
 
 class HttpRequestParser {
   public:
-    static bool parse(HttpRequest& req, const std::string& raw_req, std::size_t clientMaxBodySize,
-                      int& errorCode);
+    static bool parse(HttpRequest&, const std::string&, std::size_t clientMaxBodySize,
+                      int& errorCode, std::size_t& consumed);
 
   private:
     HttpRequestParser()                                          = delete;

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 23:23:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/24 15:06:17 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 14:26:17 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,15 +379,17 @@ void validateAbsolutePaths(const std::vector<Server>& servers) {
             }
 
             // --- Index files
-            const std::vector<std::string>& indices = loc.getIndexFiles();
-            for (const std::string& index : indices) {
-                if (!index.empty() && isSuspiciousFilename(index)) {
-                    throw ValidationError(
-                        "Invalid index file '" + index + "' in location '" + locationPath +
-                        "' of server #" + std::to_string(serverIndex + 1) +
-                        "\n→ Must be a clean filename (no '/', '..', or special characters)");
-                }
-            }
+            /*             const std::vector<std::string>& indices = loc.getIndexFiles();
+                        for (const std::string& index : indices) {
+                            if (!index.empty() && isSuspiciousFilename(index)) {
+                                throw ValidationError(
+                                    "Invalid index file '" + index + "' in location '" +
+               locationPath +
+                                    "' of server #" + std::to_string(serverIndex + 1) +
+                                    "\n→ Must be a clean filename (no '/', '..', or special
+               characters)");
+                            }
+                        } */
         }
     }
 }

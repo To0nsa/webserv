@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 21:35:26 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 15:11:54 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,47 +221,65 @@ resolveUploadPaths(const Location& loc, const std::string& relative, const std::
 HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc) {
     std::cout << "[POST] Upload store: {" << loc.getUploadStore() << "}" << std::endl;
 
-    if (request.getBody().empty()) {
-        std::cout << "[POST] Body is empty — returning 400" << std::endl;
+    // 1) Only reject if client asked for a body (Content-Length>0) but none arrived
+    if (request.getContentLength() > 0 && request.getBody().empty()) {
+        std::cout << "[POST] Body is empty despite non-zero Content-Length — returning 400"
+                  << std::endl;
         return ResponseBuilder::generateError(400, server, request);
     }
 
+    // 2) Enforce max-body size
     if (request.getBody().size() > server.getClientMaxBodySize()) {
         std::cout << "[POST] Body too large (" << request.getBody().size()
                   << " bytes) — returning 413" << std::endl;
         return ResponseBuilder::generateError(413, server, request);
     }
 
+    // 3) Must have configured upload directory
     if (loc.getUploadStore().empty()) {
         std::cout << "[POST] Upload store is not configured — returning 403" << std::endl;
         return ResponseBuilder::generateError(403, server, request);
     }
 
+    // 4) Compute where under upload_store this goes
     std::string relative = resolveRelativePath(request, loc);
     if (relative.find("..") != std::string::npos) {
         std::cerr << "[POST] Invalid relative: " << relative << std::endl;
         return ResponseBuilder::generateError(400, server, request);
     }
-    /* std::cout << "[POST] Relative: " << relative << std::endl; */
 
-    std::string filename = extractFilename(relative);
+    // 5) Derive filename + full paths
+    std::string filename;
+    if (relative.empty())
+        filename = "upload_" + std::to_string(std::time(nullptr));
+    else
+        filename = extractFilename(relative);
     std::string fullDirPath, fullpath;
     std::tie(fullDirPath, fullpath) = resolveUploadPaths(loc, relative, filename);
 
-    if (!ensureDirectoryExists(fullDirPath)) {
+    // 6) Ensure directory exists and no overwrite
+    if (!ensureDirectoryExists(fullDirPath))
         return ResponseBuilder::generateError(500, server, request);
-    }
-
-    if (isFile(fullpath)) { // Think. We have to overwrite I guess.
+    if (isFile(fullpath)) {
         std::cerr << "[POST] File already exists: " << fullpath << std::endl;
-        return ResponseBuilder::generateError(400, Server(), request);
+        return ResponseBuilder::generateError(400, server, request);
     }
 
+    // 7) Dispatch based on Content-Type
     std::string contentType = request.getHeader("Content-Type");
-    if (!contentType.empty() && contentType.find("multipart/form-data") != std::string::npos)
+
+    // a) multipart/form-data
+    if (!contentType.empty() && contentType.find("multipart/form-data") != std::string::npos) {
         return handle_multipart_form(request, server, fullDirPath);
-    if (!contentType.empty() &&
-        contentType.find("application/x-www-form-urlencoded") != std::string::npos)
+    }
+
+    // b) application/x-www-form-urlencoded, but only if there really is a body
+    bool isUrlEncoded = !contentType.empty() &&
+                        contentType.find("application/x-www-form-urlencoded") != std::string::npos;
+    if (isUrlEncoded && request.getContentLength() > 0) {
         return handle_url_encoded_form(request, server, fullpath, filename);
+    }
+
+    // c) everything else (including zero-length) → raw body
     return handle_raw_body(request, server, fullpath, filename);
 }
