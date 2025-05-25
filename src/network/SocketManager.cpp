@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/24 12:07:20 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/25 10:38:24 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,11 +328,6 @@ bool isValidParsedHeaderMethod(const HttpRequest& request, const Server& server,
 
     const std::string& method = request.getMethod();
     const std::string& path   = request.getPath();
-
-    if (implemented.find(method) == implemented.end()) {
-        errorCode = 501;
-        return false;
-    }
 
      // Find matching location
     const Location* matched     = nullptr;
