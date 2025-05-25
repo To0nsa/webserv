@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/24 18:44:58 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/25 12:55:50 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,6 +261,9 @@ void SocketManager::run() {
         for (size_t i = _poll_fds.size(); i-- > 0;) {
             short revents    = _poll_fds[i].revents;
             int   current_fd = _poll_fds[i].fd;
+			if (checkClientTimeouts(current_fd, i)) {
+                _poll_fds[i].events |= POLLOUT; // If connection keep-alive but client idle we close
+            }
             if (revents & POLLERR || revents & POLLHUP) {
                 handlePollError(current_fd, i, revents);
                 continue;
@@ -278,9 +281,6 @@ void SocketManager::run() {
             if ((revents & POLLOUT) &&
                 !_client_info[current_fd].responses.empty()) { // Ready to write (can send data)
                 sendResponse(current_fd, i);
-            }
-            if (checkClientTimeouts(current_fd, i)) {
-                _poll_fds[i].events |= POLLOUT; // If connection keep-alive but client idle we close
             }
         }
     }
