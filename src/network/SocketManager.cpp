@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 13:41:14 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/25 20:14:25 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void SocketManager::resetRequestState(int client_fd) {
 
 bool SocketManager::isHeaderTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
-    if (client.headerBytesReceived < HEADER_MIN_LENGTH &&
+    if (client.responses.empty() && client.current_raw_response.empty() &&
+        client.headerBytesReceived < HEADER_MIN_LENGTH &&
         now - client.connectionStartTime > HEADER_TIMEOUT_SECONDS) {
         std::cout << "Header timeout on fd: " << fd << std::endl;
         respondError(fd, 408);
@@ -68,7 +69,7 @@ bool SocketManager::isHeaderTimeout(int fd, time_t now) {
 bool SocketManager::isBodyTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
     if (client.headerComplete &&
-        now - client.lastRequestTime > TIMEOUT) {
+        now - client.connectionStartTime > TIMEOUT) {
         std::cout << "Body timeout on fd: " << fd << std::endl;
         respondError(fd, 408);
         return true;
@@ -107,6 +108,7 @@ bool SocketManager::checkClientTimeouts(int client_fd, size_t index) {
         return false;
     }
     if (isHeaderTimeout(client_fd, now) || isBodyTimeout(client_fd, now)) {
+        _poll_fds[index].events &= ~POLLIN;
         return true;
     }
     return false;
