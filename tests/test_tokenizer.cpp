@@ -69,36 +69,6 @@ void testInvalidIdentifierThrows() {
     }
 }
 
-void testUnterminatedCommentThrows() {
-    const std::string input = "server { /* unterminated comment ";
-    try {
-        Tokenizer tokenizer(input);
-        (void) tokenizer.tokenize();
-        assert(false && "Expected TokenizerError for unterminated comment");
-    } catch (const TokenizerError& e) {
-        std::cerr << "✅ Caught expected unterminated comment: " << e.what() << '\n';
-    }
-}
-
-void testMultiLineCommentSkips() {
-    const std::string  input = R"(
-		server {
-			/* this is a
-			multi-line comment */
-			listen 8080;
-		}
-	)";
-    Tokenizer          tokenizer(input);
-    std::vector<Token> tokens = tokenizer.tokenize();
-    assert(tokens[0].type == TokenType::KEYWORD_SERVER);
-    assert(tokens[1].type == TokenType::LBRACE);
-    assert(tokens[2].type == TokenType::KEYWORD_LISTEN);
-    assert(tokens[3].type == TokenType::NUMBER);
-    assert(tokens[4].type == TokenType::SEMICOLON);
-    assert(tokens[5].type == TokenType::RBRACE);
-    assert(tokens[6].type == TokenType::END_OF_FILE);
-}
-
 void testValidEscapedString() {
     const std::string  input = R"(root "line\nbreak\tand\\slash";)";
     Tokenizer          tokenizer(input);
@@ -160,20 +130,6 @@ void testHashCommentSkips() {
     const std::string  input = R"(
 		server {
 			# comment with text
-			listen 8080;
-		}
-	)";
-    Tokenizer          tokenizer(input);
-    std::vector<Token> tokens = tokenizer.tokenize();
-    assert(tokens[0].type == TokenType::KEYWORD_SERVER);
-    assert(tokens[2].type == TokenType::KEYWORD_LISTEN);
-    assert(tokens[3].value == "8080");
-}
-
-void testDoubleSlashCommentSkips() {
-    const std::string  input = R"(
-		server {
-			// C++-style comment
 			listen 8080;
 		}
 	)";
@@ -298,14 +254,6 @@ void testSlashPath() {
     assert(tokens[1].value == "/");
 }
 
-void testLongCommentThenDirective() {
-    std::string        input = "/*" + std::string(8000, 'a') + "*/\nlisten 8080;";
-    Tokenizer          tokenizer(input);
-    std::vector<Token> tokens = tokenizer.tokenize();
-
-    assert(tokens[0].type == TokenType::KEYWORD_LISTEN);
-}
-
 void testOneCharString() {
     const std::string  input = R"(index "a";)";
     Tokenizer          tokenizer(input);
@@ -349,15 +297,12 @@ int main() {
     testSimpleTokenization();
     testUnterminatedStringThrows();
     testInvalidIdentifierThrows();
-    testUnterminatedCommentThrows();
-    testMultiLineCommentSkips();
     testValidEscapedString();
     testInvalidEscapeInSingleQuotedString();
     testInvalidDoubleEscapeSequence();
     testMaxStringLengthExceeded();
     testInvalidNumberSuffix();
     testHashCommentSkips();
-    testDoubleSlashCommentSkips();
     testEscapedQuoteInString();
     testEmptyStrings();
     testMixedWhitespace();
@@ -369,7 +314,6 @@ int main() {
     testSymbolGarbage();
     testMultilineQuotedString();
     testSlashPath();
-    testLongCommentThenDirective();
     testOneCharString();
     testManySequentialTokens();
     testUtf8BOMDoesNotAffectTokens();

@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   handle_post.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:21:00 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/19 10:24:13 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 22:59:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "http/HttpResponseBuilder.hpp"
-#include "utils/buildFilePath.hpp"
 #include "utils/filesystemUtils.hpp"
 #include <chrono>
 #include <fstream>

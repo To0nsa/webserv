@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stringUtils.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:44 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/16 12:48:29 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/22 22:32:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,6 @@
 #include <functional>
 #include <string>
 #include <vector>
-
-/**
- * @brief Parses an integer from a string.
- * @ingroup StringUtils
- *
- * @details
- * Parses a non-negative integer from a string. Throws `std::invalid_argument` on failure.
- * Context is omitted; this version is intended for simple cases.
- *
- * @param value The string to parse.
- * @return The parsed integer.
- */
-int parseInt(const std::string& value);
-
-/**
- * @brief Parses a byte size from a human-readable string (e.g., "512K", "1M").
- * @ingroup StringUtils
- *
- * @details
- * Supports optional suffixes: K (kilobytes), M (megabytes), G (gigabytes).
- * Throws `std::invalid_argument` on failure. Context is omitted.
- *
- * @param value The string to parse.
- * @return The parsed size in bytes.
- */
-std::size_t parseByteSize(const std::string& value);
 
 /**
  * @brief Parses an integer with detailed error context.

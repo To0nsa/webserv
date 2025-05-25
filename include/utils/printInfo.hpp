@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Config.cpp                                         :+:      :+:    :+:   */
+/*   printInfo.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/30 10:36:29 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 14:59:06 by nlouis           ###   ########.fr       */
+/*   Created: 2025/05/03 14:01:52 by irychkov          #+#    #+#             */
+/*   Updated: 2025/05/20 21:45:14 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include "config/Config.hpp"
-#include "config/parser/ConfigParseError.hpp"
+#include "core/Location.hpp"
+#include "core/Server.hpp"
+#include <iostream>
 
-//////////////////
-// --- Public API
-
-void Config::addServer(const Server& server) {
-    _servers.push_back(server);
-}
-
-std::vector<Server>& Config::getServers() {
-    return _servers;
-}
-
-const std::vector<Server>& Config::getServers() const {
-    return _servers;
-}
+std::string printUsage(void);
+void        printConfig(Config& config);

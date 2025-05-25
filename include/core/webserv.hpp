@@ -1,20 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PrintInfo.hpp                                      :+:      :+:    :+:   */
+/*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/03 14:01:52 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/03 15:28:11 by irychkov         ###   ########.fr       */
+/*   Created: 2025/05/20 22:47:01 by nlouis            #+#    #+#             */
+/*   Updated: 2025/05/20 22:47:24 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include "config/Config.hpp"
-#include "core/Location.hpp"
-#include "core/Server.hpp"
-#include <iostream>
 
-void print_usage(void);
-void print_config(Config& config);
+int runWebserv(int argc, char** argv);
