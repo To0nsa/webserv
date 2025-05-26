@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 13:32:53 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 22:49:24 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ std::string getDefaultMessage(int status_code) {
     using StatusMessageMap                        = std::map<int, std::string>;
     static const StatusMessageMap status_messages = {{200, "OK"},
                                                      {201, "Created"},
+                                                     {204, "No Content"},
                                                      {301, "Moved Permanently"},
                                                      {302, "Found"},
                                                      {400, "Bad Request"},
@@ -77,10 +78,10 @@ HttpResponse generateSuccess(int status_code, const std::string& body,
 
     // Status+Connection
     initializeResponse(response, status_code, message, request);
-    // Type + Body
+
+    // Normal response
     response.setHeader("Content-Type", content_type);
     response.setBody(body);
-    // Ensure non-chunked response: set Content-Length
     response.setHeader("Content-Length", std::to_string(body.size()));
     return response;
 }

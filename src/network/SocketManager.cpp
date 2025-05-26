@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 20:12:57 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 22:03:08 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,15 +186,6 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
             throw SocketError("setsockopt(SO_REUSEADDR) failed: " +
                               std::string(std::strerror(errno)));
         }
-
-        // 3. Allow multiple binds on same port (optional, safe fallback)
-#ifdef SO_REUSEPORT
-        if (setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(opt)) < 0) {
-            close(fd);
-            throw SocketError("setsockopt(SO_REUSEPORT) failed: " +
-                              std::string(std::strerror(errno)));
-        }
-#endif
 
         // 4. Set socket to non-blocking mode (required for poll/epoll)
         if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0) {
@@ -467,11 +458,18 @@ static const Location* findMatchingLocation(const std::string& path, const Serve
 }
 
 bool SocketManager::handleClientData(int client_fd, size_t index) {
-    if (!receiveFromClient(client_fd, index))
+    if (!receiveFromClient(client_fd, index)) {
         return false;
+    }
 
-    if (checkRequestLimits(client_fd) || isHeaderTimeout(client_fd))
+    if (checkRequestLimits(client_fd)) {
+        respondError(client_fd, 413);
         return true;
+    }
+
+    if (isHeaderTimeout(client_fd)) {
+        return true;
+    }
 
     auto& buf        = _client_info[client_fd].requestBuffer;
     auto  maxBody    = _client_info[client_fd].serverConfig.getClientMaxBodySize();

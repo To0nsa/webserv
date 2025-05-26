@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 13:09:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/25 20:10:11 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 22:07:22 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
     // 1) Locate end of headers
     auto headerEndPos = raw_req.find(HEADER_BODY_DELIM);
     if (headerEndPos == std::string::npos) {
-        // incomplete or malformed header block
-        if (raw_req.find('\n') != std::string::npos) {
-            errorCode = 400; // header contains \n but not properly delimited
-        }
+        // incomplete or malformed header block makes ubuntu_tester crash
+        /*         if (raw_req.find('\n') != std::string::npos) {
+                    errorCode = 400; // header contains \n but not properly delimited
+                } */
         return false;
     }
 
@@ -78,9 +78,23 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
     const auto& te = req.getHeader("TRANSFER-ENCODING");
 
     // 5) No CL header *and* not chunked ⇒ zero-byte POST is complete
-    if (req.getHeader("CONTENT-LENGTH").empty() && te != "chunked") {
-        consumed = headerLen;
-        return true;
+    if (req.getMethod() == "POST" && te != "chunked") {
+        const std::string& clHeader = req.getHeader("CONTENT-LENGTH");
+        if (clHeader.empty()) {
+            errorCode = 411; // Length Required
+            return false;
+        }
+        try {
+            size_t len = std::stoul(clHeader);
+            req.setContentLength(len);
+            if (len == 0) {
+                consumed = headerLen;
+                return true; // Acceptable: POST with Content-Length: 0
+            }
+        } catch (...) {
+            errorCode = 400; // Malformed Content-Length
+            return false;
+        }
     }
 
     // 6) Chunked body?

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 19:39:20 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/25 22:49:41 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,14 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         std::cout << "[POST] Body too large (" << request.getBody().size()
                   << " bytes) — returning 413" << std::endl;
         return ResponseBuilder::generateError(413, server, request);
+    }
+
+    // 2.5) Zero-length POST with *no* upload_store → 204 No Content
+    if (request.getContentLength() == 0 && request.getBody().empty() &&
+        loc.getUploadStore().empty()) {
+        std::cout << "[POST] Empty POST on non-upload location — returning 204 No Content"
+                  << std::endl;
+        return ResponseBuilder::generateSuccess(204, "", "text/plain", request);
     }
 
     // 3) Must have configured upload directory
