@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 23:23:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/24 15:06:17 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/26 13:44:18 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,7 +341,7 @@ void validateIndexFiles(const std::vector<Server>& servers) {
     }
 }
 
-void validateAbsolutePaths(const std::vector<Server>& servers) {
+/* void validateAbsolutePaths(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
         const Server& server = servers[serverIndex];
 
@@ -390,7 +390,7 @@ void validateAbsolutePaths(const std::vector<Server>& servers) {
             }
         }
     }
-}
+} */
 
 void validateCgiInterpreters(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
@@ -428,7 +428,7 @@ void validateCgiInterpreters(const std::vector<Server>& servers) {
     }
 }
 
-void validateFilesystem(const std::vector<Server>& servers) {
+/* void validateFilesystem(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
         const Server& server = servers[serverIndex];
 
@@ -466,7 +466,7 @@ void validateFilesystem(const std::vector<Server>& servers) {
             }
         }
     }
-}
+} */
 
 } // namespace
 
@@ -484,7 +484,7 @@ void validateConfig(const Config& config) {
     validateClientMaxBodySize(servers);
     validateCgiExtensions(servers);
     validateIndexFiles(servers);
-    validateAbsolutePaths(servers);
+    // validateAbsolutePaths(servers);
     validateCgiInterpreters(servers);
-    validateFilesystem(servers);
+    // validateFilesystem(servers);
 }
