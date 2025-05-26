@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/24 15:05:57 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/26 17:25:18 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "core/Location.hpp"
 #include "utils/stringUtils.hpp"
-
+#include "utils/filesystemUtils.hpp"
 #include <algorithm>
 #include <filesystem>
 #include <map>
@@ -155,7 +155,12 @@ bool Location::matchesPath(const std::string& uri) const {
 std::string Location::resolveAbsolutePath(const std::string& uri) const {
     if (!matchesPath(uri))
         return "";
-    return _root + uri.substr(_path.length());
+
+    std::string relative = uri.substr(normalizePath(_path).length());
+    if (!relative.empty() && relative.front() == '/')
+        relative.erase(0, 1);
+
+    return joinPath(normalizePath(_root), relative);
 }
 
 bool Location::isUploadEnabled() const {
@@ -170,5 +175,5 @@ bool Location::isCgiRequest(const std::string& path) const {
 std::string Location::getEffectiveIndexPath() const {
     if (_index_files.empty())
         return "";
-    return _root + "/" + _index_files.front();
+    return joinPath(normalizePath(_root), normalizePath(_index_files.front()));
 }

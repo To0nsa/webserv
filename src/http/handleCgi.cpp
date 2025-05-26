@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleCgi.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/24 20:05:55 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/26 17:28:15 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,15 @@ namespace CGI {
 
 bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& server,
                     const Location& loc) {
-    cgi.script_path = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
+    cgi.script_path = std::filesystem::absolute(loc.resolveAbsolutePath(normalizePath(req.getPath())));
+	std::cerr << "[CGI] Initializing CGI for script: " << cgi.script_path << std::endl;
     if (!isFile(cgi.script_path))
         return false;
-    if (access(cgi.script_path.c_str(), X_OK) != 0)
+    if (access(cgi.script_path.c_str(), X_OK) != 0) {
         return false;
+	}
 
+	std::cerr << "[CGI] Script is executable: " << cgi.script_path << std::endl;
     int in_pipe[2], out_pipe[2];
     if (pipe(in_pipe) < 0 || pipe(out_pipe) < 0) {
         return false;
@@ -193,8 +196,10 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
 
     // Basic parser (header + body)
     size_t pos = cgi.output.find("\r\n\r\n");
-    if (pos == std::string::npos)
+    if (pos == std::string::npos) {
+		std::cerr << "[CGI] finalizeCgi(): no header found in output\n";
         return ResponseBuilder::generateError(500, server, req);
+	}
 
     std::string header = cgi.output.substr(0, pos);
     std::string body   = cgi.output.substr(pos + 4);

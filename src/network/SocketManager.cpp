@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/26 16:35:38 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 17:00:35 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -470,6 +470,8 @@ bool SocketManager::handleCgiRequest(int client_fd, const HttpRequest& request,
     client.cgiProcess.emplace();
 
     if (!CGI::initCgiProcess(*client.cgiProcess, request, server, location)) {
+		std::cerr << "[CGI] Failed to initialize CGI process for client_fd " << client_fd
+				  << " with script: " << location.getPath() << std::endl;
         respondError(client_fd, 500);
         client.cgiProcess.reset();
         return true; // error response queued
@@ -490,9 +492,9 @@ static const Location* findMatchingLocation(const std::string& path, const Serve
     const Location* best = nullptr;
     size_t          max  = 0;
     for (const Location& loc : server.getLocations()) {
-        if (path.rfind(loc.getPath(), 0) == 0 && loc.getPath().size() > max) {
+        if (path.rfind(normalizePath(loc.getPath()), 0) == 0 && normalizePath(loc.getPath()).size() > max) {
             best = &loc;
-            max  = loc.getPath().size();
+            max  = normalizePath(loc.getPath()).size();
         }
     }
     return best;
@@ -549,7 +551,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 		_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
 
 		const Server&   server   = _client_info[client_fd].serverConfig;
-		const Location* location = findMatchingLocation(request.getPath(), server);
+		const Location* location = findMatchingLocation(normalizePath(request.getPath()), server);
 
 		if (!location) {
 			respondError(client_fd, 404);
@@ -561,7 +563,8 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 			return true;
 		}
 
-		if (location->isCgiRequest(request.getPath())) {
+		if (location->isCgiRequest(normalizePath(request.getPath()))) {
+			std::cout << "Handling CGI request" << std::endl;
 			return handleCgiRequest(client_fd, request, server, *location);
 		}
 

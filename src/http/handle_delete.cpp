@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 15:07:56 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:48:41 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 HttpResponse handleDelete(const HttpRequest& request, const Server& server, const Location& loc) {
     // Build full file path
     std::string filepath = buildFilePath(request, loc);
+	std::cout << "Resolved file path: " << filepath << std::endl;
 
     // Check if file exists and delete
     struct stat s;
