@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/26 20:45:51 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 20:59:18 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "http/HttpResponseBuilder.hpp"
 #include "utils/filesystemUtils.hpp"
 #include "utils/stringUtils.hpp"
+#include "utils/Logger.hpp"
 
 #include <fcntl.h>
 #include <filesystem>
@@ -69,7 +70,7 @@ namespace CGI {
 bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& server,
                     const Location& loc) {
     cgi.script_path = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
-	std::cerr << "[CGI] Initializing CGI for script: " << cgi.script_path << std::endl;
+	Logger::logFrom(LogLevel::DEBUG, "CGI", "Initializing CGI for script: " + cgi.script_path);
     if (!isFile(cgi.script_path))
         return false;
     if (access(cgi.script_path.c_str(), X_OK) != 0) {
@@ -93,7 +94,7 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     }
 
     if (pid > 0) {
-        std::cerr << "[CGI] Forked PID: " << pid << ", script: " << cgi.script_path << std::endl;
+        Logger::logFrom(LogLevel::DEBUG, "CGI", "Forked PID: " + std::to_string(pid) + ", script: " + cgi.script_path);
     }
 
     if (pid == 0) {
@@ -127,17 +128,16 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         // 4. chdir safely
         const std::string cgiDir = std::filesystem::path(scriptPath).parent_path().string();
         if (chdir(cgiDir.c_str()) != 0) {
-            perror("chdir");
+            Logger::logFrom(LogLevel::ERROR, "CGI", "chdir failed: " + std::string(strerror(errno)));
             exit(1);
         }
 
         // 5. Final call
-        // DEBUG
-        std::cerr << "[CGI] execve: " << argv[0] << std::endl;
+        Logger::logFrom(LogLevel::DEBUG, "CGI", "execve: " + std::string(argv[0]));
         execve(argv[0], argv.data(), envp.data());
 
         // 6. If execve fails
-        perror("execve");
+        Logger::logFrom(LogLevel::ERROR, "CGI", "execve failed: " + std::string(strerror(errno)));
         exit(1);
     }
 
@@ -197,7 +197,7 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
     // Basic parser (header + body)
     size_t pos = cgi.output.find("\r\n\r\n");
     if (pos == std::string::npos) {
-		std::cerr << "[CGI] finalizeCgi(): no header found in output\n";
+		Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): no header found in output");
         return ResponseBuilder::generateError(500, server, req);
 	}
 
@@ -216,7 +216,7 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
     }
 
     // DEBUG
-    std::cerr << "[CGI] finalizeCgi(): output =\n" << cgi.output << "\n";
+    Logger::logFrom(LogLevel::DEBUG, "CGI", "finalizeCgi(): output =\n" + cgi.output);
 
     return ResponseBuilder::generateSuccess(code, body, contentType, req);
 }
@@ -233,14 +233,14 @@ void cleanupCgi(CgiProcess& cgi) {
 bool tryTerminateCgi(CgiProcess& cgi) {
     int   status;
     pid_t result = waitpid(cgi.pid, &status, WNOHANG);
-    std::cerr << "[CGI] tryTerminateCgi() → waitpid returned " << result << "\n";
+    Logger::logFrom(LogLevel::DEBUG, "CGI", "tryTerminateCgi() → waitpid returned " + std::to_string(result));
 
     if (result == 0) {
         return false;
     }
 
     if (result == -1) {
-        perror("waitpid");
+        Logger::logFrom(LogLevel::ERROR, "CGI", "waitpid failed: " + std::string(strerror(errno)));
         return true;
     }
     return true;
