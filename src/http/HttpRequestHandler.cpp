@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequestHandler.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 15:43:48 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/24 13:52:00 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,6 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     // Method not allowed
     if (!location.isMethodAllowed(method)) {
         return ResponseBuilder::generateError(405, server, request);
-    }
-
-    // CGI detection
-    if (location.isCgiRequest(path)) {
-        return handleCgi(request, server, location);
     }
 
     // Delegate based on method

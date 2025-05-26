@@ -3,28 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   filesystemUtils.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/13 10:30:19 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 14:50:19 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/filesystemUtils.hpp"
 #include "http/HttpResponseBuilder.hpp"
+
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <map>
+#include <regex>
 #include <sstream>
 #include <string>
 
-bool isDirectory(const std::string& path) {
-    return std::filesystem::is_directory(path);
-}
+namespace fs = std::filesystem;
 
-bool fileExists(const std::string& path) {
-    return std::filesystem::exists(path) && std::filesystem::is_regular_file(path);
+bool isFile(const std::string& path) {
+    return fs::exists(path) && fs::is_regular_file(path);
 }
 
 std::string detectMimeType(const std::string& file_path) {
@@ -42,8 +43,8 @@ std::string detectMimeType(const std::string& file_path) {
         {".wasm", "application/wasm"}};
 
     // Extract the file extension from the path (e.g., ".html")
-    std::filesystem::path path(file_path);
-    std::string           ext = path.extension().string();
+    fs::path    path(file_path);
+    std::string ext = path.extension().string();
 
     // Convert the extension to lowercase to ensure case-insensitive matching
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
@@ -60,7 +61,7 @@ std::string detectMimeType(const std::string& file_path) {
 HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
                        std::string content_type) {
     // Check if the file exists and is a regular file (not a directory, socket, etc.)
-    if (!fileExists(file_path)) {
+    if (!isFile(file_path)) {
         return ResponseBuilder::generateError(404, Server(), request);
     }
 
@@ -84,3 +85,158 @@ HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
     // Return a successful HTTP response with the file content and correct MIME type
     return ResponseBuilder::generateSuccess(200, body, content_type, request);
 }
+
+std::string normalizePath(const std::string& path) {
+    if (path.empty())
+        return "/";
+    std::string result = path;
+
+    if (result.size() > 1 && result.back() == '/')
+        result.pop_back();
+
+    return result;
+}
+
+std::string joinPath(const std::string& base, const std::string& suffix) {
+    if (base.empty())
+        return suffix;
+    if (base.back() == '/')
+        return base + suffix;
+    return base + '/' + suffix;
+}
+
+std::string buildFilePath(const HttpRequest& request, const Location& loc) {
+    std::string request_path  = normalizePath(request.getPath());
+    std::string location_path = normalizePath(loc.getPath());
+    std::string location_root = normalizePath(loc.getRoot());
+
+    std::string suffix;
+    if (request_path.find(location_path) == 0)
+        suffix = request_path.substr(location_path.length());
+
+    if (!suffix.empty() && suffix[0] == '/')
+        suffix.erase(0, 1);
+
+    return joinPath(location_root, suffix); // May point to file or directory
+}
+
+static std::vector<std::string> splitPath(const std::string& path) {
+    std::vector<std::string> parts;
+    std::stringstream        ss(path);
+    std::string              part;
+    while (std::getline(ss, part, '/')) {
+        if (!part.empty())
+            parts.push_back(part);
+    }
+    return parts;
+}
+
+bool mkdirRecursive(const std::string& path) {
+    std::vector<std::string> parts   = splitPath(path);
+    std::string              current = path[0] == '/' ? "/" : "";
+
+    for (size_t i = 0; i < parts.size(); ++i) {
+        current = joinPath(current, parts[i]);
+        if (isFile(current)) {
+            std::cerr << "[mkdirRecursive] Path exists and is a file (not directory): " << current
+                      << std::endl;
+            return false;
+        }
+        if (mkdir(current.c_str(), 0777) == -1) {
+            if (errno != EEXIST) {
+                std::cerr << "[mkdirRecursive] Failed to create directory: " << current
+                          << " — errno: " << strerror(errno) << std::endl;
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+/* std::string normalizePath(const std::string& path) {
+    return fs::path(path).lexically_normal().string();
+}
+
+std::string joinPath(const std::string& base, const std::string& suffix) {
+    return (fs::path(base) / suffix).lexically_normal().string();
+}
+
+std::string buildFilePath(const HttpRequest& request, const Location& loc) {
+    fs::path req       = request.getPath();
+    fs::path locPrefix = loc.getPath();
+    fs::path locRoot   = loc.getRoot();
+
+    fs::path suffix = req.lexically_relative(locPrefix);
+
+    if (suffix == "." || suffix.empty()) {
+        suffix.clear();
+    }
+
+    fs::path full = (locRoot / suffix).lexically_normal();
+    return full.string();
+}
+
+bool ensureDirectoryExists(const std::string& path) {
+    try {
+        return fs::create_directories(path);
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "[ensureDirectoryExists] Error creating directories: " << e.what() << '\n';
+        return false;
+    }
+}
+
+bool containsTraversal(const std::string& pathStr) {
+    fs::path raw = fs::path(pathStr);
+    for (const auto& part : raw) {
+        if (part == "..")
+            return true;
+    }
+    return false;
+}
+
+bool isInvalidAbsolutePath(const std::string& pathStr) {
+    if (pathStr.empty())
+        return true;
+
+    fs::path raw(pathStr);
+    if (!raw.is_absolute())
+        return true;
+
+    // Check for `..` anywhere in the original path
+    for (const auto& part : raw) {
+        if (part == "..")
+            return true;
+    }
+
+    // Check for segments that *start* with `..` (e.g., `..private`)
+    for (const auto& part : raw) {
+        const std::string& seg = part.string();
+        if (seg.rfind("..", 0) == 0) // starts with ".."
+            return true;
+    }
+
+    // Redundant slashes in raw input
+    if (pathStr.find("//") != std::string::npos)
+        return true;
+
+    return false;
+}
+
+bool isSuspiciousFilename(const std::string& filename) {
+    if (filename.empty() || filename.size() > 256)
+        return true;
+
+    fs::path p(filename);
+
+    if (p.has_parent_path() || filename.find('/') != std::string::npos ||
+        containsTraversal(filename))
+        return true;
+
+    // Must not start with a dot or dash
+    if (!std::isalnum(static_cast<unsigned char>(filename[0])))
+        return true;
+
+    // Enforce strict whitelist pattern: no multiple dots, only one extension, valid suffix
+    static const std::regex strictPattern(R"(^[a-zA-Z0-9_-]+\.(html?|txt|php|cgi)$)");
+    return !std::regex_match(filename, strictPattern);
+} */

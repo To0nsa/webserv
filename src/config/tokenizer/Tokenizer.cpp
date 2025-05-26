@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Tokenizer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 01:06:09 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/16 12:48:37 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/23 10:14:39 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 #include <cctype>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -71,11 +72,13 @@ unsigned char Tokenizer::peek() const noexcept {
 }
 
 unsigned char Tokenizer::peekNext() const noexcept {
-    // Look ahead by one char, or return '\0' if at end
-    return isAtEnd() ? '\0' : static_cast<unsigned char>(_input[_pos + 1]);
+    if (isAtEnd()) {
+        return '\0';
+    }
+    return static_cast<unsigned char>(_input[_pos + 1]);
 }
 
-char Tokenizer::advance() noexcept {
+unsigned char Tokenizer::advance() noexcept {
     char c = _input[_pos++]; // Consume current character and move cursor forward
     if (c == '\n') {
         _line++;     // Increment line number on newline
@@ -200,8 +203,8 @@ void Tokenizer::validateIdentifier(std::size_t start) {
     }
 
     // Reject non-printable/control characters (ASCII < 0x20 or DEL = 0x7F)
-    for (unsigned char c : word) {
-        if (c < 0x20 || c == 0x7F) {
+    for (char c : word) {
+        if (!std::isprint(static_cast<unsigned char>(c))) {
             throw TokenizerError(
                 formatError("Identifier contains non-printable/control character", _line, _column),
                 extractLine(_pos));
@@ -214,9 +217,8 @@ Token Tokenizer::parseIdentifierOrKeyword() {
     scanIdentifier();          // Consume all valid identifier characters
     validateIdentifier(start); // Ensure it's non-empty and well-formed
     std::string word = _input.substr(start, _pos - start); // Extract the identifier text
-
-    // Determine if it's a keyword or generic identifier and return the token
-    return makeToken(resolveKeywordType(word), word);
+    TokenType   type = resolveKeywordType(word);
+    return makeToken(type, word);
 }
 
 /////////////////////////////
@@ -260,36 +262,8 @@ Token Tokenizer::parseNumberOrUnit() {
 // --- String Parsing
 void Tokenizer::throwUnterminatedString(const std::string& reason) {
     // Throw a TokenizerError with a contextual reason and source line
-    throw TokenizerError(
-        formatError("Unterminated string literal (" + reason + ")", _line, _column),
-        extractLine(_pos));
-}
-
-std::string Tokenizer::parseEscapeSequence(unsigned char quote) {
-    if (isAtEnd())
-        throwUnterminatedString("trailing backslash"); // Backslash at end of input
-
-    char next = advance(); // Consume the escaped character
-    switch (next) {
-    case 'n':
-        return "\n"; // Newline
-    case 't':
-        return "\t"; // Tab
-    case 'r':
-        return "\r"; // Carriage return
-    case '\\':
-        return "\\"; // Backslash
-    case '"':
-        return "\""; // Double quote
-    case '\'':
-        return "\'"; // Single quote
-    default:
-        // Unknown escape sequence
-        throw TokenizerError(formatError("Invalid escape sequence \\" + std::string(1, next) +
-                                             " in " + std::string(1, quote) + "-quoted string",
-                                         _line, _column),
-                             extractLine(_pos));
-    }
+    throw TokenizerError(formatError("Invalid string literal (" + reason + ")", _line, _column),
+                         extractLine(_pos));
 }
 
 Token Tokenizer::parseStringLiteral() {
@@ -297,11 +271,11 @@ Token Tokenizer::parseStringLiteral() {
 
     unsigned char quote = advance(); // Consume opening quote (' or ")
     std::string   content;
+    content.reserve(MAX_STRING_LITERAL_LENGTH); // Preallocate for performance
 
     while (!isAtEnd()) {
         unsigned char c = peek();
 
-        // Strings cannot span multiple lines
         if (c == '\n') {
             throwUnterminatedString("unexpected newline");
         }
@@ -309,33 +283,19 @@ Token Tokenizer::parseStringLiteral() {
         c = advance(); // Consume character
 
         if (c == quote) {
-            // Closing quote found — return completed string token
-            return makeToken(TokenType::STRING, content);
+            return makeToken(TokenType::STRING, content); // Closing quote — done
         }
 
-        if (c == '\\') {
-            // Escapes are only allowed in double-quoted strings
-            if (quote == '\'') {
-                throw TokenizerError(
-                    formatError("Escapes not allowed in single-quoted strings", _line, _column),
-                    extractLine(_pos));
-            }
-            content += parseEscapeSequence(quote); // Resolve escape sequence
-        } else {
-            content += c; // Append regular character
-        }
-
-        // Enforce 64 KiB string literal limit
-        if (content.size() > MAX_STRING_LITERAL_LENGTH) {
+        if (content.size() + 1 > MAX_STRING_LITERAL_LENGTH) {
             throw TokenizerError(formatError("String literal exceeds 64 KiB limit", _line, _column),
                                  extractLine(_pos));
         }
+
+        content += c;
     }
 
-    // Unterminated string (e.g., EOF before closing quote)
-    throwUnterminatedString("end of input");
-    return Token(TokenType::STRING, "", _line, _column,
-                 0); // Unreachable, but required for return type
+    throwUnterminatedString("end of input");                // Reached EOF before closing quote
+    return Token(TokenType::STRING, "", _line, _column, 0); // Unreachable
 }
 
 ////////////////////////////////////
@@ -368,10 +328,10 @@ void Tokenizer::skipHashComment() {
 //////////////////////
 // --- Token Dispatch
 bool Tokenizer::looksLikeIpAddress() const {
-    std::size_t i    = _pos; // Start scanning from the current tokenizer position
-    int         dots = 0;    // Count the number of dots encountered ('.')
+    std::size_t len = _input.size();
+    std::size_t i = _pos, dots = 0;
 
-    while (i < _input.size()) {
+    while (i < len) {
         char c = _input[i];
 
         if (std::isdigit(c)) {
@@ -397,7 +357,7 @@ void Tokenizer::dispatchToken() {
 
         // If it looks like an IPv4 address (e.g. 127.0.0.1), or
         // if the next character is *not* a digit but *is* a valid identifier char
-        // (e.g. "1index.html" or "/api/v2a3"), then parse as an identifier/keyword
+        // ("1index.html" or "/api/v2a3"), then parse as an identifier/keyword
         if (looksLikeIpAddress() || (!std::isdigit(next) && isIdentifierChar(next))) {
             _tokens.push_back(parseIdentifierOrKeyword());
         } else {
@@ -456,24 +416,18 @@ Token Tokenizer::makeToken(TokenType type, const std::string& value) const {
 }
 
 std::string Tokenizer::extractLine(std::size_t offset) const {
-    // Find the last newline before (or at) offset
+    // Find the last newline before (or at) the offset to locate the start of the line
     std::size_t start = _input.rfind('\n', offset);
+    if (start == std::string::npos)
+        start = 0; // If no newline was found, the line starts at the beginning
+    else
+        start += 1; // Move past the newline character to the actual start of the line
 
-    // Find the next newline after offset
-    std::size_t end = _input.find('\n', offset);
+    // Find the next newline after the start to locate the end of the current line
+    std::size_t end = _input.find('\n', start);
+    if (end == std::string::npos)
+        end = _input.size(); // If no newline found, the line ends at the end of the input
 
-    // If no newline was found before, start from beginning
-    if (start == std::string::npos) {
-        start = 0;
-    } else {
-        start += 1; // Move past the newline character itself
-    }
-
-    // If no newline was found after, end at end of input
-    if (end == std::string::npos) {
-        end = _input.size();
-    }
-
-    // Return the substring representing the full line containing the offset
+    // Extract and return the substring representing the line containing the offset
     return _input.substr(start, end - start);
 }

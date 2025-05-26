@@ -6,26 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 00:19:57 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/08 16:55:53 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/20 23:40:05 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * @file    token.cpp
- * @brief   Implements the Token class and debug utilities for token inspection.
- *
- * @details This file defines the `Token` constructor and helper functions
- * such as `debugTokenType` and `debugToken` used for logging and diagnostics
- * during the tokenization and parsing of the configuration language.
- * @ingroup config
- */
-
 #include "config/tokenizer/token.hpp"
-#include <cassert>
-#include <iomanip>
-#include <iostream>
+
 #include <sstream>
-#include <string>
 
 Token::Token(TokenType t, const std::string& v, int l, int c, std::size_t off)
     : type(t), value(v), line(l), column(c), offset(off) {
@@ -48,7 +35,6 @@ std::string debugTokenType(TokenType type) {
     case TokenType::END_OF_FILE:
         return "END_OF_FILE";
 
-    // Keywords
     case TokenType::KEYWORD_SERVER:
         return "KEYWORD_SERVER";
     case TokenType::KEYWORD_LOCATION:

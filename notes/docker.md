@@ -2,8 +2,8 @@ docker pull nginx
 
 docker run --name my-nginx \
   -p 8080:8080 \
-  -v /home/irychkov/Desktop/webserv_team/serverfiles/html:/usr/share/nginx/html \
-  -v /home/irychkov/Desktop/webserv_team/configs/get_index.conf:/etc/nginx/conf.d/default.conf \
+  -v /home/nlouis/webserv/serverfiles/html:/usr/share/nginx/html \
+  -v /home/nlouis/webserv/configs/get_index.conf:/etc/nginx/conf.d/default.conf \
   -d nginx
 
 
