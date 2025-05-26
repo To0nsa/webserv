@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/23 12:40:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/26 13:41:29 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,17 +95,18 @@ std::string joinPath(const std::string& base, const std::string& suffix) {
 }
 
 std::string buildFilePath(const HttpRequest& request, const Location& loc) {
-    fs::path request_path  = request.getPath();
-    fs::path location_path = loc.getPath();
-    fs::path location_root = loc.getRoot();
+    fs::path req       = request.getPath();
+    fs::path locPrefix = loc.getPath();
+    fs::path locRoot   = loc.getRoot();
 
-    std::string suffix_str;
-    if (request_path.string().find(location_path.string()) == 0)
-        suffix_str = request_path.string().substr(location_path.string().length());
+    fs::path suffix = req.lexically_relative(locPrefix);
 
-    fs::path suffix = fs::path(suffix_str).lexically_normal();
+    if (suffix == "." || suffix.empty()) {
+        suffix.clear();
+    }
 
-    return (location_root / suffix).lexically_normal().string();
+    fs::path full = (locRoot / suffix).lexically_normal();
+    return full.string();
 }
 
 bool ensureDirectoryExists(const std::string& path) {
