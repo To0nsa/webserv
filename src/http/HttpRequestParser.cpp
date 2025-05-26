@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/26 03:33:49 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:36:53 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
     std::string headerPart = raw_req.substr(0, headerEndPos);
     std::string bodyPart   = raw_req.substr(headerEndPos + 4);
 
-	consumedBytes = headerEndPos + 4;
+    consumedBytes = headerEndPos + 4;
     if (!parseReqHeader(req, headerPart, errorCode))
         return false;
     if (!validateReq(req, errorCode))
@@ -151,10 +151,10 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
     std::string        chunkLine;
     std::string        fullBody;
     std::size_t        totalSize = 0;
-	std::size_t        localConsumed = 0;
+    std::size_t        localConsumed = 0;
 
     while (std::getline(stream, chunkLine)) {
-		localConsumed += chunkLine.size() + 1; // +1 for '\n'
+        localConsumed += chunkLine.size() + 1; // +1 for '\n'
         if (!chunkLine.empty() && chunkLine.back() == '\r') {
             chunkLine.pop_back();
         }
@@ -164,13 +164,13 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
             chunkSize = std::stoul(chunkLine, nullptr, 16); // Hexadecimal
         } catch (...) {
             errorCode = 400;
-			consumedBytes += localConsumed;
+            consumedBytes += localConsumed;
             Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid chunk size format");
             return;
         }
 
         if (chunkSize == 0) {
-			// final chunk, consume \r\n
+            // final chunk, consume \r\n
             std::string lastLine;
             std::getline(stream, lastLine);
             localConsumed += lastLine.size() + 1; // Usually just \r\n
@@ -179,14 +179,14 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
 
         if (totalSize + chunkSize > clientMaxBodySize) {
             Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Exceeded request max body size in chunked transfer");
-			consumedBytes += localConsumed + chunkSize;
+            consumedBytes += localConsumed + chunkSize;
             errorCode = 413;
             return;
         }
 
         std::string chunkData(chunkSize, '\0');
         stream.read(&chunkData[0], chunkSize);
-		std::streamsize bytesRead = stream.gcount();
+        std::streamsize bytesRead = stream.gcount();
         localConsumed += bytesRead;
 
         fullBody += chunkData;
@@ -200,7 +200,7 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
 
     req.setBody(fullBody);
     errorCode = 0;
-	consumedBytes += localConsumed;
+    consumedBytes += localConsumed;
 }
 
 bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t clientMaxBodySize,
@@ -225,7 +225,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
     if (contentLength >= clientMaxBodySize) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser","Exceeded request max body size in non-chunked transfer");
         errorCode = 413;
-		consumedBytes += bodyPart.size();
+        consumedBytes += bodyPart.size();
         return false;
     }
 
@@ -236,7 +236,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
     }
 
     std::string bodyContent = bodyPart.substr(0, contentLength);
-	consumedBytes += bodyContent.size();
+    consumedBytes += bodyContent.size();
     req.setBody(bodyContent);
 
     errorCode = 0;
@@ -292,6 +292,7 @@ bool validateReq(HttpRequest& req, int& errorCode) {
     if (!connection.empty()) {
         std::string connLower = toLower(connection);
         if (connLower != "keep-alive" && connLower != "close") {
+            req.setHeader("CONNECTION", "close");
             errorCode = 400;
             Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid Connection header value: " + connection);
             return false;

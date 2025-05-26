@@ -49,7 +49,7 @@ tests = [
             "Content-Length: 13\r\n\r\n"
             "name=test"
         ),
-        "expected": 400  # or 415 depending on parser behavior
+        "expected": 415
     },
     {
         "name": "Malformed request (missing HTTP version)",
