@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 22:55:37 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 03:15:50 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ bool SocketManager::isSendTimeout(int fd, time_t now) {
 bool SocketManager::isIdleTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
     if (client.responses.empty() && client.current_raw_response.empty() &&
-        !client.headerComplete &&
+        !client.headerComplete && client.headerBytesReceived == 0 &&
         now - client.lastRequestTime > TIMEOUT) {
         std::cout << "Idle timeout on fd: " << fd << std::endl;
         return true;

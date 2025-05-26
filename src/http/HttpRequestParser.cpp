@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/25 23:09:20 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 03:33:49 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,7 +282,7 @@ bool validateReq(HttpRequest& req, int& errorCode) {
     }
 
    if (!isValidPath(req.getPath())) {
-        errorCode = 400; // Invalid Path
+        errorCode = 403; // Invalid Path
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid request path: " + req.getPath());
         return false;
     }
