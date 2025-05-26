@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/26 16:30:44 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:35:38 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "http/HttpRequestParser.hpp"
 #include "http/HttpResponse.hpp"
 #include "http/HttpResponseBuilder.hpp"
-#include "utils/buildFilePath.hpp"
+#include "utils/filesystemUtils.hpp"
 #include <sstream> // For stringstream, we will remove it later
 
 // Signal handler for exiting the server
@@ -411,7 +411,7 @@ void SocketManager::run() {
                     if (!handleClientData(current_fd, i))
                         continue;
                     // we have a response queued, request poll‐out
-                    _poll_fds[i]..events |= POLLOUT;
+                    _poll_fds[i].events |= POLLOUT;
                 }
             }
 
