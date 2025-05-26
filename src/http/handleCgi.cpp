@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/26 21:57:28 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 23:28:51 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     std::vector<std::string> env;
     auto set = [&](const std::string& k, const std::string& v) { env.push_back(k + "=" + v); };
 
-    /* std::string requestPath  = normalizePath(req.getPath());
+    std::string requestPath  = normalizePath(req.getPath());
     std::string locationPath = normalizePath(loc.getPath());
     std::string scriptName   = std::filesystem::path(scriptPath).filename().string();
     std::string scriptUri    = locationPath;
@@ -51,9 +51,9 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "PATH_INFO = " + pathInfo);
     Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "LOCATION_PATH = " + locationPath);
     set("SCRIPT_NAME", scriptUri);
-    set("PATH_INFO", pathInfo); */
-    set("SCRIPT_NAME", req.getPath());
-    set("PATH_INFO", scriptPath);
+    set("PATH_INFO", pathInfo);
+    /* set("SCRIPT_NAME", req.getPath());
+    set("PATH_INFO", scriptPath); */
 
     set("REQUEST_METHOD", req.getMethod());
     set("QUERY_STRING", req.getQuery());
