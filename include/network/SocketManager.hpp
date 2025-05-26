@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/25 20:01:15 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:51:19 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 #include <signal.h>
 #include <unistd.h>
 #include <vector>
+#include "http/handleCgi.hpp"
+#include <optional>
 
 #define TIMEOUT 15
 #define HEADER_TIMEOUT_SECONDS 6
@@ -63,6 +65,7 @@ struct ClientInfo {
     bool                     keepAlive;    // Keep-alive flag
     Server                   serverConfig; // The server config the client is connected to
     std::queue<HttpResponse> responses;    // Queue of responses to be sent to the client
+	std::optional<CgiProcess> cgiProcess;
 };
 
 /**
@@ -118,6 +121,7 @@ class SocketManager {
     std::map<int, Server>
         _listen_map; ///< Maps listening socket fds to their corresponding server configurations.
     std::map<int, ClientInfo> _client_info; /// Stores all information about each client
+	std::map<int, std::pair<int, std::string>> _fd_to_cgi; // fd → {client_fd, "stdin"/"stdout"}
 
     /**
      * @brief Initializes all listening sockets for the provided servers.
@@ -201,4 +205,8 @@ class SocketManager {
     bool isSendTimeout(int fd, time_t now);
     bool isIdleTimeout(int fd, time_t now);
     void resetRequestState(int client_fd);
+	void handleCgiPollEvents();
+    void cleanupCgiForClient(int client_fd);
+    bool handleCgiRequest(int client_fd, const HttpRequest& request, const Server& server,
+                          const Location& location);
 };

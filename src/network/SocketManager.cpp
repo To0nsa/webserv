@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/26 11:45:13 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 14:11:04 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,134 @@ SocketManager::~SocketManager() {
         close(pfd.fd);
 }
 
+void SocketManager::cleanupCgiForClient(int client_fd) {
+    if (!_client_info.contains(client_fd))
+        return;
+
+    ClientInfo& client = _client_info[client_fd];
+    if (!client.cgiProcess)
+        return;
+
+    const CgiProcess& cgi = *client.cgiProcess;
+
+    // Remove from fd→cgi map
+    _fd_to_cgi.erase(cgi.stdin_fd);
+    _fd_to_cgi.erase(cgi.stdout_fd);
+
+    // Remove fds from poll
+    _poll_fds.erase(std::remove_if(_poll_fds.begin(), _poll_fds.end(),
+                                   [&](const pollfd& pfd) {
+                                       return pfd.fd == cgi.stdin_fd || pfd.fd == cgi.stdout_fd;
+                                   }),
+                    _poll_fds.end());
+
+    CGI::cleanupCgi(*client.cgiProcess);
+    client.cgiProcess.reset();
+}
+
 void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
+	cleanupCgiForClient(client_fd); // new line
     _poll_fds.erase(_poll_fds.begin() + index);
     _client_info.erase(client_fd);
     close(client_fd);
     std::cout << "We close FD(Connection: close): " << client_fd << std::endl;
+}
+
+void SocketManager::handleCgiPollEvents() {
+    // Helper: once we queue a response, ensure poll() will wake on POLLOUT
+    auto markClientWritable = [&](int client_fd) {
+        for (auto& pfd : _poll_fds) {
+            if (pfd.fd == client_fd) {
+                pfd.events |= POLLOUT;
+                break;
+            }
+        }
+    };
+
+    // Walk backwards so erasing entries is safe
+    for (size_t i = _poll_fds.size(); i-- > 0;) {
+        auto& pfd     = _poll_fds[i];
+        int   fd      = pfd.fd;
+        short revents = pfd.revents;
+
+        // Only handle CGI pipe FDs here
+        if (!_fd_to_cgi.contains(fd))
+            continue;
+
+        auto [client_fd, which] = _fd_to_cgi.at(fd);
+        ClientInfo& client      = _client_info[client_fd];
+        if (!client.cgiProcess)
+            continue;
+
+        CgiProcess& cgi = *client.cgiProcess;
+        time_t      now = time(NULL);
+
+        // 1) Timeout guard (5s)
+        if (now - cgi.last_activity > 0.5) {
+            std::cerr << "[CGI] Timeout on fd " << fd << " for client_fd " << client_fd << "\n";
+            client.responses.push(ResponseBuilder::generateError(504, client.serverConfig, {}));
+            markClientWritable(client_fd);
+
+            CGI::cleanupCgi(cgi);
+            client.cgiProcess.reset();
+            _poll_fds.erase(_poll_fds.begin() + i);
+            _fd_to_cgi.erase(fd);
+            continue;
+        }
+
+        bool success = true;
+        // 2) Drive CGI stdin
+        if (cgi.phase == CgiProcess::Phase::Writing && which == "stdin" && (revents & POLLOUT)) {
+            success = CGI::handleWrite(cgi);
+        }
+        // 3) Drive CGI stdout (data or EOF)
+        if (cgi.phase == CgiProcess::Phase::Reading && which == "stdout") {
+            if (revents & POLLIN) {
+                success = CGI::handleRead(cgi);
+            }
+            if (revents & POLLHUP) {
+                std::cerr << "[CGI DEBUG] POLLHUP on stdout FD=" << fd << " → setting phase=Done\n";
+                cgi.phase = CgiProcess::Phase::Done;
+            }
+        }
+
+        // 4) On I/O error
+        if (!success) {
+            std::cerr << "[CGI] I/O error on fd " << fd << "\n";
+            client.responses.push(ResponseBuilder::generateError(502, client.serverConfig, {}));
+            markClientWritable(client_fd);
+
+            CGI::cleanupCgi(cgi);
+            client.cgiProcess.reset();
+            _poll_fds.erase(_poll_fds.begin() + i);
+            _fd_to_cgi.erase(fd);
+            continue;
+        }
+
+        // 5) Finalize when done
+        if (cgi.phase == CgiProcess::Phase::Done) {
+            std::cerr << "[CGI] Phase Done, checking child status...\n";
+            if (!CGI::tryTerminateCgi(cgi)) {
+                // child not reaped yet → come back next loop
+                continue;
+            }
+
+            // build and queue the HTTP response
+            auto maybeResp = CGI::finalizeCgi(cgi, client.serverConfig, {/*req*/});
+            auto resp =
+                maybeResp.value_or(ResponseBuilder::generateError(502, client.serverConfig, {}));
+            client.responses.push(resp);
+            markClientWritable(client_fd);
+
+            // clean up both pipe FDs at once
+            std::erase_if(_poll_fds, [&](auto const& p) {
+                return p.fd == cgi.stdin_fd || p.fd == cgi.stdout_fd;
+            });
+            _fd_to_cgi.erase(cgi.stdin_fd);
+            _fd_to_cgi.erase(cgi.stdout_fd);
+            client.cgiProcess.reset();
+        }
+    }
 }
 
 void SocketManager::resetRequestState(int client_fd) {
@@ -261,9 +384,19 @@ void SocketManager::run() {
             throw SocketError("poll() failed: " + std::string(std::strerror(errno)));
         }
 
+		// First, drive any pending CGI reads/writes
+        handleCgiPollEvents();
+
+        // Then handle sockets — but skip *all* CGI FDs before doing error/HUP checks
         for (size_t i = _poll_fds.size(); i-- > 0;) {
             short revents    = _poll_fds[i].revents;
             int   current_fd = _poll_fds[i].fd;
+			
+			// **FIX**: skip CGI pipe FDs entirely
+            if (_fd_to_cgi.contains(current_fd)) {
+                continue;
+            }
+
 			if (checkClientTimeouts(current_fd, i)) {
                 _poll_fds[i].events |= POLLOUT; // If connection keep-alive but client idle we close
             }
@@ -326,6 +459,46 @@ void SocketManager::handleNewConnection(int listen_fd) {
     _client_info[client_fd] = info;
 }
 
+bool hasFullChunkedBody(const std::string& buffer, size_t bodyStart) {
+    size_t end = buffer.find("0\r\n\r\n", bodyStart);
+    return end != std::string::npos;
+}
+
+bool SocketManager::handleCgiRequest(int client_fd, const HttpRequest& request,
+                                     const Server& server, const Location& location) {
+    ClientInfo& client = _client_info[client_fd];
+    client.cgiProcess.emplace();
+
+    if (!CGI::initCgiProcess(*client.cgiProcess, request, server, location)) {
+        respondError(client_fd, 500);
+        client.cgiProcess.reset();
+        return true; // error response queued
+    }
+
+    const CgiProcess& cgi = *client.cgiProcess;
+
+    _poll_fds.push_back({cgi.stdin_fd, POLLOUT, 0});
+    _poll_fds.push_back({cgi.stdout_fd, POLLIN, 0});
+
+    _fd_to_cgi[cgi.stdin_fd]  = {client_fd, "stdin"};
+    _fd_to_cgi[cgi.stdout_fd] = {client_fd, "stdout"};
+
+    return true; // handled as CGI
+}
+
+static const Location* findMatchingLocation(const std::string& path, const Server& server) {
+    const Location* best = nullptr;
+    size_t          max  = 0;
+    for (const Location& loc : server.getLocations()) {
+        if (path.rfind(loc.getPath(), 0) == 0 && loc.getPath().size() > max) {
+            best = &loc;
+            max  = loc.getPath().size();
+        }
+    }
+    return best;
+}
+
+
 // Read data from client, send fixed response, then close
 bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (!receiveFromClient(client_fd, index)) {
@@ -378,6 +551,22 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 		_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
 
 		const Server& server   = _client_info[client_fd].serverConfig;
+		const Location* location = findMatchingLocation(request.getPath(), server);
+		if (!location) {
+			respondError(client_fd, 404);
+			return true;
+		}
+
+		if (!location->isMethodAllowed(request.getMethod())) {
+			respondError(client_fd, 405);
+			return true;
+		}
+
+		if (location->isCgiRequest(request.getPath())) {
+			return handleCgiRequest(client_fd, request, server, *location);
+		}
+
+		// Fallback to standard GET/POST/DELETE handler
 		HttpResponse  response = handleRequest(request, server);
 		_client_info[client_fd].responses.push(response);
 		// If keep-alive is false, break the loop to close connection

@@ -3,26 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/15 01:15:12 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/26 14:09:32 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * @file    Location.cpp
- * @brief   Implements the Location class methods.
- *
- * @details Provides setters, getters, and helper logic for path-based configuration
- * blocks, including method filtering, path resolution, CGI detection, and more.
- * @ingroup config
- */
-
 #include "core/Location.hpp"
+#include "utils/stringUtils.hpp"
 
 #include <algorithm>
 #include <filesystem>
+#include <map>
 #include <vector>
 
 ///////////////////////
@@ -72,6 +65,10 @@ void Location::setUploadStore(const std::string& path) {
 
 void Location::addCgiExtension(const std::string& ext) {
     _cgi_extensions.push_back(ext);
+}
+
+void Location::addCgiInterpreter(const std::string& ext, const std::string& path) {
+    _cgi_interpreters[ext] = path;
 }
 
 ///////////////
@@ -125,6 +122,19 @@ const std::string& Location::getCgiExtension() const {
 
 const std::vector<std::string>& Location::getCgiExtensions() const {
     return _cgi_extensions;
+}
+
+std::string Location::getCgiInterpreter(const std::string& ext) const {
+    std::string key = toLower(ext);
+    if (!key.empty() && key[0] != '.')
+        key = "." + key;
+
+    std::map<std::string, std::string>::const_iterator it = _cgi_interpreters.find(key);
+    return (it != _cgi_interpreters.end()) ? it->second : "";
+}
+
+const std::map<std::string, std::string>& Location::getCgiInterpreterMap() const {
+    return _cgi_interpreters;
 }
 
 /////////////////////

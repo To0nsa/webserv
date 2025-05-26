@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 15:43:48 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 13:52:40 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
         return ResponseBuilder::generateError(405, server, request);
     }
 
-    // CGI detection
+    /* // CGI detection
     if (location.isCgiRequest(path)) {
         return handleCgi(request, server, location);
-    }
+    } */
 
     // Delegate based on method
     if (method == "GET") {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   directive_handler_table.cpp                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/14 10:18:14 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/26 14:25:45 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@
 #include "utils/errorUtils.hpp"
 #include "utils/stringUtils.hpp"
 
+#include <filesystem>
 #include <set>
 #include <sstream>
+#include <unistd.h>
 
 /**
  * @namespace directive
@@ -123,7 +125,6 @@ static void validateCgiExtension(const std::string& ext, int line, int column,
                           context_provider());
     }
 
-    // Check all characters after the dot
     for (std::size_t i = 1; i < ext.size(); ++i) {
         char c = ext[i];
         if (!std::isalnum(c)) {
@@ -352,17 +353,29 @@ const std::unordered_map<std::string, LocationHandler>& locationHandlers() {
                  }
              }
          }},
-        // Handle the "return" directive, which defines an HTTP redirection for this location.
-        // The handler ensures exactly two arguments are provided (the status code and the
-        // redirection URI), parses the status code, and sets the redirection
-        // using setRedirect() on the Location object.
+        {"cgi_interpreter",
+         [](Location& loc, const auto& v, int line, int column, const std::string& ctx) {
+             requireArgCount(v, 2, "cgi_interpreter", line, column, ctx);
+             const std::string& ext  = v[0];
+             const std::string& path = v[1];
+             validateCgiExtension(ext, line, column, [&]() { return ctx; });
+             if (!std::filesystem::is_regular_file(path) || access(path.c_str(), X_OK) != 0) {
+                 throw SyntaxError(
+                     formatError("Interpreter not executable or not found: " + path, line, column),
+                     ctx);
+             }
+             if (!loc.getCgiInterpreter(ext).empty()) {
+                 throw SyntaxError(
+                     formatError("Duplicate cgi_interpreter for " + ext + ": already defined", line,
+                                 column),
+                     ctx);
+             }
+             loc.addCgiInterpreter(ext, path);
+         }},
         {"return",
          [](Location& loc, const auto& v, int line, int column, const std::string& ctx) {
-             // Ensure exactly two arguments are provided for the "return" directive
              requireArgCount(v, 2, "return", line, column, ctx);
-             // Parse the HTTP status code (e.g., 301 for permanent redirection)
-             int code = parseInt(v[0]);
-             // Set the redirection URI and status code on the Location object
+             int code = parseInt(v[0], "return", line, column, [&]() { return ctx; });
              loc.setRedirect(v[1], code);
          }},
     };
