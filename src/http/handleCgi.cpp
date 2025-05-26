@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/26 20:59:18 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 21:57:28 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,30 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     std::vector<std::string> env;
     auto set = [&](const std::string& k, const std::string& v) { env.push_back(k + "=" + v); };
 
-    set("REQUEST_METHOD", req.getMethod());
+    /* std::string requestPath  = normalizePath(req.getPath());
+    std::string locationPath = normalizePath(loc.getPath());
+    std::string scriptName   = std::filesystem::path(scriptPath).filename().string();
+    std::string scriptUri    = locationPath;
+    if (!scriptUri.empty() && scriptUri.back() != '/')
+        scriptUri += "/";
+    scriptUri += scriptName;
+
+    std::string pathInfo;
+    if (requestPath.size() > scriptUri.size() &&
+        requestPath.compare(0, scriptUri.size(), scriptUri) == 0) {
+        pathInfo = requestPath.substr(scriptUri.size());
+        if (!pathInfo.empty() && pathInfo[0] != '/')
+            pathInfo = "/" + pathInfo;
+    }
+    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "SCRIPT_NAME = " + scriptUri);
+    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "PATH_INFO = " + pathInfo);
+    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "LOCATION_PATH = " + locationPath);
+    set("SCRIPT_NAME", scriptUri);
+    set("PATH_INFO", pathInfo); */
     set("SCRIPT_NAME", req.getPath());
     set("PATH_INFO", scriptPath);
+
+    set("REQUEST_METHOD", req.getMethod());
     set("QUERY_STRING", req.getQuery());
     if (!req.getHeader("Content-Length").empty())
         set("CONTENT_LENGTH", req.getHeader("Content-Length"));
@@ -107,6 +128,7 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         std::string scriptPath = cgi.script_path;
         std::string ext        = std::filesystem::path(scriptPath).extension().string();
         std::string interp     = loc.getCgiInterpreter(ext);
+        Logger::logFrom(LogLevel::DEBUG, "CGI", "Interpreter: " + interp + ", Script: " + scriptPath);
 
         // 2. Build argv using references to scoped strings
         std::vector<std::string> argvStorage;
@@ -127,6 +149,7 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
 
         // 4. chdir safely
         const std::string cgiDir = std::filesystem::path(scriptPath).parent_path().string();
+        Logger::logFrom(LogLevel::DEBUG, "CGI", "Changing directory to: " + cgiDir);
         if (chdir(cgiDir.c_str()) != 0) {
             Logger::logFrom(LogLevel::ERROR, "CGI", "chdir failed: " + std::string(strerror(errno)));
             exit(1);
@@ -134,6 +157,8 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
 
         // 5. Final call
         Logger::logFrom(LogLevel::DEBUG, "CGI", "execve: " + std::string(argv[0]));
+        for (size_t i = 0; envp[i]; ++i)
+            Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", envp[i]);
         execve(argv[0], argv.data(), envp.data());
 
         // 6. If execve fails
