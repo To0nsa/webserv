@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:38:32 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/23 12:28:43 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/26 14:52:00 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ std::string  detectMimeType(const std::string& file_path);
 std::string  normalizePath(const std::string& path);
 std::string  joinPath(const std::string& base, const std::string& suffix);
 std::string  buildFilePath(const HttpRequest& request, const Location& loc);
-bool         ensureDirectoryExists(const std::string& path);
+bool         mkdirRecursive(const std::string& path);
 
-bool isInvalidAbsolutePath(const std::string& pathStr);
-bool isSuspiciousFilename(const std::string& pathStr);
+/* bool isInvalidAbsolutePath(const std::string& pathStr);
+bool isSuspiciousFilename(const std::string& pathStr); */

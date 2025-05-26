@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/26 13:41:29 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/26 14:50:19 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,73 @@ HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
 }
 
 std::string normalizePath(const std::string& path) {
+    if (path.empty())
+        return "/";
+    std::string result = path;
+
+    if (result.size() > 1 && result.back() == '/')
+        result.pop_back();
+
+    return result;
+}
+
+std::string joinPath(const std::string& base, const std::string& suffix) {
+    if (base.empty())
+        return suffix;
+    if (base.back() == '/')
+        return base + suffix;
+    return base + '/' + suffix;
+}
+
+std::string buildFilePath(const HttpRequest& request, const Location& loc) {
+    std::string request_path  = normalizePath(request.getPath());
+    std::string location_path = normalizePath(loc.getPath());
+    std::string location_root = normalizePath(loc.getRoot());
+
+    std::string suffix;
+    if (request_path.find(location_path) == 0)
+        suffix = request_path.substr(location_path.length());
+
+    if (!suffix.empty() && suffix[0] == '/')
+        suffix.erase(0, 1);
+
+    return joinPath(location_root, suffix); // May point to file or directory
+}
+
+static std::vector<std::string> splitPath(const std::string& path) {
+    std::vector<std::string> parts;
+    std::stringstream        ss(path);
+    std::string              part;
+    while (std::getline(ss, part, '/')) {
+        if (!part.empty())
+            parts.push_back(part);
+    }
+    return parts;
+}
+
+bool mkdirRecursive(const std::string& path) {
+    std::vector<std::string> parts   = splitPath(path);
+    std::string              current = path[0] == '/' ? "/" : "";
+
+    for (size_t i = 0; i < parts.size(); ++i) {
+        current = joinPath(current, parts[i]);
+        if (isFile(current)) {
+            std::cerr << "[mkdirRecursive] Path exists and is a file (not directory): " << current
+                      << std::endl;
+            return false;
+        }
+        if (mkdir(current.c_str(), 0777) == -1) {
+            if (errno != EEXIST) {
+                std::cerr << "[mkdirRecursive] Failed to create directory: " << current
+                          << " — errno: " << strerror(errno) << std::endl;
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+/* std::string normalizePath(const std::string& path) {
     return fs::path(path).lexically_normal().string();
 }
 
@@ -172,4 +239,4 @@ bool isSuspiciousFilename(const std::string& filename) {
     // Enforce strict whitelist pattern: no multiple dots, only one extension, valid suffix
     static const std::regex strictPattern(R"(^[a-zA-Z0-9_-]+\.(html?|txt|php|cgi)$)");
     return !std::regex_match(filename, strictPattern);
-}
+} */

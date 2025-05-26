@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 21:35:26 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/26 14:52:51 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
     std::string fullDirPath, fullpath;
     std::tie(fullDirPath, fullpath) = resolveUploadPaths(loc, relative, filename);
 
-    if (!ensureDirectoryExists(fullDirPath)) {
+    if (!mkdirRecursive(fullDirPath)) {
         return ResponseBuilder::generateError(500, server, request);
     }
 
