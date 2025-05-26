@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/26 17:25:18 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 20:46:04 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,18 +149,14 @@ bool Location::isMethodAllowed(const std::string& method) const {
 }
 
 bool Location::matchesPath(const std::string& uri) const {
-    return uri.rfind(_path, 0) == 0;
+    return normalizePath(uri).rfind(normalizePath(_path), 0) == 0;
 }
 
 std::string Location::resolveAbsolutePath(const std::string& uri) const {
-    if (!matchesPath(uri))
+    std::string cleanUri = normalizePath(uri);
+    if (!matchesPath(cleanUri))
         return "";
-
-    std::string relative = uri.substr(normalizePath(_path).length());
-    if (!relative.empty() && relative.front() == '/')
-        relative.erase(0, 1);
-
-    return joinPath(normalizePath(_root), relative);
+    return joinPath(_root, cleanUri.substr(_path.length()));
 }
 
 bool Location::isUploadEnabled() const {
@@ -175,5 +171,5 @@ bool Location::isCgiRequest(const std::string& path) const {
 std::string Location::getEffectiveIndexPath() const {
     if (_index_files.empty())
         return "";
-    return joinPath(normalizePath(_root), normalizePath(_index_files.front()));
+    return joinPath(_root, _index_files.front());
 }

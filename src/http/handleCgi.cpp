@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/26 17:28:15 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 20:45:51 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ namespace CGI {
 
 bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& server,
                     const Location& loc) {
-    cgi.script_path = std::filesystem::absolute(loc.resolveAbsolutePath(normalizePath(req.getPath())));
+    cgi.script_path = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
 	std::cerr << "[CGI] Initializing CGI for script: " << cgi.script_path << std::endl;
     if (!isFile(cgi.script_path))
         return false;
