@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/27 13:48:47 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:30:39 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -616,7 +616,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         if (!response.isConnectionClose()) {
             Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Connection: keep-alive - keeping the connection open");
             if (_client_info[client_fd].responses.empty()) {
-				/ We should not close the client connection, but just reset the POLLOUT flag if needed
+				// We should not close the client connection, but just reset the POLLOUT flag if needed
                 _poll_fds[index].events &= ~POLLOUT; // Reset POLLOUT flag if the connection should stay open
             }
         } else {

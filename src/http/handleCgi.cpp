@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/26 23:28:51 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:30:13 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,14 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "PATH_INFO = " + pathInfo);
     Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "LOCATION_PATH = " + locationPath);
     set("SCRIPT_NAME", scriptUri);
+    /* if (!pathInfo.empty()) */
     set("PATH_INFO", pathInfo);
     /* set("SCRIPT_NAME", req.getPath());
     set("PATH_INFO", scriptPath); */
 
     set("REQUEST_METHOD", req.getMethod());
-    set("QUERY_STRING", req.getQuery());
+	/* if (!req.getQuery().empty()) */
+	set("QUERY_STRING", req.getQuery());
     if (!req.getHeader("Content-Length").empty())
         set("CONTENT_LENGTH", req.getHeader("Content-Length"));
     if (!req.getHeader("Content-Type").empty())
@@ -223,7 +225,7 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
     size_t pos = cgi.output.find("\r\n\r\n");
     if (pos == std::string::npos) {
 		Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): no header found in output");
-        return ResponseBuilder::generateError(500, server, req);
+        return ResponseBuilder::generateError(500, server, req); //return ResponseBuilder::generateSuccess(200, cgi.output, "", req);
 	}
 
     std::string header = cgi.output.substr(0, pos);
