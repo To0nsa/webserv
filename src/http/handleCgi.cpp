@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleCgi.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/26 23:28:51 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/27 09:05:11 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,34 +28,32 @@
 namespace {
 
 std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server,
-                                    const Location& loc, const std::string& scriptPath) {
+        const Location& loc, const std::string& scriptPath) {
     std::vector<std::string> env;
     auto set = [&](const std::string& k, const std::string& v) { env.push_back(k + "=" + v); };
 
     std::string requestPath  = normalizePath(req.getPath());
     std::string locationPath = normalizePath(loc.getPath());
     std::string scriptName   = std::filesystem::path(scriptPath).filename().string();
-    std::string scriptUri    = locationPath;
+
+    // Construct SCRIPT_NAME (should be location path + script filename)
+    std::string scriptUri = locationPath;
     if (!scriptUri.empty() && scriptUri.back() != '/')
         scriptUri += "/";
     scriptUri += scriptName;
 
+    // Compute PATH_INFO: anything after scriptUri in request path
     std::string pathInfo;
     if (requestPath.size() > scriptUri.size() &&
-        requestPath.compare(0, scriptUri.size(), scriptUri) == 0) {
+    requestPath.compare(0, scriptUri.size(), scriptUri) == 0) {
         pathInfo = requestPath.substr(scriptUri.size());
         if (!pathInfo.empty() && pathInfo[0] != '/')
             pathInfo = "/" + pathInfo;
     }
-    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "SCRIPT_NAME = " + scriptUri);
-    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "PATH_INFO = " + pathInfo);
-    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "LOCATION_PATH = " + locationPath);
-    set("SCRIPT_NAME", scriptUri);
-    set("PATH_INFO", pathInfo);
-    /* set("SCRIPT_NAME", req.getPath());
-    set("PATH_INFO", scriptPath); */
 
     set("REQUEST_METHOD", req.getMethod());
+    set("SCRIPT_NAME", scriptUri);
+    set("PATH_INFO", pathInfo);
     set("QUERY_STRING", req.getQuery());
     if (!req.getHeader("Content-Length").empty())
         set("CONTENT_LENGTH", req.getHeader("Content-Length"));
@@ -73,8 +71,14 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
         std::replace(envKey.begin(), envKey.end(), '-', '_');
         set(envKey, value);
     }
+
+    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "SCRIPT_NAME = " + scriptUri);
+    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "PATH_INFO = " + pathInfo);
+    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "LOCATION_PATH = " + locationPath);
+
     return env;
 }
+
 
 std::vector<char*> toCharPtrArray(const std::vector<std::string>& vec) {
     std::vector<char*> out;
@@ -159,6 +163,11 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         Logger::logFrom(LogLevel::DEBUG, "CGI", "execve: " + std::string(argv[0]));
         for (size_t i = 0; envp[i]; ++i)
             Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", envp[i]);
+        
+        Logger::logFrom(LogLevel::DEBUG, "CGI", "execve: " + std::string(argv[0]));
+        for (size_t i = 0; envp[i]; ++i)
+            Logger::logFrom(LogLevel::DEBUG, "CGI-ARGV", argv[i]);
+        
         execve(argv[0], argv.data(), envp.data());
 
         // 6. If execve fails
@@ -212,38 +221,62 @@ bool handleRead(CgiProcess& cgi) {
 }
 
 std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
-                                        const HttpRequest& req) {
+    const HttpRequest& req) {
     int status;
     if (waitpid(cgi.pid, &status, WNOHANG) == 0)
-        return std::nullopt; // Not done yet
-    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
+        return std::nullopt; // Still running
+
+    if (!WIFEXITED(status)) {
+        Logger::logFrom(LogLevel::ERROR, "CGI", "Script terminated abnormally");
+        return ResponseBuilder::generateError(502, server, req);
+    }
+
+    int exitCode = WEXITSTATUS(status);
+    Logger::logFrom(LogLevel::DEBUG, "CGI", "Script exited with code: " + std::to_string(exitCode));
+    if (exitCode != 0)
         return ResponseBuilder::generateError(502, server, req);
 
-    // Basic parser (header + body)
+    if (cgi.output.empty()) {
+        Logger::logFrom(LogLevel::WARN, "CGI", "Script produced no output; returning 200 OK");
+        return ResponseBuilder::generateSuccess(200, "", "text/plain", req);
+    }
+
     size_t pos = cgi.output.find("\r\n\r\n");
-    if (pos == std::string::npos) {
-		Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): no header found in output");
+/*     if (pos == std::string::npos) {
+        Logger::logFrom(LogLevel::ERROR, "CGI", "Missing header/body delimiter in output");
         return ResponseBuilder::generateError(500, server, req);
-	}
+    } */
 
     std::string header = cgi.output.substr(0, pos);
     std::string body   = cgi.output.substr(pos + 4);
 
     std::string        contentType = "text/plain";
-    int                code        = 200;
+    int                statusCode  = 200;
     std::istringstream iss(header);
     std::string        line;
+
     while (std::getline(iss, line)) {
+        if (!line.empty() && line.back() == '\r')  // Strip CR if present
+            line.pop_back();
+
         if (line.find("Content-Type:") == 0)
             contentType = trim(line.substr(13));
-        else if (line.find("Status:") == 0)
-            code = std::stoi(trim(line.substr(7)));
+        else if (line.find("Status:") == 0) {
+                std::string statusStr = trim(line.substr(7));
+            try {
+                statusCode = std::stoi(statusStr);
+            } catch (...) {
+                Logger::logFrom(LogLevel::ERROR, "CGI", "Invalid Status header: " + statusStr);
+                return ResponseBuilder::generateError(500, server, req);
+            }
+        }
     }
 
-    // DEBUG
-    Logger::logFrom(LogLevel::DEBUG, "CGI", "finalizeCgi(): output =\n" + cgi.output);
+    Logger::logFrom(LogLevel::DEBUG, "CGI", "Parsed response: " + std::to_string(statusCode) +
+            ", content-type: " + contentType);
+    Logger::logFrom(LogLevel::DEBUG, "CGI", "Full CGI output:\n" + cgi.output);
 
-    return ResponseBuilder::generateSuccess(code, body, contentType, req);
+    return ResponseBuilder::generateSuccess(statusCode, body, contentType, req);
 }
 
 void cleanupCgi(CgiProcess& cgi) {
