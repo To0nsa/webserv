@@ -35,20 +35,20 @@
 #define MAX_CLIENTS 512
 
 struct ClientInfo {
-    int                      client_fd;       // File descriptor of the client socket
-    time_t                   lastRequestTime; // Last request time for timeout management
-    time_t                   connectionStartTime;
-    time_t                   lastSendAttemptTime;
-    size_t                   headerBytesReceived;
-    size_t                   bodyBytesReceived;
-    bool                     headerComplete;
-    size_t                   bytes_sent;
-    std::string              requestBuffer;
-    std::string              current_raw_response;
-    bool                     keepAlive;    // Keep-alive flag
-    Server                   serverConfig; // The server config the client is connected to
-    std::queue<HttpResponse> responses;    // Queue of responses to be sent to the client
-	std::optional<CgiProcess> cgiProcess;
+    int                       client_fd;       // File descriptor of the client socket
+    time_t                    lastRequestTime; // Last request time for timeout management
+    time_t                    connectionStartTime;
+    time_t                    lastSendAttemptTime;
+    size_t                    headerBytesReceived;
+    size_t                    bodyBytesReceived;
+    bool                      headerComplete;
+    size_t                    bytes_sent;
+    std::string               requestBuffer;
+    std::string               current_raw_response;
+    bool                      keepAlive;    // Keep-alive flag
+    Server                    serverConfig; // The server config the client is connected to
+    std::queue<HttpResponse>  responses;    // Queue of responses to be sent to the client
+    std::optional<CgiProcess> cgiProcess;
 };
 
 class SocketManager {
@@ -104,7 +104,7 @@ class SocketManager {
     bool isSendTimeout(int fd, time_t now);
     bool isIdleTimeout(int fd, time_t now);
     void resetRequestState(int client_fd);
-	void handleCgiPollEvents();
+    void handleCgiPollEvents();
     void cleanupCgiForClient(int client_fd);
     bool handleCgiRequest(int client_fd, const HttpRequest& request, const Server& server,
                           const Location& location);

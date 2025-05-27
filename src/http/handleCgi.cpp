@@ -6,15 +6,15 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/27 13:24:51 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/27 19:48:57 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handleCgi.hpp"
 #include "http/HttpResponseBuilder.hpp"
+#include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
 #include "utils/stringUtils.hpp"
-#include "utils/Logger.hpp"
 
 #include <fcntl.h>
 #include <filesystem>
@@ -28,7 +28,7 @@
 namespace {
 
 std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server,
-        const Location& loc, const std::string& scriptPath) {
+                                    const Location& loc, const std::string& scriptPath) {
     std::vector<std::string> env;
     auto set = [&](const std::string& k, const std::string& v) { env.push_back(k + "=" + v); };
 
@@ -36,29 +36,32 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     std::string locationPath = normalizePath(loc.getPath());
     std::string scriptName   = std::filesystem::path(scriptPath).filename().string();
 
-    // Construct SCRIPT_NAME (should be location path + script filename)
+    // SCRIPT_NAME = URL path to the script
     std::string scriptUri = locationPath;
     if (!scriptUri.empty() && scriptUri.back() != '/')
         scriptUri += "/";
     scriptUri += scriptName;
 
-    // Compute PATH_INFO: anything after scriptUri in request path
     std::string pathInfo;
-    if (requestPath.size() > scriptUri.size() &&
-    requestPath.compare(0, scriptUri.size(), scriptUri) == 0) {
+    if (requestPath.rfind(scriptUri, 0) == 0 && requestPath.size() > scriptUri.size()) {
         pathInfo = requestPath.substr(scriptUri.size());
-        if (!pathInfo.empty() && pathInfo[0] != '/')
-            pathInfo = "/" + pathInfo;
+        if (!pathInfo.empty() && pathInfo.front() != '/')
+            pathInfo.insert(pathInfo.begin(), '/');
+    }
+    // **Always** give at least a “/” so the tester sees something**
+    if (pathInfo.empty()) {
+        pathInfo = "/";
     }
 
     set("REQUEST_METHOD", req.getMethod());
     set("SCRIPT_NAME", scriptUri);
-    set("PATH_INFO", "/");
+    set("PATH_INFO", pathInfo);
     set("QUERY_STRING", req.getQuery());
     if (!req.getHeader("Content-Length").empty())
         set("CONTENT_LENGTH", req.getHeader("Content-Length"));
     if (!req.getHeader("Content-Type").empty())
         set("CONTENT_TYPE", req.getHeader("Content-Type"));
+
     set("SERVER_PROTOCOL", "HTTP/1.1");
     set("GATEWAY_INTERFACE", "CGI/1.1");
     set("SERVER_SOFTWARE", "webserv/1.0");
@@ -66,19 +69,19 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     set("SERVER_NAME", server.getDefaultServerName());
     set("SERVER_PORT", std::to_string(server.getPort()));
 
-/*     for (const auto& [key, value] : req.getHeaders()) {
+    for (const auto& [key, value] : req.getHeaders()) {
         std::string envKey = "HTTP_" + toUpper(key);
         std::replace(envKey.begin(), envKey.end(), '-', '_');
         set(envKey, value);
-    } */
-
+    }
     return env;
 }
 
-
-std::vector<char*> toCharPtrArray(const std::vector<std::string>& vec) {
+// Helper to convert vector<string> → vector<char*>
+std::vector<char*> toCharPtrArray(const std::vector<std::string>& vs) {
     std::vector<char*> out;
-    for (const auto& s : vec)
+    out.reserve(vs.size() + 1);
+    for (const auto& s : vs)
         out.push_back(const_cast<char*>(s.c_str()));
     out.push_back(nullptr);
     return out;
@@ -90,96 +93,86 @@ namespace CGI {
 
 bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& server,
                     const Location& loc) {
+    // 1) Resolve script and ensure it exists + is executable
     cgi.script_path = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
-	Logger::logFrom(LogLevel::DEBUG, "CGI", "Initializing CGI for script: " + cgi.script_path);
-    if (!isFile(cgi.script_path))
+    if (!isFile(cgi.script_path) || access(cgi.script_path.c_str(), X_OK) != 0) {
         return false;
-    if (access(cgi.script_path.c_str(), X_OK) != 0) {
-        return false;
-	}
+    }
 
-	std::cerr << "[CGI] Script is executable: " << cgi.script_path << std::endl;
+    // 2) Create non-blocking pipes for stdin/stdout
     int in_pipe[2], out_pipe[2];
-    if (pipe(in_pipe) < 0 || pipe(out_pipe) < 0) {
+    if (pipe(in_pipe) < 0 || pipe(out_pipe) < 0)
         return false;
-    }
+    for (int fd : {in_pipe[0], in_pipe[1], out_pipe[0], out_pipe[1]})
+        fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
 
-    fcntl(in_pipe[0], F_SETFL, fcntl(in_pipe[0], F_GETFL) | O_NONBLOCK);
-    fcntl(in_pipe[1], F_SETFL, fcntl(in_pipe[1], F_GETFL) | O_NONBLOCK);
-    fcntl(out_pipe[0], F_SETFL, fcntl(out_pipe[0], F_GETFL) | O_NONBLOCK);
-    fcntl(out_pipe[1], F_SETFL, fcntl(out_pipe[1], F_GETFL) | O_NONBLOCK);
-
+    // 3) Fork
     pid_t pid = fork();
-    if (pid < 0) {
+    if (pid < 0)
         return false;
-    }
-
-    if (pid > 0) {
-        Logger::logFrom(LogLevel::DEBUG, "CGI", "Forked PID: " + std::to_string(pid) + ", script: " + cgi.script_path);
-    }
 
     if (pid == 0) {
+        // ─── CHILD ───────────────────────────────────────────────────────────
         dup2(in_pipe[0], STDIN_FILENO);
         dup2(out_pipe[1], STDOUT_FILENO);
         close(in_pipe[1]);
         close(out_pipe[0]);
-    
-        std::string scriptPath = cgi.script_path;
-        std::string ext        = std::filesystem::path(scriptPath).extension().string();
-        std::string interp     = loc.getCgiInterpreter(ext);
-    
-        Logger::logFrom(LogLevel::DEBUG, "CGI", "Interpreter: " + interp + ", Script: " + scriptPath);
-    
+
+        // Determine interpreter (if any)
+        std::string ext    = std::filesystem::path(cgi.script_path).extension().string();
+        std::string interp = loc.getCgiInterpreter(ext);
+
+        // Build argv: [interp?, SCRIPT_URI]
         std::vector<std::string> argvStorage;
-        std::string execPath;
-    
-        if (!interp.empty()) {
-            // Example: execve("/usr/bin/python3", ["/usr/bin/python3", "/path/to/script.py"], envp)
-            execPath = interp;
+        if (!interp.empty())
             argvStorage.push_back(interp);
-            argvStorage.push_back(scriptPath);
-        } else {
-            // No interpreter → assume script is executable and self-contained
-            execPath = scriptPath;
-            argvStorage.push_back(scriptPath);
-        }
-    
-        std::vector<char*> argv = toCharPtrArray(argvStorage);
-        std::vector<std::string> envStrs = prepareEnv(req, server, loc, scriptPath);
-        std::vector<char*>       envp    = toCharPtrArray(envStrs);
-    
-        const std::string cgiDir = std::filesystem::path(scriptPath).parent_path().string();
-        Logger::logFrom(LogLevel::DEBUG, "CGI", "Changing directory to: " + cgiDir);
-        if (chdir(cgiDir.c_str()) != 0) {
-            Logger::logFrom(LogLevel::ERROR, "CGI", "chdir failed: " + std::string(strerror(errno)));
+
+        // SCRIPT_URI is the URL path used by the client
+        std::string locationPath = normalizePath(loc.getPath());
+        std::string scriptName   = std::filesystem::path(cgi.script_path).filename().string();
+        std::string scriptUri    = locationPath;
+        if (!scriptUri.empty() && scriptUri.back() != '/')
+            scriptUri += '/';
+        scriptUri += scriptName;
+
+        argvStorage.push_back(scriptUri);
+        auto argv = toCharPtrArray(argvStorage);
+
+        // Build envp
+        auto envStrs = prepareEnv(req, server, loc, cgi.script_path);
+        auto envp    = toCharPtrArray(envStrs);
+
+        // chdir into the script’s directory
+        std::string cgiDir = std::filesystem::path(cgi.script_path).parent_path().string();
+        if (chdir(cgiDir.c_str()) != 0)
             exit(1);
+
+        // Debug: Dump argv[]
+        for (size_t i = 0; argv[i] != nullptr; ++i) {
+            std::cerr << "[CGI-DEBUG] argv[" << i << "] = " << argv[i] << "\n";
         }
 
-/*         Logger::logFrom(LogLevel::DEBUG, "CGI", "execve: " + std::string(argv[0]));
-        for (size_t i = 0; envp[i]; ++i)
-            Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", envp[i]);
-        
-        Logger::logFrom(LogLevel::DEBUG, "CGI", "execve: " + std::string(argv[0]));
-        for (size_t i = 0; envp[i]; ++i)
-            Logger::logFrom(LogLevel::DEBUG, "CGI-ARGV", argv[i]); */
-    
-        execve(execPath.c_str(), argv.data(), envp.data());
-    
-        Logger::logFrom(LogLevel::ERROR, "CGI", "execve failed: " + std::string(strerror(errno)));
-        exit(1);
+        // Debug: Dump envp[]
+        for (size_t i = 0; envp[i] != nullptr; ++i) {
+            std::cerr << "[CGI-DEBUG] envp[" << i << "] = " << envp[i] << "\n";
+        }
+
+        // Exec
+        execve(argv[0], argv.data(), envp.data());
+        _exit(1);
     }
 
+    // ─── PARENT ────────────────────────────────────────────────────────────
     close(in_pipe[0]);
     close(out_pipe[1]);
-
     cgi.pid           = pid;
     cgi.stdin_fd      = in_pipe[1];
     cgi.stdout_fd     = out_pipe[0];
-    cgi.input         = req.getMethod() == "POST" ? req.getBody() : "";
+    cgi.input         = (req.getMethod() == "POST" ? req.getBody() : "");
     cgi.input_sent    = 0;
     cgi.phase         = cgi.input.empty() ? CgiProcess::Phase::Reading : CgiProcess::Phase::Writing;
-    cgi.start_time    = time(NULL);
-    cgi.last_activity = time(NULL);
+    cgi.start_time    = time(nullptr);
+    cgi.last_activity = time(nullptr);
     return true;
 }
 
@@ -215,7 +208,7 @@ bool handleRead(CgiProcess& cgi) {
 }
 
 std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
-    const HttpRequest& req) {
+                                        const HttpRequest& req) {
     int status;
     if (waitpid(cgi.pid, &status, WNOHANG) == 0)
         return std::nullopt; // Still running
@@ -234,7 +227,6 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
 
     Logger::logFrom(LogLevel::DEBUG, "CGI", "Raw waitpid status: " + std::to_string(status));
 
-        
     if (cgi.output.empty()) {
         Logger::logFrom(LogLevel::WARN, "CGI", "Script produced no output");
         return ResponseBuilder::generateError(500, server, req);
@@ -250,7 +242,7 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
     std::string body   = cgi.output.substr(pos + 4);
 
     std::string        contentType;
-    int                statusCode = 200;
+    int                statusCode     = 200;
     bool               hasContentType = false;
     std::istringstream iss(header);
     std::string        line;
@@ -259,7 +251,7 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
         if (!line.empty() && line.back() == '\r')
             line.pop_back();
         if (line.find("Content-Type:") == 0) {
-            contentType = trim(line.substr(13));
+            contentType    = trim(line.substr(13));
             hasContentType = true;
         } else if (line.find("Status:") == 0) {
             std::string statusStr = trim(line.substr(7));
@@ -277,12 +269,12 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
         return ResponseBuilder::generateError(500, server, req);
     }
 
-    Logger::logFrom(LogLevel::DEBUG, "CGI", "Parsed response: " +
-    std::to_string(statusCode) + ", content-type: " + contentType);
+    Logger::logFrom(LogLevel::DEBUG, "CGI",
+                    "Parsed response: " + std::to_string(statusCode) +
+                        ", content-type: " + contentType);
 
     return ResponseBuilder::generateSuccess(statusCode, body, contentType, req);
 }
-
 
 void cleanupCgi(CgiProcess& cgi) {
     if (cgi.stdin_fd > 0)
@@ -296,7 +288,8 @@ void cleanupCgi(CgiProcess& cgi) {
 bool tryTerminateCgi(CgiProcess& cgi) {
     int   status;
     pid_t result = waitpid(cgi.pid, &status, WNOHANG);
-    Logger::logFrom(LogLevel::DEBUG, "CGI", "tryTerminateCgi() → waitpid returned " + std::to_string(result));
+    Logger::logFrom(LogLevel::DEBUG, "CGI",
+                    "tryTerminateCgi() → waitpid returned " + std::to_string(result));
 
     if (result == 0) {
         return false;

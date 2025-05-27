@@ -13,12 +13,12 @@
 #include "http/HttpRequestParser.hpp"
 #include "utils/Logger.hpp"
 #include <algorithm>
+#include <filesystem>
 #include <iostream>
 #include <ranges>
 #include <regex>
-#include <sstream>
 #include <set>
-#include <filesystem>
+#include <sstream>
 
 namespace fs = std::filesystem;
 
@@ -28,7 +28,7 @@ namespace fs = std::filesystem;
 bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorCode);
 bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t clientMaxBodySize,
                   int& errorCode, std::size_t& consumedBytes);
-Url parseUrl(HttpRequest& req, const std::string& url);
+Url  parseUrl(HttpRequest& req, const std::string& url);
 
 //--------------------------------------------------------
 // validating utils
@@ -36,15 +36,14 @@ Url parseUrl(HttpRequest& req, const std::string& url);
 bool validateReq(HttpRequest& req, int& errorCode);
 bool isValidPath(const std::string& rawPath);
 
-
-
 bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
-                              std::size_t clientMaxBodySize, int& errorCode, std::size_t& consumedBytes) {
+                              std::size_t clientMaxBodySize, int& errorCode,
+                              std::size_t& consumedBytes) {
     std::size_t headerEndPos = raw_req.find("\r\n\r\n");
     if (headerEndPos == std::string::npos) {
         errorCode = 0; // Incomplete request
         Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
-                          "Incomplete header, server reads again");
+                        "Incomplete header, server reads again");
         return false;
     }
     std::string headerPart = raw_req.substr(0, headerEndPos);
@@ -64,7 +63,8 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     std::istringstream stream(headerPart);
     std::string        line;
     if (!std::getline(stream, line) || line.empty()) {
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Empty request start line or invalid format");
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Empty request start line or invalid format");
         errorCode = 400;
         return false;
     }
@@ -98,7 +98,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
 
         if ((key == "TRANSFER-ENCODING") && value == "chunked" && req.getMethod() == "GET") {
             Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
-                          "Chunked transfer encoding is not allowed in GET requests");
+                            "Chunked transfer encoding is not allowed in GET requests");
             errorCode = 400;
             return false;
         }
@@ -106,7 +106,8 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
             if (value.empty() || !std::all_of(value.begin(), value.end(), [](char c) {
                     return std::isdigit(static_cast<unsigned char>(c));
                 })) {
-                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid Content-Length value: " + value);
+                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                                "Invalid Content-Length value: " + value);
                 errorCode = 411;
                 return false;
             }
@@ -114,7 +115,8 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
             try {
                 req.setContentLength(std::stoull(value));
             } catch (const std::exception& e) {
-                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid Content-Length value: " + value);
+                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                                "Invalid Content-Length value: " + value);
                 errorCode = 411;
                 return false;
             }
@@ -150,7 +152,7 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
     std::istringstream stream(bodyPart);
     std::string        chunkLine;
     std::string        fullBody;
-    std::size_t        totalSize = 0;
+    std::size_t        totalSize     = 0;
     std::size_t        localConsumed = 0;
 
     while (std::getline(stream, chunkLine)) {
@@ -174,11 +176,12 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
             std::string lastLine;
             std::getline(stream, lastLine);
             localConsumed += lastLine.size() + 1; // Usually just \r\n
-            break; // End of chunks
+            break;                                // End of chunks
         }
 
         if (totalSize + chunkSize > clientMaxBodySize) {
-            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Exceeded request max body size in chunked transfer");
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                            "Exceeded request max body size in chunked transfer");
             consumedBytes += localConsumed + chunkSize;
             errorCode = 413;
             return;
@@ -213,7 +216,8 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
 
     if (transferEncoding == "chunked") {
         if (!isChunkedBodyComplete(bodyPart)) {
-            Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete chunked body, server reads again");
+            Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
+                            "Incomplete chunked body, server reads again");
             errorCode = 0;
             return false;
         }
@@ -223,14 +227,16 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
 
     std::size_t contentLength = req.getContentLength();
     if (contentLength >= clientMaxBodySize) {
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser","Exceeded request max body size in non-chunked transfer");
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Exceeded request max body size in non-chunked transfer");
         errorCode = 413;
         consumedBytes += bodyPart.size();
         return false;
     }
 
     if (bodyPart.size() < contentLength) {
-        Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete request body, server reads again");
+        Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
+                        "Incomplete request body, server reads again");
         errorCode = 0;
         return false;
     }
@@ -270,20 +276,24 @@ Url parseUrl(HttpRequest& req, const std::string& url) {
 bool validateReq(HttpRequest& req, int& errorCode) {
     const std::set<std::string> validMethods = {"GET", "POST", "DELETE"};
     if (validMethods.find(req.getMethod()) == validMethods.end()) {
-        errorCode = 405; // Method Not Allowed !!!!!!!!!!!!!!!!! It has to be 501, I changed only for passing tests
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",  "Method Not Allowed: " + req.getMethod());
+        errorCode = 405; // Method Not Allowed !!!!!!!!!!!!!!!!! It has to be 501, I changed only
+                         // for passing tests
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Method Not Allowed: " + req.getMethod());
         return false;
     }
 
     if (req.getVersion() != "HTTP/1.0" && req.getVersion() != "HTTP/1.1") {
         errorCode = 505; // HTTP Version Not Supported
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid HTTP version: " + req.getVersion());
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Invalid HTTP version: " + req.getVersion());
         return false;
     }
 
-   if (!isValidPath(req.getPath())) {
+    if (!isValidPath(req.getPath())) {
         errorCode = 403; // Invalid Path
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid request path: " + req.getPath());
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Invalid request path: " + req.getPath());
         return false;
     }
 
@@ -294,7 +304,8 @@ bool validateReq(HttpRequest& req, int& errorCode) {
         if (connLower != "keep-alive" && connLower != "close") {
             req.setHeader("CONNECTION", "close");
             errorCode = 400;
-            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid Connection header value: " + connection);
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                            "Invalid Connection header value: " + connection);
             return false;
         }
     }
@@ -304,15 +315,14 @@ bool validateReq(HttpRequest& req, int& errorCode) {
     if (req.getMethod() == "POST") {
         if (contentType.empty()) {
             errorCode = 415; // Unsupported Media Type
-            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Missing Content-Type header for POST request");
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                            "Missing Content-Type header for POST request");
             return false;
         }
 
         // Allow only specific Content-Types for POST requests
         static const std::set<std::string> validTypes = {
-            "application/x-www-form-urlencoded",
-            "multipart/form-data",
-            "text/plain",
+            "application/x-www-form-urlencoded", "multipart/form-data", "text/plain",
             "application/json",
             "test/file" // only for testing purposes
         };
@@ -320,7 +330,8 @@ bool validateReq(HttpRequest& req, int& errorCode) {
         std::string ctLower = toLower(contentType);
         if (validTypes.find(ctLower) == validTypes.end()) {
             errorCode = 415; // Unsupported Media Type
-            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Unsupported Content-Type for POST: " + contentType);
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                            "Unsupported Content-Type for POST: " + contentType);
             return false;
         }
     }
@@ -329,7 +340,8 @@ bool validateReq(HttpRequest& req, int& errorCode) {
     const std::string& transferEncoding = req.getHeader("TRANSFER-ENCODING");
     if (!transferEncoding.empty() && req.getContentLength() > 0) {
         errorCode = 400; // Bad Request
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Conflicting Transfer-Encoding and Content-Length headers");
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Conflicting Transfer-Encoding and Content-Length headers");
         return false;
     }
 
@@ -349,7 +361,8 @@ bool isValidPath(const std::string& rawPath) {
             return false;
         }
     }
-    if (path == "/.." || path.string().find("/../") != std::string::npos || path.string().ends_with("/..")) {
+    if (path == "/.." || path.string().find("/../") != std::string::npos ||
+        path.string().ends_with("/..")) {
         return false;
     }
     return true;

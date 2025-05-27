@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/27 09:39:58 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/27 22:00:45 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,15 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
 void SocketManager::resetRequestState(int client_fd) {
     if (!_client_info.count(client_fd))
         return;
-    _client_info[client_fd].headerComplete = false;
+    _client_info[client_fd].headerComplete      = false;
     _client_info[client_fd].headerBytesReceived = 0;
-    _client_info[client_fd].bodyBytesReceived = 0;
+    _client_info[client_fd].bodyBytesReceived   = 0;
 }
 
 bool SocketManager::isHeaderTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
-    if (client.responses.empty() && client.current_raw_response.empty() && (client.headerBytesReceived > 0) &&
-        client.headerBytesReceived < HEADER_MIN_LENGTH &&
+    if (client.responses.empty() && client.current_raw_response.empty() &&
+        (client.headerBytesReceived > 0) && client.headerBytesReceived < HEADER_MIN_LENGTH &&
         now - client.connectionStartTime > HEADER_TIMEOUT_SECONDS) {
         std::cout << "Header timeout on fd: " << fd << std::endl;
         respondError(fd, 408);
@@ -94,8 +94,7 @@ bool SocketManager::isHeaderTimeout(int fd, time_t now) {
 
 bool SocketManager::isBodyTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
-    if (client.headerComplete &&
-        now - client.connectionStartTime > TIMEOUT) {
+    if (client.headerComplete && now - client.connectionStartTime > TIMEOUT) {
         std::cout << "Body timeout on fd: " << fd << std::endl;
         respondError(fd, 408);
         return true;
@@ -115,9 +114,8 @@ bool SocketManager::isSendTimeout(int fd, time_t now) {
 
 bool SocketManager::isIdleTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
-    if (client.responses.empty() && client.current_raw_response.empty() &&
-        !client.headerComplete && client.headerBytesReceived == 0 &&
-        now - client.lastRequestTime > TIMEOUT) {
+    if (client.responses.empty() && client.current_raw_response.empty() && !client.headerComplete &&
+        client.headerBytesReceived == 0 && now - client.lastRequestTime > TIMEOUT) {
         std::cout << "Idle timeout on fd: " << fd << std::endl;
         return true;
     }
@@ -164,9 +162,10 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
         return false;
     }
     buffer[bytes] = '\0';
-/*     std::cout << "======================Received RAW request: {" << buffer << "} bytes: {" << bytes << "}"
-              << std::endl;
-    std::cout << "==================================================" << std::endl; */
+    /*     std::cout << "======================Received RAW request: {" << buffer << "} bytes: {" <<
+       bytes << "}"
+                  << std::endl;
+        std::cout << "==================================================" << std::endl; */
 
     std::string single_msg(buffer, bytes);
     _client_info[client_fd].requestBuffer += single_msg;
@@ -175,17 +174,18 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
     if (headerEndPos == std::string::npos) {
         // Header not complete yet
         std::cout << "we didn't find end of header" << std::endl;
-		if (_client_info[client_fd].headerBytesReceived == 0) {
-			_client_info[client_fd].connectionStartTime = time(NULL);
-		}
+        if (_client_info[client_fd].headerBytesReceived == 0) {
+            _client_info[client_fd].connectionStartTime = time(NULL);
+        }
         _client_info[client_fd].headerBytesReceived += bytes;
     } else {
         if (!_client_info[client_fd].headerComplete) {
             // First time detecting header end
             std::cout << "we found end of header" << std::endl;
             size_t fullHeaderSize = headerEndPos + 4; // Include "\r\n\r\n"
-            size_t oldBufferSize = _client_info[client_fd].requestBuffer.size() - bytes;
-            size_t headerBytesThisTime = std::max((ssize_t)0, (ssize_t)(fullHeaderSize - oldBufferSize));
+            size_t oldBufferSize  = _client_info[client_fd].requestBuffer.size() - bytes;
+            size_t headerBytesThisTime =
+                std::max((ssize_t) 0, (ssize_t) (fullHeaderSize - oldBufferSize));
             _client_info[client_fd].headerBytesReceived += headerBytesThisTime;
             _client_info[client_fd].bodyBytesReceived += (bytes - headerBytesThisTime);
             _client_info[client_fd].headerComplete = true;
@@ -212,15 +212,15 @@ bool SocketManager::checkRequestLimits(int fd) {
         return true;
     }
 
-/*     std::size_t maxBody = _client_info[fd].serverConfig.getClientMaxBodySize();
-    if (_client_info[fd].bodyBytesReceived > maxBody) {
-        std::cout << "Request body too large on fd: " << fd
-                  << " (" << _client_info[fd].bodyBytesReceived
-                  << " bytes > max " << maxBody << ")\n";
-        respondError(fd, 413);
-        return true;
-    } */
-    
+    /*     std::size_t maxBody = _client_info[fd].serverConfig.getClientMaxBodySize();
+        if (_client_info[fd].bodyBytesReceived > maxBody) {
+            std::cout << "Request body too large on fd: " << fd
+                      << " (" << _client_info[fd].bodyBytesReceived
+                      << " bytes > max " << maxBody << ")\n";
+            respondError(fd, 413);
+            return true;
+        } */
+
     return false;
 }
 
@@ -399,11 +399,11 @@ void SocketManager::run() {
         for (size_t i = _poll_fds.size(); i-- > 0;) {
             short revents    = _poll_fds[i].revents;
             int   current_fd = _poll_fds[i].fd;
-			if (checkClientTimeouts(current_fd, i)) {
+            if (checkClientTimeouts(current_fd, i)) {
                 _poll_fds[i].events |= POLLOUT; // If connection keep-alive but client idle we close
             }
 
-			// **FIX**: skip CGI pipe FDs entirely
+            // **FIX**: skip CGI pipe FDs entirely
             if (_fd_to_cgi.contains(current_fd)) {
                 continue;
             }
@@ -480,8 +480,8 @@ bool SocketManager::handleCgiRequest(int client_fd, const HttpRequest& request,
     client.cgiProcess.emplace();
 
     if (!CGI::initCgiProcess(*client.cgiProcess, request, server, location)) {
-		std::cerr << "[CGI] Failed to initialize CGI process for client_fd " << client_fd
-				  << " with script: " << location.getPath() << std::endl;
+        std::cerr << "[CGI] Failed to initialize CGI process for client_fd " << client_fd
+                  << " with script: " << location.getPath() << std::endl;
         respondError(client_fd, 500);
         client.cgiProcess.reset();
         return true; // error response queued
@@ -502,7 +502,8 @@ static const Location* findMatchingLocation(const std::string& path, const Serve
     const Location* best = nullptr;
     size_t          max  = 0;
     for (const Location& loc : server.getLocations()) {
-        if (path.rfind(normalizePath(loc.getPath()), 0) == 0 && normalizePath(loc.getPath()).size() > max) {
+        if (path.rfind(normalizePath(loc.getPath()), 0) == 0 &&
+            normalizePath(loc.getPath()).size() > max) {
             best = &loc;
             max  = normalizePath(loc.getPath()).size();
         }
@@ -513,75 +514,82 @@ static const Location* findMatchingLocation(const std::string& path, const Serve
 bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (!receiveFromClient(client_fd, index)) {
         return false;
-	}
-	while (true) {
-		if (checkRequestLimits(client_fd)) {
-			resetRequestState(client_fd);
-			_client_info[client_fd].requestBuffer.clear();
-			return true;
-		}
-		HttpRequest request;
-		int         errorCode = 0;
-		std::size_t consumedBytes = 0;
-		if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
-									_client_info[client_fd].serverConfig.getClientMaxBodySize(),
-									errorCode, consumedBytes)) {
+    }
+    while (true) {
+        if (checkRequestLimits(client_fd)) {
+            resetRequestState(client_fd);
+            _client_info[client_fd].requestBuffer.clear();
+            return true;
+        }
+        HttpRequest request;
+        int         errorCode     = 0;
+        std::size_t consumedBytes = 0;
+        if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
+                                      _client_info[client_fd].serverConfig.getClientMaxBodySize(),
+                                      errorCode, consumedBytes)) {
 
-			if (errorCode == 0){
-				std::cout << "Incomplete request, waiting for more data" << std::endl;
-				return false; // Incomplete data — wait for more
-			}
-			else {
-				HttpResponse err = ResponseBuilder::generateError(
-					errorCode, _client_info[client_fd].serverConfig, request);
-				resetRequestState(client_fd);
-				request.printRequest();
-				std::cout << "[2]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
-					std::cout << "[2]consumedBytes size is {" << consumedBytes << "}" << std::endl;
-					std::cout << "[2]requestBuffer size after erase is {" << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}" << std::endl;
-				_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
-				_client_info[client_fd].responses.push(err);
-				// If keep-alive is false, break the loop to close connection
-				if (err.isConnectionClose()) {
-					break;
-				}
-		
-				// If no more complete request left, break
-				if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
-					break;
-				}
-				continue; // We queued a response and continue processing the next request in pipeline
-			}
-		}
-		request.printRequest();
-		resetRequestState(client_fd);
-		std::cout << "[3]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
-		std::cout << "[3]consumedBytes size is {" << consumedBytes << "}" << std::endl;
-		std::cout << "[3]requestBuffer size after erase is {" << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}" << std::endl;
-		_client_info[client_fd].requestBuffer.erase(0, consumedBytes);
+            if (errorCode == 0) {
+                std::cout << "Incomplete request, waiting for more data" << std::endl;
+                return false; // Incomplete data — wait for more
+            } else {
+                HttpResponse err = ResponseBuilder::generateError(
+                    errorCode, _client_info[client_fd].serverConfig, request);
+                resetRequestState(client_fd);
+                request.printRequest();
+                std::cout << "[2]requestBuffer size is {"
+                          << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
+                std::cout << "[2]consumedBytes size is {" << consumedBytes << "}" << std::endl;
+                std::cout << "[2]requestBuffer size after erase is {"
+                          << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}"
+                          << std::endl;
+                _client_info[client_fd].requestBuffer.erase(0, consumedBytes);
+                _client_info[client_fd].responses.push(err);
+                // If keep-alive is false, break the loop to close connection
+                if (err.isConnectionClose()) {
+                    break;
+                }
 
-		const Server&   server   = _client_info[client_fd].serverConfig;
-		const Location* location = findMatchingLocation(normalizePath(request.getPath()), server);
+                // If no more complete request left, break
+                if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
+                    break;
+                }
+                continue; // We queued a response and continue processing the next request in
+                          // pipeline
+            }
+        }
+        request.printRequest();
+        resetRequestState(client_fd);
+        std::cout << "[3]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size()
+                  << "}" << std::endl;
+        std::cout << "[3]consumedBytes size is {" << consumedBytes << "}" << std::endl;
+        std::cout << "[3]requestBuffer size after erase is {"
+                  << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}"
+                  << std::endl;
+        _client_info[client_fd].requestBuffer.erase(0, consumedBytes);
 
-		if (!location) {
-			respondError(client_fd, 404);
-			return true;
-		}
+        const Server&   server   = _client_info[client_fd].serverConfig;
+        const Location* location = findMatchingLocation(normalizePath(request.getPath()), server);
 
-		if (!location->isMethodAllowed(request.getMethod())) {
-			respondError(client_fd, 405);
-			return true;
-		}
+        if (!location) {
+            respondError(client_fd, 404);
+            return true;
+        }
 
-		if (location->isCgiRequest(normalizePath(request.getPath()))) {
-			std::cout << "Handling CGI request" << std::endl;
-			return handleCgiRequest(client_fd, request, server, *location);
-		}
+        if (!location->isMethodAllowed(request.getMethod())) {
+            respondError(client_fd, 405);
+            return true;
+        }
 
-		// Fallback to standard GET/POST/DELETE handler
-		HttpResponse  response = handleRequest(request, server);
-		_client_info[client_fd].responses.push(response);
-		// If keep-alive is false, break the loop to close connection
+        if (/* request.getMethod() == "POST" &&  */ location->isCgiRequest(
+            normalizePath(request.getPath()))) {
+            std::cout << "Handling CGI request" << std::endl;
+            return handleCgiRequest(client_fd, request, server, *location);
+        }
+
+        // Fallback to standard GET/POST/DELETE handler
+        HttpResponse response = handleRequest(request, server);
+        _client_info[client_fd].responses.push(response);
+        // If keep-alive is false, break the loop to close connection
         if (response.isConnectionClose()) {
             break;
         }
@@ -590,7 +598,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
             break;
         }
-	}
+    }
 
     return (true);
 }
@@ -630,11 +638,12 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 
         if (!response.isConnectionClose()) {
             std::cout << "Connection: keep-alive - keeping the connection open" << std::endl;
-			if (_client_info[client_fd].responses.empty()) {
-            // We should not close the client connection, but just reset the POLLOUT flag if needed
-            _poll_fds[index].events &=
-                ~POLLOUT; // Reset POLLOUT flag if the connection should stay open
-			}
+            if (_client_info[client_fd].responses.empty()) {
+                // We should not close the client connection, but just reset the POLLOUT flag if
+                // needed
+                _poll_fds[index].events &=
+                    ~POLLOUT; // Reset POLLOUT flag if the connection should stay open
+            }
         } else {
             // If it's not keep-alive, close the connection
             std::cout << "Connection: close - closing the connection" << std::endl;

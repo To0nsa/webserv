@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "core/Location.hpp"
-#include "utils/stringUtils.hpp"
 #include "utils/filesystemUtils.hpp"
+#include "utils/stringUtils.hpp"
 #include <algorithm>
 #include <filesystem>
 #include <map>
