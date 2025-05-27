@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/26 17:00:35 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/27 09:39:58 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,16 @@ bool SocketManager::checkRequestLimits(int fd) {
         respondError(fd, 413);
         return true;
     }
+
+/*     std::size_t maxBody = _client_info[fd].serverConfig.getClientMaxBodySize();
+    if (_client_info[fd].bodyBytesReceived > maxBody) {
+        std::cout << "Request body too large on fd: " << fd
+                  << " (" << _client_info[fd].bodyBytesReceived
+                  << " bytes > max " << maxBody << ")\n";
+        respondError(fd, 413);
+        return true;
+    } */
+    
     return false;
 }
 

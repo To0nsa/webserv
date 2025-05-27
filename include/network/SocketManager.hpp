@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/26 16:31:49 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/27 09:40:25 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #include <unistd.h>
 #include <vector>
 
-#define TIMEOUT 15
+#define TIMEOUT 200
 #define HEADER_TIMEOUT_SECONDS 6
 #define HEADER_MIN_LENGTH 15
 #define HEADER_MAX_LENGTH 8192

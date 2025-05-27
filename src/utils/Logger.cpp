@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Logger.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 11:28:06 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/25 12:09:51 by ktieu            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "utils/Logger.hpp"
 #include <iostream>
 #include <iomanip>
@@ -22,7 +10,6 @@
 #define COLOR_INFO    "\033[32m" // Green
 #define COLOR_WARN    "\033[33m" // Yellow
 #define COLOR_ERROR   "\033[31m" // Red
-
 
 std::string levelToString(LogLevel level) {
     switch (level) {
@@ -45,25 +32,25 @@ const char* levelColor(LogLevel level) {
 }
 
 void Logger::log(LogLevel level, const std::string& message) {
-    if (level ==  LogLevel::ERROR) {
-         std::cerr <<levelColor(level) << "[" << levelToString(level) << "]" << COLOR_RESET << " "
-              << message << std::endl;
-        return;
-    }
-    std::cout <<levelColor(level) << "[" << levelToString(level) << "]" << COLOR_RESET << " "
-              << message << std::endl;
+    std::ostream& os = std::cerr; // 👈 All logs go to cerr for better visibility
+    os << levelColor(level)
+       << "[" << levelToString(level) << "]"
+       << COLOR_RESET << " "
+       << message << std::endl
+       << std::flush;
 }
 
 void Logger::logFrom(LogLevel level, const std::string& from, const std::string& message) {
+    std::ostream& os = std::cerr; // 👈 All logs to cerr
     if (from.empty()) {
         log(level, message);
         return;
     }
-    if (level == LogLevel::ERROR) {
-         std::cerr <<levelColor(level) << "[" << levelToString(level) << "] " << from << " : "  << COLOR_RESET << " "
-              << message << std::endl;
-        return;
-    }
-    std::cout <<levelColor(level) << "[" << levelToString(level) << "] " << from << " : "  << COLOR_RESET << " "
-              << message << std::endl;
+
+    os << levelColor(level)
+       << "[" << levelToString(level) << "] "
+       << from << " : "
+       << COLOR_RESET
+       << message << std::endl
+       << std::flush;
 }

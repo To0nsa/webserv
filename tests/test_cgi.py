@@ -48,7 +48,7 @@ class WebservCGITests(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
 
     def test_non_executable_script(self):
-        script_path = "./cgi-bin/hello.py"
+        script_path = "./serverfiles/cgi-bin/hello.py"
         os.chmod(script_path, 0o644)
         res = requests.get(f"{SERVER_URL}/cgi-bin/hello.py")
         self.assertEqual(res.status_code, 403)
@@ -79,7 +79,6 @@ class WebservCGITests(unittest.TestCase):
         res = requests.get(f"{SERVER_URL}/cgi-bin/redirect.py", allow_redirects=False)
         self.assertEqual(res.status_code, 302)
         self.assertEqual(res.headers.get('Location'), "/new/location")
-
 
     def test_stdout_stderr(self):
         res = requests.get(f"{SERVER_URL}/cgi-bin/stdout_stderr.py")
