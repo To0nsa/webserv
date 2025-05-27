@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/27 15:25:40 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:48:15 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         std::string scriptPath = cgi.script_path;
         std::string ext        = std::filesystem::path(scriptPath).extension().string();
         std::string interp     = loc.getCgiInterpreter(ext);
-        Logger::logFrom(LogLevel::DEBUG, "CGI", "Interpreter: " + interp + ", Script: " + scriptPath);
+        Logger::logFrom(LogLevel::DEBUG, "CGI CHILD", "Interpreter: " + interp + ", Script: " + scriptPath);
 
         // 2. Build argv using references to scoped strings
         std::vector<std::string> argvStorage;
@@ -151,20 +151,22 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
 
         // 4. chdir safely
         const std::string cgiDir = std::filesystem::path(scriptPath).parent_path().string();
-        Logger::logFrom(LogLevel::DEBUG, "CGI", "Changing directory to: " + cgiDir);
+        Logger::logFrom(LogLevel::DEBUG, "CGI CHILD", "Changing directory to: " + cgiDir);
         if (chdir(cgiDir.c_str()) != 0) {
-            Logger::logFrom(LogLevel::ERROR, "CGI", "chdir failed: " + std::string(strerror(errno)));
+            Logger::logFrom(LogLevel::ERROR, "CGI CHILD", "chdir failed: " + std::string(strerror(errno)));
             exit(1);
         }
-
+		
         // 5. Final call
-        Logger::logFrom(LogLevel::DEBUG, "CGI", "execve: " + std::string(argv[0]));
-        for (size_t i = 0; envp[i]; ++i)
-            Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", envp[i]);
+        for (size_t i = 0; argv[i]; ++i)
+			Logger::logFrom(LogLevel::DEBUG, "CGI CHILD-ARGV[" + std::to_string(i) + "]", argv[i]);
+
+		for (size_t i = 0; envp[i]; ++i)
+			Logger::logFrom(LogLevel::DEBUG, "CGI CHILD-ENV[" + std::to_string(i) + "]", envp[i]);
         execve(argv[0], argv.data(), envp.data());
 
         // 6. If execve fails
-        Logger::logFrom(LogLevel::ERROR, "CGI", "execve failed: " + std::string(strerror(errno)));
+        Logger::logFrom(LogLevel::ERROR, "CGI CHILD", "execve failed: " + std::string(strerror(errno)));
         exit(1);
     }
 
@@ -183,12 +185,14 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
 }
 
 bool handleWrite(CgiProcess& cgi) {
+	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE WRITE", "Handling write phase for CGI process");
     const char* data = cgi.input.data() + cgi.input_sent;
     size_t      len  = cgi.input.size() - cgi.input_sent;
     ssize_t     n    = write(cgi.stdin_fd, data, len);
     if (n < 0) {
         return false;
     }
+	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE WRITE", "Wrote {" + std::string(data, n) + "} to CGI stdin");
     cgi.input_sent += n;
     cgi.last_activity = time(NULL);
     if (cgi.input_sent == cgi.input.size()) {
@@ -199,15 +203,19 @@ bool handleWrite(CgiProcess& cgi) {
 }
 
 bool handleRead(CgiProcess& cgi) {
+	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE READ", "Handling read phase for CGI process");
     char    buf[4096];
     ssize_t n = read(cgi.stdout_fd, buf, sizeof(buf));
     if (n < 0) {
         return false;
     }
     if (n == 0) {
+		Logger::logFrom(LogLevel::DEBUG, "CGI READ", "EOF reached");
         cgi.phase = CgiProcess::Phase::Done;
         return true;
     }
+	std::string debugStr(buf, n);
+    Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE READ", "Read {" + debugStr + "}");
     cgi.output.append(buf, n);
     cgi.last_activity = time(NULL);
     return true;
@@ -215,17 +223,22 @@ bool handleRead(CgiProcess& cgi) {
 
 std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
                                         const HttpRequest& req) {
+	Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "Finalizing CGI process for script");
     int status;
     if (waitpid(cgi.pid, &status, WNOHANG) == 0)
         return std::nullopt; // Not done yet
-    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
+    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+		Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): CGI process exited with error: " + std::to_string(WEXITSTATUS(status)));
         return ResponseBuilder::generateError(502, server, req);
+	}
 
     // Basic parser (header + body)
     size_t pos = cgi.output.find("\r\n\r\n");
+	Logger::logFrom(LogLevel::DEBUG, "CGI", "cgi output is " + cgi.output);
     if (pos == std::string::npos) {
 		Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): no header found in output");
-        return ResponseBuilder::generateError(500, server, req); //return ResponseBuilder::generateSuccess(200, cgi.output, "", req);
+        return ResponseBuilder::generateError(500, server, req);
+		//return ResponseBuilder::generateSuccess(200, cgi.output, "", req);
 	}
 
     std::string header = cgi.output.substr(0, pos);
@@ -249,7 +262,7 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
 }
 
 void cleanupCgi(CgiProcess& cgi) {
-    if (cgi.stdin_fd > 0)
+    if (cgi.stdin_fd >= 0)
         close(cgi.stdin_fd);
     if (cgi.stdout_fd > 0)
         close(cgi.stdout_fd);
