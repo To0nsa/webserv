@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/26 14:50:19 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 12:55:31 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <regex>
@@ -89,10 +90,36 @@ HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
 std::string normalizePath(const std::string& path) {
     if (path.empty())
         return "/";
-    std::string result = path;
 
-    if (result.size() > 1 && result.back() == '/')
-        result.pop_back();
+    std::vector<std::string> segments;
+    std::string              segment;
+    std::istringstream       stream(path);
+    bool                     hadTrailingSlash = path.back() == '/';
+
+    while (std::getline(stream, segment, '/')) {
+        if (segment.empty() || segment == ".")
+            continue;
+        if (segment == "..") {
+            if (!segments.empty()) {
+                segments.pop_back(); // move up
+            } else {
+                // Attempt to go above root: reject this path
+                return ""; // special marker for invalid path
+            }
+        } else {
+            segments.push_back(segment);
+        }
+    }
+
+    std::string result = "/";
+    for (std::size_t i = 0; i < segments.size(); ++i) {
+        result += segments[i];
+        if (i + 1 < segments.size())
+            result += "/";
+    }
+
+    if (hadTrailingSlash && result != "/")
+        result += "/";
 
     return result;
 }
@@ -151,6 +178,25 @@ bool mkdirRecursive(const std::string& path) {
         }
     }
     return true;
+}
+
+std::string decodePercentEncoding(const std::string& encoded) {
+    std::ostringstream result;
+    for (size_t i = 0; i < encoded.length(); ++i) {
+        if (encoded[i] == '%' && i + 2 < encoded.length()) {
+            std::istringstream hex(encoded.substr(i + 1, 2));
+            int                c;
+            if (hex >> std::hex >> c) {
+                result << static_cast<char>(c);
+                i += 2;
+            } else {
+                result << '%'; // malformed % sequence
+            }
+        } else {
+            result << encoded[i];
+        }
+    }
+    return result.str();
 }
 
 /* std::string normalizePath(const std::string& path) {

@@ -142,6 +142,15 @@ def test_if_modified_since():
     assert res.status in (304, 200), "Expected 304 or 200"
     print(f"✅ Conditional GET → {res.status}")
     conn.close()
+    
+def test_get_with_body():
+    parsed = urlparse(SERVER)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
+    conn.request("GET", "/index.html", body="useless body")
+    res = conn.getresponse()
+    assert res.status == 200
+    print("✅ GET /index.html with body → 200 OK")
+    conn.close()
 
 def run_tests():
     print("[GET] Running GET tests...")
@@ -150,6 +159,7 @@ def run_tests():
     assert_status("/index.html", 200)
     assert_status("/dir/file.txt", 200)
     assert_status("/", 200)
+    assert_status("/dir//file.txt", 200)
 
     # Not found
     assert_status("/nonexistent", 404)
@@ -168,10 +178,15 @@ def run_tests():
 	# Query
     assert_status("/?foo=bar", 200)        # query shouldn’t change which file is served
     assert_status("/index.html?x=1&y=2", 200)
+    assert_status("/index.html?foo=bar&x=1+1%3D2", 200)
+    assert_status("/index.html?foo=bar#section1", 200)
 
     # Edge cases
-    assert_status("//", 403)
+    assert_status("//", 200)
+    assert_status("//index.html", 200)
     assert_status("/../index.html", 403)
+    assert_status("/%2E%2E/index.html", 403)   # %2E == .
+    assert_status("/%2e%2e/%2e%2e/index.html", 403)
 
     # Content-Type validation
     assert_content_type("/index.html", "text/html")
@@ -198,3 +213,4 @@ if __name__ == "__main__":
     test_header_overflow()
     test_connection_close()
     test_if_modified_since()
+    test_get_with_body()

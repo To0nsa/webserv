@@ -6,12 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/28 12:28:45 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 12:57:03 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/HttpRequestParser.hpp"
 #include "utils/Logger.hpp"
+#include "utils/filesystemUtils.hpp"
 #include <algorithm>
 #include <filesystem>
 #include <iostream>
@@ -80,12 +81,13 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     }
 
     // ── Split path and query ──
-    std::string pathOnly = rawTarget;
+    std::string decodedPath = decodePercentEncoding(rawTarget);
+    std::string pathOnly    = decodedPath;
     std::string queryString;
-    std::size_t qpos = rawTarget.find('?');
+    size_t      qpos = decodedPath.find('?');
     if (qpos != std::string::npos) {
-        pathOnly    = rawTarget.substr(0, qpos);
-        queryString = rawTarget.substr(qpos + 1);
+        pathOnly    = decodedPath.substr(0, qpos);
+        queryString = decodedPath.substr(qpos + 1);
     }
 
     const std::size_t MAX_URI_LEN = 2048;
@@ -97,7 +99,15 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
 
     req = HttpRequest();
     req.setMethod(method);
-    req.setPath(pathOnly);     // only path used for file resolution
+
+    std::string normPath = normalizePath(pathOnly);
+    if (normPath.empty()) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
+        errorCode = 403;
+        return false;
+    }
+    req.setPath(normPath);
+
     req.setQuery(queryString); // query string passed to CGI (if needed)
     req.setVersion(version);
 

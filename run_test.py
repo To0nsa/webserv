@@ -16,13 +16,16 @@ def run(cmd, name):
 def main():
     root = os.path.dirname(os.path.abspath(__file__))
 
-    bootstrap = os.path.join(root, "test", "bootstrap_test_data.py")
-    test_get = os.path.join(root, "test", "http", "test_get.py")
+    bootstrap      = os.path.join(root, "test", "bootstrap_test_data.py")
+    test_get       = os.path.join(root, "test", "http", "test_get.py")
+    test_raw_malformed = os.path.join(root, "test", "http", "test_raw_malformed.py")
 
     run(["python3", bootstrap], "bootstrap_test_data.py")
     run(["python3", test_get], "test_get.py")
+    run(["python3", test_raw_malformed], "test_raw_malformed.py")
 
     print("\n✅ All tests passed!")
 
 if __name__ == "__main__":
     main()
+
