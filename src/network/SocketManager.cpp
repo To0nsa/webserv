@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/27 22:00:45 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 11:26:46 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,18 +208,18 @@ void SocketManager::respondError(int fd, int status_code) {
 bool SocketManager::checkRequestLimits(int fd) {
     if (_client_info[fd].headerBytesReceived > HEADER_MAX_LENGTH) {
         std::cout << "Request too large from fd: " << fd << std::endl;
-        respondError(fd, 413);
+        respondError(fd, 431);
         return true;
     }
 
     /*     std::size_t maxBody = _client_info[fd].serverConfig.getClientMaxBodySize();
-        if (_client_info[fd].bodyBytesReceived > maxBody) {
-            std::cout << "Request body too large on fd: " << fd
-                      << " (" << _client_info[fd].bodyBytesReceived
-                      << " bytes > max " << maxBody << ")\n";
-            respondError(fd, 413);
-            return true;
-        } */
+            if (_client_info[fd].bodyBytesReceived > maxBody) {
+                    std::cout << "Request body too large on fd: " << fd
+                                            << " (" << _client_info[fd].bodyBytesReceived
+                                            << " bytes > max " << maxBody << ")\n";
+                    respondError(fd, 413);
+                    return true;
+            } */
 
     return false;
 }
@@ -515,56 +515,46 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (!receiveFromClient(client_fd, index)) {
         return false;
     }
+
     while (true) {
         if (checkRequestLimits(client_fd)) {
             resetRequestState(client_fd);
             _client_info[client_fd].requestBuffer.clear();
             return true;
         }
+
         HttpRequest request;
         int         errorCode     = 0;
         std::size_t consumedBytes = 0;
+
         if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
                                       _client_info[client_fd].serverConfig.getClientMaxBodySize(),
                                       errorCode, consumedBytes)) {
 
             if (errorCode == 0) {
+                // Incomplete — wait for more data
                 std::cout << "Incomplete request, waiting for more data" << std::endl;
-                return false; // Incomplete data — wait for more
+                return false;
             } else {
+                // Fatal parse error (400, 413, etc): emit one error and break out
                 HttpResponse err = ResponseBuilder::generateError(
                     errorCode, _client_info[client_fd].serverConfig, request);
                 resetRequestState(client_fd);
                 request.printRequest();
-                std::cout << "[2]requestBuffer size is {"
-                          << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
-                std::cout << "[2]consumedBytes size is {" << consumedBytes << "}" << std::endl;
-                std::cout << "[2]requestBuffer size after erase is {"
-                          << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}"
-                          << std::endl;
-                _client_info[client_fd].requestBuffer.erase(0, consumedBytes);
-                _client_info[client_fd].responses.push(err);
-                // If keep-alive is false, break the loop to close connection
-                if (err.isConnectionClose()) {
-                    break;
-                }
 
-                // If no more complete request left, break
-                if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
-                    break;
-                }
-                continue; // We queued a response and continue processing the next request in
-                          // pipeline
+                // Erase only the bytes consumed by this bad request
+                _client_info[client_fd].requestBuffer.erase(0, consumedBytes);
+
+                // Queue the error response
+                _client_info[client_fd].responses.push(err);
+
+                // Stop parsing *now* — leave any further pipelined bytes intact
+                break;
             }
         }
         request.printRequest();
         resetRequestState(client_fd);
-        std::cout << "[3]requestBuffer size is {" << _client_info[client_fd].requestBuffer.size()
-                  << "}" << std::endl;
-        std::cout << "[3]consumedBytes size is {" << consumedBytes << "}" << std::endl;
-        std::cout << "[3]requestBuffer size after erase is {"
-                  << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}"
-                  << std::endl;
+
         _client_info[client_fd].requestBuffer.erase(0, consumedBytes);
 
         const Server&   server   = _client_info[client_fd].serverConfig;
@@ -580,8 +570,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
             return true;
         }
 
-        if (/* request.getMethod() == "POST" &&  */ location->isCgiRequest(
-            normalizePath(request.getPath()))) {
+        if (location->isCgiRequest(normalizePath(request.getPath()))) {
             std::cout << "Handling CGI request" << std::endl;
             return handleCgiRequest(client_fd, request, server, *location);
         }

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/27 19:48:57 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 11:52:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,21 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     std::string locationPath = normalizePath(loc.getPath());
     std::string scriptName   = std::filesystem::path(scriptPath).filename().string();
 
-    // SCRIPT_NAME = URL path to the script
+    // SCRIPT_NAME = URL path to the script (/directory/youpi.bla)
     std::string scriptUri = locationPath;
     if (!scriptUri.empty() && scriptUri.back() != '/')
         scriptUri += "/";
     scriptUri += scriptName;
 
+    // PATH_INFO = remainder of the path after SCRIPT_NAME
     std::string pathInfo;
     if (requestPath.rfind(scriptUri, 0) == 0 && requestPath.size() > scriptUri.size()) {
         pathInfo = requestPath.substr(scriptUri.size());
         if (!pathInfo.empty() && pathInfo.front() != '/')
             pathInfo.insert(pathInfo.begin(), '/');
     }
-    // **Always** give at least a “/” so the tester sees something**
-    if (pathInfo.empty()) {
+    if (pathInfo.empty())
         pathInfo = "/";
-    }
 
     set("REQUEST_METHOD", req.getMethod());
     set("SCRIPT_NAME", scriptUri);
@@ -74,6 +73,7 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
         std::replace(envKey.begin(), envKey.end(), '-', '_');
         set(envKey, value);
     }
+
     return env;
 }
 
