@@ -29,7 +29,6 @@ def run_raw_tests():
     print("[RAW] Running malformed/raw request tests...")
 
     tests = [
-        # Syntax errors
         ("GET  HTTP/1.1\r\nHost: localhost\r\n\r\n",         "400 Bad Request", "Missing request-target"),
         ("GET / \r\nHost: localhost\r\n\r\n",                "400 Bad Request", "Missing HTTP version"),
         ("GET / HTTP/1.1\r\n\r\n",                           "400 Bad Request", "Missing Host header"),
@@ -41,7 +40,11 @@ def run_raw_tests():
         ("GET / HTTP/0.9\r\n\r\n",                             "505 HTTP Version Not Supported", "Unsupported HTTP version"),
         ("GET / HTTP/1.1\r\n\r\n\r\n\r\n",                     "400 Bad Request", "Too many CRLF after headers"),
         ("get / HTTP/1.1\r\nHost: localhost\r\n\r\n",          "501 Not Implemented", "Invalid method casing"),
-        ("GET / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: chunked\r\n\r\n4\r\ntest\r\n0\r\n\r\n", "400 Bad Request", "GET with chunked body")
+        ("GET / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: chunked\r\n\r\n4\r\ntest\r\n0\r\n\r\n", "400 Bad Request", "GET with chunked body"),
+        ("GET / HTTP/1.1\r\nHost: localhost\r\nX-Header:\r\n\r\n", "400 Bad Request", "Header with missing value"),
+        ("", "400 Bad Request", "Empty request"),
+        ("CONNECT / HTTP/1.1\r\nHost: localhost\r\n\r\n", "501 Not Implemented", "Unsupported CONNECT method"),
+        ("GET / HTTP/1.1\r\nHost: localhost\r\nX-Test: val1\r\nX-Test: val2\r\n\r\n", "200 OK", "Duplicate but mergeable headers"),
     ]
 
     for raw, expected, context in tests:
