@@ -13,7 +13,8 @@ FILES = {
 
 DIRS = {
     "dir": {
-        "file.txt": "This is a file inside /dir/"
+        "file.txt":     "This is a file inside /dir/",
+        "file.unknown": "Binary? Nope—just text to test fallback"
     },
     "forbidden": {},
     "secret": {},
@@ -35,16 +36,20 @@ def bootstrap():
     print(f"[BOOTSTRAP] Creating test files in {BASE}")
     os.makedirs(BASE, exist_ok=True)
 
+    # Top-level files
     for name, content in FILES.items():
         path = os.path.join(BASE, name)
-        write_file(path, content if isinstance(content, str) else content, binary=not isinstance(content, str))
+        binary = not isinstance(content, str)
+        write_file(path, content, binary=binary)
 
+    # Per-directory files
     for dir_name, files in DIRS.items():
         dir_path = os.path.join(BASE, dir_name)
         os.makedirs(dir_path, exist_ok=True)
         for fname, fcontent in files.items():
             write_file(os.path.join(dir_path, fname), fcontent)
 
+    # Error pages
     for name, html in ERROR_PAGES.items():
         write_file(os.path.join(BASE, name), html)
 

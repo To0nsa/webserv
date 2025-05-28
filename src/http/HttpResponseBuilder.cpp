@@ -6,12 +6,13 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/28 11:24:28 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 18:57:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/HttpResponseBuilder.hpp"
 #include "http/HttpResponse.hpp"
+#include "utils/filesystemUtils.hpp"
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -104,36 +105,41 @@ HttpResponse generateSuccess(int status_code, const std::string& body,
 
 HttpResponse generateError(int status_code, const Server& server, const HttpRequest& request) {
     HttpResponse response;
-    // Get default message for the given status code (e.g., "Not Found")
-    std::string message = MessageHandler::getDefaultMessage(status_code);
-    std::string body;
+    std::string  message = MessageHandler::getDefaultMessage(status_code);
+    std::string  body;
 
-    // Try to find a custom error page configured for this status code
-    const std::map<int, std::string>&          error_pages = server.getErrorPages();
-    std::map<int, std::string>::const_iterator it          = error_pages.find(status_code);
-
-    // If a custom error page exists, attempt to load its content
+    // Try custom error page
+    const auto& error_pages = server.getErrorPages();
+    auto        it          = error_pages.find(status_code);
     if (it != error_pages.end()) {
-        std::ifstream file(it->second.c_str());
+        std::string uri = it->second;
+        // Strip leading slash
+        if (!uri.empty() && uri.front() == '/')
+            uri.erase(0, 1);
+        // Determine default root (location "/")
+        std::string default_root;
+        for (const auto& loc : server.getLocations()) {
+            if (loc.getPath() == "/") {
+                default_root = loc.getRoot();
+                break;
+            }
+        }
+        std::string   full_path = joinPath(default_root, uri);
+        std::ifstream file(full_path.c_str());
         if (file)
             body.assign((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     }
-    // If no custom page or file is missing, generate a simple default HTML message
-    /* if (body.empty()) {
+
+    // Fallback default page
+    if (body.empty()) {
         std::ostringstream ss;
         ss << "<html><body><h1>" << status_code << " " << message << "</h1></body></html>";
         body = ss.str();
-    } */
-    // Set status, connection headers, and keep-alive logic
-    initializeResponse(response, status_code, message, request);
-    // Always serve error pages as text/html
-    response.setHeader("Content-Type", "text/html");
-    // Attach the generated or loaded error page body
-    if (!body.empty()) {
-        response.setBody(body);
     }
-    /* response.setBody(body); */
 
+    initializeResponse(response, status_code, message, request);
+    response.setHeader("Content-Type", "text/html");
+    response.setBody(body);
     return response;
 }
 

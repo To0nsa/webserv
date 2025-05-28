@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/28 12:57:03 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 14:39:54 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,8 +313,8 @@ Url parseUrl(HttpRequest& req, const std::string& url) {
 bool validateReq(HttpRequest& req, int& errorCode) {
     const std::set<std::string> validMethods = {"GET", "POST", "DELETE"};
     if (validMethods.find(req.getMethod()) == validMethods.end()) {
-        errorCode = 405; // Method Not Allowed !!!!!!!!!!!!!!!!! It has to be 501, I changed only
-                         // for passing tests
+        errorCode = 501; // Method Not Allowed !!!!!!!!!!!!!!!!! It has to be 501, I changed only
+                         // for passing tests I DONT CARE ABOUT PASSING THAT FUCKING TESTS <3 405
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                         "Method Not Allowed: " + req.getMethod());
         return false;

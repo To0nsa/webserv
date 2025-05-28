@@ -15,7 +15,6 @@ def request(path, headers=None):
     conn.close()
     return response.status, response.reason, body
 
-
 def assert_status(path, expected_code):
     code, reason, _ = request(path)
     if code == expected_code:
@@ -23,7 +22,6 @@ def assert_status(path, expected_code):
     else:
         print(f"❌ GET {path} → {code} {reason} (expected {expected_code})")
         sys.exit(1)
-
 
 def assert_redirect(path, expected_location):
     parsed = urlparse(SERVER)
@@ -38,7 +36,6 @@ def assert_redirect(path, expected_location):
         sys.exit(1)
     conn.close()
 
-
 def assert_content_type(path, expected_type):
     parsed = urlparse(SERVER)
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
@@ -51,7 +48,6 @@ def assert_content_type(path, expected_type):
         print(f"❌ {path} → Content-Type: {content_type} (expected {expected_type})")
         sys.exit(1)
     conn.close()
-
 
 def test_invalid_http_version():
     parsed = urlparse(SERVER)
@@ -67,7 +63,6 @@ def test_invalid_http_version():
         sys.exit(1)
     conn.close()
 
-
 def test_header_case_insensitive():
     for variation in ["Host", "HOST", "host", "hOSt"]:
         code, _, _ = request("/index.html", headers={variation: "localhost:8080"})
@@ -76,7 +71,6 @@ def test_header_case_insensitive():
         else:
             print(f"❌ Header case {variation} → {code} (expected 200)")
             sys.exit(1)
-
 
 def test_duplicate_headers():
     parsed = urlparse(SERVER)
@@ -92,7 +86,6 @@ def test_duplicate_headers():
         print(f"❌ Duplicate Host headers → {res.status} (expected 400)")
         sys.exit(1)
     conn.close()
-
 
 def test_long_url():
     long_path = "/a" * 2048
@@ -151,6 +144,24 @@ def test_get_with_body():
     assert res.status == 200
     print("✅ GET /index.html with body → 200 OK")
     conn.close()
+    
+def test_put_not_implemented():
+    parsed = urlparse(SERVER)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
+    conn.request("PUT", "/index.html")
+    res = conn.getresponse()
+    assert res.status == 501, f"Expected 501, got {res.status}"
+    print("✅ PUT /index.html → 501 Not Implemented")
+    conn.close()
+
+def test_custom_error_pages():
+    code, _, body = request("/doesnotexist")
+    assert code == 404 and "<h1>404 Not Found</h1>" in body
+    print("✅ 404 page uses custom error_404.html")
+
+    code, _, body = request("/forbidden/")
+    assert code == 403 and "<h1>403 Forbidden</h1>" in body
+    print("✅ 403 page uses custom error_403.html")
 
 def run_tests():
     print("[GET] Running GET tests...")
@@ -171,6 +182,9 @@ def run_tests():
 
     # Redirects
     assert_redirect("/forbidden", "/forbidden/")
+    
+	# MIME fallback
+    assert_content_type("/dir/file.unknown", "application/octet-stream")
 
     # Forbidden
     assert_status("/forbidden/", 403)
@@ -180,6 +194,8 @@ def run_tests():
     assert_status("/index.html?x=1&y=2", 200)
     assert_status("/index.html?foo=bar&x=1+1%3D2", 200)
     assert_status("/index.html?foo=bar#section1", 200)
+    assert_status("/index.html?foo=bar?baz=qux", 200)
+    assert_status("/Index.HTML", 404)
 
     # Edge cases
     assert_status("//", 200)
@@ -187,6 +203,9 @@ def run_tests():
     assert_status("/../index.html", 403)
     assert_status("/%2E%2E/index.html", 403)   # %2E == .
     assert_status("/%2e%2e/%2e%2e/index.html", 403)
+    assert_status("/index.html.", 404)
+    assert_status("/..", 403)
+    assert_status("/dir/..", 200)
 
     # Content-Type validation
     assert_content_type("/index.html", "text/html")
@@ -214,3 +233,5 @@ if __name__ == "__main__":
     test_connection_close()
     test_if_modified_since()
     test_get_with_body()
+    test_put_not_implemented()
+    test_custom_error_pages()
