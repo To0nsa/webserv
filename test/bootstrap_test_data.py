@@ -1,14 +1,18 @@
 # test/bootstrap_test_data.py
 
 import os
+import shutil
 
 BASE = "test/data"
 
 FILES = {
     "index.html": "<h1>Welcome to Webserv</h1>",
     "style.css": "body { background: #222; color: #eee; }",
+    "style.CsS": "body { font-size: 14px; }",
     "script.js": "console.log('Hello from JS');",
-    "logo.png": b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR"  # Fake PNG header (not valid image)
+    "script.Js": "console.log('Same script with weird casing');",
+    "logo.png": b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR",  # Fake PNG header (not valid image)
+    "index.html.bak": "<!-- backup copy of index.html -->"
 }
 
 DIRS = {
@@ -41,6 +45,12 @@ def bootstrap():
         path = os.path.join(BASE, name)
         binary = not isinstance(content, str)
         write_file(path, content, binary=binary)
+
+    # Create LOGO.PNG as a copy of logo.png to test uppercase extension
+    logo_src = os.path.join(BASE, "logo.png")
+    logo_dst = os.path.join(BASE, "LOGO.PNG")
+    if os.path.exists(logo_src):
+        shutil.copyfile(logo_src, logo_dst)
 
     # Per-directory files
     for dir_name, files in DIRS.items():

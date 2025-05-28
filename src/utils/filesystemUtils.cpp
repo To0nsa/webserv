@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/28 12:55:31 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 20:20:00 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,14 +184,13 @@ std::string decodePercentEncoding(const std::string& encoded) {
     std::ostringstream result;
     for (size_t i = 0; i < encoded.length(); ++i) {
         if (encoded[i] == '%' && i + 2 < encoded.length()) {
-            std::istringstream hex(encoded.substr(i + 1, 2));
-            int                c;
-            if (hex >> std::hex >> c) {
-                result << static_cast<char>(c);
-                i += 2;
-            } else {
-                result << '%'; // malformed % sequence
-            }
+            std::string hexStr = encoded.substr(i + 1, 2);
+            char*       endptr;
+            long        val = std::strtol(hexStr.c_str(), &endptr, 16);
+            if (*endptr != '\0' || val < 0 || val > 255)
+                throw std::invalid_argument("Invalid percent encoding: %" + hexStr);
+            result << static_cast<char>(val);
+            i += 2;
         } else {
             result << encoded[i];
         }

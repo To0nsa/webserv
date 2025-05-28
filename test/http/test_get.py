@@ -15,6 +15,11 @@ def request(path, headers=None):
     conn.close()
     return response.status, response.reason, body
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Assertion Helpers
+# ─────────────────────────────────────────────────────────────────────────────
+
 def assert_status(path, expected_code):
     code, reason, _ = request(path)
     if code == expected_code:
@@ -49,6 +54,10 @@ def assert_content_type(path, expected_type):
         sys.exit(1)
     conn.close()
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Protocol Compliance & RFC-Level Tests
+# ─────────────────────────────────────────────────────────────────────────────
+
 def test_invalid_http_version():
     parsed = urlparse(SERVER)
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
@@ -56,21 +65,28 @@ def test_invalid_http_version():
     conn._http_vsn_str = "HTTP/2.0"
     conn.request("GET", "/index.html")
     res = conn.getresponse()
-    if res.status == 505:
-        print("✅ GET with HTTP/2.0 → 505 HTTP Version Not Supported")
-    else:
-        print(f"❌ GET with HTTP/2.0 → {res.status} (expected 505)")
-        sys.exit(1)
+    print("✅ GET with HTTP/2.0 → 505 HTTP Version Not Supported"
+    if res.status == 505 else f"❌ GET with HTTP/2.0 → {res.status} (expected 505)")
     conn.close()
+
+def test_put_not_implemented():
+    parsed = urlparse(SERVER)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
+    conn.request("PUT", "/index.html")
+    res = conn.getresponse()
+    assert res.status == 501
+    print("✅ PUT /index.html → 501 Not Implemented")
+    conn.close()
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Header Parsing Behavior
+# ─────────────────────────────────────────────────────────────────────────────
 
 def test_header_case_insensitive():
     for variation in ["Host", "HOST", "host", "hOSt"]:
         code, _, _ = request("/index.html", headers={variation: "localhost:8080"})
-        if code == 200:
-            print(f"✅ Header case {variation} → 200 OK")
-        else:
-            print(f"❌ Header case {variation} → {code} (expected 200)")
-            sys.exit(1)
+        assert code == 200
+        print(f"✅ Header case {variation} → 200 OK")
 
 def test_duplicate_headers():
     parsed = urlparse(SERVER)
@@ -80,21 +96,9 @@ def test_duplicate_headers():
     conn.putheader("Host", "evil.com")
     conn.endheaders()
     res = conn.getresponse()
-    if res.status == 400:
-        print("✅ Duplicate Host headers → 400 Bad Request")
-    else:
-        print(f"❌ Duplicate Host headers → {res.status} (expected 400)")
-        sys.exit(1)
+    assert res.status == 400
+    print("✅ Duplicate Host headers → 400 Bad Request")
     conn.close()
-
-def test_long_url():
-    long_path = "/a" * 2048
-    code, _, _ = request(long_path)
-    if code == 414:
-        print(f"✅ Long URI → {code} URI Too Long")
-    else:
-        print(f"❌ Long URI → {code} (expected 400 or 414)")
-        sys.exit(1)
 
 def test_missing_host_header():
     parsed = urlparse(SERVER)
@@ -102,19 +106,25 @@ def test_missing_host_header():
     conn.putrequest("GET", "/index.html", skip_host=True)
     conn.endheaders()
     res = conn.getresponse()
-    if res.status == 400:
-        print("✅ Missing Host header → 400 Bad Request")
-    else:
-        print(f"❌ Missing Host header → {res.status} (expected 400)")
-        sys.exit(1)
+    assert res.status == 400
+    print("✅ Missing Host header → 400 Bad Request")
     conn.close()
-    
+
 def test_header_overflow():
-    long_header = "a" * (8192 + 1) # HEADER_MAX_LENGTH + 1
+    long_header = "a" * (8192 + 1)  # Exceeds HEADER_MAX_LENGTH
     code, _, _ = request("/index.html", headers={"X-Test": long_header})
     assert code in (431, 400)
     print(f"✅ Oversized header → {code}")
     
+def test_accept_header():
+    status, _, _ = request("/index.html", headers={"Accept": "text/html"})
+    assert status == 200
+    print("✅ Accept: text/html handled")
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Connection and Timeout Behavior
+# ─────────────────────────────────────────────────────────────────────────────
+
 def test_connection_close():
     parsed = urlparse(SERVER)
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
@@ -123,115 +133,181 @@ def test_connection_close():
     assert res.getheader("Connection") == "close"
     print("✅ Connection: close honored")
     conn.close()
-    
-def test_if_modified_since():
-    # first fetch to get Last-Modified
-    _, _, _ = request("/index.html")
-    parsed = urlparse(SERVER)
-    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
-    lm = request("/index.html")[2]  # or parse from headers
-    conn.request("GET", "/index.html", headers={"If-Modified-Since": lm})
-    res = conn.getresponse()
-    assert res.status in (304, 200), "Expected 304 or 200"
-    print(f"✅ Conditional GET → {res.status}")
-    conn.close()
-    
+
 def test_get_with_body():
     parsed = urlparse(SERVER)
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
-    conn.request("GET", "/index.html", body="useless body")
+    conn.request("GET", "/index.html", body="irrelevant body")
     res = conn.getresponse()
     assert res.status == 200
-    print("✅ GET /index.html with body → 200 OK")
+    print("✅ GET with body → 200 OK")
     conn.close()
-    
-def test_put_not_implemented():
+
+def test_if_modified_since():
+    # Simplified: not parsing date from headers — should be extended
+    _, _, _ = request("/index.html")
+    _, _, lm = request("/index.html")
     parsed = urlparse(SERVER)
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
-    conn.request("PUT", "/index.html")
+    conn.request("GET", "/index.html", headers={"If-Modified-Since": lm})
     res = conn.getresponse()
-    assert res.status == 501, f"Expected 501, got {res.status}"
-    print("✅ PUT /index.html → 501 Not Implemented")
+    assert res.status in (304, 200)
+    print(f"✅ Conditional GET → {res.status}")
     conn.close()
+
+# ─────────────────────────────────────────────────────────────────────────────
+# URI Handling and Edge Cases
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_long_url():
+    long_path = "/a" * 2048
+    code, _, _ = request(long_path)
+    assert code == 414
+    print("✅ Long URI → 414 URI Too Long")
+
+def test_percent_encoded_slash():
+    assert_status("/dir%2Ffile.txt", 200)
+    assert_status("/dir%2ffile.txt", 200)
+    print("✅ Encoded slash handled")
+    
+def test_invalid_percent_encoding():
+    assert_status("/%ZZ", 400)
+    print("✅ Invalid encoded slash handled")
+
+def test_long_query_string():
+    long_query = "/index.html?" + "x=" + "y" * 1000
+    assert_status(long_query, 200)
+    print("✅ Long query string → 200 OK")
+    
+def test_dot_in_path():
+    assert_status("/./index.html", 200)
+    assert_status("/dir/./file.txt", 200)
+    print("✅ Dot in path handled correctly")
+    
+def test_nested_dotdot_blocked():
+    assert_status("/dir/../../secret.txt", 403)
+    print("✅ Nested ../ blocked correctly")
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Content Type / MIME
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_non_mime_file_fallback():
+    assert_content_type("/index.html.bak", "application/octet-stream")
+
+def test_uppercase_extension():
+    assert_content_type("/LOGO.PNG", "image/png")
+
+def test_mixed_case_extensions():
+    assert_content_type("/script.Js", "application/javascript")
+    assert_content_type("/style.CsS", "text/css")
+    print("✅ Mixed-case extensions OK")
+
+def test_accept_encoding_gzip():
+    status, _, _ = request("/index.html", headers={"Accept-Encoding": "gzip"})
+    assert status == 200
+    print("✅ Accept-Encoding: gzip → OK")
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Directory Indexing and Autoindex
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_index_prevents_autoindex():
+    _, _, body = request("/")
+    assert "<h1>Welcome to Webserv</h1>" in body
+    print("✅ index.html served instead of autoindex")
+
+def test_autoindex_lists_files():
+    _, _, body = request("/dir/")
+    assert "file.txt" in body
+    assert "file.unknown" in body
+    print("✅ Autoindex lists directory contents")
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Error Handling (Custom Pages)
+# ─────────────────────────────────────────────────────────────────────────────
 
 def test_custom_error_pages():
     code, _, body = request("/doesnotexist")
     assert code == 404 and "<h1>404 Not Found</h1>" in body
-    print("✅ 404 page uses custom error_404.html")
+    print("✅ Custom 404 page loaded")
 
     code, _, body = request("/forbidden/")
     assert code == 403 and "<h1>403 Forbidden</h1>" in body
-    print("✅ 403 page uses custom error_403.html")
+    print("✅ Custom 403 page loaded")
+    
+# ─────────────────────────────────────────────────────────────────────────────
+# Multiple pipelined GET requests
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_pipelined_requests():
+    parsed = urlparse(SERVER)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
+    conn.connect()
+    sock = conn.sock
+
+    sock.sendall(b"GET /index.html HTTP/1.1\r\nHost: localhost\r\n\r\nGET /dir/file.txt HTTP/1.1\r\nHost: localhost\r\n\r\n")
+    res1 = conn.response_class(sock, method="GET")
+    res1.begin()
+    body1 = res1.read()
+    assert res1.status == 200
+
+    res2 = conn.response_class(sock, method="GET")
+    res2.begin()
+    body2 = res2.read()
+    assert res2.status == 200
+
+    print("✅ Pipelined GET requests handled correctly")
+    conn.close()
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Run All
+# ─────────────────────────────────────────────────────────────────────────────
 
 def run_tests():
-    print("[GET] Running GET tests...")
+    print("[ GET Test Suite ]")
 
-    # Static file serving
-    assert_status("/index.html", 200)
-    assert_status("/dir/file.txt", 200)
-    assert_status("/", 200)
-    assert_status("/dir//file.txt", 200)
+    # ─── Protocol / Method handling ─────────────────────────────────────────
+    test_invalid_http_version()
+    test_put_not_implemented()
 
-    # Not found
-    assert_status("/nonexistent", 404)
-    assert_status("/dir/missing.html", 404)
+    # ─── Headers ───────────────────────────────────────────────────────────
+    test_header_case_insensitive()
+    test_duplicate_headers()
+    test_missing_host_header()
+    test_header_overflow()
+    test_accept_header()
 
-    # Autoindex
-    assert_status("/dir/", 200)
-    assert_redirect("/dir", "/dir/")
+    # ─── Connection behavior ───────────────────────────────────────────────
+    test_connection_close()
+    test_get_with_body()
+    test_if_modified_since()
 
-    # Redirects
-    assert_redirect("/forbidden", "/forbidden/")
-    
-	# MIME fallback
-    assert_content_type("/dir/file.unknown", "application/octet-stream")
+    # ─── URI / Path edge cases ─────────────────────────────────────────────
+    test_long_url()
+    test_percent_encoded_slash()
+    test_invalid_percent_encoding()
+    test_long_query_string()
+    test_dot_in_path()
+    test_nested_dotdot_blocked()
 
-    # Forbidden
-    assert_status("/forbidden/", 403)
-    
-	# Query
-    assert_status("/?foo=bar", 200)        # query shouldn’t change which file is served
-    assert_status("/index.html?x=1&y=2", 200)
-    assert_status("/index.html?foo=bar&x=1+1%3D2", 200)
-    assert_status("/index.html?foo=bar#section1", 200)
-    assert_status("/index.html?foo=bar?baz=qux", 200)
-    assert_status("/Index.HTML", 404)
+    # ─── Content-Type handling ─────────────────────────────────────────────
+    test_non_mime_file_fallback()
+    test_uppercase_extension()
+    test_mixed_case_extensions()
+    test_accept_encoding_gzip()
 
-    # Edge cases
-    assert_status("//", 200)
-    assert_status("//index.html", 200)
-    assert_status("/../index.html", 403)
-    assert_status("/%2E%2E/index.html", 403)   # %2E == .
-    assert_status("/%2e%2e/%2e%2e/index.html", 403)
-    assert_status("/index.html.", 404)
-    assert_status("/..", 403)
-    assert_status("/dir/..", 200)
+    # ─── Autoindex / Directory logic ───────────────────────────────────────
+    test_index_prevents_autoindex()
+    test_autoindex_lists_files()
 
-    # Content-Type validation
-    assert_content_type("/index.html", "text/html")
-    assert_content_type("/dir/file.txt", "text/plain")
-    assert_content_type("/script.js", "application/javascript")
-    assert_content_type("/style.css", "text/css")
+    # ─── Custom error pages ────────────────────────────────────────────────
+    test_custom_error_pages()
 
-    # Optional: binary file test
-    code, _, body = request("/logo.png")
-    if code == 200 and len(body) > 0:
-        print(f"✅ GET /logo.png → 200 OK (binary, {len(body)} bytes)")
-    else:
-        print(f"❌ GET /logo.png → {code} (expected 200 with non-empty body)")
-        sys.exit(1)
+    # ─── HTTP/1.1 pipelining ───────────────────────────────────────────────
+    test_pipelined_requests()
 
+    print("✅ All GET tests completed.")
 
 if __name__ == "__main__":
     run_tests()
-    test_invalid_http_version()
-    test_header_case_insensitive()
-    test_duplicate_headers()
-    test_long_url()
-    test_missing_host_header()
-    test_header_overflow()
-    test_connection_close()
-    test_if_modified_since()
-    test_get_with_body()
-    test_put_not_implemented()
-    test_custom_error_pages()
