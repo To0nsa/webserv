@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/28 11:11:08 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 11:23:53 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,13 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     if (method.empty() || path.empty() || version.empty()) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid request start line");
         errorCode = 400;
+        return false;
+    }
+
+    const std::size_t MAX_URI_LEN = 2048;
+    if (path.length() > MAX_URI_LEN) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Request-URI Too Long: " + path);
+        errorCode = 414;
         return false;
     }
 

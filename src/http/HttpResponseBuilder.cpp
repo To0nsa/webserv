@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponseBuilder.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/26 16:31:00 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/28 11:24:28 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ std::string getDefaultMessage(int status_code) {
                                                      {408, "Request Timeout"},
                                                      {411, "Length Required"},
                                                      {413, "Payload Too Large"},
+                                                     {414, "URI Too Long"},
                                                      {431, "Request Header Fields Too Large"},
                                                      {500, "Internal Server Error"},
                                                      {501, "Not Implemented"},
