@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequestParser.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/26 13:36:53 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/28 11:11:08 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,13 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     req.setMethod(method);
     req.setPath(path);
     req.setVersion(version);
+
+    if (req.getVersion() != "HTTP/1.0" && req.getVersion() != "HTTP/1.1") {
+        errorCode = 505; // HTTP Version Not Supported
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Invalid HTTP version: " + req.getVersion());
+        return false;
+    }
 
     while (std::getline(stream, line)) {
         if (!line.empty() && line.back() == '\r') {
@@ -283,13 +290,6 @@ bool validateReq(HttpRequest& req, int& errorCode) {
         return false;
     }
 
-    if (req.getVersion() != "HTTP/1.0" && req.getVersion() != "HTTP/1.1") {
-        errorCode = 505; // HTTP Version Not Supported
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
-                        "Invalid HTTP version: " + req.getVersion());
-        return false;
-    }
-
     if (!isValidPath(req.getPath())) {
         errorCode = 403; // Invalid Path
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
@@ -322,9 +322,12 @@ bool validateReq(HttpRequest& req, int& errorCode) {
 
         // Allow only specific Content-Types for POST requests
         static const std::set<std::string> validTypes = {
-            "application/x-www-form-urlencoded", "multipart/form-data", "text/plain",
+            "application/x-www-form-urlencoded",
+            "multipart/form-data",
+            "text/plain",
             "application/json",
-            "test/file" // only for testing purposes
+            "application/octet-stream",
+            "test/file" // for testing
         };
 
         std::string ctLower = toLower(contentType);
