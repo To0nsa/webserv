@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/28 11:23:53 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 12:28:45 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,26 +68,37 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         errorCode = 400;
         return false;
     }
-    std::istringstream requestLineStream(line);
-    std::string        method, path, version;
-    requestLineStream >> method >> path >> version;
 
-    if (method.empty() || path.empty() || version.empty()) {
+    std::istringstream requestLineStream(line);
+    std::string        method, rawTarget, version;
+    requestLineStream >> method >> rawTarget >> version;
+
+    if (method.empty() || rawTarget.empty() || version.empty()) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid request start line");
         errorCode = 400;
         return false;
     }
 
+    // ── Split path and query ──
+    std::string pathOnly = rawTarget;
+    std::string queryString;
+    std::size_t qpos = rawTarget.find('?');
+    if (qpos != std::string::npos) {
+        pathOnly    = rawTarget.substr(0, qpos);
+        queryString = rawTarget.substr(qpos + 1);
+    }
+
     const std::size_t MAX_URI_LEN = 2048;
-    if (path.length() > MAX_URI_LEN) {
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Request-URI Too Long: " + path);
+    if (pathOnly.length() > MAX_URI_LEN) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Request-URI Too Long: " + pathOnly);
         errorCode = 414;
         return false;
     }
 
     req = HttpRequest();
     req.setMethod(method);
-    req.setPath(path);
+    req.setPath(pathOnly);     // only path used for file resolution
+    req.setQuery(queryString); // query string passed to CGI (if needed)
     req.setVersion(version);
 
     if (req.getVersion() != "HTTP/1.0" && req.getVersion() != "HTTP/1.1") {
@@ -105,6 +116,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         if (colonPos == std::string::npos) {
             continue; // skip invalid headers
         }
+
         std::string key   = toUpper(line.substr(0, colonPos));
         std::string value = line.substr(colonPos + 1);
         key.erase(key.find_last_not_of(" \t\r\n") + 1);     // remove trailing whitespace
@@ -116,6 +128,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
             errorCode = 400;
             return false;
         }
+
         if (key == "CONTENT-LENGTH") {
             if (value.empty() || !std::all_of(value.begin(), value.end(), [](char c) {
                     return std::isdigit(static_cast<unsigned char>(c));
@@ -136,8 +149,8 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
             }
         }
 
-        // Handling duplicated header
-        auto existing = req.getHeader(key);
+        // Handling duplicated headers
+        std::string existing = req.getHeader(key);
         if (!existing.empty()) {
             req.setHeader(key, existing + ", " + value);
         } else {
