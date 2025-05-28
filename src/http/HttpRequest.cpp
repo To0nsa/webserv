@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/28 12:00:11 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 23:12:13 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,4 +120,8 @@ void HttpRequest::setUrl(const Url& url) {
 
 void HttpRequest::setQuery(const std::string& query) {
     _query = query;
+}
+
+bool HttpRequest::hasHeader(const std::string& key) const {
+    return _headers.find(key) != _headers.end();
 }

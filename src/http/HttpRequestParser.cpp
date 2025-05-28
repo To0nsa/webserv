@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/28 22:33:16 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 23:22:36 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,12 +205,17 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
             }
         }
 
-        // Handling duplicated headers
-        std::string existing = req.getHeader(key);
-        if (!existing.empty()) {
-            req.setHeader(key, existing + ", " + value);
+        const std::string normKey = toUpper(key);
+
+        if (req.hasHeader(normKey)) {
+            if (normKey == "HOST") {
+                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Duplicate Host header");
+                errorCode = 400;
+                return false;
+            }
+            req.setHeader(normKey, req.getHeader(normKey) + ", " + value); // Comma-mergeable
         } else {
-            req.setHeader(key, value);
+            req.setHeader(normKey, value);
         }
     }
 

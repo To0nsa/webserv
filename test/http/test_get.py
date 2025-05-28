@@ -1,9 +1,13 @@
 import http.client
 import os
 import sys
+import socket
+import time
 from urllib.parse import urlparse
 
 SERVER = os.getenv("WEBSERV_URL", "http://localhost:8080")
+HOST = os.getenv("WEBSERV_HOST", "127.0.0.1")
+PORT = int(os.getenv("WEBSERV_PORT", "8080"))
 
 
 def request(path, headers=None):
@@ -154,6 +158,25 @@ def test_if_modified_since():
     assert res.status in (304, 200)
     print(f"✅ Conditional GET → {res.status}")
     conn.close()
+    
+def test_header_timeout():
+    print("[RAW] Testing timeout on incomplete headers...")
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(10)  # Prevent test hanging forever
+    s.connect((HOST, PORT))
+    s.sendall(b"GET /index.html HTTP/1.1\r\nHost: localhost\r\n")  # no \r\n\r\n
+
+    try:
+        response = s.recv(4096).decode(errors="replace")
+        if "408 Request Timeout" in response:
+            print("✅ Incomplete header → 408 Request Timeout")
+        else:
+            print("❌ Incomplete header → Expected 408, got:")
+            print(response)
+    except socket.timeout:
+        print("❌ Server did not respond with 408 (timed out in client)")
+    finally:
+        s.close()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # URI Handling and Edge Cases
@@ -321,16 +344,17 @@ def run_tests():
     test_header_overflow()
     test_accept_header()
 
-    # ─── Connection behavior ───────────────────────────────────────────────
+    # ─── Connection and timeout behavior ───────────────────────────────────────────────
     test_connection_close()
     test_get_with_body()
     test_if_modified_since()
+    test_header_timeout()
 
     # ─── URI / Path edge cases ─────────────────────────────────────────────
     test_long_url()
     test_percent_encoded_slash()
     test_invalid_percent_encoding()
-    test_incomplete_percent_encoding();
+    test_incomplete_percent_encoding()
     test_long_query_string()
     test_dot_in_path()
     test_nested_dotdot_blocked()
@@ -351,8 +375,6 @@ def run_tests():
     # ─── HTTP/1.1 pipelining ───────────────────────────────────────────────
     test_pipelined_requests()
     test_pipelined_mixed_requests()
-
-    print("✅ All GET tests completed.")
 
 if __name__ == "__main__":
     run_tests()

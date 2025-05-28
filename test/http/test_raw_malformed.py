@@ -48,8 +48,6 @@ def run_raw_tests():
         res = send_raw_request(raw)
         assert_contains(res, expected, context)
 
-    print("[RAW] ✅ All raw tests passed.")
-
 
 if __name__ == "__main__":
     run_raw_tests()
