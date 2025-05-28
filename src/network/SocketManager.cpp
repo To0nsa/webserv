@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/28 11:26:46 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 23:59:28 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ void SocketManager::resetRequestState(int client_fd) {
 
 bool SocketManager::isHeaderTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
-    if (client.responses.empty() && client.current_raw_response.empty() &&
-        (client.headerBytesReceived > 0) && client.headerBytesReceived < HEADER_MIN_LENGTH &&
-        now - client.connectionStartTime > HEADER_TIMEOUT_SECONDS) {
-        std::cout << "Header timeout on fd: " << fd << std::endl;
+    if (!client.headerComplete && (now - client.connectionStartTime >= HEADER_TIMEOUT_SECONDS)) {
+        std::cout << "[TIMEOUT] Incomplete header after " << HEADER_TIMEOUT_SECONDS
+                  << "s on fd: " << fd << " (received " << client.headerBytesReceived
+                  << " bytes)\n";
         respondError(fd, 408);
         return true;
     }
