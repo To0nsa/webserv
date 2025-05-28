@@ -173,6 +173,11 @@ def test_percent_encoded_slash():
 def test_invalid_percent_encoding():
     assert_status("/%ZZ", 400)
     print("✅ Invalid encoded slash handled")
+    
+def test_incomplete_percent_encoding():
+    assert_status("/%", 400)
+    assert_status("/%G1", 400)
+    print("✅ Incomplete and invalid percent-encodings → 400 Bad Request")
 
 def test_long_query_string():
     long_query = "/index.html?" + "x=" + "y" * 1000
@@ -287,6 +292,7 @@ def run_tests():
     test_long_url()
     test_percent_encoded_slash()
     test_invalid_percent_encoding()
+    test_incomplete_percent_encoding();
     test_long_query_string()
     test_dot_in_path()
     test_nested_dotdot_blocked()

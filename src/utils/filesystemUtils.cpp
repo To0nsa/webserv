@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/28 20:20:00 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 20:27:59 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,19 +182,26 @@ bool mkdirRecursive(const std::string& path) {
 
 std::string decodePercentEncoding(const std::string& encoded) {
     std::ostringstream result;
+
     for (size_t i = 0; i < encoded.length(); ++i) {
-        if (encoded[i] == '%' && i + 2 < encoded.length()) {
-            std::string hexStr = encoded.substr(i + 1, 2);
-            char*       endptr;
-            long        val = std::strtol(hexStr.c_str(), &endptr, 16);
-            if (*endptr != '\0' || val < 0 || val > 255)
-                throw std::invalid_argument("Invalid percent encoding: %" + hexStr);
-            result << static_cast<char>(val);
+        if (encoded[i] == '%') {
+            if (i + 2 >= encoded.length())
+                throw std::invalid_argument("Incomplete percent-encoding at end of URI");
+
+            char hex1 = encoded[i + 1];
+            char hex2 = encoded[i + 2];
+            if (!isxdigit(hex1) || !isxdigit(hex2))
+                throw std::invalid_argument("Invalid hex in percent-encoding: %" +
+                                            std::string(1, hex1) + std::string(1, hex2));
+
+            int byte = std::stoi(encoded.substr(i + 1, 2), nullptr, 16);
+            result << static_cast<char>(byte);
             i += 2;
         } else {
             result << encoded[i];
         }
     }
+
     return result.str();
 }
 

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/28 20:22:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 20:28:43 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,42 +81,42 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     }
 
     // ── Split path and query ──
+    std::string decodedPath;
     try {
-        std::string decodedPath = decodePercentEncoding(rawTarget);
-        std::string pathOnly    = decodedPath;
-        std::string queryString;
-        size_t      qpos = decodedPath.find('?');
-        if (qpos != std::string::npos) {
-            pathOnly    = decodedPath.substr(0, qpos);
-            queryString = decodedPath.substr(qpos + 1);
-        }
-
-        const std::size_t MAX_URI_LEN = 2048;
-        if (pathOnly.length() > MAX_URI_LEN) {
-            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
-                            "Request-URI Too Long: " + pathOnly);
-            errorCode = 414;
-            return false;
-        }
-
-        req = HttpRequest();
-        req.setMethod(method);
-
-        std::string normPath = normalizePath(pathOnly);
-        if (normPath.empty()) {
-            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
-            errorCode = 403;
-            return false;
-        }
-        req.setPath(normPath);
-
-        req.setQuery(queryString); // query string passed to CGI (if needed)
-        req.setVersion(version);
+        decodedPath = decodePercentEncoding(rawTarget);
     } catch (const std::exception& e) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", e.what());
         errorCode = 400;
         return false;
     }
+    std::string pathOnly = decodedPath;
+    std::string queryString;
+    size_t      qpos = decodedPath.find('?');
+    if (qpos != std::string::npos) {
+        pathOnly    = decodedPath.substr(0, qpos);
+        queryString = decodedPath.substr(qpos + 1);
+    }
+
+    const std::size_t MAX_URI_LEN = 2048;
+    if (pathOnly.length() > MAX_URI_LEN) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Request-URI Too Long: " + pathOnly);
+        errorCode = 414;
+        return false;
+    }
+
+    req = HttpRequest();
+    req.setMethod(method);
+
+    std::string normPath = normalizePath(pathOnly);
+    if (normPath.empty()) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
+        errorCode = 403;
+        return false;
+    }
+    req.setPath(normPath);
+
+    req.setQuery(queryString); // query string passed to CGI (if needed)
+    req.setVersion(version);
 
     if (req.getVersion() != "HTTP/1.0" && req.getVersion() != "HTTP/1.1") {
         errorCode = 505; // HTTP Version Not Supported
