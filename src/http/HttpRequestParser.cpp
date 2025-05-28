@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/28 20:28:43 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 21:18:55 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,22 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         return false;
     }
 
-    std::istringstream requestLineStream(line);
-    std::string        method, rawTarget, version;
-    requestLineStream >> method >> rawTarget >> version;
+    size_t first_sp  = line.find(' ');
+    size_t second_sp = line.find(' ', first_sp + 1);
+    size_t third_sp  = line.find(' ', second_sp + 1);
+
+    // Must contain exactly two spaces (no more, no less)
+    if (first_sp == std::string::npos || second_sp == std::string::npos ||
+        third_sp != std::string::npos) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Malformed request line (must have exactly 2 SP)");
+        errorCode = 400;
+        return false;
+    }
+
+    std::string method    = line.substr(0, first_sp);
+    std::string rawTarget = line.substr(first_sp + 1, second_sp - first_sp - 1);
+    std::string version   = trim(line.substr(second_sp + 1)); // trim trailing \r
 
     if (method.empty() || rawTarget.empty() || version.empty()) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid request start line");
@@ -175,13 +188,22 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         }
     }
 
-    try {
-        Url url = parseUrl(req, req.getHeader("HOST") + req.getPath());
-        req.setUrl(url);
-    } catch (const std::exception& e) {
-        errorCode = 400;
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", e.what());
-        return false;
+    if (req.getVersion() == "HTTP/1.1" || !req.getHeader("HOST").empty()) {
+        try {
+            Url url = parseUrl(req, req.getHeader("HOST") + req.getPath());
+            req.setUrl(url);
+        } catch (const std::exception& e) {
+            errorCode = 400;
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", e.what());
+            return false;
+        }
+    } else {
+        // Fallback for HTTP/1.0 without Host header
+        Url dummy;
+        dummy.path = req.getPath();
+        dummy.host = req.getHeader("HOST");
+        req.setUrl(dummy);
+        Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Using fallback Url for HTTP/1.0");
     }
 
     return true;
@@ -294,9 +316,10 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
 }
 
 Url parseUrl(HttpRequest& req, const std::string& url) {
-    if (req.getHeader("HOST").empty()) {
-        throw std::invalid_argument("Missing HOST header");
+    if (req.getVersion() == "HTTP/1.1" && req.getHeader("HOST").empty()) {
+        throw std::invalid_argument("Missing HOST header (required in HTTP/1.1)");
     }
+
     Url        res;
     std::regex urlRegex(
         R"((https?://)?(?:([^:@]+)(?::([^:@]*))?@)?([^:/?#]+)(?::(\d+))?(/[^?#]*)?(?:\?([^#]*))?(?:#(.*))?)");

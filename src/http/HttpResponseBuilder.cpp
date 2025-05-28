@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/28 18:57:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 21:12:45 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ std::string getDefaultMessage(int status_code) {
                                                      {500, "Internal Server Error"},
                                                      {501, "Not Implemented"},
                                                      {502, "Bad Gateway"},
-                                                     {503, "Service Unavailable"}};
+                                                     {503, "Service Unavailable"},
+                                                     {505, "HTTP Version Not Supported"}};
+
     // Attempt to find the status code in the map
     StatusMessageMap::const_iterator it = status_messages.find(status_code);
     // Return the associated message or a fallback if unknown

@@ -1,5 +1,3 @@
-# test/test_raw_malformed.py
-
 import socket
 import sys
 import os
@@ -30,28 +28,31 @@ def assert_contains(response, expected_status, context):
 def run_raw_tests():
     print("[RAW] Running malformed/raw request tests...")
 
-    # 1. Missing request-target (e.g., just GET and version)
-    res = send_raw_request("GET  HTTP/1.1\r\nHost: localhost\r\n\r\n")
-    assert_contains(res, "400 Bad Request", "Missing request-target")
+    tests = [
+        # Syntax errors
+        ("GET  HTTP/1.1\r\nHost: localhost\r\n\r\n",         "400 Bad Request", "Missing request-target"),
+        ("GET / \r\nHost: localhost\r\n\r\n",                "400 Bad Request", "Missing HTTP version"),
+        ("GET / HTTP/1.1\r\n\r\n",                           "400 Bad Request", "Missing Host header"),
+        ("GET / HTTP/1.0\r\n\r\n",                           "200 OK",          "Valid HTTP/1.0 request"),
+        ("GET   /index.html   HTTP/1.1\r\nHost: localhost\r\n\r\n", "400 Bad Request", "Extra spaces in request line"),
+        ("G@T /index.html HTTP/1.1\r\nHost: localhost\r\n\r\n",     "400 Bad Request", "Invalid characters in method"),
+        ("GET /he\x01llo HTTP/1.1\r\nHost: localhost\r\n\r\n",     "400 Bad Request", "Control character in path"),
+        ("GET / HTTP/1.1\r\nHost: localhost\r\n\r\nGARBAGE\r\n\r\n", "400 Bad Request", "Garbage after headers"),
+        ("GET / HTTP/1.1\r\nHost: localhost",                  "400 Bad Request", "Truncated headers"),
+        ("GET / HTTP/1.1\r\nHost: localhost\r\nHost: evil.com\r\n\r\n", "400 Bad Request", "Duplicate Host headers"),
+        ("GET / HTTP/0.9\r\n\r\n",                             "505 HTTP Version Not Supported", "Unsupported HTTP version"),
+        ("GET / HTTP/1.1\r\n\r\n\r\n\r\n",                     "400 Bad Request", "Too many CRLF after headers"),
+        ("get / HTTP/1.1\r\nHost: localhost\r\n\r\n",          "501 Not Implemented", "Invalid method casing"),
+        ("GET / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: chunked\r\n\r\n4\r\ntest\r\n0\r\n\r\n", "400 Bad Request", "GET with chunked body")
+    ]
 
-    # 2. Invalid method casing
-    res = send_raw_request("get / HTTP/1.1\r\nHost: localhost\r\n\r\n")
-    assert_contains(res, "400 Bad Request", "Invalid method casing")
-
-    # 3. No HTTP version
-    res = send_raw_request("GET / \r\nHost: localhost\r\n\r\n")
-    assert_contains(res, "400 Bad Request", "Missing HTTP version")
-
-    # 4. Missing Host header (HTTP/1.1)
-    res = send_raw_request("GET / HTTP/1.1\r\n\r\n")
-    assert_contains(res, "400 Bad Request", "Missing Host header")
-
-    # 5. Valid HTTP/1.0 request without Host
-    res = send_raw_request("GET / HTTP/1.0\r\n\r\n")
-    assert_contains(res, "200 OK", "Valid HTTP/1.0 request")
+    for raw, expected, context in tests:
+        res = send_raw_request(raw)
+        assert_contains(res, expected, context)
 
     print("[RAW] ✅ All raw tests passed.")
 
 
 if __name__ == "__main__":
     run_raw_tests()
+
