@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/22 21:04:39 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 10:18:51 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,9 @@ HttpResponse handleGet(const HttpRequest& request, const Server& server, const L
             // If no index file is found, check if autoindex is enabled
             if (loc.isAutoindexEnabled()) {
                 return generateAutoindex(filepath, uri, request, server);
+            } else {
+                // Directory, no index, no autoindex → return 403
+                return ResponseBuilder::generateError(403, server, request);
             }
         }
     }
