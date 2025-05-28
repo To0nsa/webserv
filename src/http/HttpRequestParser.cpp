@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/28 21:18:55 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 21:23:34 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,19 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
     return true;
 }
 
+static bool isValidHttpMethodToken(const std::string& method) {
+    if (method.empty())
+        return false;
+    for (char c : method) {
+        if (!std::isalnum(c) && c != '!' && c != '#' && c != '$' && c != '%' && c != '&' &&
+            c != '\'' && c != '*' && c != '+' && c != '-' && c != '.' && c != '^' && c != '_' &&
+            c != '`' && c != '|' && c != '~') {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorCode) {
     std::istringstream stream(headerPart);
     std::string        line;
@@ -86,6 +99,12 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     std::string method    = line.substr(0, first_sp);
     std::string rawTarget = line.substr(first_sp + 1, second_sp - first_sp - 1);
     std::string version   = trim(line.substr(second_sp + 1)); // trim trailing \r
+
+    if (!isValidHttpMethodToken(method)) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Method Not Allowed: " + method);
+        errorCode = 400;
+        return false;
+    }
 
     if (method.empty() || rawTarget.empty() || version.empty()) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid request start line");
