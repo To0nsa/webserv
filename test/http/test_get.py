@@ -264,6 +264,44 @@ def test_pipelined_requests():
 
     print("✅ Pipelined GET requests handled correctly")
     conn.close()
+    
+def test_pipelined_mixed_requests():
+    parsed = urlparse(SERVER)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
+    conn.connect()
+    sock = conn.sock
+
+    req1 = b"GET /index.html HTTP/1.1\r\nHost: localhost\r\n\r\n"
+    req2 = b"G@T /invalid HTTP/1.1\r\nHost: localhost\r\n\r\n"
+    req3 = b"GET /dir/file.txt HTTP/1.1\r\nHost: localhost\r\n\r\n"
+
+    sock.sendall(req1 + req2 + req3)
+
+    try:
+        res1 = conn.response_class(sock, method="GET")
+        res1.begin()
+        _ = res1.read()
+        assert res1.status == 200
+
+        res2 = conn.response_class(sock, method="GET")
+        res2.begin()
+        _ = res2.read()
+        assert res2.status == 400  # Server should close after this
+
+        # Should fail to read the third response
+        res3 = conn.response_class(sock, method="GET")
+        res3.begin()
+        res3.read()
+        print("❌ Expected connection close after 400, but got a response")
+    except http.client.RemoteDisconnected:
+        print("✅ Server closed connection after 400 Bad Request (correct)")
+    except Exception as e:
+        print(f"❌ Unexpected exception during pipelined test: {e}")
+    finally:
+        try:
+            conn.close()
+        except:
+            pass
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Run All
@@ -312,6 +350,7 @@ def run_tests():
 
     # ─── HTTP/1.1 pipelining ───────────────────────────────────────────────
     test_pipelined_requests()
+    test_pipelined_mixed_requests()
 
     print("✅ All GET tests completed.")
 

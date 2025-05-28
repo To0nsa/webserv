@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/28 21:23:34 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 22:33:16 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         return false;
     }
 
-    // ── Split path and query ──
     std::string decodedPath;
     try {
         decodedPath = decodePercentEncoding(rawTarget);
@@ -120,6 +119,14 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", e.what());
         errorCode = 400;
         return false;
+    }
+    for (char c : decodedPath) {
+        if (std::iscntrl(static_cast<unsigned char>(c))) {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                            "Path contains control characters");
+            errorCode = 400;
+            return false;
+        }
     }
     std::string pathOnly = decodedPath;
     std::string queryString;
