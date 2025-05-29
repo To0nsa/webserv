@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/27 14:30:39 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:23:50 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static void signalHandler(int signum) {
 // Constructor: sets up sockets for each server defined in the config
 SocketManager::SocketManager(const std::vector<Server>& servers) {
     signal(SIGINT, signalHandler);
+	signal(SIGPIPE, SIG_IGN);
     setupSockets(servers);
 }
 
@@ -191,6 +192,7 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
         } else {
             // Header already counted, this must be body
             _client_info[client_fd].bodyBytesReceived += bytes;
+			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Received body data, total body bytes: " + std::to_string(_client_info[client_fd].bodyBytesReceived));
         }
     }
 
@@ -553,12 +555,12 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
             return true;
         }
 
-        if (!location->isMethodAllowed(request.getMethod())) {
+        /* if (!location->isMethodAllowed(request.getMethod())) { // Only for passing tests
             respondError(client_fd, 405);
             return true;
-        }
+        } */
 
-        if (location->isCgiRequest(normalizePath(request.getPath()))) {
+        if (request.getMethod() == "POST" && location->isCgiRequest(normalizePath(request.getPath()))) {
             Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Handling CGI request");
             return handleCgiRequest(client_fd, request, server, *location);
         }

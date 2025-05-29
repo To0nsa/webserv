@@ -1,4 +1,28 @@
 #!/usr/bin/env python3
+import os
+import sys
+
+
+sys.stdout.write("Content-Type: text/plain\r\n\r\n")
+
+
+try:
+    content_length = int(os.environ.get("CONTENT_LENGTH", 0))
+except (ValueError, TypeError):
+    content_length = 0
+
+body = b""
+while len(body) < content_length:
+    chunk = sys.stdin.buffer.read(min(65536, content_length - len(body)))
+    if not chunk:
+        break
+    body += chunk
+
+print("CGI script received POST data.")
+print(f"Request method: {os.environ.get('REQUEST_METHOD')}")
+print(f"Body length: {len(body)} bytes")
+
+""" #!/usr/bin/env python3
 import os, sys
 
 # Start response
@@ -10,3 +34,4 @@ print(f"Method: {os.environ.get('REQUEST_METHOD')}")
 print(f"Query: {os.environ.get('QUERY_STRING')}")
 print(f"Path Info: {os.environ.get('PATH_INFO')}")
 print(f"Script Name: {os.environ.get('SCRIPT_NAME')}")
+ """

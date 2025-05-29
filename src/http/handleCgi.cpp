@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/29 10:58:33 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:24:27 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,14 @@ bool handleWrite(CgiProcess& cgi) {
 	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE WRITE", "Handling write phase for CGI process");
     const char* data = cgi.input.data() + cgi.input_sent;
     size_t      len  = cgi.input.size() - cgi.input_sent;
-    ssize_t     n    = write(cgi.stdin_fd, data, len);
+	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE WRITE", "Writing size: " + std::to_string(len));
+    const size_t MAX_WRITE_CHUNK = 65536; // 64 KB
+	size_t to_write = std::min(len, MAX_WRITE_CHUNK);
+	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE WRITE", "Writing chunk size: " + std::to_string(to_write));
+	ssize_t n = write(cgi.stdin_fd, data, to_write);
+	/* ssize_t     n    = write(cgi.stdin_fd, data, len); */
     if (n < 0) {
+		Logger::logFrom(LogLevel::ERROR, "CGI HANDLE WRITE", "Write error: " + std::string(strerror(errno)));
         return false;
     }
 	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE WRITE", "Wrote {" + std::string(data, n) + "} to CGI stdin");
