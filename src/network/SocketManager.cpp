@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/29 22:00:02 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 23:54:53 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,18 +91,6 @@ bool SocketManager::isHeaderTimeout(int fd, time_t now) {
     }
     return false;
 }
-
-/* bool SocketManager::isHeaderTimeout(int fd, time_t now) {
-    ClientInfo& client = _client_info[fd];
-    if (!client.headerComplete && (now - client.connectionStartTime >= HEADER_TIMEOUT_SECONDS)) {
-        std::cout << "[TIMEOUT] Incomplete header after " << HEADER_TIMEOUT_SECONDS
-                  << "s on fd: " << fd << " (received " << client.headerBytesReceived
-                  << " bytes)\n";
-        respondError(fd, 408);
-        return true;
-    }
-    return false;
-} */
 
 bool SocketManager::isBodyTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];

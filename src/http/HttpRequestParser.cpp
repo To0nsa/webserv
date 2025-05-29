@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/29 15:43:09 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 23:51:32 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,7 +341,14 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
 }
 
 bool isChunkedBodyComplete(const std::string& bodyPart) {
-    return bodyPart.find("0\r\n") != std::string::npos;
+    // 1. Locate start of trailer section: must contain 0\r\n
+    std::size_t zeroPos = bodyPart.find("0\r\n");
+    if (zeroPos == std::string::npos)
+        return false;
+
+    // 2. Look for the CRLF that ends the trailer section
+    std::size_t trailerEnd = bodyPart.find("\r\n\r\n", zeroPos);
+    return trailerEnd != std::string::npos;
 }
 
 void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t clientMaxBodySize,
