@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/29 11:45:24 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:38:11 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 #define HEADER_MAX_LENGTH 8192
 #define RECV_BUFFER HEADER_MAX_LENGTH * 2
 #define MAX_CLIENTS 512
+#define CGI_TIMEOUT_SECONDS 0.5
 
 struct ClientInfo {
     int                      client_fd;       // File descriptor of the client socket

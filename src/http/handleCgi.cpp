@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/29 14:24:27 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:01:13 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 #include "utils/filesystemUtils.hpp"
 #include "utils/stringUtils.hpp"
 #include "utils/Logger.hpp"
-
+#include <cstdio>
+#include <fstream>
 #include <fcntl.h>
 #include <filesystem>
 #include <poll.h>
@@ -101,18 +102,46 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
 	}
 
 	std::cerr << "[CGI] Script is executable: " << cgi.script_path << std::endl;
-    int in_pipe[2], out_pipe[2];
-    if (pipe(in_pipe) < 0 || pipe(out_pipe) < 0) {
+
+    // === Generate a unique temporary file path ===
+    static int counter = 0;
+    std::stringstream ss;
+    ss << "/tmp/webserv_tmpfile_" << getpid() << "_" << time(nullptr) << "_" << counter++ << ".tmp";
+    std::string temp_path = ss.str();
+
+    // === Write request body to temp file ===
+    std::ofstream out(temp_path, std::ios::binary);
+    if (!out.is_open()) {
+        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to create temp file");
+        return false;
+    }
+    out.write(req.getBody().data(), req.getBody().size());
+    out.close();
+
+    // === Open the temp file for reading ===
+    int body_fd = open(temp_path.c_str(), O_RDONLY);
+    if (body_fd < 0) {
+        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to reopen temp file for CGI input");
         return false;
     }
 
-    fcntl(in_pipe[0], F_SETFL, fcntl(in_pipe[0], F_GETFL) | O_NONBLOCK);
-    fcntl(in_pipe[1], F_SETFL, fcntl(in_pipe[1], F_GETFL) | O_NONBLOCK);
+    std::filesystem::remove(temp_path); // auto-delete after fd close
+
+    // === Create stdout pipe ===
+    int out_pipe[2];
+    if (pipe(out_pipe) < 0) {
+        close(body_fd);
+        return false;
+    }
+
     fcntl(out_pipe[0], F_SETFL, fcntl(out_pipe[0], F_GETFL) | O_NONBLOCK);
     fcntl(out_pipe[1], F_SETFL, fcntl(out_pipe[1], F_GETFL) | O_NONBLOCK);
 
     pid_t pid = fork();
     if (pid < 0) {
+        close(body_fd);
+        close(out_pipe[0]);
+        close(out_pipe[1]);
         return false;
     }
 
@@ -121,9 +150,10 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     }
 
     if (pid == 0) {
-        dup2(in_pipe[0], STDIN_FILENO);
+        dup2(body_fd, STDIN_FILENO);
+        close(body_fd);
         dup2(out_pipe[1], STDOUT_FILENO);
-        close(in_pipe[1]);
+        close(out_pipe[1]);
         close(out_pipe[0]);
 
         // 1. Store script and interpreter in scoped std::string
@@ -171,41 +201,14 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         exit(1);
     }
 
-    close(in_pipe[0]);
+    close(body_fd);
     close(out_pipe[1]);
 
     cgi.pid           = pid;
-    cgi.stdin_fd      = in_pipe[1];
     cgi.stdout_fd     = out_pipe[0];
-    cgi.input         = req.getMethod() == "POST" ? req.getBody() : "";
-    cgi.input_sent    = 0;
-    cgi.phase         = cgi.input.empty() ? CgiProcess::Phase::Reading : CgiProcess::Phase::Writing;
+    cgi.phase         = CgiProcess::Phase::Reading;
     cgi.start_time    = time(NULL);
     cgi.last_activity = time(NULL);
-    return true;
-}
-
-bool handleWrite(CgiProcess& cgi) {
-	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE WRITE", "Handling write phase for CGI process");
-    const char* data = cgi.input.data() + cgi.input_sent;
-    size_t      len  = cgi.input.size() - cgi.input_sent;
-	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE WRITE", "Writing size: " + std::to_string(len));
-    const size_t MAX_WRITE_CHUNK = 65536; // 64 KB
-	size_t to_write = std::min(len, MAX_WRITE_CHUNK);
-	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE WRITE", "Writing chunk size: " + std::to_string(to_write));
-	ssize_t n = write(cgi.stdin_fd, data, to_write);
-	/* ssize_t     n    = write(cgi.stdin_fd, data, len); */
-    if (n < 0) {
-		Logger::logFrom(LogLevel::ERROR, "CGI HANDLE WRITE", "Write error: " + std::string(strerror(errno)));
-        return false;
-    }
-	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE WRITE", "Wrote {" + std::string(data, n) + "} to CGI stdin");
-    cgi.input_sent += n;
-    cgi.last_activity = time(NULL);
-    if (cgi.input_sent == cgi.input.size()) {
-        close(cgi.stdin_fd);
-        cgi.phase = CgiProcess::Phase::Reading;
-    }
     return true;
 }
 
@@ -270,8 +273,6 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
 }
 
 void cleanupCgi(CgiProcess& cgi) {
-    if (cgi.stdin_fd >= 0)
-        close(cgi.stdin_fd);
     if (cgi.stdout_fd > 0)
         close(cgi.stdout_fd);
     kill(cgi.pid, SIGKILL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleCgi.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 00:24:43 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/24 23:12:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 15:36:25 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,11 @@
 #include <unistd.h>
 
 struct CgiProcess {
-    enum class Phase { Launching, Writing, Reading, Done, Failed };
+    enum class Phase { Launching, Reading, Done, Failed };
 
     pid_t       pid       = -1;
-    int         stdin_fd  = -1;
     int         stdout_fd = -1;
-    std::string input;  ///< Body to send to CGI (for POST)
     std::string output; ///< Output received from CGI
-    std::size_t input_sent    = 0;
     Phase       phase         = Phase::Launching;
     time_t      start_time    = 0;
     time_t      last_activity = 0;
