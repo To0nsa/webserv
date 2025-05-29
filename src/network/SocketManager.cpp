@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/30 00:54:06 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/30 02:04:46 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,7 +318,7 @@ void SocketManager::handleCgiPollEvents() {
         bool success = true;
         // 3) Drive CGI stdout (data or EOF)
         if (cgi.phase == CgiProcess::Phase::Reading && which == "stdout") {
-            if (revents & POLLIN) {
+            if (revents & POLLIN) { // Data available to read!!!!!!!!!
                 success = CGI::handleRead(cgi);
             }
             if (revents & POLLHUP) {
@@ -342,7 +342,7 @@ void SocketManager::handleCgiPollEvents() {
 
         // 5) Finalize when done
         if (cgi.phase == CgiProcess::Phase::Done) {
-            Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI] Phase Done, checking child status...");
+            //Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI] Phase Done, checking child status...");
             // Ensure we actually have data before finalizing
             if (cgi.output.empty()) {
                 Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI] Output not yet read, deferring finalization...");

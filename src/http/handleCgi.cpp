@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/30 01:07:53 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/30 02:26:36 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,10 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     // === Generate a unique temporary file path ===
     static int counter = 0;
     std::stringstream ss;
-    ss << "/Users/irychkov/Desktop/webserv_team/tmp/webserv_tmpfile_" << getpid() << "_" << time(nullptr) << "_" << counter++ << ".tmp";
+    ss << "/home/irychkov/Desktop/webserv/webserv_tmpfile_" << getpid() << "_" << time(nullptr) << "_" << counter++ << ".tmp";
     std::string temp_path = ss.str();
     std::stringstream ss1;
-    ss1 << "/Users/irychkov/Desktop/webserv_team/tmp/script_out_" << getpid() << "_" << time(nullptr) << "_" << counter++ << ".tmp";
+    ss1 << "/home/irychkov/Desktop/webserv/script_out_" << getpid() << "_" << time(nullptr) << "_" << counter++ << ".tmp";
     std::string script_out = ss1.str();
     Logger::logFrom(LogLevel::DEBUG, "CGI", "Temporary file path: " + temp_path);
     Logger::logFrom(LogLevel::DEBUG, "CGI", "Script output file path: " + script_out);
@@ -241,6 +241,7 @@ bool handleRead(CgiProcess& cgi) {
 	Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE READ", "Handling read phase for CGI process");
     char    buf[RECV_BUFFER];
     ssize_t n = read(cgi.stdout_fd, buf, sizeof(buf));
+    Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE READ", "Read bytes: " + std::to_string(n));
     if (n < 0) {
         return false;
     }
@@ -257,10 +258,10 @@ bool handleRead(CgiProcess& cgi) {
 
 std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
                                         const HttpRequest& req) {
-	Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "Finalizing CGI process for script");
+	//Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "Finalizing CGI process for script");
     int status;
     if (waitpid(cgi.pid, &status, WNOHANG) == 0) {
-        Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "CGI process is still running");
+        //Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "CGI process is still running");
         return std::nullopt; // Not done yet
     }
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
@@ -315,7 +316,7 @@ void cleanupCgi(CgiProcess& cgi) {
 bool tryTerminateCgi(CgiProcess& cgi) {
     int   status;
     pid_t result = waitpid(cgi.pid, &status, WNOHANG);
-    Logger::logFrom(LogLevel::DEBUG, "CGI", "tryTerminateCgi() → waitpid returned " + std::to_string(result));
+    //Logger::logFrom(LogLevel::DEBUG, "CGI", "tryTerminateCgi() → waitpid returned " + std::to_string(result));
 
     if (result == 0) {
         return false;
