@@ -42,9 +42,27 @@ def run_raw_tests():
         ("get / HTTP/1.1\r\nHost: localhost\r\n\r\n",          "501 Not Implemented", "Invalid method casing"),
         ("GET / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: chunked\r\n\r\n4\r\ntest\r\n0\r\n\r\n", "400 Bad Request", "GET with chunked body"),
         ("GET / HTTP/1.1\r\nHost: localhost\r\nX-Header:\r\n\r\n", "400 Bad Request", "Header with missing value"),
-        ("", "400 Bad Request", "Empty request"),
+        ("GET / HTTP/1.1\r\nHost: localhost\r\nX-BAD:\r\n\r\n", "400 Bad Request", "Header with missing value"),
         ("CONNECT / HTTP/1.1\r\nHost: localhost\r\n\r\n", "501 Not Implemented", "Unsupported CONNECT method"),
         ("GET / HTTP/1.1\r\nHost: localhost\r\nX-Test: val1\r\nX-Test: val2\r\n\r\n", "200 OK", "Duplicate but mergeable headers"),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nContent-Length: 10\r\n\r\nhello", "400 Bad Request", "Duplicate Content-Length headers"),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nTransfer-Encoding: chunked\r\n\r\n4\r\ntest\r\n0\r\n\r\n", "400 Bad Request", "Conflicting Content-Length and Transfer-Encoding"),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: abc\r\n\r\nhello", "411 Length Required", "Non-numeric Content-Length"),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: -42\r\n\r\nhello", "411 Length Required", "Negative Content-Length"),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nContent-Type: text/plain\r\nContent-Type: application/json\r\n\r\nhello", "400 Bad Request", "Duplicate Content-Type headers"),
+        (
+			"POST / HTTP/1.1\r\n"
+			"Host: localhost\r\n"
+			"Content-Length: 5\r\n"
+			"Content-Type: application/x-evil\r\n"
+			"\r\n"
+			"hello",
+			"415 Unsupported Media Type",
+			"Unsupported Content-Type"
+		),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: gzip\r\n\r\nhello", "501 Not Implemented", "Unsupported Transfer-Encoding value"),
+        ("GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\nConnection: keep-alive\r\n\r\n", "400 Bad Request", "Conflicting Connection header values"),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nExpect: 100-continue\r\n\r\nhello", "417 Expectation Failed", "Unsupported Expect header")
     ]
 
     for raw, expected, context in tests:

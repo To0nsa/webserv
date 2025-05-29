@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/28 23:22:36 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 09:49:26 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,101 @@ static bool isValidHttpMethodToken(const std::string& method) {
             return false;
         }
     }
+    return true;
+}
+
+/// Validates and inserts a header into the request.
+/// @return true if header was accepted, false if an error occurred (sets errorCode)
+bool insertValidatedHeader(HttpRequest& req, const std::string& key, const std::string& value,
+                           int& errorCode) {
+    const std::string normKey = toUpper(key);
+
+    // RFC: Empty value is invalid
+    if (value.empty()) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Header missing value: " + normKey);
+        errorCode = 400;
+        return false;
+    }
+
+    // RFC: Empty key or invalid characters (ASCII control)
+    if (normKey.empty() || std::any_of(normKey.begin(), normKey.end(),
+                                       [](char c) { return (c <= 0x1F || c == 0x7F); })) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid or empty header name");
+        errorCode = 400;
+        return false;
+    }
+
+    if (req.hasHeader(normKey)) {
+        if (normKey == "HOST") {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Duplicate Host header");
+            errorCode = 400;
+            return false;
+        }
+
+        if (normKey == "CONTENT-LENGTH") {
+            if (!std::all_of(value.begin(), value.end(), ::isdigit)) {
+                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                                "Invalid numeric Content-Length");
+                errorCode = 400;
+                return false;
+            }
+            if (req.getHeader(normKey) != value) {
+                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                                "Conflicting Content-Length headers");
+                errorCode = 400;
+                return false;
+            }
+            return true; // identical Content-Length is OK
+        }
+
+        if (normKey == "CONTENT-TYPE") {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Duplicate Content-Type header");
+            errorCode = 400;
+            return false;
+        }
+
+        // Only merge allowed headers
+        static const std::set<std::string> mergeableHeaders = {
+            "ACCEPT", "ACCEPT-ENCODING", "ACCEPT-LANGUAGE", "CACHE-CONTROL", "VIA", "COOKIE"};
+        if (mergeableHeaders.count(normKey)) {
+            req.setHeader(normKey, req.getHeader(normKey) + ", " + value);
+        } else {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                            "Duplicate unmergeable header: " + normKey);
+            errorCode = 400;
+            return false;
+        }
+    } else {
+        // First-time set
+        req.setHeader(normKey, value);
+
+        // Content-Length + Transfer-Encoding conflict check
+        if ((normKey == "CONTENT-LENGTH" && req.hasHeader("TRANSFER-ENCODING")) ||
+            (normKey == "TRANSFER-ENCODING" && req.hasHeader("CONTENT-LENGTH"))) {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                            "Both Content-Length and Transfer-Encoding present");
+            errorCode = 400;
+            return false;
+        }
+
+        if (normKey == "CONTENT-LENGTH" && !std::all_of(value.begin(), value.end(), ::isdigit)) {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                            "Invalid Content-Length value: " + value);
+            errorCode = 400;
+            return false;
+        }
+
+        if (normKey == "TRANSFER-ENCODING") {
+            std::string valLower = toLower(value);
+            if (valLower != "chunked") {
+                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                                "Unsupported Transfer-Encoding value: " + valLower);
+                errorCode = 501;
+                return false;
+            }
+        }
+    }
+
     return true;
 }
 
@@ -168,9 +263,12 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         if (!line.empty() && line.back() == '\r') {
             line.pop_back();
         }
+
         std::size_t colonPos = line.find(':');
-        if (colonPos == std::string::npos) {
-            continue; // skip invalid headers
+        if (colonPos == std::string::npos || colonPos == 0 || colonPos == line.size() - 1) {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Malformed header: " + line);
+            errorCode = 400;
+            return false;
         }
 
         std::string key   = toUpper(line.substr(0, colonPos));
@@ -205,18 +303,8 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
             }
         }
 
-        const std::string normKey = toUpper(key);
-
-        if (req.hasHeader(normKey)) {
-            if (normKey == "HOST") {
-                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Duplicate Host header");
-                errorCode = 400;
-                return false;
-            }
-            req.setHeader(normKey, req.getHeader(normKey) + ", " + value); // Comma-mergeable
-        } else {
-            req.setHeader(normKey, value);
-        }
+        if (!insertValidatedHeader(req, key, value, errorCode))
+            return false;
     }
 
     if (req.getVersion() == "HTTP/1.1" || !req.getHeader("HOST").empty()) {

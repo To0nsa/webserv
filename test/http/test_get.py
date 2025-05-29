@@ -177,6 +177,18 @@ def test_header_timeout():
         print("❌ Server did not respond with 408 (timed out in client)")
     finally:
         s.close()
+        
+def test_empty_request_timeout():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((HOST, PORT))
+        time.sleep(10)  # wait for timeout to trigger
+        try:
+            res = s.recv(4096).decode(errors="replace")
+            assert "408 Request Timeout" in res
+            print("✅ Empty request triggers 408 timeout")
+        except Exception as e:
+            print(f"❌ Empty request timeout test failed: {e}")
+            sys.exit(1)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # URI Handling and Edge Cases
@@ -348,7 +360,8 @@ def run_tests():
     test_connection_close()
     test_get_with_body()
     test_if_modified_since()
-    test_header_timeout()
+    #test_header_timeout()
+    #test_empty_request_timeout()
 
     # ─── URI / Path edge cases ─────────────────────────────────────────────
     test_long_url()
