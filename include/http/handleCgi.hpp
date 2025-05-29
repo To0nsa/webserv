@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 00:24:43 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/29 15:36:25 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/29 19:09:30 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ struct CgiProcess {
 
     pid_t       pid       = -1;
     int         stdout_fd = -1;
-    std::string output; ///< Output received from CGI
+    int         output_fd = -1; // new: temp file to store CGI output
+    std::string output_path;    // new: path to that file
+    std::string output;         ///< Collected output from the CGI script
     Phase       phase         = Phase::Launching;
     time_t      start_time    = 0;
     time_t      last_activity = 0;

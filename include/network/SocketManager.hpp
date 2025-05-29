@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/29 16:26:49 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/29 19:41:12 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #include <unistd.h>
 #include <vector>
 
-#define TIMEOUT 600
+#define TIMEOUT 800
 #define HEADER_TIMEOUT_SECONDS 6
 #define HEADER_MIN_LENGTH 15
 #define HEADER_MAX_LENGTH 8192

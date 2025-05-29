@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/29 15:44:30 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/30 00:54:06 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,6 +343,11 @@ void SocketManager::handleCgiPollEvents() {
         // 5) Finalize when done
         if (cgi.phase == CgiProcess::Phase::Done) {
             Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI] Phase Done, checking child status...");
+            // Ensure we actually have data before finalizing
+            if (cgi.output.empty()) {
+                Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI] Output not yet read, deferring finalization...");
+                continue;
+            }
             if (!CGI::tryTerminateCgi(cgi)) {
                 // child not reaped yet → come back next loop
                 continue;
