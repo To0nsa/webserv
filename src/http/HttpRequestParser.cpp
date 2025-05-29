@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/29 14:41:33 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 15:43:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,7 +341,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
 }
 
 bool isChunkedBodyComplete(const std::string& bodyPart) {
-    return bodyPart.find("0\r\n\r\n") != std::string::npos;
+    return bodyPart.find("0\r\n") != std::string::npos;
 }
 
 void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t clientMaxBodySize,
@@ -367,8 +367,25 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
         }
 
         if (chunkSize == 0) {
+            // consume the final CRLF after the 0–chunk
             std::getline(stream, line);
             local += line.size() + 1;
+
+            // reject ANY trailers (we don’t support them) ───
+            std::string trailer;
+            while (std::getline(stream, trailer)) {
+                local += trailer.size() + 1;
+                // an empty line ends the trailer section
+                if (trailer.empty())
+                    break;
+                // any non-empty trailer header is unsupported
+                errorCode = 400;
+                consumedBytes += local;
+                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                                "Unsupported trailer header: " + trailer);
+                return;
+            }
+
             break;
         }
 

@@ -50,16 +50,7 @@ def run_raw_tests():
         ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: abc\r\n\r\nhello", "411 Length Required", "Non-numeric Content-Length"),
         ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: -42\r\n\r\nhello", "411 Length Required", "Negative Content-Length"),
         ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nContent-Type: text/plain\r\nContent-Type: application/json\r\n\r\nhello", "400 Bad Request", "Duplicate Content-Type headers"),
-        (
-            "POST / HTTP/1.1\r\n"
-            "Host: localhost\r\n"
-            "Content-Length: 5\r\n"
-            "Content-Type: application/x-evil\r\n"
-            "\r\n"
-            "hello",
-            "415 Unsupported Media Type",
-            "Unsupported Content-Type"
-        ),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nContent-Type: application/x-evil\r\n\r\nhello", "415 Unsupported Media Type", "Unsupported Content-Type"),
         ("POST / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: gzip\r\n\r\nhello", "501 Not Implemented", "Unsupported Transfer-Encoding value"),
         ("GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\nConnection: keep-alive\r\n\r\n", "400 Bad Request", "Conflicting Connection header values"),
         ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nExpect: 100-continue\r\n\r\nhello", "417 Expectation Failed", "Unsupported Expect header"),
@@ -73,6 +64,12 @@ def run_raw_tests():
         ("POST / HTTP/1.1\r\nHost: localhost\r\n\r\nhello", "411 Length Required", "POST with no Content-Length or TE"),
         ("POST / HTTP/1.1\r\nHost: localhost\r\nExpect: 100-continue\r\nExpect: 100-continue\r\n\r\nhello", "417 Expectation Failed", "Duplicate Expect headers"),
         ("GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close, keep-alive\r\n\r\n", "400 Bad Request", "Conflicting Connection header values in single line"),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nExpect: 100-continue\r\n\r\nhello", "417 Expectation Failed", "Unsupported Expect header"),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: chunked\r\nContent-Type: text/plain\r\n\r\n4\r\ntest\r\n0\r\nX-Foo: bar\r\n\r\n", "400 Bad Request", "Trailers after chunked body (unsupported)"),
+        ('GET / HTTP/1.1\r\n: value\r\nHost: localhost\r\n\r\n', "400 Bad Request", "Empty header name"),
+        ('BREW /coffee HTTP/1.1\r\nHost: localhost\r\n\r\n', "501 Not Implemented", "Unknown HTTP method"),
+        ('POST / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: chunked\r\nContent-Type: text/plain\r\n\r\n5\r\nhello\r\n0\r\n\r\n', "200 OK", "Valid chunked POST"),
+        ('GET / HTTP/1.1\nHost: localhost\n\n', "400 Bad Request", "Missing CRLF, only LF"),
     ]
 
     for raw, expected, context in tests:
