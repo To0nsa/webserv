@@ -1,9 +1,8 @@
-# test/bootstrap_test_data.py
-
 import os
 import shutil
 
 BASE = "test/data"
+UPLOAD_STORE = os.path.join(BASE, "upload_store")
 
 FILES = {
     "index.html": "<h1>Welcome to Webserv</h1>",
@@ -11,7 +10,7 @@ FILES = {
     "style.CsS": "body { font-size: 14px; }",
     "script.js": "console.log('Hello from JS');",
     "script.Js": "console.log('Same script with weird casing');",
-    "logo.png": b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR",  # Fake PNG header (not valid image)
+    "logo.png": b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR",
     "index.html.bak": "<!-- backup copy of index.html -->"
 }
 
@@ -22,6 +21,7 @@ DIRS = {
     },
     "forbidden": {},
     "secret": {},
+    "upload_store": {},
 }
 
 ERROR_PAGES = {
@@ -40,28 +40,31 @@ def bootstrap():
     print(f"[BOOTSTRAP] Creating test files in {BASE}")
     os.makedirs(BASE, exist_ok=True)
 
-    # Top-level files
     for name, content in FILES.items():
         path = os.path.join(BASE, name)
         binary = not isinstance(content, str)
         write_file(path, content, binary=binary)
 
-    # Create LOGO.PNG as a copy of logo.png to test uppercase extension
+    # Create LOGO.PNG to test case insensitivity
     logo_src = os.path.join(BASE, "logo.png")
     logo_dst = os.path.join(BASE, "LOGO.PNG")
     if os.path.exists(logo_src):
         shutil.copyfile(logo_src, logo_dst)
 
-    # Per-directory files
+    # Create all subdirectories and files
     for dir_name, files in DIRS.items():
         dir_path = os.path.join(BASE, dir_name)
         os.makedirs(dir_path, exist_ok=True)
         for fname, fcontent in files.items():
             write_file(os.path.join(dir_path, fname), fcontent)
 
-    # Error pages
+    # Create error pages
     for name, html in ERROR_PAGES.items():
         write_file(os.path.join(BASE, name), html)
+
+    # Ensure upload_store is writable
+    os.makedirs(UPLOAD_STORE, exist_ok=True)
+    os.chmod(UPLOAD_STORE, 0o755)
 
     print("[BOOTSTRAP] ✅ Done.")
 
