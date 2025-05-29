@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/29 14:35:09 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 14:41:33 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -464,6 +464,14 @@ bool validateReq(HttpRequest& req, int& errorCode) {
 
     // POST → must have supported Content-Type
     if (req.getMethod() == "POST") {
+
+        if (req.getContentLength() == 0 && req.getHeader("TRANSFER-ENCODING").empty()) {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                            "POST without Content-Length or Transfer-Encoding");
+            errorCode = 411;
+            return false;
+        }
+
         std::string                        ct         = req.getHeader("CONTENT-TYPE");
         static const std::set<std::string> validTypes = {"application/x-www-form-urlencoded",
                                                          "multipart/form-data",
