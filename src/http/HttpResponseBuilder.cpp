@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/29 14:25:16 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 14:38:10 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ std::string getDefaultMessage(int status_code) {
                                                      {408, "Request Timeout"},
                                                      {411, "Length Required"},
                                                      {413, "Payload Too Large"},
-                                                     {414, "URI Too Long"},
+                                                     {414, "Request-URI Too Long"},
                                                      {415, "Unsupported Media Type"},
                                                      {417, "Expectation Failed"},
                                                      {431, "Request Header Fields Too Large"},
