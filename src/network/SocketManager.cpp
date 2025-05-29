@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/28 23:59:28 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 22:00:02 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,18 @@ void SocketManager::resetRequestState(int client_fd) {
 
 bool SocketManager::isHeaderTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
+    if (client.responses.empty() && client.current_raw_response.empty() &&
+        (client.headerBytesReceived > 0) && client.headerBytesReceived < HEADER_MIN_LENGTH &&
+        now - client.connectionStartTime > HEADER_TIMEOUT_SECONDS) {
+        std::cout << "Header timeout on fd: " << fd << std::endl;
+        respondError(fd, 408);
+        return true;
+    }
+    return false;
+}
+
+/* bool SocketManager::isHeaderTimeout(int fd, time_t now) {
+    ClientInfo& client = _client_info[fd];
     if (!client.headerComplete && (now - client.connectionStartTime >= HEADER_TIMEOUT_SECONDS)) {
         std::cout << "[TIMEOUT] Incomplete header after " << HEADER_TIMEOUT_SECONDS
                   << "s on fd: " << fd << " (received " << client.headerBytesReceived
@@ -90,7 +102,7 @@ bool SocketManager::isHeaderTimeout(int fd, time_t now) {
         return true;
     }
     return false;
-}
+} */
 
 bool SocketManager::isBodyTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
@@ -532,24 +544,32 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
                                       errorCode, consumedBytes)) {
 
             if (errorCode == 0) {
-                // Incomplete — wait for more data
                 std::cout << "Incomplete request, waiting for more data" << std::endl;
-                return false;
+                return false; // Incomplete data — wait for more
             } else {
-                // Fatal parse error (400, 413, etc): emit one error and break out
                 HttpResponse err = ResponseBuilder::generateError(
                     errorCode, _client_info[client_fd].serverConfig, request);
                 resetRequestState(client_fd);
                 request.printRequest();
-
-                // Erase only the bytes consumed by this bad request
+                std::cout << "[2]requestBuffer size is {"
+                          << _client_info[client_fd].requestBuffer.size() << "}" << std::endl;
+                std::cout << "[2]consumedBytes size is {" << consumedBytes << "}" << std::endl;
+                std::cout << "[2]requestBuffer size after erase is {"
+                          << _client_info[client_fd].requestBuffer.size() - consumedBytes << "}"
+                          << std::endl;
                 _client_info[client_fd].requestBuffer.erase(0, consumedBytes);
-
-                // Queue the error response
                 _client_info[client_fd].responses.push(err);
+                // If keep-alive is false, break the loop to close connection
+                if (err.isConnectionClose()) {
+                    break;
+                }
 
-                // Stop parsing *now* — leave any further pipelined bytes intact
-                break;
+                // If no more complete request left, break
+                if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
+                    break;
+                }
+                continue; // We queued a response and continue processing the next request in
+                          // pipeline
             }
         }
         request.printRequest();
