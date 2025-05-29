@@ -1,22 +1,31 @@
 #!/usr/bin/env python3
 import os
 import sys
-
+import traceback
 
 sys.stdout.write("Content-Type: text/plain\r\n\r\n")
-
+print(f"Path Info: {os.environ.get('PATH_INFO')}")
+printf(f"Status: 201 Created\r\n")
+print("YoupiBanane CGI script started.")
 
 try:
     content_length = int(os.environ.get("CONTENT_LENGTH", 0))
-except (ValueError, TypeError):
-    content_length = 0
+except Exception:
+    sys.stderr.write("Invalid CONTENT_LENGTH\n")
+    traceback.print_exc(file=sys.stderr)
+    sys.exit(1)
 
 body = b""
-while len(body) < content_length:
-    chunk = sys.stdin.buffer.read(min(65536, content_length - len(body)))
-    if not chunk:
-        break
-    body += chunk
+try:
+    while len(body) < content_length:
+        chunk = sys.stdin.buffer.read(min(65536, content_length - len(body)))
+        if not chunk:
+            break
+        body += chunk
+except Exception:
+    sys.stderr.write("Error reading stdin\n")
+    traceback.print_exc(file=sys.stderr)
+    sys.exit(2)
 
 print("CGI script received POST data.")
 print(f"Request method: {os.environ.get('REQUEST_METHOD')}")
