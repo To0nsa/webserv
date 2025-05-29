@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/27 17:48:15 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/29 10:58:33 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
         if (!pathInfo.empty() && pathInfo[0] != '/')
             pathInfo = "/" + pathInfo;
     }
-    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "SCRIPT_NAME = " + scriptUri);
+    /* Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "SCRIPT_NAME = " + scriptUri);
     Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "PATH_INFO = " + pathInfo);
-    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "LOCATION_PATH = " + locationPath);
+    Logger::logFrom(LogLevel::DEBUG, "CGI-ENV", "LOCATION_PATH = " + locationPath); */
     set("SCRIPT_NAME", scriptUri);
     /* if (!pathInfo.empty()) */
     set("PATH_INFO", pathInfo);
@@ -130,7 +130,7 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         std::string scriptPath = cgi.script_path;
         std::string ext        = std::filesystem::path(scriptPath).extension().string();
         std::string interp     = loc.getCgiInterpreter(ext);
-        Logger::logFrom(LogLevel::DEBUG, "CGI CHILD", "Interpreter: " + interp + ", Script: " + scriptPath);
+        //Logger::logFrom(LogLevel::DEBUG, "CGI CHILD", "Interpreter: " + interp + ", Script: " + scriptPath);
 
         // 2. Build argv using references to scoped strings
         std::vector<std::string> argvStorage;
@@ -151,18 +151,19 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
 
         // 4. chdir safely
         const std::string cgiDir = std::filesystem::path(scriptPath).parent_path().string();
-        Logger::logFrom(LogLevel::DEBUG, "CGI CHILD", "Changing directory to: " + cgiDir);
+        //Logger::logFrom(LogLevel::DEBUG, "CGI CHILD", "Changing directory to: " + cgiDir);
         if (chdir(cgiDir.c_str()) != 0) {
-            Logger::logFrom(LogLevel::ERROR, "CGI CHILD", "chdir failed: " + std::string(strerror(errno)));
+            //Logger::logFrom(LogLevel::ERROR, "CGI CHILD", "chdir failed: " + std::string(strerror(errno)));
             exit(1);
         }
 		
         // 5. Final call
+        /* std::cout << "[CGI CHILD] Executing script: " << scriptPath << std::endl;
         for (size_t i = 0; argv[i]; ++i)
 			Logger::logFrom(LogLevel::DEBUG, "CGI CHILD-ARGV[" + std::to_string(i) + "]", argv[i]);
 
 		for (size_t i = 0; envp[i]; ++i)
-			Logger::logFrom(LogLevel::DEBUG, "CGI CHILD-ENV[" + std::to_string(i) + "]", envp[i]);
+			Logger::logFrom(LogLevel::DEBUG, "CGI CHILD-ENV[" + std::to_string(i) + "]", envp[i]); */
         execve(argv[0], argv.data(), envp.data());
 
         // 6. If execve fails
@@ -211,11 +212,10 @@ bool handleRead(CgiProcess& cgi) {
     }
     if (n == 0) {
 		Logger::logFrom(LogLevel::DEBUG, "CGI READ", "EOF reached");
+        Logger::logFrom(LogLevel::DEBUG, "CGI READ", "CGI process output: [[[[[" + cgi.output + "]]]]]");
         cgi.phase = CgiProcess::Phase::Done;
         return true;
     }
-	std::string debugStr(buf, n);
-    Logger::logFrom(LogLevel::DEBUG, "CGI HANDLE READ", "Read {" + debugStr + "}");
     cgi.output.append(buf, n);
     cgi.last_activity = time(NULL);
     return true;
@@ -225,8 +225,10 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
                                         const HttpRequest& req) {
 	Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "Finalizing CGI process for script");
     int status;
-    if (waitpid(cgi.pid, &status, WNOHANG) == 0)
+    if (waitpid(cgi.pid, &status, WNOHANG) == 0) {
+        Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "CGI process is still running");
         return std::nullopt; // Not done yet
+    }
     if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
 		Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): CGI process exited with error: " + std::to_string(WEXITSTATUS(status)));
         return ResponseBuilder::generateError(502, server, req);
@@ -234,7 +236,7 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
 
     // Basic parser (header + body)
     size_t pos = cgi.output.find("\r\n\r\n");
-	Logger::logFrom(LogLevel::DEBUG, "CGI", "cgi output is " + cgi.output);
+	Logger::logFrom(LogLevel::DEBUG, "CGI", "cgi is checking output for header");
     if (pos == std::string::npos) {
 		Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): no header found in output");
         return ResponseBuilder::generateError(500, server, req);
