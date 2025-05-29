@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/29 14:24:50 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 14:35:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,7 +305,12 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
             return false;
         }
 
-        std::string key   = trim(line.substr(0, colon));
+        std::string key = line.substr(0, colon);
+        if (key.empty() || key.find_first_of(" \t") != std::string::npos) {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Invalid header name: " + key);
+            errorCode = 400;
+            return false;
+        }
         std::string value = line.substr(colon + 1);
         value.erase(0, value.find_first_not_of(" \t\r\n"));
         value.erase(value.find_last_not_of(" \t\r\n") + 1);
