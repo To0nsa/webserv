@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/29 14:18:40 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 14:24:50 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,17 @@ bool insertValidatedHeader(HttpRequest& req, const std::string& key, const std::
             return false;
         }
         req.setContentLength(len);
+    }
+
+    // — EXPECT: reject 100-continue (RFC 7231 §5.1.1)
+    if (normKey == "EXPECT") {
+        std::string lower = toLower(value);
+        if (lower == "100-continue") {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                            "Unsupported Expect header: " + value);
+            errorCode = 417;
+            return false;
+        }
     }
 
     // — TRANSFER-ENCODING: only “chunked” (501), disallowed on GET (400)

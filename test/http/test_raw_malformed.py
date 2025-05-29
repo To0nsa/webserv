@@ -51,18 +51,28 @@ def run_raw_tests():
         ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: -42\r\n\r\nhello", "411 Length Required", "Negative Content-Length"),
         ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nContent-Type: text/plain\r\nContent-Type: application/json\r\n\r\nhello", "400 Bad Request", "Duplicate Content-Type headers"),
         (
-			"POST / HTTP/1.1\r\n"
-			"Host: localhost\r\n"
-			"Content-Length: 5\r\n"
-			"Content-Type: application/x-evil\r\n"
-			"\r\n"
-			"hello",
-			"415 Unsupported Media Type",
-			"Unsupported Content-Type"
-		),
+            "POST / HTTP/1.1\r\n"
+            "Host: localhost\r\n"
+            "Content-Length: 5\r\n"
+            "Content-Type: application/x-evil\r\n"
+            "\r\n"
+            "hello",
+            "415 Unsupported Media Type",
+            "Unsupported Content-Type"
+        ),
         ("POST / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: gzip\r\n\r\nhello", "501 Not Implemented", "Unsupported Transfer-Encoding value"),
         ("GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\nConnection: keep-alive\r\n\r\n", "400 Bad Request", "Conflicting Connection header values"),
-        ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nExpect: 100-continue\r\n\r\nhello", "417 Expectation Failed", "Unsupported Expect header")
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nExpect: 100-continue\r\n\r\nhello", "417 Expectation Failed", "Unsupported Expect header"),
+        ("GET / HTTP/1.1\r\nHost localhost\r\n\r\n", "400 Bad Request", "Header without colon"),
+        ("GET / HTTP/1.1\r\nHo\x01st: localhost\r\n\r\n", "400 Bad Request", "Control char in header name"),
+        ("GET / HTTP/1.1\r\nHost : localhost\r\n\r\n", "400 Bad Request", "Space in header name"),
+        ("GET / HTTP/1.1\r\nHost:\tlocalhost\r\n\r\n", "200 OK", "Tab in header value (legal but rare)"),
+        ("GET / HTTP/1.1\r\nHost: localhost\r\nX-Folded: hello\r\n world\r\n\r\n", "400 Bad Request", "Obsolete folded header line"),
+        ("GET /" + "a"*3000 + " HTTP/1.1\r\nHost: localhost\r\n\r\n", "414 Request-URI Too Long", "Too long URI"),
+        ("PoSt / HTTP/1.1\r\nHost: localhost\r\n\r\n", "501 Not Implemented", "Mixed-case HTTP method"),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\n\r\nhello", "411 Length Required", "POST with no Content-Length or TE"),
+        ("POST / HTTP/1.1\r\nHost: localhost\r\nExpect: 100-continue\r\nExpect: 100-continue\r\n\r\nhello", "417 Expectation Failed", "Duplicate Expect headers"),
+        ("GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close, keep-alive\r\n\r\n", "400 Bad Request", "Conflicting Connection header values in single line"),
     ]
 
     for raw, expected, context in tests:
