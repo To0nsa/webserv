@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/29 14:06:03 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 14:18:40 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,6 @@
 namespace fs = std::filesystem;
 
 namespace {
-
-/** Headers whose values may be merged (comma-separated). */
-static const std::set<std::string> mergeableHeaders = {
-    "ACCEPT", "ACCEPT-ENCODING", "ACCEPT-LANGUAGE", "CACHE-CONTROL", "VIA", "COOKIE"};
 
 /** Checks that method tokens only contain RFC-allowed characters. */
 static bool isValidHttpMethodToken(const std::string& method) {
@@ -167,37 +163,29 @@ bool insertValidatedHeader(HttpRequest& req, const std::string& key, const std::
     }
 
     // — Duplicate handling
+    static const std::set<std::string> nonMergeable = {
+        "HOST", "CONTENT-LENGTH", "CONTENT-TYPE", "TRANSFER-ENCODING", "EXPECT", "CONNECTION"};
+
     if (!first) {
-        if (normKey == "HOST") {
-            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Duplicate Host header");
-            errorCode = 400;
-            return false;
-        }
-        if (normKey == "CONTENT-LENGTH") {
-            // only identical allowed
-            if (req.getHeader(normKey) != value) {
-                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
-                                "Conflicting Content-Length headers");
-                errorCode = 400;
-                return false;
+        if (nonMergeable.count(normKey)) {
+            if (normKey == "CONTENT-LENGTH") {
+                if (req.getHeader(normKey) != value) {
+                    Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                                    "Conflicting Content-Length headers");
+                    errorCode = 400;
+                    return false;
+                }
+                return true; // identical CL is OK
             }
-            return true;
-        }
-        if (normKey == "CONTENT-TYPE") {
-            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Duplicate Content-Type header");
-            errorCode = 400;
-            return false;
-        }
-        if (mergeableHeaders.count(normKey)) {
-            req.setHeader(normKey, req.getHeader(normKey) + ", " + value);
-        } else {
             Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
-                            "Duplicate unmergeable header: " + normKey);
+                            "Duplicate " + normKey + " header");
             errorCode = 400;
             return false;
         }
+
+        // RFC 7230 §3.2.2: mergeable by default
+        req.setHeader(normKey, req.getHeader(normKey) + ", " + value);
     } else {
-        // first insertion
         req.setHeader(normKey, value);
     }
 
