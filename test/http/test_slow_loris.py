@@ -1,4 +1,4 @@
-# test/http/test_slow_lors.py
+# test/http/test_slow_loris.py
 
 import socket
 import threading
@@ -8,7 +8,7 @@ import sys
 
 HOST = os.getenv("WEBSERV_HOST", "127.0.0.1")
 PORT = int(os.getenv("WEBSERV_PORT", "8080"))
-CONNECTIONS = 1000
+CONNECTIONS = 1200
 DELAY = 10  # seconds between header chunks
 
 HEADERS = [

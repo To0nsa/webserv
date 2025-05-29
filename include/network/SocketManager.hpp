@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/28 22:54:10 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/29 16:56:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 #define HEADER_MIN_LENGTH 15
 #define HEADER_MAX_LENGTH 8192
 #define RECV_BUFFER HEADER_MAX_LENGTH * 2
-#define MAX_CLIENTS 512
+#define MAX_CLIENTS 1024
 
 struct ClientInfo {
     int                       client_fd;       // File descriptor of the client socket
