@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/26 20:46:04 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/30 18:01:18 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,15 @@ bool Location::isMethodAllowed(const std::string& method) const {
     return _methods.count(method) > 0;
 }
 
-bool Location::matchesPath(const std::string& uri) const {
+/* bool Location::matchesPath(const std::string& uri) const {
     return normalizePath(uri).rfind(normalizePath(_path), 0) == 0;
+} */
+
+bool Location::matchesPath(const std::string& uri) const {
+    std::string cleanUri = normalizePath(uri);
+    std::string locPath  = normalizePath(_path);
+
+    return cleanUri.rfind(locPath, 0) == 0;
 }
 
 std::string Location::resolveAbsolutePath(const std::string& uri) const {

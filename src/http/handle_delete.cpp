@@ -6,11 +6,9 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/30 10:57:43 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/30 19:59:45 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "http/handle_delete.hpp"
 
 /* HttpResponse handleDelete(const HttpRequest& request, const Server& server, const Location& loc)
 {
@@ -32,12 +30,13 @@
 } */
 
 #include "http/handle_delete.hpp"
-#include "utils/filesystemUtils.hpp" // normalizePath, joinPath, buildFilePath
+#include "utils/filesystemUtils.hpp"
 #include <iostream>
 #include <sys/stat.h>
 #include <unistd.h>
 
 HttpResponse handleDelete(const HttpRequest& request, const Server& server, const Location& loc) {
+
     // Normalize both the request path and the location prefix
     std::string requestPath = normalizePath(request.getPath());
     std::string locPrefix   = normalizePath(loc.getPath());
@@ -61,8 +60,8 @@ HttpResponse handleDelete(const HttpRequest& request, const Server& server, cons
         filepath = joinPath(uploadRoot, relative);
     } else {
         // Static content (or DELETE on a non-upload location)
-        // filepath = buildFilePath(request, loc);
-        return ResponseBuilder::generateError(403, server, request);
+        filepath = buildFilePath(request, loc);
+        // return ResponseBuilder::generateError(403, server, request);
     }
 
     std::cout << "Resolved file path: " << filepath << std::endl;

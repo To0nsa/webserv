@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/30 09:54:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/30 18:01:03 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
     return ResponseBuilder::generateSuccess(200, body, content_type, request);
 }
 
-std::string normalizePath(const std::string& path) {
+/* std::string normalizePath(const std::string& path) {
     if (path.empty())
         return "/";
     std::string result = path;
@@ -96,9 +96,9 @@ std::string normalizePath(const std::string& path) {
         result.pop_back();
 
     return result;
-}
+} */
 
-/* std::string normalizePath(const std::string& path) {
+std::string normalizePath(const std::string& path) {
     if (path.empty())
         return "/";
 
@@ -133,7 +133,7 @@ std::string normalizePath(const std::string& path) {
         result += "/";
 
     return result;
-} */
+}
 
 std::string joinPath(const std::string& base, const std::string& suffix) {
     if (base.empty())
@@ -143,7 +143,7 @@ std::string joinPath(const std::string& base, const std::string& suffix) {
     return base + '/' + suffix;
 }
 
-std::string buildFilePath(const HttpRequest& request, const Location& loc) {
+/* std::string buildFilePath(const HttpRequest& request, const Location& loc) {
     std::string request_path  = normalizePath(request.getPath());
     std::string location_path = normalizePath(loc.getPath());
     std::string location_root = normalizePath(loc.getRoot());
@@ -156,6 +156,29 @@ std::string buildFilePath(const HttpRequest& request, const Location& loc) {
         suffix.erase(0, 1);
 
     return joinPath(location_root, suffix); // May point to file or directory
+} */
+
+std::string buildFilePath(const HttpRequest& request, const Location& loc) {
+    // 1) Normalize but PRESERVE trailing-slash info in request URI & location prefix
+    std::string req_path = normalizePath(request.getPath());
+    std::string loc_path = normalizePath(loc.getPath());
+    // 2) Don’t normalize the filesystem root with the same HTTP logic—
+    //    use it raw (it should already be an absolute, clean path).
+    std::string loc_root = loc.getRoot();
+
+    // 3) Prefix-match exactly at position 0
+    if (req_path.rfind(loc_path, 0) != 0) {
+        // doesn’t belong to this Location
+        return "";
+    }
+
+    // 4) Strip the prefix and leading slash from the remainder
+    std::string suffix = req_path.substr(loc_path.size());
+    if (!suffix.empty() && suffix[0] == '/')
+        suffix.erase(0, 1);
+
+    // 5) Join filesystem-style
+    return joinPath(loc_root, suffix); // may be file or directory
 }
 
 static std::vector<std::string> splitPath(const std::string& path) {

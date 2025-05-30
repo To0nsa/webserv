@@ -79,7 +79,7 @@ def run_raw_tests():
         ('POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: 5\r\nTransfer-Encoding: chunked\r\n\r\n4\r\ntest\r\n0\r\n\r\n', '400 Bad Request', 'Conflicting Content-Length and Transfer-Encoding'),
         ('POST / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: gzip\r\n\r\nhello', '501 Not Implemented', 'Unsupported Transfer-Encoding value'),
         ('POST / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: chunked\r\nContent-Type: text/plain\r\n\r\n4\r\ntest\r\n0\r\nX-Foo: bar\r\n\r\n', '400 Bad Request', 'Trailers after chunked body (unsupported)'),
-        ('POST / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: chunked\r\nContent-Type: text/plain\r\n\r\n5\r\nhello\r\n0\r\n\r\n', '201 Created', 'Valid chunked POST'),
+        ('POST /upload_store/test.txt HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: chunked\r\nContent-Type: text/plain\r\n\r\n5\r\nhello\r\n0\r\n\r\n', '201 Created', 'Valid chunked POST'),
         ('GET / HTTP/1.1\r\nHost: localhost\r\nTransfer-Encoding: chunked\r\n\r\n4\r\ntest\r\n0\r\n\r\n', '400 Bad Request', 'GET with chunked body'),
 
         # ────────── CONTENT-TYPE ──────────

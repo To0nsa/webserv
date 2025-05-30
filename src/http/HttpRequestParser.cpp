@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/30 09:45:45 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/30 20:07:13 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ namespace fs = std::filesystem;
 
 namespace {
 
-std::string normalizePathInHttpParser(const std::string& path) {
+/* std::string normalizePathInHttpParser(const std::string& path) {
     if (path.empty())
         return "/";
 
@@ -60,7 +60,7 @@ std::string normalizePathInHttpParser(const std::string& path) {
         result += "/";
 
     return result;
-}
+} */
 
 /** Checks that method tokens only contain RFC-allowed characters. */
 static bool isValidHttpMethodToken(const std::string& method) {
@@ -312,7 +312,13 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     // — Initialize request
     req = HttpRequest();
     req.setMethod(method);
-    std::string norm = normalizePathInHttpParser(pathOnly);
+    if (pathOnly.find("..") != std::string::npos) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Rejected traversal attempt: " + pathOnly);
+        errorCode = 403;
+        return false;
+    }
+    std::string norm = normalizePath(pathOnly);
     if (norm.empty()) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
         errorCode = 403;

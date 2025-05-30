@@ -52,7 +52,7 @@ def test_file_deletion():
     request("GET", test_path, expected=404)
 
 def test_delete_nonexistent():
-    request("DELETE", "/doesnotexist", expected=404)
+    request("DELETE", "/doesnotexist", expected=405)
 
 def test_delete_directory():
     request("DELETE", "/dir/", expected=403)

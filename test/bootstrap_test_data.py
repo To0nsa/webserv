@@ -17,7 +17,8 @@ FILES = {
 DIRS = {
     "dir": {
         "file.txt":     "This is a file inside /dir/",
-        "file.unknown": "Binary? Nope—just text to test fallback"
+        "file.unknown": "Binary? Nope—just text to test fallback",
+        "testfile.txt": "file for DELETE test"
     },
     "forbidden": {},
     "secret": {},
