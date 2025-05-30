@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/30 02:26:36 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:14:06 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <vector>
+
 
 namespace {
 
@@ -67,8 +68,8 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     set("REQUEST_METHOD", req.getMethod());
 	/* if (!req.getQuery().empty()) */
 	set("QUERY_STRING", req.getQuery());
-    if (!req.getHeader("Content-Length").empty())
-        set("CONTENT_LENGTH", req.getHeader("Content-Length"));
+    //if (!req.getHeader("Content-Length").empty())
+    set("CONTENT_LENGTH", std::to_string(req.getContentLength()));
     if (!req.getHeader("Content-Type").empty())
         set("CONTENT_TYPE", req.getHeader("Content-Type"));
     set("SERVER_PROTOCOL", "HTTP/1.1");
@@ -264,10 +265,21 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
         //Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "CGI process is still running");
         return std::nullopt; // Not done yet
     }
-    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+    /* if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
 		Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): CGI process exited with error: " + std::to_string(WEXITSTATUS(status)));
         return ResponseBuilder::generateError(502, server, req);
-	}
+	} */
+
+    std::ifstream in(cgi.output_path);
+    if (!in.is_open()) {
+        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to open CGI output file");
+        return ResponseBuilder::generateError(500, server, req);
+    }
+
+    std::stringstream buffer;
+    buffer << in.rdbuf();
+    cgi.output = buffer.str();
+    in.close();
 
     // Basic parser (header + body)
     size_t pos = cgi.output.find("\r\n\r\n");

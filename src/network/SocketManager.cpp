@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/30 02:04:46 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/30 09:52:49 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,10 +300,10 @@ void SocketManager::handleCgiPollEvents() {
             continue;
 
         CgiProcess& cgi = *client.cgiProcess;
-        time_t      now = time(NULL);
+        //time_t      now = time(NULL);
 
         // 1) Timeout guard (5s)
-        if (now - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
+        /* if (now - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
             Logger::logFrom(LogLevel::WARN, "SocketManager", "[CGI] Timeout on fd " + std::to_string(fd) + " for client_fd " + std::to_string(client_fd));
             client.responses.push(ResponseBuilder::generateError(504, client.serverConfig, {}));
             markClientWritable(client_fd);
@@ -313,17 +313,19 @@ void SocketManager::handleCgiPollEvents() {
             _poll_fds.erase(_poll_fds.begin() + i);
             _fd_to_cgi.erase(fd);
             continue;
-        }
+        } */
 
         bool success = true;
         // 3) Drive CGI stdout (data or EOF)
         if (cgi.phase == CgiProcess::Phase::Reading && which == "stdout") {
             if (revents & POLLIN) { // Data available to read!!!!!!!!!
-                success = CGI::handleRead(cgi);
+                /* success = CGI::handleRead(cgi); */
+				
             }
             if (revents & POLLHUP) {
                 Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI DEBUG] POLLHUP on stdout FD=" + std::to_string(fd) + " → setting phase=Done");
-                cgi.phase = CgiProcess::Phase::Done;
+                /* cgi.phase = CgiProcess::Phase::Done; */
+				cgi.last_activity = time(NULL);
             }
         }
 
@@ -341,17 +343,13 @@ void SocketManager::handleCgiPollEvents() {
         }
 
         // 5) Finalize when done
-        if (cgi.phase == CgiProcess::Phase::Done) {
+        if (cgi.phase != CgiProcess::Phase::Done) {
             //Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI] Phase Done, checking child status...");
-            // Ensure we actually have data before finalizing
-            if (cgi.output.empty()) {
-                Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI] Output not yet read, deferring finalization...");
-                continue;
-            }
             if (!CGI::tryTerminateCgi(cgi)) {
                 // child not reaped yet → come back next loop
                 continue;
             }
+			cgi.phase = CgiProcess::Phase::Done;
 
             // build and queue the HTTP response
             auto maybeResp = CGI::finalizeCgi(cgi, client.serverConfig, {/*req*/});

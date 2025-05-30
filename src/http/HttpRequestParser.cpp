@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/26 13:36:53 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/30 11:22:22 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,7 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
     }
 
     req.setBody(fullBody);
+	req.setContentLength(fullBody.size());
     errorCode = 0;
     consumedBytes += localConsumed;
 }
