@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/30 11:22:22 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:43:12 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
 
     if (transferEncoding == "chunked") {
         if (!isChunkedBodyComplete(bodyPart)) {
-            Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete chunked body, server reads again");
+            //Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete chunked body, server reads again");
             errorCode = 0;
             return false;
         }
@@ -231,7 +231,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
     }
 
     if (bodyPart.size() < contentLength) {
-        Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete request body, server reads again");
+        //Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete request body, server reads again");
         errorCode = 0;
         return false;
     }

@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/30 12:14:06 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/30 13:54:31 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,12 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
                     const Location& loc) {
     cgi.script_path = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
 	Logger::logFrom(LogLevel::DEBUG, "CGI", "Initializing CGI for script: " + cgi.script_path);
-    if (!isFile(cgi.script_path))
+    if (!isFile(cgi.script_path)) {
+		Logger::logFrom(LogLevel::DEBUG, "CGI", "File is invalid");
         return false;
+	}
     if (access(cgi.script_path.c_str(), X_OK) != 0) {
+		Logger::logFrom(LogLevel::DEBUG, "CGI", "File is not executable");
         return false;
 	}
 

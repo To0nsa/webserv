@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/30 09:52:49 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/30 17:27:09 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void signalHandler(int signum) {
 // Constructor: sets up sockets for each server defined in the config
 SocketManager::SocketManager(const std::vector<Server>& servers) {
     signal(SIGINT, signalHandler);
-	signal(SIGPIPE, SIG_IGN);
+    signal(SIGPIPE, SIG_IGN);
     setupSockets(servers);
 }
 
@@ -191,7 +191,7 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
         } else {
             // Header already counted, this must be body
             _client_info[client_fd].bodyBytesReceived += bytes;
-			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Received body data, total body bytes: " + std::to_string(_client_info[client_fd].bodyBytesReceived));
+            //Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Received body data, total body bytes: " + std::to_string(_client_info[client_fd].bodyBytesReceived));
         }
     }
 
@@ -320,12 +320,12 @@ void SocketManager::handleCgiPollEvents() {
         if (cgi.phase == CgiProcess::Phase::Reading && which == "stdout") {
             if (revents & POLLIN) { // Data available to read!!!!!!!!!
                 /* success = CGI::handleRead(cgi); */
-				
+                
             }
             if (revents & POLLHUP) {
                 Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI DEBUG] POLLHUP on stdout FD=" + std::to_string(fd) + " → setting phase=Done");
                 /* cgi.phase = CgiProcess::Phase::Done; */
-				cgi.last_activity = time(NULL);
+                cgi.last_activity = time(NULL);
             }
         }
 
@@ -349,7 +349,7 @@ void SocketManager::handleCgiPollEvents() {
                 // child not reaped yet → come back next loop
                 continue;
             }
-			cgi.phase = CgiProcess::Phase::Done;
+            cgi.phase = CgiProcess::Phase::Done;
 
             // build and queue the HTTP response
             auto maybeResp = CGI::finalizeCgi(cgi, client.serverConfig, {/*req*/});
@@ -386,11 +386,11 @@ void SocketManager::run() {
         for (size_t i = _poll_fds.size(); i-- > 0;) {
             short revents    = _poll_fds[i].revents;
             int   current_fd = _poll_fds[i].fd;
-			if (checkClientTimeouts(current_fd, i)) {
+            if (checkClientTimeouts(current_fd, i)) {
                 _poll_fds[i].events |= POLLOUT; // If connection keep-alive but client idle we close
             }
 
-			// **FIX**: skip CGI pipe FDs entirely
+            // **FIX**: skip CGI pipe FDs entirely
             if (_fd_to_cgi.contains(current_fd)) {
                 continue;
             }
@@ -498,22 +498,22 @@ static const Location* findMatchingLocation(const std::string& path, const Serve
 bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (!receiveFromClient(client_fd, index)) {
         return false;
-	}
-	while (true) {
-		if (checkRequestLimits(client_fd)) {
-			resetRequestState(client_fd);
-			_client_info[client_fd].requestBuffer.clear();
-			return true;
-		}
-		HttpRequest request;
-		int         errorCode = 0;
-		std::size_t consumedBytes = 0;
-		if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
+    }
+    while (true) {
+        if (checkRequestLimits(client_fd)) {
+            resetRequestState(client_fd);
+            _client_info[client_fd].requestBuffer.clear();
+            return true;
+        }
+        HttpRequest request;
+        int         errorCode = 0;
+        std::size_t consumedBytes = 0;
+        if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
                                     _client_info[client_fd].serverConfig.getClientMaxBodySize(),
                                     errorCode, consumedBytes)) {
 
             if (errorCode == 0){
-                Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Incomplete request, waiting for more data");
+                //Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Incomplete request, waiting for more data");
                 return false; // Incomplete data — wait for more
             }
             else {
@@ -525,12 +525,12 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
                 Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[2]requestBuffer size is {" + std::to_string(_client_info[client_fd].requestBuffer.size()) + "}, [2]consumedBytes size is {" + std::to_string(consumedBytes) + "}, [2]requestBuffer size after erase is {" + std::to_string(_client_info[client_fd].requestBuffer.size() - consumedBytes) + "}");
                 _client_info[client_fd].requestBuffer.erase(0, consumedBytes);
                 _client_info[client_fd].responses.push(err);
-				// If keep-alive is false, break the loop to close connection
+                // If keep-alive is false, break the loop to close connection
                 if (err.isConnectionClose()) {
                     break;
                 }
                 // If no more complete request left, break
-				if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
+                if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
                     break;
                 }
                 continue; // We queued a response and continue processing the next request in pipeline
@@ -554,11 +554,22 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
             respondError(client_fd, 405);
             return true;
         } */
+        std::string resolved = location->resolveAbsolutePath(request.getPath());
+        if (!resolved.empty()) {
+            std::string script_path = std::filesystem::absolute(resolved);
+            if (request.getMethod() == "POST" &&
+                location->isCgiRequest(normalizePath(request.getPath())) &&
+                isFile(script_path) &&
+                access(script_path.c_str(), X_OK) == 0) {
 
-        if (request.getMethod() == "POST" && location->isCgiRequest(normalizePath(request.getPath()))) {
+                Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Handling CGI request");
+                return handleCgiRequest(client_fd, request, server, *location);
+            }
+        }
+        /* if (request.getMethod() == "POST" && location->isCgiRequest(normalizePath(request.getPath()))) {
             Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Handling CGI request");
             return handleCgiRequest(client_fd, request, server, *location);
-        }
+        } */
 
         // Fallback to standard GET/POST/DELETE handler
         HttpResponse  response = handleRequest(request, server);
@@ -572,7 +583,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
             break;
         }
-	}
+    }
 
     return (true);
 }
@@ -599,7 +610,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
     }
 
     Logger::logFrom(LogLevel::INFO, "SocketManager", "[✅DONE] We sent RESPONSE to fd:" + std::to_string(client_fd));
-	Logger::logFrom(LogLevel::DEBUG, "SocketManager", "============================RAW===================");
+    Logger::logFrom(LogLevel::DEBUG, "SocketManager", "============================RAW===================");
     Logger::logFrom(LogLevel::DEBUG, "SocketManager", raw);
     Logger::logFrom(LogLevel::DEBUG, "SocketManager", "==================================================");
 
@@ -613,7 +624,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         if (!response.isConnectionClose()) {
             Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Connection: keep-alive - keeping the connection open");
             if (_client_info[client_fd].responses.empty()) {
-				// We should not close the client connection, but just reset the POLLOUT flag if needed
+                // We should not close the client connection, but just reset the POLLOUT flag if needed
                 _poll_fds[index].events &= ~POLLOUT; // Reset POLLOUT flag if the connection should stay open
             }
         } else {

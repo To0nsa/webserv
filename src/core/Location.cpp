@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/26 20:46:04 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:52:24 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ bool Location::matchesPath(const std::string& uri) const {
 
 std::string Location::resolveAbsolutePath(const std::string& uri) const {
     std::string cleanUri = normalizePath(uri);
-    if (!matchesPath(cleanUri))
+    if (!matchesPath(cleanUri) || _path.length() > cleanUri.length())
         return "";
     return joinPath(_root, cleanUri.substr(_path.length()));
 }
