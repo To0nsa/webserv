@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/29 23:51:32 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/30 09:45:45 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,43 @@
 namespace fs = std::filesystem;
 
 namespace {
+
+std::string normalizePathInHttpParser(const std::string& path) {
+    if (path.empty())
+        return "/";
+
+    std::vector<std::string> segments;
+    std::string              segment;
+    std::istringstream       stream(path);
+    bool                     hadTrailingSlash = path.back() == '/';
+
+    while (std::getline(stream, segment, '/')) {
+        if (segment.empty() || segment == ".")
+            continue;
+        if (segment == "..") {
+            if (!segments.empty()) {
+                segments.pop_back(); // move up
+            } else {
+                // Attempt to go above root: reject this path
+                return ""; // special marker for invalid path
+            }
+        } else {
+            segments.push_back(segment);
+        }
+    }
+
+    std::string result = "/";
+    for (std::size_t i = 0; i < segments.size(); ++i) {
+        result += segments[i];
+        if (i + 1 < segments.size())
+            result += "/";
+    }
+
+    if (hadTrailingSlash && result != "/")
+        result += "/";
+
+    return result;
+}
 
 /** Checks that method tokens only contain RFC-allowed characters. */
 static bool isValidHttpMethodToken(const std::string& method) {
@@ -275,7 +312,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     // — Initialize request
     req = HttpRequest();
     req.setMethod(method);
-    std::string norm = normalizePath(pathOnly);
+    std::string norm = normalizePathInHttpParser(pathOnly);
     if (norm.empty()) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
         errorCode = 403;

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/28 20:27:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/30 09:54:18 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,17 @@ HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
 std::string normalizePath(const std::string& path) {
     if (path.empty())
         return "/";
+    std::string result = path;
+
+    if (result.size() > 1 && result.back() == '/')
+        result.pop_back();
+
+    return result;
+}
+
+/* std::string normalizePath(const std::string& path) {
+    if (path.empty())
+        return "/";
 
     std::vector<std::string> segments;
     std::string              segment;
@@ -122,7 +133,7 @@ std::string normalizePath(const std::string& path) {
         result += "/";
 
     return result;
-}
+} */
 
 std::string joinPath(const std::string& base, const std::string& suffix) {
     if (base.empty())
