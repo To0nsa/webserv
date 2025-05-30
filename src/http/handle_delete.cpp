@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/30 09:57:05 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/30 10:57:43 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ HttpResponse handleDelete(const HttpRequest& request, const Server& server, cons
         filepath = joinPath(uploadRoot, relative);
     } else {
         // Static content (or DELETE on a non-upload location)
-        filepath = buildFilePath(request, loc);
+        // filepath = buildFilePath(request, loc);
+        return ResponseBuilder::generateError(403, server, request);
     }
 
     std::cout << "Resolved file path: " << filepath << std::endl;
@@ -72,12 +73,26 @@ HttpResponse handleDelete(const HttpRequest& request, const Server& server, cons
         return ResponseBuilder::generateError(404, server, request);
 
     // 2) Must be a regular file
-    if (!S_ISREG(st.st_mode))
+    if (!S_ISREG(st.st_mode)) {
         return ResponseBuilder::generateError(403, server, request);
+    }
+
+    if (request.getPath().back() == '/' && S_ISREG(st.st_mode)) {
+        return ResponseBuilder::generateError(404, server, request);
+    }
 
     // 3) Try to delete
-    if (unlink(filepath.c_str()) != 0)
-        return ResponseBuilder::generateError(500, server, request);
+    if (unlink(filepath.c_str()) != 0) {
+        switch (errno) {
+        case EACCES:
+        case EPERM:
+            return ResponseBuilder::generateError(403, server, request);
+        case ENOENT:
+            return ResponseBuilder::generateError(404, server, request);
+        default:
+            return ResponseBuilder::generateError(500, server, request);
+        }
+    }
 
     // 4) Success page
     std::string filename = request.getPath().substr(request.getPath().find_last_of('/') + 1);

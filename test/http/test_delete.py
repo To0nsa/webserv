@@ -66,6 +66,88 @@ def test_delete_with_body():
     ensure_absent(test_path)
     create_file(test_path, "data")
     request("DELETE", test_path, body="ignored", expected=200)
+    
+def test_delete_encoded_filename():
+    test_path = "/upload_store/file%20with%20space.txt"
+    ensure_absent(test_path)
+    create_file(test_path, "content")
+    request("DELETE", test_path, expected=200)
+    request("GET", test_path, expected=404)
+    
+def test_delete_file_with_trailing_slash():
+    test_path = "/upload_store/test_with_slash.txt"
+    ensure_absent(test_path)
+    create_file(test_path, "data")
+    request("DELETE", test_path + "/", expected=404)
+    
+def test_delete_case_sensitive():
+    parsed = urlparse(SERVER)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
+    conn.request("delete", "/upload_store/irrelevant.txt")
+    res = conn.getresponse()
+    data = res.read().decode(errors="replace")
+    print(f"[LOG] delete (lowercase) → {res.status} {res.reason}")
+    assert res.status == 501, f"Expected 501 Not Implemented, got {res.status}"
+    
+def test_delete_symlink_to_file():
+    """If symlinks are allowed and resolve to regular files, deletion should succeed."""
+    test_path = "/upload_store/symlink_to_file.txt"
+    target_path = "/upload_store/real_target.txt"
+    
+    ensure_absent(test_path)
+    ensure_absent(target_path)
+    create_file(target_path, "linked")
+    
+    # Create symlink if system supports it
+    try:
+        os.symlink(
+            os.path.join(os.getenv("UPLOAD_DIR", "./test/data/upload_store"), "real_target.txt"),
+            os.path.join(os.getenv("UPLOAD_DIR", "./test/data/upload_store"), "symlink_to_file.txt")
+        )
+        request("DELETE", test_path, expected=200)
+        request("GET", target_path, expected=404)  # file was actually deleted
+    except OSError as e:
+        print("[SKIPPED] test_delete_symlink_to_file (symlink not supported)")
+
+
+def test_delete_root_path_should_be_forbidden():
+    """DELETE / should never be allowed (even if mapped)."""
+    request("DELETE", "/", expected=403)
+
+
+def test_delete_deep_nested_file():
+    """Ensure nested paths inside upload_store can be deleted."""
+    nested_path = "/upload_store/deep/nested/dir/file.txt"
+    # Setup directories
+    base = os.path.join("test/data/upload_store/deep/nested/dir")
+    os.makedirs(base, exist_ok=True)
+    with open(os.path.join(base, "file.txt"), "w") as f:
+        f.write("deep content")
+
+    # Run test
+    request("DELETE", nested_path, expected=200)
+    request("GET", nested_path, expected=404)
+
+
+def test_delete_conflict_dir_vs_file():
+    """Ensure DELETE only deletes the file, not a same-named directory."""
+    base_path = "/upload_store/conflict"
+    file_path = base_path + ".txt"
+    dir_path = os.path.join("test/data/upload_store/conflict.txt")
+    
+    ensure_absent(file_path)
+    if not os.path.isdir(dir_path):
+        os.makedirs(dir_path, exist_ok=True)
+
+    create_file(file_path, "conflicting file")
+    request("DELETE", file_path, expected=200)
+
+    # Directory should still exist
+    if not os.path.isdir(dir_path):
+        print("❌ conflict directory was deleted (should remain)")
+        sys.exit(1)
+    else:
+        print("✅ conflict directory remained untouched")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Run
@@ -78,6 +160,14 @@ def run_tests():
     test_delete_directory()
     test_delete_path_traversal()
     test_delete_with_body()
+    test_delete_encoded_filename()
+    test_delete_file_with_trailing_slash()
+    test_delete_case_sensitive()
+    
+    test_delete_symlink_to_file()
+    test_delete_root_path_should_be_forbidden()
+    test_delete_deep_nested_file()
+    test_delete_conflict_dir_vs_file()
 
 if __name__ == "__main__":
     run_tests()
