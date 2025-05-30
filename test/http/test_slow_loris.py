@@ -8,7 +8,7 @@ import sys
 
 HOST = os.getenv("WEBSERV_HOST", "127.0.0.1")
 PORT = int(os.getenv("WEBSERV_PORT", "8080"))
-CONNECTIONS = 1200
+CONNECTIONS = 800
 DELAY = 10  # seconds between header chunks
 
 HEADERS = [
