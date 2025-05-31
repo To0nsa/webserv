@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   handle_get.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 17:33:14 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/22 21:04:39 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handle_get.hpp"
-#include "utils/buildFilePath.hpp"
+#include "utils/filesystemUtils.hpp"
 #include <string_view>
 
 static std::string truncateName(const std::string& name, std::size_t maxLen) {
@@ -23,7 +23,7 @@ static std::string truncateName(const std::string& name, std::size_t maxLen) {
 }
 
 static HttpResponse generateAutoindex(const std::string& filepath, const std::string& uri,
-                               const HttpRequest& request, const Server& server) {
+                                      const HttpRequest& request, const Server& server) {
     DIR* dir = opendir(filepath.c_str());
     if (!dir)
         return ResponseBuilder::generateError(403, server, request);
@@ -128,7 +128,7 @@ HttpResponse handleGet(const HttpRequest& request, const Server& server, const L
             if (!index_file.empty()) {
                 // Serve index.html if it exists in the directory
                 std::string index_path = joinPath(filepath, index_file);
-                if (fileExists(index_path)) {
+                if (isFile(index_path)) {
                     return serveFile(index_path, request, "");
                 }
             }

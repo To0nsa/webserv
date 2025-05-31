@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_delete.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:57 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 15:17:54 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/21 22:58:54 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "http/HttpRequest.hpp"
 #include "http/HttpResponse.hpp"
 #include "http/HttpResponseBuilder.hpp"
-#include "utils/buildFilePath.hpp"
+#include "utils/filesystemUtils.hpp"
 #include <sys/stat.h>
 #include <unistd.h>
 

@@ -3,11 +3,12 @@
 
 #include "http/HttpRequest.hpp"
 #include "utils/stringUtils.hpp"
+#include <string>
 
 class HttpRequestParser {
   public:
     static bool parse(HttpRequest& req, const std::string& raw_req, std::size_t clientMaxBodySize,
-                      int& errorCode);
+                      int& errorCode, std::size_t& consumedBytes);
 
   private:
     HttpRequestParser()                                          = delete;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_post.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 17:32:34 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 14:52:51 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ HttpResponse handlePost(const HttpRequest& request, const Server& server, const 
         return ResponseBuilder::generateError(500, server, request);
     }
 
-    if (fileExists(fullpath)) { // Think. We have to overwrite I guess.
+    if (isFile(fullpath)) { // Think. We have to overwrite I guess.
         std::cerr << "[POST] File already exists: " << fullpath << std::endl;
         return ResponseBuilder::generateError(400, Server(), request);
     }

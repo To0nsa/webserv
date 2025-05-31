@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 11:42:16 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:31:00 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ std::string getDefaultMessage(int status_code) {
                                                      {408, "Request Timeout"},
                                                      {411, "Length Required"},
                                                      {413, "Payload Too Large"},
+                                                     {431, "Request Header Fields Too Large"},
                                                      {500, "Internal Server Error"},
                                                      {501, "Not Implemented"},
                                                      {502, "Bad Gateway"},
@@ -117,17 +118,21 @@ HttpResponse generateError(int status_code, const Server& server, const HttpRequ
             body.assign((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     }
     // If no custom page or file is missing, generate a simple default HTML message
-    if (body.empty()) {
+    /* if (body.empty()) {
         std::ostringstream ss;
         ss << "<html><body><h1>" << status_code << " " << message << "</h1></body></html>";
         body = ss.str();
-    }
+    } */
     // Set status, connection headers, and keep-alive logic
     initializeResponse(response, status_code, message, request);
     // Always serve error pages as text/html
     response.setHeader("Content-Type", "text/html");
     // Attach the generated or loaded error page body
-    response.setBody(body);
+    if (!body.empty()) {
+        response.setBody(body);
+    }
+    /* response.setBody(body); */
+
     return response;
 }
 
@@ -142,7 +147,7 @@ HttpResponse generateRedirect(int status_code, const std::string& location,
     // Set the Location header to indicate the redirect target
     response.setHeader("Location", location);
     // No body is sent in most redirects → explicitly set Content-Length to 0
-    response.setHeader("Content-Length", "0");
+    // response.setHeader("Content-Length", "0");
     return response;
 }
 

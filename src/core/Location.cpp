@@ -3,26 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/15 01:15:12 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/30 16:52:24 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * @file    Location.cpp
- * @brief   Implements the Location class methods.
- *
- * @details Provides setters, getters, and helper logic for path-based configuration
- * blocks, including method filtering, path resolution, CGI detection, and more.
- * @ingroup config
- */
-
 #include "core/Location.hpp"
-
+#include "utils/filesystemUtils.hpp"
+#include "utils/stringUtils.hpp"
 #include <algorithm>
 #include <filesystem>
+#include <map>
 #include <vector>
 
 ///////////////////////
@@ -72,6 +65,10 @@ void Location::setUploadStore(const std::string& path) {
 
 void Location::addCgiExtension(const std::string& ext) {
     _cgi_extensions.push_back(ext);
+}
+
+void Location::addCgiInterpreter(const std::string& ext, const std::string& path) {
+    _cgi_interpreters[ext] = path;
 }
 
 ///////////////
@@ -127,6 +124,19 @@ const std::vector<std::string>& Location::getCgiExtensions() const {
     return _cgi_extensions;
 }
 
+std::string Location::getCgiInterpreter(const std::string& ext) const {
+    std::string key = toLower(ext);
+    if (!key.empty() && key[0] != '.')
+        key = "." + key;
+
+    std::map<std::string, std::string>::const_iterator it = _cgi_interpreters.find(key);
+    return (it != _cgi_interpreters.end()) ? it->second : "";
+}
+
+const std::map<std::string, std::string>& Location::getCgiInterpreterMap() const {
+    return _cgi_interpreters;
+}
+
 /////////////////////
 // --- Logic Helpers
 
@@ -139,13 +149,14 @@ bool Location::isMethodAllowed(const std::string& method) const {
 }
 
 bool Location::matchesPath(const std::string& uri) const {
-    return uri.rfind(_path, 0) == 0;
+    return normalizePath(uri).rfind(normalizePath(_path), 0) == 0;
 }
 
 std::string Location::resolveAbsolutePath(const std::string& uri) const {
-    if (!matchesPath(uri))
+    std::string cleanUri = normalizePath(uri);
+    if (!matchesPath(cleanUri) || _path.length() > cleanUri.length())
         return "";
-    return _root + uri.substr(_path.length());
+    return joinPath(_root, cleanUri.substr(_path.length()));
 }
 
 bool Location::isUploadEnabled() const {
@@ -160,5 +171,5 @@ bool Location::isCgiRequest(const std::string& path) const {
 std::string Location::getEffectiveIndexPath() const {
     if (_index_files.empty())
         return "";
-    return _root + "/" + _index_files.front();
+    return joinPath(_root, _index_files.front());
 }

@@ -1,0 +1,13 @@
+#!/usr/bin python3
+
+import os, sys
+
+# Start response
+sys.stdout.write("Content-Type: text/plain\r\n\r\n")
+
+# Print CGI environment variables
+print("Hello from CGI!")
+print(f"Method: {os.environ.get('REQUEST_METHOD')}")
+print(f"Query: {os.environ.get('QUERY_STRING')}")
+print(f"Path Info: {os.environ.get('PATH_INFO')}")
+print(f"Script Name: {os.environ.get('SCRIPT_NAME')}")

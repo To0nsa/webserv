@@ -12,9 +12,9 @@ def send_chunk(data):
     conn.send(chunk.encode())
 
 send_chunk("Hello")
-sleep(1)  # Simulate delay
+sleep(2)  # Simulate delay
 send_chunk(" ")
-sleep(1)  # Simulate delay
+sleep(2)  # Simulate delay
 send_chunk("World")
 conn.send(b"0\r\n\r\n")  # End of chunks
 
