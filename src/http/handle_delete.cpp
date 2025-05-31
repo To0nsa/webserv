@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/30 19:59:45 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 13:20:43 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,56 +31,63 @@
 
 #include "http/handle_delete.hpp"
 #include "utils/filesystemUtils.hpp"
+
 #include <iostream>
 #include <sys/stat.h>
 #include <unistd.h>
 
 HttpResponse handleDelete(const HttpRequest& request, const Server& server, const Location& loc) {
+    // 1) Normalize both the request path and the location prefix
+    std::string requestPath   = normalizePath(request.getPath());
+    std::string locPrefix     = normalizePath(loc.getPath());
+    bool        inUploadStore = loc.isUploadEnabled() && requestPath.rfind(locPrefix, 0) == 0;
 
-    // Normalize both the request path and the location prefix
-    std::string requestPath = normalizePath(request.getPath());
-    std::string locPrefix   = normalizePath(loc.getPath());
-
-    // Decide which physical directory to delete from
+    // 2) Compute the real filesystem path
     std::string filepath;
-    if (loc.isUploadEnabled() && requestPath.rfind(locPrefix, 0) == 0) {
-        // — Strip the location prefix from the request
+    if (inUploadStore) {
+        // — Strip the location prefix from the request URI
         std::string relative = requestPath.substr(locPrefix.size());
-        // — Remove any leading slashes
         while (!relative.empty() && relative.front() == '/')
             relative.erase(0, 1);
 
-        // — Figure out the upload_store base
+        // — Find upload_store base, interpreting relative paths under loc.getRoot()
         std::string uploadRoot = normalizePath(loc.getUploadStore());
-        // If upload_store was given as a relative path, interpret it under the normal root
         if (!uploadRoot.empty() && uploadRoot.front() != '/')
             uploadRoot = joinPath(normalizePath(loc.getRoot()), uploadRoot);
 
-        // — Join into a full path under upload_store
+        // — Final path under upload_store
         filepath = joinPath(uploadRoot, relative);
     } else {
-        // Static content (or DELETE on a non-upload location)
+        // Static content (DELETE outside upload_store)
         filepath = buildFilePath(request, loc);
-        // return ResponseBuilder::generateError(403, server, request);
     }
 
     std::cout << "Resolved file path: " << filepath << std::endl;
 
-    // 1) Must exist
-    struct stat st;
-    if (stat(filepath.c_str(), &st) != 0)
-        return ResponseBuilder::generateError(404, server, request);
+    // 3) ANY symlink → Immediately reject with 403
+    //    (no more “follow‐and‐delete” logic)
+    if (isSymlink(filepath)) {
+        return ResponseBuilder::generateError(403, server, request);
+    }
 
-    // 2) Must be a regular file
+    // 4) Must exist
+    struct stat st;
+    if (stat(filepath.c_str(), &st) != 0) {
+        std::cerr << "[DELETE] File not found: " << filepath << std::endl;
+        return ResponseBuilder::generateError(404, server, request);
+    }
+
+    // 5) Must be a regular file (directories, sockets, etc. → 403)
     if (!S_ISREG(st.st_mode)) {
         return ResponseBuilder::generateError(403, server, request);
     }
 
+    // 6) Trailing‐slash edge case: “/foo.txt/” → 404
     if (request.getPath().back() == '/' && S_ISREG(st.st_mode)) {
         return ResponseBuilder::generateError(404, server, request);
     }
 
-    // 3) Try to delete
+    // 7) Try to unlink
     if (unlink(filepath.c_str()) != 0) {
         switch (errno) {
         case EACCES:
@@ -93,7 +100,7 @@ HttpResponse handleDelete(const HttpRequest& request, const Server& server, cons
         }
     }
 
-    // 4) Success page
+    // 8) Success: return a simple “deleted” HTML page
     std::string filename = request.getPath().substr(request.getPath().find_last_of('/') + 1);
     std::string body     = "<h1>File " + filename + " deleted.</h1>";
     return ResponseBuilder::generateSuccess(200, body, "text/html", request);

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/30 18:01:03 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 13:22:06 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,6 +237,10 @@ std::string decodePercentEncoding(const std::string& encoded) {
     }
 
     return result.str();
+}
+
+bool isSymlink(const std::string& path) {
+    return fs::is_symlink(fs::path(path));
 }
 
 /* std::string normalizePath(const std::string& path) {

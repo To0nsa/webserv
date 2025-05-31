@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/30 19:59:27 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 13:54:53 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,30 @@ static HttpResponse generateAutoindex(const std::string& filepath, const std::st
 }
 
 HttpResponse handleGet(const HttpRequest& request, const Server& server, const Location& loc) {
-    std::string filepath = buildFilePath(request, loc);
+    std::string requestPath   = normalizePath(request.getPath());
+    std::string locPrefix     = normalizePath(loc.getPath());
+    bool        inUploadStore = loc.isUploadEnabled() && requestPath.rfind(locPrefix, 0) == 0;
+
+    std::string filepath;
+    if (inUploadStore) {
+        std::string relative = requestPath.substr(locPrefix.size());
+        while (!relative.empty() && relative.front() == '/')
+            relative.erase(0, 1);
+
+        std::string uploadRoot = normalizePath(loc.getUploadStore());
+        if (!uploadRoot.empty() && uploadRoot.front() != '/')
+            uploadRoot = joinPath(normalizePath(loc.getRoot()), uploadRoot);
+
+        filepath = joinPath(uploadRoot, relative);
+    } else {
+        filepath = buildFilePath(request, loc);
+    }
     std::cout << "Resolved file path: " << filepath << std::endl;
+
+    if (isSymlink(filepath)) {
+        std::cerr << "[GET] Refusing to serve symlink: " << filepath << std::endl;
+        return ResponseBuilder::generateError(403, server, request);
+    }
 
     // Redirect if directory is missing trailing slash
     struct stat fileStat;

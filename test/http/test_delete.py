@@ -30,6 +30,12 @@ def ensure_absent(path):
     status, _, _ = request("GET", path)
     if status == 200:
         request("DELETE", path, expected=200)
+    else:
+        full = os.path.join(os.getenv("UPLOAD_DIR", "./test/data/upload_store"),
+                            os.path.basename(path))
+        if os.path.islink(full):
+            print(f"[CLEANUP] Removing leftover symlink: {full}")
+            os.unlink(full)
 
 def create_file(path, content="x"):
     request("POST", path, body=content,
@@ -90,23 +96,33 @@ def test_delete_case_sensitive():
     assert res.status == 501, f"Expected 501 Not Implemented, got {res.status}"
     
 def test_delete_symlink_to_file():
-    """If symlinks are allowed and resolve to regular files, deletion should succeed."""
-    test_path = "/upload_store/symlink_to_file.txt"
+    """DELETE on a symlink should be forbidden, and the target must remain."""
+    test_path   = "/upload_store/symlink_to_file.txt"
     target_path = "/upload_store/real_target.txt"
-    
+
+    # Ensure neither the symlink nor the target exists beforehand
     ensure_absent(test_path)
     ensure_absent(target_path)
+
+    # Create the real target file
     create_file(target_path, "linked")
-    
-    # Create symlink if system supports it
+
+    # Create a symlink pointing at the real target (if supported)
     try:
         os.symlink(
             os.path.join(os.getenv("UPLOAD_DIR", "./test/data/upload_store"), "real_target.txt"),
             os.path.join(os.getenv("UPLOAD_DIR", "./test/data/upload_store"), "symlink_to_file.txt")
         )
-        request("DELETE", test_path, expected=200)
-        request("GET", target_path, expected=404)  # file was actually deleted
-    except OSError as e:
+
+        # Now attempt DELETE on the symlink: should get 403 Forbidden
+        request("DELETE", test_path, expected=403)
+        
+        real_path = os.path.join(os.getenv("UPLOAD_DIR", "./test/data/upload_store"), "real_target.txt")
+        if not os.path.isfile(real_path):
+            print(f"❌ Expected real target to still exist on disk, but it's missing: {real_path}")
+            sys.exit(1)
+        print("✅ real_target.txt still exists on disk after DELETE on symlink.")
+    except OSError:
         print("[SKIPPED] test_delete_symlink_to_file (symlink not supported)")
 
 
