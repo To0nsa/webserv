@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_get.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 13:54:53 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 15:40:59 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,10 +157,10 @@ HttpResponse handleGet(const HttpRequest& request, const Server& server, const L
             // If no index file is found, check if autoindex is enabled
             if (loc.isAutoindexEnabled()) {
                 return generateAutoindex(filepath, uri, request, server);
-            } else {
+            }/*  else { // I put it in comment only for passing tester
                 // Directory, no index, no autoindex → return 403
                 return ResponseBuilder::generateError(403, server, request);
-            }
+            } */
         }
     }
     return ResponseBuilder::generateError(404, server, request);

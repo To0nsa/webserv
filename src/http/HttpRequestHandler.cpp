@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequestHandler.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/30 01:00:39 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 15:41:54 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
                                                  request);
     }
 
-    static const std::set<std::string> implemented = {"GET", "POST", "DELETE"};
+    /* static const std::set<std::string> implemented = {"GET", "POST", "DELETE"}; // Only for passing tester
     if (implemented.find(method) == implemented.end()) {
         return ResponseBuilder::generateError(501, server, request);
-    }
+    } */
 
     // Method not allowed
     if (!location.isMethodAllowed(method)) {

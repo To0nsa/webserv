@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/31 14:53:34 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/31 15:38:25 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,7 +281,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         errorCode = 403;
         return false;
     }
-    std::string norm = normalizePath(pathOnly);
+    std::string norm = /* normalizePath(pathOnly); */ pathOnly;
     if (norm.empty()) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
         errorCode = 403;
@@ -433,7 +433,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
 
     if (te == "chunked") {
         if (!isChunkedBodyComplete(bodyPart)) {
-            Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
+            //Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
                             "Incomplete chunked body, waiting for more");
             errorCode = 0;
             return false;
@@ -452,7 +452,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
     }
 
     if (bodyPart.size() < len) {
-        Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete body, waiting for more");
+        //Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete body, waiting for more");
         errorCode = 0;
         return false;
     }
@@ -469,7 +469,7 @@ bool validateReq(HttpRequest& req, int& errorCode) {
     if (!methods.count(req.getMethod())) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                         "Method Not Allowed: " + req.getMethod());
-        errorCode = 501;
+        errorCode = 405;
         return false;
     }
 
