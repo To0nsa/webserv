@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/30 20:07:13 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 14:22:47 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,43 +24,6 @@
 namespace fs = std::filesystem;
 
 namespace {
-
-/* std::string normalizePathInHttpParser(const std::string& path) {
-    if (path.empty())
-        return "/";
-
-    std::vector<std::string> segments;
-    std::string              segment;
-    std::istringstream       stream(path);
-    bool                     hadTrailingSlash = path.back() == '/';
-
-    while (std::getline(stream, segment, '/')) {
-        if (segment.empty() || segment == ".")
-            continue;
-        if (segment == "..") {
-            if (!segments.empty()) {
-                segments.pop_back(); // move up
-            } else {
-                // Attempt to go above root: reject this path
-                return ""; // special marker for invalid path
-            }
-        } else {
-            segments.push_back(segment);
-        }
-    }
-
-    std::string result = "/";
-    for (std::size_t i = 0; i < segments.size(); ++i) {
-        result += segments[i];
-        if (i + 1 < segments.size())
-            result += "/";
-    }
-
-    if (hadTrailingSlash && result != "/")
-        result += "/";
-
-    return result;
-} */
 
 /** Checks that method tokens only contain RFC-allowed characters. */
 static bool isValidHttpMethodToken(const std::string& method) {
@@ -539,19 +502,31 @@ bool validateReq(HttpRequest& req, int& errorCode) {
             return false;
         }
 
-        std::string                        ct         = req.getHeader("CONTENT-TYPE");
+        std::string ct = req.getHeader("CONTENT-TYPE");
+        if (ct.empty()) {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Missing Content-Type for POST");
+            errorCode = 415;
+            return false;
+        }
+
         static const std::set<std::string> validTypes = {"application/x-www-form-urlencoded",
                                                          "multipart/form-data",
                                                          "text/plain",
                                                          "application/json",
                                                          "application/octet-stream",
                                                          "test/file"};
-        if (ct.empty()) {
-            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Missing Content-Type for POST");
-            errorCode = 415;
-            return false;
+
+        // Accept type with optional parameters (e.g. multipart/form-data; boundary=...)
+        std::string lowerCt = toLower(ct);
+        bool        valid   = false;
+        for (const std::string& type : validTypes) {
+            if (lowerCt.rfind(type, 0) == 0) { // prefix match
+                valid = true;
+                break;
+            }
         }
-        if (!validTypes.count(toLower(ct))) {
+
+        if (!valid) {
             Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                             "Unsupported Content-Type for POST: " + ct);
             errorCode = 415;
