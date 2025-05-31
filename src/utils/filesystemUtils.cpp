@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/26 14:50:19 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 13:22:06 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <regex>
@@ -86,13 +87,50 @@ HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
     return ResponseBuilder::generateSuccess(200, body, content_type, request);
 }
 
-std::string normalizePath(const std::string& path) {
+/* std::string normalizePath(const std::string& path) {
     if (path.empty())
         return "/";
     std::string result = path;
 
     if (result.size() > 1 && result.back() == '/')
         result.pop_back();
+
+    return result;
+} */
+
+std::string normalizePath(const std::string& path) {
+    if (path.empty())
+        return "/";
+
+    std::vector<std::string> segments;
+    std::string              segment;
+    std::istringstream       stream(path);
+    bool                     hadTrailingSlash = path.back() == '/';
+
+    while (std::getline(stream, segment, '/')) {
+        if (segment.empty() || segment == ".")
+            continue;
+        if (segment == "..") {
+            if (!segments.empty()) {
+                segments.pop_back(); // move up
+            } else {
+                // Attempt to go above root: reject this path
+                return ""; // special marker for invalid path
+            }
+        } else {
+            segments.push_back(segment);
+        }
+    }
+
+    std::string result = "/";
+    for (std::size_t i = 0; i < segments.size(); ++i) {
+        result += segments[i];
+        if (i + 1 < segments.size())
+            result += "/";
+    }
+
+    if (hadTrailingSlash && result != "/")
+        result += "/";
 
     return result;
 }
@@ -105,7 +143,7 @@ std::string joinPath(const std::string& base, const std::string& suffix) {
     return base + '/' + suffix;
 }
 
-std::string buildFilePath(const HttpRequest& request, const Location& loc) {
+/* std::string buildFilePath(const HttpRequest& request, const Location& loc) {
     std::string request_path  = normalizePath(request.getPath());
     std::string location_path = normalizePath(loc.getPath());
     std::string location_root = normalizePath(loc.getRoot());
@@ -118,6 +156,29 @@ std::string buildFilePath(const HttpRequest& request, const Location& loc) {
         suffix.erase(0, 1);
 
     return joinPath(location_root, suffix); // May point to file or directory
+} */
+
+std::string buildFilePath(const HttpRequest& request, const Location& loc) {
+    // 1) Normalize but PRESERVE trailing-slash info in request URI & location prefix
+    std::string req_path = normalizePath(request.getPath());
+    std::string loc_path = normalizePath(loc.getPath());
+    // 2) Don’t normalize the filesystem root with the same HTTP logic—
+    //    use it raw (it should already be an absolute, clean path).
+    std::string loc_root = loc.getRoot();
+
+    // 3) Prefix-match exactly at position 0
+    if (req_path.rfind(loc_path, 0) != 0) {
+        // doesn’t belong to this Location
+        return "";
+    }
+
+    // 4) Strip the prefix and leading slash from the remainder
+    std::string suffix = req_path.substr(loc_path.size());
+    if (!suffix.empty() && suffix[0] == '/')
+        suffix.erase(0, 1);
+
+    // 5) Join filesystem-style
+    return joinPath(loc_root, suffix); // may be file or directory
 }
 
 static std::vector<std::string> splitPath(const std::string& path) {
@@ -151,6 +212,35 @@ bool mkdirRecursive(const std::string& path) {
         }
     }
     return true;
+}
+
+std::string decodePercentEncoding(const std::string& encoded) {
+    std::ostringstream result;
+
+    for (size_t i = 0; i < encoded.length(); ++i) {
+        if (encoded[i] == '%') {
+            if (i + 2 >= encoded.length())
+                throw std::invalid_argument("Incomplete percent-encoding at end of URI");
+
+            char hex1 = encoded[i + 1];
+            char hex2 = encoded[i + 2];
+            if (!isxdigit(hex1) || !isxdigit(hex2))
+                throw std::invalid_argument("Invalid hex in percent-encoding: %" +
+                                            std::string(1, hex1) + std::string(1, hex2));
+
+            int byte = std::stoi(encoded.substr(i + 1, 2), nullptr, 16);
+            result << static_cast<char>(byte);
+            i += 2;
+        } else {
+            result << encoded[i];
+        }
+    }
+
+    return result.str();
+}
+
+bool isSymlink(const std::string& path) {
+    return fs::is_symlink(fs::path(path));
 }
 
 /* std::string normalizePath(const std::string& path) {

@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 12:32:41 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/31 14:56:17 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,6 +220,16 @@ bool SocketManager::checkRequestLimits(int fd) {
         respondError(fd, 413);
         return true;
     }
+
+    /*     std::size_t maxBody = _client_info[fd].serverConfig.getClientMaxBodySize();
+            if (_client_info[fd].bodyBytesReceived > maxBody) {
+                    std::cout << "Request body too large on fd: " << fd
+                                            << " (" << _client_info[fd].bodyBytesReceived
+                                            << " bytes > max " << maxBody << ")\n";
+                    respondError(fd, 413);
+                    return true;
+            } */
+
     return false;
 }
 

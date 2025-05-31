@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/31 13:35:37 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/31 14:50:58 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,11 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     return env;
 }
 
-std::vector<char*> toCharPtrArray(const std::vector<std::string>& vec) {
+// Helper to convert vector<string> → vector<char*>
+std::vector<char*> toCharPtrArray(const std::vector<std::string>& vs) {
     std::vector<char*> out;
-    for (const auto& s : vec)
+    out.reserve(vs.size() + 1);
+    for (const auto& s : vs)
         out.push_back(const_cast<char*>(s.c_str()));
     out.push_back(nullptr);
     return out;
@@ -144,6 +146,7 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         return false;
     }
 
+    // 3) Fork
     pid_t pid = fork();
     if (pid < 0) {
         close(body_fd);
@@ -261,14 +264,41 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
     }
     std::string        contentType = "text/plain";
     int                code        = 200;
+    bool               hasContentType = false;
     std::istringstream iss(header);
     std::string        line;
+
     while (std::getline(iss, line)) {
-        if (line.find("Content-Type:") == 0)
-            contentType = trim(line.substr(13));
-        else if (line.find("Status:") == 0)
-            code = std::stoi(trim(line.substr(7)));
+        if (!line.empty() && line.back() == '\r')
+            line.pop_back();
+        if (line.find("Content-Type:") == 0) {
+            contentType    = trim(line.substr(13));
+            hasContentType = true;
+        } else if (line.find("Status:") == 0) {
+            std::string statusStr = trim(line.substr(7));
+            try {
+                code = std::stoi(statusStr);
+            } catch (...) {
+                Logger::logFrom(LogLevel::ERROR, "CGI", "Invalid Status header: " + statusStr);
+                return ResponseBuilder::generateError(500, server, req);
+            }
+        }
     }
+    if (!hasContentType) {
+        Logger::logFrom(LogLevel::ERROR, "CGI", "Missing Content-Type header");
+        return ResponseBuilder::generateError(500, server, req);
+    }
+    
+
+    if (!hasContentType) {
+        Logger::logFrom(LogLevel::ERROR, "CGI", "Missing Content-Type header");
+        return ResponseBuilder::generateError(500, server, req);
+    }
+
+    Logger::logFrom(LogLevel::DEBUG, "CGI",
+                    "Parsed response: " + std::to_string(code) +
+                        ", content-type: " + contentType);
+
     return ResponseBuilder::generateSuccess(code, body, contentType, req);
 }
 
