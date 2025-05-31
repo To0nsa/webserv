@@ -42,10 +42,13 @@ const char* levelColor(LogLevel level) {
 }
 
 void Logger::log(LogLevel level, const std::string& message) {
-    std::ostream& os = std::cerr; // 👈 All logs go to cerr for better visibility
-    os << levelColor(level) << "[" << levelToString(level) << "]" << COLOR_RESET << " " << message
-       << std::endl
-       << std::flush;
+    if (level == LogLevel::ERROR) {
+        std::cerr << levelColor(level) << "[" << levelToString(level) << "]" << COLOR_RESET << " "
+                  << message << std::endl;
+        return;
+    }
+    std::cout << levelColor(level) << "[" << levelToString(level) << "]" << COLOR_RESET << " "
+              << message << std::endl;
 }
 
 void Logger::logFrom(LogLevel level, const std::string& from, const std::string& message) {
@@ -54,8 +57,11 @@ void Logger::logFrom(LogLevel level, const std::string& from, const std::string&
         log(level, message);
         return;
     }
-
-    os << levelColor(level) << "[" << levelToString(level) << "] " << from << " : " << COLOR_RESET
-       << message << std::endl
-       << std::flush;
+    if (level == LogLevel::ERROR) {
+        std::cerr << levelColor(level) << "[" << levelToString(level) << "] " << from << " : "
+                  << COLOR_RESET << " " << message << std::endl;
+        return;
+    }
+    std::cout << levelColor(level) << "[" << levelToString(level) << "] " << from << " : "
+              << COLOR_RESET << " " << message << std::endl;
 }

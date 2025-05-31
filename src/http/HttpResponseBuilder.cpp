@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/29 14:38:10 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 14:47:08 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,12 @@ HttpResponse generateError(int status_code, const Server& server, const HttpRequ
 
     initializeResponse(response, status_code, message, request);
     response.setHeader("Content-Type", "text/html");
-    response.setBody(body);
+    // Attach the generated or loaded error page body
+    if (!body.empty()) {
+        response.setBody(body);
+    }
+    /* response.setBody(body); */
+
     return response;
 }
 

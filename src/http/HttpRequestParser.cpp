@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/31 14:22:47 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 14:50:40 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -422,6 +422,7 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
     }
 
     req.setBody(fullBody);
+    req.setContentLength(fullBody.size());
     errorCode = 0;
     consumedBytes += local;
 }
