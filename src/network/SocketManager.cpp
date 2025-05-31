@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/30 17:27:09 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/31 12:32:41 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,67 +284,40 @@ void SocketManager::handleCgiPollEvents() {
         }
     };
 
+    auto cleanupCgiAndUnregister = [&](int index, int fd, ClientInfo& client) {
+        CGI::cleanupCgi(*client.cgiProcess);
+        client.cgiProcess.reset();
+        _poll_fds.erase(_poll_fds.begin() + index);
+        _fd_to_cgi.erase(fd);
+    };
+
     // Walk backwards so erasing entries is safe
     for (size_t i = _poll_fds.size(); i-- > 0;) {
         auto& pfd     = _poll_fds[i];
         int   fd      = pfd.fd;
-        short revents = pfd.revents;
 
         // Only handle CGI pipe FDs here
         if (!_fd_to_cgi.contains(fd))
             continue;
 
-        auto [client_fd, which] = _fd_to_cgi.at(fd);
+        int client_fd = _fd_to_cgi.at(fd);
         ClientInfo& client      = _client_info[client_fd];
         if (!client.cgiProcess)
             continue;
 
         CgiProcess& cgi = *client.cgiProcess;
-        //time_t      now = time(NULL);
-
-        // 1) Timeout guard (5s)
-        /* if (now - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
-            Logger::logFrom(LogLevel::WARN, "SocketManager", "[CGI] Timeout on fd " + std::to_string(fd) + " for client_fd " + std::to_string(client_fd));
-            client.responses.push(ResponseBuilder::generateError(504, client.serverConfig, {}));
-            markClientWritable(client_fd);
-
-            CGI::cleanupCgi(cgi);
-            client.cgiProcess.reset();
-            _poll_fds.erase(_poll_fds.begin() + i);
-            _fd_to_cgi.erase(fd);
-            continue;
-        } */
-
-        bool success = true;
-        // 3) Drive CGI stdout (data or EOF)
-        if (cgi.phase == CgiProcess::Phase::Reading && which == "stdout") {
-            if (revents & POLLIN) { // Data available to read!!!!!!!!!
-                /* success = CGI::handleRead(cgi); */
-                
-            }
-            if (revents & POLLHUP) {
-                Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI DEBUG] POLLHUP on stdout FD=" + std::to_string(fd) + " → setting phase=Done");
-                /* cgi.phase = CgiProcess::Phase::Done; */
-                cgi.last_activity = time(NULL);
-            }
-        }
-
-        // 4) On I/O error
-        if (!success) {
-            Logger::logFrom(LogLevel::ERROR, "SocketManager", "[CGI] I/O error on fd " + std::to_string(fd));
-            client.responses.push(ResponseBuilder::generateError(502, client.serverConfig, {}));
-            markClientWritable(client_fd);
-
-            CGI::cleanupCgi(cgi);
-            client.cgiProcess.reset();
-            _poll_fds.erase(_poll_fds.begin() + i);
-            _fd_to_cgi.erase(fd);
-            continue;
-        }
-
-        // 5) Finalize when done
         if (cgi.phase != CgiProcess::Phase::Done) {
             //Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI] Phase Done, checking child status...");
+            time_t now = time(nullptr);
+            if (now - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
+                Logger::logFrom(LogLevel::WARN, "SocketManager",
+                    "[CGI] Timeout on fd " + std::to_string(fd) + " for client_fd " + std::to_string(client_fd));
+
+                client.responses.push(ResponseBuilder::generateError(504, client.serverConfig, {}));  // Gateway Timeout
+                markClientWritable(client_fd);
+                cleanupCgiAndUnregister(i, fd, client);
+                continue;
+            }
             if (!CGI::tryTerminateCgi(cgi)) {
                 // child not reaped yet → come back next loop
                 continue;
@@ -353,17 +326,10 @@ void SocketManager::handleCgiPollEvents() {
 
             // build and queue the HTTP response
             auto maybeResp = CGI::finalizeCgi(cgi, client.serverConfig, {/*req*/});
-            auto resp =
-                maybeResp.value_or(ResponseBuilder::generateError(502, client.serverConfig, {}));
+            auto resp = maybeResp.value_or(ResponseBuilder::generateError(502, client.serverConfig, {}));
             client.responses.push(resp);
             markClientWritable(client_fd);
-
-            // clean up both pipe FDs at once
-            std::erase_if(_poll_fds, [&](auto const& p) {
-                return p.fd == cgi.stdout_fd;
-            });
-            _fd_to_cgi.erase(cgi.stdout_fd);
-            client.cgiProcess.reset();
+            cleanupCgiAndUnregister(i, fd, client);
         }
     }
 }
@@ -379,7 +345,6 @@ void SocketManager::run() {
             throw SocketError("poll() failed: " + std::string(std::strerror(errno)));
         }
 
-        // First, drive any pending CGI reads/writes
         handleCgiPollEvents();
 
         // Then handle sockets — but skip *all* CGI FDs before doing error/HUP checks
@@ -478,7 +443,7 @@ bool SocketManager::handleCgiRequest(int client_fd, const HttpRequest& request,
 
     _poll_fds.push_back({cgi.stdout_fd, POLLIN, 0});
 
-    _fd_to_cgi[cgi.stdout_fd] = {client_fd, "stdout"};
+    _fd_to_cgi[cgi.stdout_fd] = client_fd;
 
     return true; // handled as CGI
 }
