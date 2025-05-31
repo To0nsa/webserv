@@ -24,15 +24,15 @@
 struct CgiProcess {
     enum class Phase { Launching, Reading, Done, Failed };
 
-	Phase       phase         = Phase::Launching;
+    Phase       phase         = Phase::Launching;
     pid_t       pid           = -1;
     int         stdout_fd     = -1;
     time_t      start_time    = 0;
     time_t      last_activity = 0;
-    std::string script_path;     ///< Path to the CGI script
-    std::string interpreter;     ///< Interpreter to use
-	std::string output_path;     ///< Path to the temporary output file
-    std::string input_path;      ///< Path to the temporary input file
+    std::string script_path; ///< Path to the CGI script
+    std::string interpreter; ///< Interpreter to use
+    std::string output_path; ///< Path to the temporary output file
+    std::string input_path;  ///< Path to the temporary input file
 };
 
 namespace CGI {

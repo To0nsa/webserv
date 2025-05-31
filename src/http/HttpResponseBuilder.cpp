@@ -128,11 +128,11 @@ HttpResponse generateError(int status_code, const Server& server, const HttpRequ
     // Always serve error pages as text/html
     response.setHeader("Content-Type", "text/html");
     // Attach the generated or loaded error page body
-	if (!body.empty()) {
-		response.setBody(body);
-	}
+    if (!body.empty()) {
+        response.setBody(body);
+    }
     /* response.setBody(body); */
-	
+
     return response;
 }
 
@@ -147,7 +147,7 @@ HttpResponse generateRedirect(int status_code, const std::string& location,
     // Set the Location header to indicate the redirect target
     response.setHeader("Location", location);
     // No body is sent in most redirects → explicitly set Content-Length to 0
-    //response.setHeader("Content-Length", "0");
+    // response.setHeader("Content-Length", "0");
     return response;
 }
 

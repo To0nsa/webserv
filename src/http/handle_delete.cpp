@@ -15,7 +15,7 @@
 HttpResponse handleDelete(const HttpRequest& request, const Server& server, const Location& loc) {
     // Build full file path
     std::string filepath = buildFilePath(request, loc);
-	std::cout << "Resolved file path: " << filepath << std::endl;
+    std::cout << "Resolved file path: " << filepath << std::endl;
 
     // Check if file exists and delete
     struct stat s;

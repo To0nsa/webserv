@@ -12,14 +12,14 @@
 
 #include "http/handleCgi.hpp"
 #include "http/HttpResponseBuilder.hpp"
+#include "network/SocketManager.hpp"
+#include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
 #include "utils/stringUtils.hpp"
-#include "utils/Logger.hpp"
-#include "network/SocketManager.hpp"
 #include <cstdio>
-#include <fstream>
 #include <fcntl.h>
 #include <filesystem>
+#include <fstream>
 #include <poll.h>
 #include <signal.h>
 #include <sstream>
@@ -52,8 +52,7 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     set("SCRIPT_NAME", req.getPath());
     if (pathInfo.empty()) {
         set("PATH_INFO", req.getPath());
-    }
-    else {
+    } else {
         set("PATH_INFO", pathInfo);
     }
     set("REQUEST_METHOD", req.getMethod());
@@ -96,7 +95,7 @@ namespace CGI {
 bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& server,
                     const Location& loc) {
     cgi.last_activity = time(NULL);
-    cgi.script_path = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
+    cgi.script_path   = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
     Logger::logFrom(LogLevel::DEBUG, "CGI", "Initializing CGI for script: " + cgi.script_path);
     if (!isFile(cgi.script_path)) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "File is invalid");
@@ -110,15 +109,17 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     std::cerr << "[CGI] Script is executable: " << cgi.script_path << std::endl;
 
     // === Generate a unique temporary file path ===
-    static int counter = 0;
+    static int        counter = 0;
     std::stringstream ss;
-    ss << "/home/irychkov/Desktop/webserv/temp_in" << getpid() << "_" << time(nullptr) << "_" << counter++ << ".tmp";
-    std::string temp_in = ss.str();
+    ss << "/home/irychkov/Desktop/webserv/temp_in" << getpid() << "_" << time(nullptr) << "_"
+       << counter++ << ".tmp";
+    std::string       temp_in = ss.str();
     std::stringstream ss1;
-    ss1 << "/home/irychkov/Desktop/webserv/temp_out_" << getpid() << "_" << time(nullptr) << "_" << counter++ << ".tmp";
+    ss1 << "/home/irychkov/Desktop/webserv/temp_out_" << getpid() << "_" << time(nullptr) << "_"
+        << counter++ << ".tmp";
     std::string temp_out = ss1.str();
-    cgi.input_path  = temp_in;
-    cgi.output_path = temp_out;
+    cgi.input_path       = temp_in;
+    cgi.output_path      = temp_out;
 
     // === Write request body to temp file ===
     std::ofstream out(temp_in, std::ios::binary);
@@ -136,7 +137,7 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         return false;
     }
     cgi.last_activity = time(NULL);
-    int output_fd = open(temp_out.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0600);
+    int output_fd     = open(temp_out.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0600);
     if (output_fd < 0) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to create CGI output file");
         close(body_fd);
@@ -151,7 +152,8 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     }
 
     if (pid > 0) {
-        Logger::logFrom(LogLevel::DEBUG, "CGI", "Forked PID: " + std::to_string(pid) + ", script: " + cgi.script_path);
+        Logger::logFrom(LogLevel::DEBUG, "CGI",
+                        "Forked PID: " + std::to_string(pid) + ", script: " + cgi.script_path);
     }
 
     if (pid == 0) {
@@ -185,13 +187,15 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         // 4. chdir safely
         const std::string cgiDir = std::filesystem::path(scriptPath).parent_path().string();
         if (chdir(cgiDir.c_str()) != 0) {
-            Logger::logFrom(LogLevel::ERROR, "CGI CHILD", "chdir failed: " + std::string(strerror(errno)));
+            Logger::logFrom(LogLevel::ERROR, "CGI CHILD",
+                            "chdir failed: " + std::string(strerror(errno)));
             exit(1);
         }
         execve(argv[0], argv.data(), envp.data());
 
         // 5. If execve fails
-        Logger::logFrom(LogLevel::ERROR, "CGI CHILD", "execve failed: " + std::string(strerror(errno)));
+        Logger::logFrom(LogLevel::ERROR, "CGI CHILD",
+                        "execve failed: " + std::string(strerror(errno)));
         exit(1);
     }
 
@@ -213,15 +217,15 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
 
 std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
                                         const HttpRequest& req) {
-    //Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "Finalizing CGI process for script");
+    // Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "Finalizing CGI process for script");
     int status;
     if (waitpid(cgi.pid, &status, WNOHANG) == 0) {
-        //Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "CGI process is still running");
+        // Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "CGI process is still running");
         return std::nullopt; // Not done yet
     }
     /* if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-        Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): CGI process exited with error: " + std::to_string(WEXITSTATUS(status)));
-        return ResponseBuilder::generateError(502, server, req);
+        Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): CGI process exited with error: " +
+    std::to_string(WEXITSTATUS(status))); return ResponseBuilder::generateError(502, server, req);
     } */
 
     cgi.last_activity = time(NULL);
@@ -241,7 +245,7 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
     Logger::logFrom(LogLevel::DEBUG, "CGI", "cgi is checking output for header");
     std::string header;
     std::string body;
-    if (pos!= std::string::npos) {
+    if (pos != std::string::npos) {
         header = fullOutput.substr(0, pos);
         body   = fullOutput.substr(pos + 4);
     } else {
@@ -287,7 +291,8 @@ void cleanupCgi(CgiProcess& cgi) {
 bool tryTerminateCgi(CgiProcess& cgi) {
     int   status;
     pid_t result = waitpid(cgi.pid, &status, WNOHANG);
-    //Logger::logFrom(LogLevel::DEBUG, "CGI", "tryTerminateCgi() → waitpid returned " + std::to_string(result));
+    // Logger::logFrom(LogLevel::DEBUG, "CGI", "tryTerminateCgi() → waitpid returned " +
+    // std::to_string(result));
 
     if (result == 0) {
         return false;

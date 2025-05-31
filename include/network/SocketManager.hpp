@@ -36,19 +36,19 @@
 #define CGI_TIMEOUT_SECONDS 45
 
 struct ClientInfo {
-    int                      client_fd;       // File descriptor of the client socket
-    time_t                   lastRequestTime; // Last request time for timeout management
-    time_t                   connectionStartTime;
-    time_t                   lastSendAttemptTime;
-    size_t                   headerBytesReceived;
-    size_t                   bodyBytesReceived;
-    bool                     headerComplete;
-    size_t                   bytes_sent;
-    std::string              requestBuffer;
-    std::string              current_raw_response;
-    bool                     keepAlive;    // Keep-alive flag
-    Server                   serverConfig; // The server config the client is connected to
-    std::queue<HttpResponse> responses;    // Queue of responses to be sent to the client
+    int                       client_fd;       // File descriptor of the client socket
+    time_t                    lastRequestTime; // Last request time for timeout management
+    time_t                    connectionStartTime;
+    time_t                    lastSendAttemptTime;
+    size_t                    headerBytesReceived;
+    size_t                    bodyBytesReceived;
+    bool                      headerComplete;
+    size_t                    bytes_sent;
+    std::string               requestBuffer;
+    std::string               current_raw_response;
+    bool                      keepAlive;    // Keep-alive flag
+    Server                    serverConfig; // The server config the client is connected to
+    std::queue<HttpResponse>  responses;    // Queue of responses to be sent to the client
     std::optional<CgiProcess> cgiProcess;
 };
 
@@ -76,7 +76,7 @@ class SocketManager {
     std::map<int, Server>
         _listen_map; ///< Maps listening socket fds to their corresponding server configurations.
     std::map<int, ClientInfo> _client_info; /// Stores all information about each client
-    std::map<int, int> _fd_to_cgi; ///< Maps CGI stdout fds to client fds
+    std::map<int, int>        _fd_to_cgi;   ///< Maps CGI stdout fds to client fds
 
     void setupSockets(const std::vector<Server>& servers);
     void handleNewConnection(int listen_fd);
