@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/30 01:00:39 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 15:31:55 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@
 HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     const std::string& method = request.getMethod();
     const std::string& path   = request.getPath();
+
+    for (const Location& loc : server.getLocations()) {
+        const std::string& locPath = normalizePath(loc.getPath());
+        if (locPath.length() > 1 && locPath.back() == '/' &&
+            path == locPath.substr(0, locPath.size() - 1)) {
+            return ResponseBuilder::generateRedirect(301, locPath, request);
+        }
+    }
 
     // Find matching location
     const Location* matched     = nullptr;

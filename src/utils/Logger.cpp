@@ -52,7 +52,6 @@ void Logger::log(LogLevel level, const std::string& message) {
 }
 
 void Logger::logFrom(LogLevel level, const std::string& from, const std::string& message) {
-    std::ostream& os = std::cerr; // 👈 All logs to cerr
     if (from.empty()) {
         log(level, message);
         return;

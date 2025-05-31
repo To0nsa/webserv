@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 13:54:53 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 16:12:19 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,38 +130,44 @@ HttpResponse handleGet(const HttpRequest& request, const Server& server, const L
         return ResponseBuilder::generateError(403, server, request);
     }
 
-    // Redirect if directory is missing trailing slash
     struct stat fileStat;
     if (stat(filepath.c_str(), &fileStat) == 0) {
         const std::string& uri = request.getPath();
-        // Redirect to add trailing slash if it's a directory but URI lacks slash
+
+        // If it's a directory, handle trailing-slash redirect and index lookup
         if (S_ISDIR(fileStat.st_mode)) {
+            // Redirect to add trailing slash if URI lacks it
             if (!uri.empty() && uri.back() != '/') {
                 std::string redirectUri = uri + "/";
                 return ResponseBuilder::generateRedirect(301, redirectUri, request);
             }
-        }
-        if (S_ISREG(fileStat.st_mode)) {
-            // It's a regular file
-            return serveFile(filepath, request, "");
-        } else if (S_ISDIR(fileStat.st_mode)) {
-            // It's a directory
+
+            // At this point, URI ends with '/', so check for an explicit index
             std::string index_file = loc.getIndex();
             if (!index_file.empty()) {
-                // Serve index.html if it exists in the directory
                 std::string index_path = joinPath(filepath, index_file);
                 if (isFile(index_path)) {
                     return serveFile(index_path, request, "");
                 }
+                // Index was configured but missing → 404 Not Found
+                return ResponseBuilder::generateError(404, server, request);
             }
-            // If no index file is found, check if autoindex is enabled
+
+            // No index configured → check autoindex
             if (loc.isAutoindexEnabled()) {
                 return generateAutoindex(filepath, uri, request, server);
-            } else {
-                // Directory, no index, no autoindex → return 403
-                return ResponseBuilder::generateError(403, server, request);
             }
+
+            // No index and autoindex disabled → 403 Forbidden
+            return ResponseBuilder::generateError(403, server, request);
+        }
+
+        // If it's a regular file, just serve it
+        if (S_ISREG(fileStat.st_mode)) {
+            return serveFile(filepath, request, "");
         }
     }
+
+    // File/directory does not exist → 404 Not Found
     return ResponseBuilder::generateError(404, server, request);
 }

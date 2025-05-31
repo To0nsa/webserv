@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/31 14:50:40 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 15:22:43 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,12 +281,14 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         errorCode = 403;
         return false;
     }
-    std::string norm = normalizePath(pathOnly);
-    if (norm.empty()) {
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
-        errorCode = 403;
-        return false;
-    }
+
+    std::string norm = pathOnly;
+    /*     std::string norm = normalizePath(pathOnly);
+        if (norm.empty()) {
+            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
+            errorCode = 403;
+            return false;
+        } */
     req.setPath(norm);
     req.setQuery(query);
     req.setVersion(version);
@@ -469,7 +471,7 @@ bool validateReq(HttpRequest& req, int& errorCode) {
     if (!methods.count(req.getMethod())) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                         "Method Not Allowed: " + req.getMethod());
-        errorCode = 501;
+        errorCode = 405; // 501
         return false;
     }
 

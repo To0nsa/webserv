@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 14:45:23 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 15:13:18 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ bool SocketManager::checkRequestLimits(int fd) {
     if (_client_info[fd].headerBytesReceived > HEADER_MAX_LENGTH) {
         Logger::logFrom(LogLevel::WARN, "SocketManager",
                         "Request too large from fd: " + std::to_string(fd));
-        respondError(fd, 413);
+        respondError(fd, 431); // Request Header Fields Too Large
         return true;
     }
 

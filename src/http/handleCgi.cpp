@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/31 14:51:16 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/31 16:37:51 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,11 +117,11 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     // === Generate a unique temporary file path ===
     static int        counter = 0;
     std::stringstream ss;
-    ss << "/home/irychkov/Desktop/webserv/temp_in" << getpid() << "_" << time(nullptr) << "_"
+    ss << "/home/toonsa/myProjects/webserv/temp_in" << getpid() << "_" << time(nullptr) << "_"
        << counter++ << ".tmp";
     std::string       temp_in = ss.str();
     std::stringstream ss1;
-    ss1 << "/home/irychkov/Desktop/webserv/temp_out_" << getpid() << "_" << time(nullptr) << "_"
+    ss1 << "/home/toonsa/myProjects/webserv/temp_out_" << getpid() << "_" << time(nullptr) << "_"
         << counter++ << ".tmp";
     std::string temp_out = ss1.str();
     cgi.input_path       = temp_in;
