@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 16:12:19 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/01 18:39:27 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,13 +120,18 @@ HttpResponse handleGet(const HttpRequest& request, const Server& server, const L
             uploadRoot = joinPath(normalizePath(loc.getRoot()), uploadRoot);
 
         filepath = joinPath(uploadRoot, relative);
+        std::cout << "[GET] In upload_store. Upload root: " << uploadRoot
+                  << ", relative: " << relative << std::endl;
     } else {
         filepath = buildFilePath(request, loc);
+        std::cout << "[GET] In regular static file mode. buildFilePath() result: " << filepath
+                  << std::endl;
     }
-    std::cout << "Resolved file path: " << filepath << std::endl;
+
+    std::cout << "[GET] Final resolved file path: " << filepath << std::endl;
 
     if (isSymlink(filepath)) {
-        std::cerr << "[GET] Refusing to serve symlink: " << filepath << std::endl;
+        std::cerr << "[GET] ❌ Refusing to serve symlink: " << filepath << std::endl;
         return ResponseBuilder::generateError(403, server, request);
     }
 
@@ -134,40 +139,48 @@ HttpResponse handleGet(const HttpRequest& request, const Server& server, const L
     if (stat(filepath.c_str(), &fileStat) == 0) {
         const std::string& uri = request.getPath();
 
-        // If it's a directory, handle trailing-slash redirect and index lookup
         if (S_ISDIR(fileStat.st_mode)) {
-            // Redirect to add trailing slash if URI lacks it
+            std::cout << "[GET] 📁 Path is a directory.\n";
+
             if (!uri.empty() && uri.back() != '/') {
-                std::string redirectUri = uri + "/";
-                return ResponseBuilder::generateRedirect(301, redirectUri, request);
+                std::cout << "[GET] ↪️ Redirecting to URI with trailing slash: " << uri + "/"
+                          << std::endl;
+                return ResponseBuilder::generateRedirect(301, uri + "/", request);
             }
 
-            // At this point, URI ends with '/', so check for an explicit index
             std::string index_file = loc.getIndex();
             if (!index_file.empty()) {
                 std::string index_path = joinPath(filepath, index_file);
+                std::cout << "[GET] 🔍 Looking for index file: " << index_path << std::endl;
+
                 if (isFile(index_path)) {
+                    std::cout << "[GET] ✅ Found index file, serving it.\n";
                     return serveFile(index_path, request, "");
                 }
-                // Index was configured but missing → 404 Not Found
-                return ResponseBuilder::generateError(404, server, request);
+
+                std::cerr << "[GET] ❌ Index file specified but not found: " << index_path
+                          << std::endl;
+                return ResponseBuilder::generateError(403, server, request);
             }
 
-            // No index configured → check autoindex
             if (loc.isAutoindexEnabled()) {
+                std::cout << "[GET] 📄 No index file. Autoindex is ON — generating listing.\n";
                 return generateAutoindex(filepath, uri, request, server);
             }
 
-            // No index and autoindex disabled → 403 Forbidden
+            std::cerr << "[GET] ❌ No index and autoindex is OFF — forbidden.\n";
             return ResponseBuilder::generateError(403, server, request);
         }
 
-        // If it's a regular file, just serve it
         if (S_ISREG(fileStat.st_mode)) {
+            std::cout << "[GET] 📄 Path is a regular file — serving it.\n";
             return serveFile(filepath, request, "");
         }
+
+        std::cerr << "[GET] ❌ Path exists but is not a file or dir: " << filepath << std::endl;
+    } else {
+        std::cerr << "[GET] ❌ stat() failed — file not found: " << filepath << std::endl;
     }
 
-    // File/directory does not exist → 404 Not Found
     return ResponseBuilder::generateError(404, server, request);
 }

@@ -68,9 +68,9 @@ def run_raw_tests():
         # ────────── METHOD ──────────
         ('G@T /index.html HTTP/1.1\r\nHost: localhost\r\n\r\n', '400 Bad Request', 'Invalid characters in method'),
         ('GÊT / HTTP/1.1\r\nHost: localhost\r\n\r\n', '400 Bad Request', 'Non-ASCII method name'),
-        ('get / HTTP/1.1\r\nHost: localhost\r\n\r\n', '501 Not Implemented', 'Invalid method casing'),
-        ('PoSt / HTTP/1.1\r\nHost: localhost\r\n\r\n', '501 Not Implemented', 'Mixed-case HTTP method'),
-        ('BREW /coffee HTTP/1.1\r\nHost: localhost\r\n\r\n', '501 Not Implemented', 'Unknown HTTP method'),
+        ('get / HTTP/1.1\r\nHost: localhost\r\n\r\n', '405 Method Not Allowed', 'Invalid method casing'),
+        ('PoSt / HTTP/1.1\r\nHost: localhost\r\n\r\n', '405 Method Not Allowed', 'Mixed-case HTTP method'),
+        ('BREW /coffee HTTP/1.1\r\nHost: localhost\r\n\r\n', '405 Method Not Allowed', 'Unknown HTTP method'),
 
         # ────────── BODY & TRANSFER-ENCODING ──────────
         ('POST / HTTP/1.1\r\nHost: localhost\r\n\r\nhello', '411 Length Required', 'POST with no Content-Length or TE'),

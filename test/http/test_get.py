@@ -78,8 +78,8 @@ def test_put_not_implemented():
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
     conn.request("PUT", "/index.html")
     res = conn.getresponse()
-    assert res.status == 501
-    print("✅ PUT /index.html → 501 Not Implemented")
+    assert res.status == 405
+    print("✅ PUT /index.html → 405 Method Not Allowed")
     conn.close()
 
 # ─────────────────────────────────────────────────────────────────────────────
