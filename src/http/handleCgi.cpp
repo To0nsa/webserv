@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/31 13:35:37 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/01 11:51:46 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ std::vector<char*> toCharPtrArray(const std::vector<std::string>& vec) {
 namespace CGI {
 
 bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& server,
-                    const Location& loc) {
+                    const Location& loc, const std::vector<pollfd>& poll_fds) {
     cgi.last_activity = time(NULL);
     cgi.script_path   = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
     Logger::logFrom(LogLevel::DEBUG, "CGI", "Initializing CGI for script: " + cgi.script_path);
@@ -161,6 +161,12 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         close(body_fd);
         dup2(output_fd, STDOUT_FILENO);
         close(output_fd);
+        for (std::vector<pollfd>::const_iterator it = poll_fds.begin(); it != poll_fds.end(); ++it) {
+            int fd = it->fd;
+            if (fd != STDIN_FILENO && fd != STDOUT_FILENO && fd != STDERR_FILENO) {
+                close(fd);
+            }
+        }
 
         // 1. Store script and interpreter in scoped std::string
         std::string scriptPath = cgi.script_path;

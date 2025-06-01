@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 12:32:41 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/01 11:41:38 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -450,7 +450,7 @@ bool SocketManager::handleCgiRequest(int client_fd, const HttpRequest& request,
     ClientInfo& client = _client_info[client_fd];
     client.cgiProcess.emplace();
 
-    if (!CGI::initCgiProcess(*client.cgiProcess, request, server, location)) {
+    if (!CGI::initCgiProcess(*client.cgiProcess, request, server, location, _poll_fds)) {
         Logger::logFrom(LogLevel::ERROR, "SocketManager",
                         "[CGI] Failed to initialize CGI process for client_fd " +
                             std::to_string(client_fd) + " with script: " + location.getPath());
@@ -558,7 +558,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         std::string resolved = location->resolveAbsolutePath(request.getPath());
         if (!resolved.empty()) {
             std::string script_path = std::filesystem::absolute(resolved);
-            if (request.getMethod() == "POST" &&
+            if ((request.getMethod() == "POST" || request.getMethod() == "GET") &&
                 location->isCgiRequest(normalizePath(request.getPath())) && isFile(script_path) &&
                 access(script_path.c_str(), X_OK) == 0) {
 

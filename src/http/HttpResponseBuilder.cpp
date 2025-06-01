@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/26 16:31:00 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/01 11:10:06 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ std::string getDefaultMessage(int status_code) {
                                                      {500, "Internal Server Error"},
                                                      {501, "Not Implemented"},
                                                      {502, "Bad Gateway"},
-                                                     {503, "Service Unavailable"}};
+                                                     {503, "Service Unavailable"},
+                                                     {504, "Gateway Timeout"}};
     // Attempt to find the status code in the map
     StatusMessageMap::const_iterator it = status_messages.find(status_code);
     // Return the associated message or a fallback if unknown

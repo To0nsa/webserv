@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 00:24:43 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/31 13:34:06 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/01 11:47:32 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <optional>
 #include <string>
 #include <unistd.h>
+#include <vector>
+#include <poll.h>
 
 struct CgiProcess {
     enum class Phase { Launching, Reading, Done, Failed };
@@ -38,7 +40,7 @@ struct CgiProcess {
 namespace CGI {
 
 bool initCgiProcess(CgiProcess& cgi, const HttpRequest& request, const Server& server,
-                    const Location& loc);
+                    const Location& loc, const std::vector<pollfd>& poll_fds);
 std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
                                         const HttpRequest& request);
 void                        cleanupCgi(CgiProcess& cgi);
