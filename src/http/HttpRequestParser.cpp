@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/02 19:27:11 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 00:25:16 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 #include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
 #include <algorithm>
+#include <array>
 #include <cctype>
 #include <exception>
 #include <filesystem>
 #include <regex>
 #include <set>
 #include <sstream>
+#include <string>
+#include <string_view>
 
 namespace fs = std::filesystem;
 
@@ -429,6 +432,18 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
     consumedBytes += local;
 }
 
+// Helper: does this substring begin with a valid HTTP method + space?
+static bool isLikelyStartLine(const std::string& s) {
+    static const std::array<std::string_view, 7> methods = {"GET ",  "POST ",    "DELETE ", "PUT ",
+                                                            "HEAD ", "OPTIONS ", "PATCH "};
+    for (auto m : methods) {
+        if (s.size() >= m.size() && std::string_view(s).substr(0, m.size()) == m) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t clientMaxBodySize,
                   int& errorCode, std::size_t& consumedBytes) {
     const std::string& te = req.getHeader("TRANSFER-ENCODING");
@@ -462,8 +477,21 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
         return false;
     }
 
-    // 3) NEW: If the client sent more than len bytes, that is a mismatch → 400
+    // 3) If there are more than len bytes in bodyPart, check for pipelining
     if (bodyPart.size() > len) {
+        // Look at the bytes immediately after the declared body
+        std::string_view remainder(bodyPart.c_str() + len, bodyPart.size() - len);
+
+        // Use the helper instead of a lambda
+        if (isLikelyStartLine(std::string(remainder))) {
+            // Treat extra bytes as the next request → consume exactly len bytes
+            req.setBody(bodyPart.substr(0, len));
+            consumedBytes += len;
+            errorCode = 0;
+            return true;
+        }
+
+        // Otherwise, it’s a real mismatch
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                         "Content-Length mismatch: body too long");
         errorCode = 400;

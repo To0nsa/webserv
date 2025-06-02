@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 14:20:00 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 23:25:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -668,7 +668,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
                     "[✅DONE] We sent RESPONSE to fd:" + std::to_string(client_fd));
     Logger::logFrom(LogLevel::DEBUG, "SocketManager",
                     "============================RAW===================");
-    Logger::logFrom(LogLevel::DEBUG, "SocketManager", raw);
+    // Logger::logFrom(LogLevel::DEBUG, "SocketManager", raw);
     Logger::logFrom(LogLevel::DEBUG, "SocketManager",
                     "==================================================");
 

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/28 23:12:13 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 23:21:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ void HttpRequest::printRequest() const {
     }
 
     std::cout << "-------------- Body ---------------\n";
-    if (!_body.empty()) {
-        std::cout << "Body: {\n" << _body << "\n}\n";
-    } else {
-        std::cout << "Body: {(empty)}\n";
-    }
+    /*     if (!_body.empty()) {
+            std::cout << "Body: {\n" << _body << "\n}\n";
+        } else {
+            std::cout << "Body: {(empty)}\n";
+        } */
 
     std::cout << "===================================\n";
 }

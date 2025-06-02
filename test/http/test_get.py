@@ -30,7 +30,7 @@ def cleanup_test_files():
                 pass
 
     for f in [
-        "index.html", "style.css", "style.CsS", "script.js", "script.Js",
+        "style.css", "style.CsS", "script.js", "script.Js",
         "LOGO.PNG", "index.html.bak"
     ]:
         try:
