@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 21:49:10 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/02 23:27:22 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ void SocketManager::cleanupCgiForClient(int client_fd) {
         return;
 
     const CgiProcess& cgi = *client.cgiProcess;
+	Logger::logFrom(LogLevel::DEBUG, "SocketManager cleanupCgiForClient",
+					"[CGI] Cleaning up CGI process for client_fd " + std::to_string(client_fd) +
+						" with stdout_fd " + std::to_string(cgi.stdout_fd));
 
     // Remove from fd→cgi map
     _fd_to_cgi.erase(cgi.stdout_fd);
@@ -88,7 +91,7 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
     // 3. Close the socket itself
     close(client_fd);
 
-    Logger::logFrom(LogLevel::INFO, "SocketManager",
+    Logger::logFrom(LogLevel::INFO, "SocketManager cleanupClientConnectionClose",
                     "Closed FD (Connection: close): " + std::to_string(client_fd));
 }
 
@@ -457,8 +460,9 @@ void SocketManager::handleNewConnection(int listen_fd) {
     info.serverConfig        = _listen_map[listen_fd];
 
 	_poll_fds.push_back((pollfd){client_fd, POLLIN, 0});
-    Logger::logFrom(LogLevel::INFO, "SocketManager",
-                    "Accepted client on fd: " + std::to_string(client_fd));
+    Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+		"Accept returned fd: " + std::to_string(client_fd) +
+		" | current open clients: " + std::to_string(_client_info.size()));
 }
 
 bool hasFullChunkedBody(const std::string& buffer, size_t bodyStart) {
@@ -657,13 +661,16 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 				"==================================================");
             offset += sent;
 			_client_info[client_fd].lastSendAttemptTime = time(NULL);
-            return;
+            if (offset < raw.size())
+				return;
         }
 
         // Then send file content in 8KB chunks
         char buffer[8192];
         _client_info[client_fd].file_stream.read(buffer, sizeof(buffer));
         std::streamsize bytes_read = _client_info[client_fd].file_stream.gcount();
+		Logger::logFrom(LogLevel::DEBUG, "SocketManager sendResponse", "from file stream, read " +
+			std::to_string(bytes_read) + " bytes for fd: " + std::to_string(client_fd));
         if (bytes_read > 0) {
             ssize_t sent = send(client_fd, buffer, bytes_read, MSG_DONTWAIT);
             if (sent < 0) {
@@ -677,12 +684,14 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 			_client_info[client_fd].lastSendAttemptTime = time(NULL);
         }
 
-        if (_client_info[client_fd].file_stream.eof()) {
+        if (_client_info[client_fd].file_stream.eof() || bytes_read == 0) {
             _client_info[client_fd].file_stream.close();
             _client_info[client_fd].responses.pop();
             _client_info[client_fd].current_raw_response.clear();
             offset = 0;
 			if (response.isFileResponse() && _client_info[client_fd].cgiProcess) {
+				Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+					"[CGI] Cleaning up CGI process for fd: " + std::to_string(client_fd));
 				CGI::cleanupCgi(*_client_info[client_fd].cgiProcess);
 				_client_info[client_fd].cgiProcess.reset();
 			}
