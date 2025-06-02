@@ -6,6 +6,7 @@ DIRS = [
     "forbidden",
     "secret",
     "upload_store",
+    "cgi-bin",
 ]
 
 def bootstrap():
