@@ -1,8 +1,6 @@
 
 def setup_test_files():
     os.makedirs("test/data/dir", exist_ok=True)
-    with open("test/data/index.html", "w") as f:
-        f.write("<h1>Welcome to Webserv</h1>")
     with open("test/data/style.css", "w") as f:
         f.write("body { background: #222; color: #eee; }")
     with open("test/data/style.CsS", "w") as f:

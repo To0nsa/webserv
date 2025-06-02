@@ -1,1 +1,63 @@
-<h1>Welcome to Webserv</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.ico" />
+  <title>Webserv </title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(145deg, #1f1f1f, #2b2b2b);
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 2rem;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #4fc3f7;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #cccccc;
+    }
+    a.button {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: #4fc3f7;
+      color: #1a1a1a;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+    a.button:hover {
+      background: #0288d1;
+    }
+    footer {
+      position: absolute;
+      bottom: 1rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Webserv 🌐</h1>
+  <p>Our custom C++ HTTP server is running and ready to serve.</p>
+  <a href="/upload_store/" class="button">Browse Upload Store</a>
+  <footer>Powered by C++20, Non-blocking I/O & RFC compliance</footer>
+</body>
+</html>

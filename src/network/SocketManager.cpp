@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 23:25:09 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 02:09:06 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,10 +185,10 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
         return false;
     }
     buffer[bytes] = '\0';
-    /*     std::cout << "======================Received RAW request: {" << buffer << "} bytes: {" <<
-       bytes << "}"
-                  << std::endl;
-        std::cout << "==================================================" << std::endl; */
+    //    std::cout << "======================Received RAW request: {" << buffer << "} bytes: {" <<
+    //   bytes << "}"
+    //              << std::endl;
+    //    std::cout << "==================================================" << std::endl;
 
     std::string single_msg(buffer, bytes);
     _client_info[client_fd].requestBuffer += single_msg;
@@ -220,6 +220,82 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
 
     return true;
 }
+
+/* bool SocketManager::receiveFromClient(int client_fd, size_t index) {
+    // Update the timestamp for timeout tracking
+    _client_info[client_fd].lastRequestTime = time(NULL);
+
+    // Keep calling recv() until there’s no more data immediately available
+    while (true) {
+        char buffer[RECV_BUFFER];
+        // Attempt to read up to RECV_BUFFER - 1 bytes from the socket
+        ssize_t bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
+
+        if (bytes > 0) {
+            // We got some bytes; append them to the client’s requestBuffer
+            buffer[bytes] = '\0';
+            _client_info[client_fd].requestBuffer.append(buffer, bytes);
+
+            // Check if we have seen the end of the HTTP headers yet
+            size_t headerEndPos = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
+            if (headerEndPos == std::string::npos) {
+                // Still inside headers—haven’t found “\r\n\r\n”
+                if (_client_info[client_fd].headerBytesReceived == 0) {
+                    // First time we’re receiving header data for this request
+                    _client_info[client_fd].connectionStartTime = time(NULL);
+                }
+                // Accumulate header bytes count for timeout and size checks
+                _client_info[client_fd].headerBytesReceived += bytes;
+            } else {
+                // We have at least one full header block in requestBuffer
+                if (!_client_info[client_fd].headerComplete) {
+                    // Just crossed the boundary from headers to body
+                    size_t fullHeaderSize = headerEndPos + 4;  // “\r\n\r\n” length = 4
+                    size_t oldSize = _client_info[client_fd].requestBuffer.size() - bytes;
+                    // Compute how many of these bytes belonged to the header portion
+                    size_t headerThisTime = std::max(
+                        (ssize_t)0,
+                        (ssize_t)(fullHeaderSize - oldSize)
+                    );
+                    _client_info[client_fd].headerBytesReceived += headerThisTime;
+                    // The rest of the bytes read belong to the body
+                    _client_info[client_fd].bodyBytesReceived += (bytes - headerThisTime);
+                    _client_info[client_fd].headerComplete = true;
+                } else {
+                    // Already past header parsing—these bytes are all body
+                    _client_info[client_fd].bodyBytesReceived += bytes;
+                }
+            }
+            // Continue looping to consume any additional data waiting on the socket
+            continue;
+        }
+
+        if (bytes == 0) {
+            // The client closed the connection cleanly (EOF)
+            Logger::logFrom(LogLevel::INFO, "SocketManager",
+                            "Client fd " + std::to_string(client_fd) + " disconnected.");
+            cleanupClientConnectionClose(client_fd, index);
+            return false;
+        }
+
+        if (bytes < 0) {
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                // No more data is ready on the socket right now.
+                // Break out so that the parser can run on the accumulated buffer.
+                break;
+            }
+            // An actual recv() error occurred (e.g., ECONNRESET)
+            Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                            std::string("recv() failed: ") + std::strerror(errno));
+            cleanupClientConnectionClose(client_fd, index);
+            return false;
+        }
+    }
+
+    // We’ve drained all available data from the socket for now.
+    // The accumulated requestBuffer (headers + any body) is ready for parsing.
+    return true;
+} */
 
 void SocketManager::respondError(int fd, int status_code) {
     HttpRequest  empty;
@@ -668,7 +744,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
                     "[✅DONE] We sent RESPONSE to fd:" + std::to_string(client_fd));
     Logger::logFrom(LogLevel::DEBUG, "SocketManager",
                     "============================RAW===================");
-    // Logger::logFrom(LogLevel::DEBUG, "SocketManager", raw);
+    Logger::logFrom(LogLevel::DEBUG, "SocketManager", raw);
     Logger::logFrom(LogLevel::DEBUG, "SocketManager",
                     "==================================================");
 

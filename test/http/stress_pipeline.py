@@ -4,48 +4,37 @@ import socket
 import time
 import random
 import string
+import re
 from urllib.parse import urlparse
 import http.client
 from concurrent.futures import ThreadPoolExecutor
 
 # ─── CONFIGURATION ─────────────────────────────────────────────────────────────
 
-# e.g., "http://localhost:8080" or export WEBSERV_URL in your environment
-SERVER     = os.getenv("WEBSERV_URL", "http://localhost:8080")
-ENDPOINT   = "/upload_store/pipe"
-PIPELINE_DEPTH = 10      # how many (POST→GET→DELETE) cycles per batch
-PIPELINE_COUNT = 50      # how many batches to issue
-BODY_SIZE      = 4096    # size of each POST payload in bytes
-
-# Set to >1 if you want to run batches in parallel (adjust to your CPU/IO capacity)
-MAX_WORKERS    = 1
+SERVER       = os.getenv("WEBSERV_URL", "http://localhost:8080")
+ENDPOINT     = "/upload_store/pipe"
+PIPELINE_DEPTH = 10      # 10 (POST→GET→DELETE) groups per batch
+PIPELINE_COUNT = 50      # 50 batches total
+BODY_SIZE      = 4096    # each POST’s body is 4096 bytes
+MAX_WORKERS    = 1       # set to >1 to run batches in parallel
 
 # ─── HELPERS ────────────────────────────────────────────────────────────────────
 
 def generate_data(size=BODY_SIZE):
     """Return a random ASCII string of exactly `size` bytes."""
-    # Use letters and digits to avoid any binary/encoding surprises.
     return "".join(random.choices(string.ascii_letters + string.digits, k=size))
 
 def parse_status_lines(raw_text):
     """
-    Extract all status codes from lines that start with "HTTP/1.1".
-    Returns a list of integers, e.g. [201, 200, 200, ...].
+    Use a regex to find every occurrence of “HTTP/1.1 <XXX>” 
+    and return the list of integer status codes.
     """
-    codes = []
-    for line in raw_text.split("\r\n"):
-        if line.startswith("HTTP/1.1"):
-            parts = line.split()
-            if len(parts) >= 2 and parts[1].isdigit():
-                codes.append(int(parts[1]))
-    return codes
+    return [int(m.group(1)) for m in re.finditer(r"HTTP/1\.1 (\d{3})", raw_text)]
 
 def make_pipeline_block(i_base):
     """
-    Build a single pipeline block of length PIPELINE_DEPTH:
-      [POST /upload_store/pipe{i}.txt → GET /upload_store/pipe{i}.txt → DELETE /upload_store/pipe{i}.txt]
-    for i in [i_base, i_base+1, ..., i_base + PIPELINE_DEPTH - 1].
-    Returns (concatenated_bytes, expected_status_list).
+    Build one block containing PIPELINE_DEPTH × (POST→GET→DELETE),
+    and return (pipelined_bytes, expected_status_list).
     """
     block_parts = []
     expected = []
@@ -58,7 +47,7 @@ def make_pipeline_block(i_base):
     for i in range(i_base, i_base + PIPELINE_DEPTH):
         path = f"{ENDPOINT}{i}.txt"
 
-        # 1. POST
+        # 1) POST
         body = generate_data()
         post_headers = (
             f"POST {path} HTTP/1.1\r\n"
@@ -71,7 +60,7 @@ def make_pipeline_block(i_base):
         block_parts.append(post_headers.encode("ascii") + body.encode("ascii"))
         expected.append(201)
 
-        # 2. GET
+        # 2) GET
         get_req = (
             f"GET {path} HTTP/1.1\r\n"
             f"Host: {host_header}\r\n"
@@ -81,7 +70,7 @@ def make_pipeline_block(i_base):
         block_parts.append(get_req.encode("ascii"))
         expected.append(200)
 
-        # 3. DELETE
+        # 3) DELETE
         delete_req = (
             f"DELETE {path} HTTP/1.1\r\n"
             f"Host: {host_header}\r\n"
@@ -91,40 +80,50 @@ def make_pipeline_block(i_base):
         block_parts.append(delete_req.encode("ascii"))
         expected.append(200)
 
-    # Concatenate all sub‐requests into one pipelined buffer:
     return b"".join(block_parts), expected
 
 def run_pipeline_batch(batch_id):
     """
-    Open a single TCP connection, send PIPELINE_DEPTH×3 concatenated requests,
-    read until we’ve parsed all expected status lines, then verify codes.
-    Returns True if expected == actual; False otherwise.
+    Send one pipelined batch (10×(POST, GET, DELETE)) and read back
+    until we’ve seen all 30 status lines (or the server closes).
     """
     try:
-        s = socket.create_connection((urlparse(SERVER).hostname, urlparse(SERVER).port))
+        parsed = urlparse(SERVER)
+        s = socket.create_connection((parsed.hostname, parsed.port))
+        # To be safe, give the socket a small receive timeout (in seconds)
+        s.settimeout(5.0)
+
         block, expected = make_pipeline_block(batch_id * PIPELINE_DEPTH)
         s.sendall(block)
 
-        # Read until we've seen all status lines (len(expected) total)
         response = b""
-        expected_count = len(expected)
+        expected_count = len(expected)  # should be 30
 
+        start = time.time()
         while True:
-            part = s.recv(4096)
+            try:
+                part = s.recv(4096)
+            except socket.timeout:
+                # No new data for 5 seconds → assume server is done sending
+                break
+
             if not part:
-                # Socket closed by server (EOF), stop reading
+                # Server closed connection
                 break
+
             response += part
-            # As soon as we have >= expected_count status lines, we can stop
             decoded = response.decode("ascii", errors="replace")
-            if len(parse_status_lines(decoded)) >= expected_count:
+            # As soon as we see >= 30 matches of “HTTP/1.1 <status>”
+            found = parse_status_lines(decoded)
+            if len(found) >= expected_count:
                 break
+
+            # loop again until all 30 appear or timeout/EOF
 
         s.close()
 
         actual = parse_status_lines(decoded)
         if actual != expected:
-            # On mismatch, dump the first 1 KiB of raw response for diagnostics
             snippet = decoded[:1024]
             print(f"[Batch {batch_id}] ❌ Mismatch:")
             print(f"  Expected status sequence: {expected}")
@@ -142,8 +141,7 @@ def run_pipeline_batch(batch_id):
 
 def cleanup_upload_store():
     """
-    After all batches, delete every file under /upload_store/ (0.txt … up to PIPELINE_COUNT*PIPELINE_DEPTH-1.txt).
-    Uses a single HTTPConnection and issues sequential DELETEs.
+    After all batches, delete every file under /upload_store/.
     """
     parsed = urlparse(SERVER)
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
@@ -154,30 +152,24 @@ def cleanup_upload_store():
         path = f"{ENDPOINT}{i}.txt"
         conn.request("DELETE", path, headers={"Host": parsed.hostname})
         resp = conn.getresponse()
-        # We expect either 200 (deleted) or 404 (already not present)
+        # 200 (deleted) or 404 (not present) are fine
         if resp.status in (200, 404):
             deleted += 1
-        resp.read()  # drain
+        resp.read()
     conn.close()
     print(f"[🧹] Deleted {deleted}/{total_to_delete} entries.\n")
 
 # ─── MAIN STRESS FUNCTION ────────────────────────────────────────────────────────
 
 def pipeline_stress():
-    """
-    Run PIPELINE_COUNT batches of PIPELINE_DEPTH pipelined requests each,
-    optionally in parallel with MAX_WORKERS.
-    """
     print(f"➡️  Starting stress test: {PIPELINE_COUNT} batches × depth {PIPELINE_DEPTH} ...")
     start_time = time.time()
 
     if MAX_WORKERS > 1:
-        # Run batches in parallel
         with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             futures = [executor.submit(run_pipeline_batch, i) for i in range(PIPELINE_COUNT)]
             results = [f.result() for f in futures]
     else:
-        # Sequential execution
         results = [run_pipeline_batch(i) for i in range(PIPELINE_COUNT)]
 
     duration = time.time() - start_time
