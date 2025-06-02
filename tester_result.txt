@@ -671,3 +671,24 @@ Connection: keep-alive
 Content-Type: application/octet-stream
 Content-Length: 0
 
+==10227== Invalid read of size 8
+==10227==    at 0x159F91: HttpResponse::isConnectionClose() const (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x126D43: SocketManager::sendResponse(int, unsigned long) (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x129707: SocketManager::run() (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x184B51: runWebserv(int, char**) (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x11CF6E: main (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==  Address 0x4e953d0 is 384 bytes inside a block of size 448 free'd
+==10227==    at 0x484A61D: operator delete(void*, unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==10227==    by 0x12713D: SocketManager::sendResponse(int, unsigned long) (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x129707: SocketManager::run() (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x184B51: runWebserv(int, char**) (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x11CF6E: main (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==  Block was alloc'd at
+==10227==    at 0x4846FA3: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==10227==    by 0x12357C: std::_Rb_tree_iterator<std::pair<int const, ClientInfo> > std::_Rb_tree<int, std::pair<int const, ClientInfo>, std::_Select1st<std::pair<int const, ClientInfo> >, std::less<int>, std::allocator<std::pair<int const, ClientInfo> > >::_M_emplace_hint_unique<std::piecewise_construct_t const&, std::tuple<int const&>, std::tuple<> >(std::_Rb_tree_const_iterator<std::pair<int const, ClientInfo> >, std::piecewise_construct_t const&, std::tuple<int const&>&&, std::tuple<>&&) [clone .isra.0] (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x12CC3B: std::map<int, ClientInfo, std::less<int>, std::allocator<std::pair<int const, ClientInfo> > >::operator[](int const&) (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x123E61: SocketManager::handleNewConnection(int) (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x129790: SocketManager::run() (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x184B51: runWebserv(int, char**) (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227==    by 0x11CF6E: main (in /home/irychkov/Desktop/webserv/bin/webserv)
+==10227== 

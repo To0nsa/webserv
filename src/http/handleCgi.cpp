@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/02 21:47:33 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 01:08:58 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,15 +207,8 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
 
     close(body_fd);
     close(output_fd);
-    output_fd = open(temp_out.c_str(), O_RDONLY);
-    if (output_fd < 0) {
-        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to reopen CGI temp_out file for reading");
-        return false;
-    }
 
     cgi.pid           = pid;
-    cgi.stdout_fd     = output_fd;
-    cgi.phase         = CgiProcess::Phase::Reading;
     cgi.start_time    = time(NULL);
     cgi.last_activity = time(NULL);
     return true;
@@ -285,10 +278,6 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
 }
 
 void cleanupCgi(CgiProcess& cgi) {
-    if (cgi.stdout_fd > 0) {
-        close(cgi.stdout_fd);
-		cgi.stdout_fd = -1;
-	}
     kill(cgi.pid, SIGKILL);
     waitpid(cgi.pid, nullptr, 0);
     if (!cgi.input_path.empty()) {

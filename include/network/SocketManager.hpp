@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 10:46:30 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 00:36:42 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ class SocketManager {
     bool isSendTimeout(int fd, time_t now);
     bool isIdleTimeout(int fd, time_t now);
     void resetRequestState(int client_fd);
-    void handleCgiPollEvents();
     void cleanupCgiForClient(int client_fd);
     bool handleCgiRequest(int client_fd, const HttpRequest& request, const Server& server,
                           const Location& location);

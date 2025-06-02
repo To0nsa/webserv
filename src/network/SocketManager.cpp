@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 23:27:22 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 01:16:19 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,6 @@ void SocketManager::cleanupCgiForClient(int client_fd) {
     if (!client.cgiProcess)
         return;
 
-    const CgiProcess& cgi = *client.cgiProcess;
-	Logger::logFrom(LogLevel::DEBUG, "SocketManager cleanupCgiForClient",
-					"[CGI] Cleaning up CGI process for client_fd " + std::to_string(client_fd) +
-						" with stdout_fd " + std::to_string(cgi.stdout_fd));
-
-    // Remove from fd→cgi map
-    _fd_to_cgi.erase(cgi.stdout_fd);
-
-    // Remove fds from poll
-    _poll_fds.erase(std::remove_if(_poll_fds.begin(), _poll_fds.end(),
-                                   [&](const pollfd& pfd) { return pfd.fd == cgi.stdout_fd; }),
-                    _poll_fds.end());
-
     CGI::cleanupCgi(*client.cgiProcess);
     client.cgiProcess.reset();
 }
@@ -77,10 +64,11 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
     if (it != _client_info.end()) {
         ClientInfo& client = it->second;
 
-        // Cleanup CGI pipes and remove cgi stdout_fd from poll
-        cleanupCgiForClient(client_fd);
+        if (client.cgiProcess) {
+            CGI::cleanupCgi(*client.cgiProcess);
+            client.cgiProcess.reset();
+        }
 
-        // Close file stream if still open
         if (client.file_stream.is_open()) {
             client.file_stream.close();
         }
@@ -88,7 +76,6 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
         _client_info.erase(it);
     }
 
-    // 3. Close the socket itself
     close(client_fd);
 
     Logger::logFrom(LogLevel::INFO, "SocketManager cleanupClientConnectionClose",
@@ -141,9 +128,9 @@ bool SocketManager::isSendTimeout(int fd, time_t now) {
 
 bool SocketManager::isIdleTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
-	if (client.cgiProcess.has_value()) {
+    if (client.cgiProcess.has_value()) {
         return false;
-	}
+    }
     if (client.responses.empty() && client.current_raw_response.empty() && !client.headerComplete &&
         client.headerBytesReceived == 0 && now - client.lastRequestTime > TIMEOUT) {
         Logger::logFrom(LogLevel::WARN, "SocketManager",
@@ -311,69 +298,6 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
     }
 }
 
-void SocketManager::handleCgiPollEvents() {
-    // Helper: once we queue a response, ensure poll() will wake on POLLOUT
-    auto markClientWritable = [&](int client_fd) {
-        for (auto& pfd : _poll_fds) {
-            if (pfd.fd == client_fd) {
-                pfd.events |= POLLOUT;
-                break;
-            }
-        }
-    };
-
-    auto cleanupCgiAndUnregister = [&](int index, int fd, ClientInfo& client) {
-        CGI::cleanupCgi(*client.cgiProcess);
-        client.cgiProcess.reset();
-        _poll_fds.erase(_poll_fds.begin() + index);
-        _fd_to_cgi.erase(fd);
-    };
-
-    // Walk backwards so erasing entries is safe
-    for (size_t i = _poll_fds.size(); i-- > 0;) {
-        auto& pfd = _poll_fds[i];
-        int   fd  = pfd.fd;
-
-        // Only handle CGI pipe FDs here
-        if (!_fd_to_cgi.contains(fd))
-            continue;
-
-        int         client_fd = _fd_to_cgi.at(fd);
-        ClientInfo& client    = _client_info[client_fd];
-        if (!client.cgiProcess)
-            continue;
-
-        CgiProcess& cgi = *client.cgiProcess;
-        if (cgi.phase != CgiProcess::Phase::Done) {
-            // Logger::logFrom(LogLevel::DEBUG, "SocketManager", "[CGI] Phase Done, checking child
-            // status...");
-            time_t now = time(nullptr);
-            if (now - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
-                Logger::logFrom(LogLevel::WARN, "SocketManager",
-                                "[CGI] Timeout on fd " + std::to_string(fd) + " for client_fd " +
-                                    std::to_string(client_fd));
-
-                client.responses.push(ResponseBuilder::generateError(504, client.serverConfig,
-                                                                     {})); // Gateway Timeout
-                markClientWritable(client_fd);
-                cleanupCgiAndUnregister(i, fd, client);
-                continue;
-            }
-            if (!CGI::tryTerminateCgi(cgi)) {
-                // child not reaped yet → come back next loop
-                continue;
-            }
-            cgi.phase = CgiProcess::Phase::Done;
-
-            // build and queue the HTTP response
-            auto maybeResp = CGI::finalizeCgi(cgi, client.serverConfig, {/*req*/});
-            auto resp =
-                maybeResp.value_or(ResponseBuilder::generateError(502, client.serverConfig, {}));
-            client.responses.push(resp);
-            markClientWritable(client_fd);
-        }
-    }
-}
 
 void SocketManager::run() {
     while (running) {
@@ -386,7 +310,44 @@ void SocketManager::run() {
             throw SocketError("poll() failed: " + std::string(std::strerror(errno)));
         }
 
-        handleCgiPollEvents();
+        //handleCgiPollEvents();
+        // === CGI Completion Check ===
+        for (auto& [client_fd, client] : _client_info) {
+            if (!client.cgiProcess)
+                continue;
+
+            CgiProcess& cgi = *client.cgiProcess;
+
+            // timeout check
+            if (time(NULL) - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
+                Logger::logFrom(LogLevel::WARN, "CGI", "Timeout. Killing CGI process for fd: " + std::to_string(client_fd));
+                CGI::cleanupCgi(cgi);
+                client.responses.push(ResponseBuilder::generateError(504, client.serverConfig, {}));
+                client.cgiProcess.reset();
+                for (auto& pfd : _poll_fds) {
+                    if (pfd.fd == client_fd) {
+                        pfd.events |= POLLOUT;
+                        break;
+                    }
+                }
+                continue;
+            }
+
+            // check if finished
+            if (CGI::tryTerminateCgi(cgi)) {
+                auto maybeResp = CGI::finalizeCgi(cgi, client.serverConfig, {/* dummy req if needed */});
+                auto resp = maybeResp.value_or(ResponseBuilder::generateError(502, client.serverConfig, {}));
+                client.responses.push(resp);
+                client.cgiProcess.reset();
+
+                for (auto& pfd : _poll_fds) {
+                    if (pfd.fd == client_fd) {
+                        pfd.events |= POLLOUT;
+                        break;
+                    }
+                }
+            }
+        }
 
         // Then handle sockets — but skip *all* CGI FDs before doing error/HUP checks
         for (size_t i = _poll_fds.size(); i-- > 0;) {
@@ -459,10 +420,10 @@ void SocketManager::handleNewConnection(int listen_fd) {
     info.keepAlive           = true;
     info.serverConfig        = _listen_map[listen_fd];
 
-	_poll_fds.push_back((pollfd){client_fd, POLLIN, 0});
+    _poll_fds.push_back((pollfd){client_fd, POLLIN, 0});
     Logger::logFrom(LogLevel::DEBUG, "SocketManager",
-		"Accept returned fd: " + std::to_string(client_fd) +
-		" | current open clients: " + std::to_string(_client_info.size()));
+        "Accept returned fd: " + std::to_string(client_fd) +
+        " | current open clients: " + std::to_string(_client_info.size()));
 }
 
 bool hasFullChunkedBody(const std::string& buffer, size_t bodyStart) {
@@ -483,12 +444,6 @@ bool SocketManager::handleCgiRequest(int client_fd, const HttpRequest& request,
         client.cgiProcess.reset();
         return true; // error response queued
     }
-
-    const CgiProcess& cgi = *client.cgiProcess;
-
-    _poll_fds.push_back({cgi.stdout_fd, POLLIN, 0});
-
-    _fd_to_cgi[cgi.stdout_fd] = client_fd;
 
     return true; // handled as CGI
 }
@@ -627,11 +582,11 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
                 return;
             }
 
-			// ⬇️ Skip header bytes for CGI
-			if (response.getCgiBodyOffset() > 0) {
-				_client_info[client_fd].file_stream.seekg(response.getCgiBodyOffset());
-			}
-			
+            // ⬇️ Skip header bytes for CGI
+            if (response.getCgiBodyOffset() > 0) {
+                _client_info[client_fd].file_stream.seekg(response.getCgiBodyOffset());
+            }
+            
             std::ostringstream head;
             head << "HTTP/1.1 " << response.getStatusCode() << " " << response.getStatusMessage() << "\r\n";
             for (const auto& header : response.getHeaders()) {
@@ -646,42 +601,42 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         if (offset < raw.size()) {
             ssize_t sent = send(client_fd, raw.c_str() + offset, raw.size() - offset, MSG_DONTWAIT);
             if (sent < 0) {
-				Logger::logFrom(LogLevel::ERROR, "SocketManager",
-								"send() failed on fd " + std::to_string(client_fd) + ": " +
-									std::strerror(errno));
-				cleanupClientConnectionClose(client_fd, index);
-				return;
-			}
-			Logger::logFrom(LogLevel::INFO, "SocketManager",
-				"[✅DONE] We sent RESPONSE to fd:" + std::to_string(client_fd));
-			Logger::logFrom(LogLevel::DEBUG, "SocketManager",
-							"============================RAW===================");
-			Logger::logFrom(LogLevel::DEBUG, "SocketManager", raw.c_str() + offset);
-			Logger::logFrom(LogLevel::DEBUG, "SocketManager",
-				"==================================================");
+                Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                                "send() failed on fd " + std::to_string(client_fd) + ": " +
+                                    std::strerror(errno));
+                cleanupClientConnectionClose(client_fd, index);
+                return;
+            }
+            Logger::logFrom(LogLevel::INFO, "SocketManager",
+                "[✅DONE] We sent RESPONSE to fd:" + std::to_string(client_fd));
+            Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                            "============================RAW===================");
+            Logger::logFrom(LogLevel::DEBUG, "SocketManager", raw.c_str() + offset);
+            Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                "==================================================");
             offset += sent;
-			_client_info[client_fd].lastSendAttemptTime = time(NULL);
+            _client_info[client_fd].lastSendAttemptTime = time(NULL);
             if (offset < raw.size())
-				return;
+                return;
         }
 
         // Then send file content in 8KB chunks
         char buffer[8192];
         _client_info[client_fd].file_stream.read(buffer, sizeof(buffer));
         std::streamsize bytes_read = _client_info[client_fd].file_stream.gcount();
-		Logger::logFrom(LogLevel::DEBUG, "SocketManager sendResponse", "from file stream, read " +
-			std::to_string(bytes_read) + " bytes for fd: " + std::to_string(client_fd));
+        Logger::logFrom(LogLevel::DEBUG, "SocketManager sendResponse", "from file stream, read " +
+            std::to_string(bytes_read) + " bytes for fd: " + std::to_string(client_fd));
         if (bytes_read > 0) {
             ssize_t sent = send(client_fd, buffer, bytes_read, MSG_DONTWAIT);
             if (sent < 0) {
-				Logger::logFrom(LogLevel::ERROR, "SocketManager",
-								"send() failed on fd " + std::to_string(client_fd) + ": " +
-									std::strerror(errno));
-				cleanupClientConnectionClose(client_fd, index);
-				return;
-			}
-			offset += sent;
-			_client_info[client_fd].lastSendAttemptTime = time(NULL);
+                Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                                "send() failed on fd " + std::to_string(client_fd) + ": " +
+                                    std::strerror(errno));
+                cleanupClientConnectionClose(client_fd, index);
+                return;
+            }
+            offset += sent;
+            _client_info[client_fd].lastSendAttemptTime = time(NULL);
         }
 
         if (_client_info[client_fd].file_stream.eof() || bytes_read == 0) {
@@ -689,12 +644,12 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
             _client_info[client_fd].responses.pop();
             _client_info[client_fd].current_raw_response.clear();
             offset = 0;
-			if (response.isFileResponse() && _client_info[client_fd].cgiProcess) {
-				Logger::logFrom(LogLevel::DEBUG, "SocketManager",
-					"[CGI] Cleaning up CGI process for fd: " + std::to_string(client_fd));
-				CGI::cleanupCgi(*_client_info[client_fd].cgiProcess);
-				_client_info[client_fd].cgiProcess.reset();
-			}
+            if (response.isFileResponse() && _client_info[client_fd].cgiProcess) {
+                Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                    "[CGI] Cleaning up CGI process for fd: " + std::to_string(client_fd));
+                CGI::cleanupCgi(*_client_info[client_fd].cgiProcess);
+                _client_info[client_fd].cgiProcess.reset();
+            }
             if (response.isConnectionClose()) {
                 cleanupClientConnectionClose(client_fd, index);
             } else {
@@ -711,14 +666,14 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         if (offset < raw.size()) {
             ssize_t bytes_sent = send(client_fd, raw.c_str() + offset, raw.size() - offset, MSG_DONTWAIT);
             if (bytes_sent < 0) {
-				Logger::logFrom(LogLevel::ERROR, "SocketManager",
-								"send() failed on fd " + std::to_string(client_fd) + ": " +
-									std::strerror(errno));
-				cleanupClientConnectionClose(client_fd, index);
-				return;
-			}
+                Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                                "send() failed on fd " + std::to_string(client_fd) + ": " +
+                                    std::strerror(errno));
+                cleanupClientConnectionClose(client_fd, index);
+                return;
+            }
             offset += bytes_sent;
-			_client_info[client_fd].lastSendAttemptTime = time(NULL);
+            _client_info[client_fd].lastSendAttemptTime = time(NULL);
         }
 
         if (offset >= _client_info[client_fd].current_raw_response.size()) {
@@ -726,12 +681,12 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
             _client_info[client_fd].current_raw_response.clear();
             offset = 0;
             if (response.isConnectionClose()) {
-				Logger::logFrom(LogLevel::INFO, "SocketManager",
-					"Connection: close - closing the connection");
+                Logger::logFrom(LogLevel::INFO, "SocketManager",
+                    "Connection: close - closing the connection");
                 cleanupClientConnectionClose(client_fd, index);
             } else {
-				Logger::logFrom(LogLevel::DEBUG, "SocketManager",
-					"Connection: keep-alive - keeping the connection open");
+                Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                    "Connection: keep-alive - keeping the connection open");
                 _poll_fds[index].events &= ~POLLOUT;
             }
         }

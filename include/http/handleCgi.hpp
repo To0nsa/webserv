@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 00:24:43 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/01 11:47:32 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 00:45:17 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,7 @@
 #include <poll.h>
 
 struct CgiProcess {
-    enum class Phase { Launching, Reading, Done, Failed };
-
-    Phase       phase         = Phase::Launching;
     pid_t       pid           = -1;
-    int         stdout_fd     = -1;
     time_t      start_time    = 0;
     time_t      last_activity = 0;
     std::string script_path; ///< Path to the CGI script
