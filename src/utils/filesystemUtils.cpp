@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filesystemUtils.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/26 14:50:19 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 13:41:26 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,31 +60,40 @@ std::string detectMimeType(const std::string& file_path) {
 
 HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
                        std::string content_type) {
-    // Check if the file exists and is a regular file (not a directory, socket, etc.)
+    // Check if the file exists and is a regular file
     if (!isFile(file_path)) {
         return ResponseBuilder::generateError(404, Server(), request);
     }
 
-    // Open the file in binary mode to avoid any platform-specific transformations
-    std::ifstream file(file_path, std::ios::binary);
+    // Try to open file
+    std::ifstream file(file_path, std::ios::binary | std::ios::ate); // Open at end to get size
     if (!file.is_open()) {
-        // File exists but can't be opened (permissions, locked, etc.)
         return ResponseBuilder::generateError(403, Server(), request);
     }
 
-    // Read the full content of the file into a string
-    std::ostringstream buffer;
-    buffer << file.rdbuf();
-    std::string body = buffer.str();
+    std::streamsize size = file.tellg(); // Get file size
+    file.seekg(0, std::ios::beg);        // Reset pointer
 
-    // If no content type was explicitly passed, detect it from file extension
+    // Detect content type if not provided
     if (content_type.empty()) {
         content_type = detectMimeType(file_path);
     }
 
-    // Return a successful HTTP response with the file content and correct MIME type
-    return ResponseBuilder::generateSuccess(200, body, content_type, request);
+    // Threshold for in-memory vs streaming (100 KB)
+    const std::streamsize MEMORY_LIMIT = 100 * 1024;
+
+    if (size <= MEMORY_LIMIT) {
+        // Small file: read into memory
+        std::ostringstream buffer;
+        buffer << file.rdbuf();
+        std::string body = buffer.str();
+        return ResponseBuilder::generateSuccess(200, body, content_type, request);
+    } else {
+        // Large file: stream from disk
+        return ResponseBuilder::generateSuccessFile(200, file_path, content_type, request, size);
+    }
 }
+
 
 std::string normalizePath(const std::string& path) {
     if (path.empty())

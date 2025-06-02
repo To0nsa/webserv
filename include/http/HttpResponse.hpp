@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:37 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 23:09:20 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 17:25:40 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ class HttpResponse {
     std::string                        _body;
     std::string                        _http_version;
     std::string                        _connection_header;
+	std::string                        _file_path;
+	std::streamsize _cgiBodyOffset;
 
   public:
     HttpResponse(void);
@@ -40,4 +42,12 @@ class HttpResponse {
     void        setRequestMeta(const std::string& version, const std::string& conn);
     bool        isConnectionClose(void) const;
     std::string toHttpString(void) const;
+	void        setFilePath(const std::string& path);
+	const std::string& getFilePath() const;
+	bool isFileResponse() const;
+	int         getStatusCode(void) const;
+	const std::string& getStatusMessage(void) const;
+	const std::map<std::string, std::string>& getHeaders(void) const;
+	void setCgiBodyOffset(std::streamsize offset);
+	std::streamsize getCgiBodyOffset() const;
 };

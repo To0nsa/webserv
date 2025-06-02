@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 12:56:43 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/02 10:46:30 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <vector>
+#include <fstream>
 
 #define TIMEOUT 300
 #define HEADER_TIMEOUT_SECONDS 6
@@ -50,6 +51,7 @@ struct ClientInfo {
     Server                    serverConfig; // The server config the client is connected to
     std::queue<HttpResponse>  responses;    // Queue of responses to be sent to the client
     std::optional<CgiProcess> cgiProcess;
+	std::ifstream file_stream;
 };
 
 class SocketManager {

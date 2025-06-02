@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:56:54 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/12 23:09:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 17:26:04 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 HttpResponse ::HttpResponse(void) {
     _status_code    = 200;
     _status_message = "OK";
+	_cgiBodyOffset = 0;
 }
 
 HttpResponse ::~HttpResponse(void) {
@@ -94,4 +95,36 @@ std::string HttpResponse ::toHttpString(void) const {
     ss << _body;
 
     return ss.str();
+}
+
+void HttpResponse::setFilePath(const std::string& path) {
+	_file_path = path;
+}
+
+const std::string& HttpResponse::getFilePath() const {
+	return _file_path;
+}
+
+bool HttpResponse::isFileResponse() const {
+	return !_file_path.empty();
+}
+
+int HttpResponse::getStatusCode(void) const {
+	return _status_code;
+}
+
+const std::string& HttpResponse::getStatusMessage(void) const {
+	return _status_message;
+}
+
+const std::map<std::string, std::string>& HttpResponse::getHeaders(void) const {
+	return _headers;
+}
+
+void HttpResponse::setCgiBodyOffset(std::streamsize offset) {
+	_cgiBodyOffset = offset;
+}
+
+std::streamsize HttpResponse::getCgiBodyOffset() const {
+	return _cgiBodyOffset;
 }

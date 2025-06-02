@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/01 11:51:46 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:33:54 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,47 +235,53 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
     } */
 
     cgi.last_activity = time(NULL);
-    std::ifstream in(cgi.output_path);
+    std::ifstream in(cgi.output_path, std::ios::binary);
     if (!in.is_open()) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to open CGI output file");
         return ResponseBuilder::generateError(500, server, req);
     }
 
-    std::stringstream buffer;
-    buffer << in.rdbuf();
-    std::string fullOutput = buffer.str();
-    in.close();
+	in.seekg(0, std::ios::end);
+	std::streamsize totalSize = in.tellg();
+	in.seekg(0, std::ios::beg);
 
-    // Basic parser (header + body)
-    size_t pos = fullOutput.find("\r\n\r\n");
-    Logger::logFrom(LogLevel::DEBUG, "CGI", "cgi is checking output for header");
-    std::string header;
-    std::string body;
-    if (pos != std::string::npos) {
-        header = fullOutput.substr(0, pos);
-        body   = fullOutput.substr(pos + 4);
-    } else {
-        pos = fullOutput.find("\n\n");
-        if (pos != std::string::npos) {
-            header = fullOutput.substr(0, pos);
-            body   = fullOutput.substr(pos + 2);
-        }
-    }
+    // Read the first 16KB only to find headers
+    const size_t MAX_HEADER_SCAN = 16 * 1024;
+    std::vector<char> buffer(MAX_HEADER_SCAN);
+    in.read(buffer.data(), MAX_HEADER_SCAN);
+    std::streamsize bytesRead = in.gcount();
+    std::string partialOutput(buffer.data(), bytesRead);
+
+    // Look for header delimiter
+    size_t pos = partialOutput.find("\r\n\r\n");
+	size_t delimLen = 4;
     if (pos == std::string::npos) {
-        Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): no header found in output");
+        pos = partialOutput.find("\n\n");
+		delimLen = 2;
+	}
+    if (pos == std::string::npos) {
+        Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): Header delimiter not found in first 16KB");
         return ResponseBuilder::generateError(500, server, req);
     }
-    std::string        contentType = "text/plain";
-    int                code        = 200;
-    std::istringstream iss(header);
-    std::string        line;
-    while (std::getline(iss, line)) {
+
+    std::string header = partialOutput.substr(0, pos);
+    std::string contentType = "text/plain";
+    int         code        = 200;
+
+    std::istringstream headerStream(header);
+    std::string line;
+    while (std::getline(headerStream, line)) {
         if (line.find("Content-Type:") == 0)
             contentType = trim(line.substr(13));
         else if (line.find("Status:") == 0)
             code = std::stoi(trim(line.substr(7)));
     }
-    return ResponseBuilder::generateSuccess(code, body, contentType, req);
+
+	std::streamsize headerEnd = static_cast<std::streamsize>(pos + delimLen);
+    std::streamsize bodySize = totalSize - headerEnd;
+    in.close();
+
+    return ResponseBuilder::generateSuccessFile(code, cgi.output_path, contentType, req, bodySize, headerEnd);
 }
 
 void cleanupCgi(CgiProcess& cgi) {
