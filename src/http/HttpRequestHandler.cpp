@@ -6,16 +6,24 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/01 18:20:50 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 10:12:18 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "core/Location.hpp"
+#include "core/Server.hpp"
+#include "http/HttpRequest.hpp"
+#include "http/HttpResponseBuilder.hpp"
 #include "http/handleCgi.hpp"
 #include "http/handle_delete.hpp"
 #include "http/handle_get.hpp"
 #include "http/handle_post.hpp"
+#include "utils/filesystemUtils.hpp"
+
 #include <fstream>
 #include <iostream>
+#include <set>
+#include <string>
 
 HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     const std::string& method = request.getMethod();
@@ -23,14 +31,16 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
 
     std::cout << "[Router] Handling request: method=" << method << " path=" << path << std::endl;
 
-    // Check for implicit redirect (e.g., "/foo" → "/foo/")
-    for (const Location& loc : server.getLocations()) {
-        const std::string& locPath = normalizePath(loc.getPath());
-        if (locPath.length() > 1 && locPath.back() == '/' &&
-            path == locPath.substr(0, locPath.size() - 1)) {
-            std::cout << "[Router] 📍 Path matches redirect rule: " << path << " → " << locPath
-                      << std::endl;
-            return ResponseBuilder::generateRedirect(301, locPath, request);
+    // Only redirect GET from "/foo" → "/foo/".
+    if (method == "GET") {
+        for (const Location& loc : server.getLocations()) {
+            const std::string& locPath = normalizePath(loc.getPath());
+            if (locPath.length() > 1 && locPath.back() == '/' &&
+                path == locPath.substr(0, locPath.size() - 1)) {
+                std::cout << "[Router] 📍 Path matches redirect rule: " << path << " → " << locPath
+                          << std::endl;
+                return ResponseBuilder::generateRedirect(301, locPath, request);
+            }
         }
     }
 
@@ -54,8 +64,9 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
     const Location& location = *matched;
     std::cout << "[Router] ✅ Matched location: " << location.getPath() << std::endl;
 
-    // Handle configured redirection (return 301/302/etc.)
-    if (location.hasRedirect()) {
+    // Only perform a “return …” redirect if the client is GET (or HEAD).
+    // A DELETE should not trigger this redirect; it must fall through to handleDelete().
+    if (method == "GET" && location.hasRedirect()) {
         std::cout << "[Router] ↪️ Redirect configured: " << location.getRedirect() << " (code "
                   << location.getReturnCode() << ")" << std::endl;
         return ResponseBuilder::generateRedirect(location.getReturnCode(), location.getRedirect(),

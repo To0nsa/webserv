@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/31 15:22:43 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 09:52:29 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static bool isValidPath(const std::string& rawPath) {
         return true;
     if (s.empty() || s.front() != '/')
         return false;
-    if (s.find("//") != std::string::npos)
-        return false;
+    /*     if (s.find("//") != std::string::npos)
+            return false; */
     if (s == "/.." || s.find("/../") != std::string::npos || s.ends_with("/.."))
         return false;
     return true;

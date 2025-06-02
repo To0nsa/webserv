@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/01 18:39:27 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 10:09:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ HttpResponse handleGet(const HttpRequest& request, const Server& server, const L
 
                 std::cerr << "[GET] ❌ Index file specified but not found: " << index_path
                           << std::endl;
-                return ResponseBuilder::generateError(403, server, request);
+                return ResponseBuilder::generateError(404, server, request); // 403
             }
 
             if (loc.isAutoindexEnabled()) {

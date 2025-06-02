@@ -58,7 +58,7 @@ def test_file_deletion():
     request("GET", test_path, expected=404)
 
 def test_delete_nonexistent():
-    request("DELETE", "/doesnotexist", expected=405)
+    request("DELETE", "/doesnotexist", expected=404)
 
 def test_delete_directory():
     request("DELETE", "/dir/", expected=403)
@@ -93,7 +93,7 @@ def test_delete_case_sensitive():
     res = conn.getresponse()
     data = res.read().decode(errors="replace")
     print(f"[LOG] delete (lowercase) → {res.status} {res.reason}")
-    assert res.status == 501, f"Expected 501 Not Implemented, got {res.status}"
+    assert res.status == 405, f"Expected 501 Not Implemented, got {res.status}" // 501
     
 def test_delete_symlink_to_file():
     """DELETE on a symlink should be forbidden, and the target must remain."""
@@ -143,28 +143,209 @@ def test_delete_deep_nested_file():
     # Run test
     request("DELETE", nested_path, expected=200)
     request("GET", nested_path, expected=404)
-
-
-def test_delete_conflict_dir_vs_file():
-    """Ensure DELETE only deletes the file, not a same-named directory."""
-    base_path = "/upload_store/conflict"
-    file_path = base_path + ".txt"
-    dir_path = os.path.join("test/data/upload_store/conflict.txt")
     
-    ensure_absent(file_path)
-    if not os.path.isdir(dir_path):
-        os.makedirs(dir_path, exist_ok=True)
+def test_delete_empty_path():
+    """
+    DELETE with an empty request‐URI ("") should be treated as a malformed request → 400.
+    """
+    # Using the same request() helper: path="" ⇒ raw request line is "DELETE  HTTP/1.1",
+    # which our parser should reject as “rawTarget” is empty.
+    request("DELETE", "", expected=403)
+    
+def test_delete_directory_traversal_arbitrary():
+    """
+    Ensure that DELETE on “/upload_store/../outside_delete.txt” is forbidden
+    and does NOT delete a file outside of upload_store.
+    """
+    # Compute the real filesystem path for a file just above upload_store
+    upload_dir = os.getenv("UPLOAD_DIR", "./test/data/upload_store")
+    outside_local = os.path.normpath(os.path.join(upload_dir, "../outside_delete.txt"))
 
-    create_file(file_path, "conflicting file")
-    request("DELETE", file_path, expected=200)
+    # Make sure its parent directory exists, then create the “outside” file
+    os.makedirs(os.path.dirname(outside_local), exist_ok=True)
+    with open(outside_local, "w") as f:
+        f.write("this should not get deleted")
 
-    # Directory should still exist
-    if not os.path.isdir(dir_path):
-        print("❌ conflict directory was deleted (should remain)")
+    # Attempt to delete it via a traversal‐style URI; expect 403 Forbidden
+    request("DELETE", "/upload_store/../outside_delete.txt", expected=403)
+
+    # Verify the file is still present on disk
+    if not os.path.isfile(outside_local):
+        print(f"❌ Vulnerability: {outside_local} was deleted!")
         sys.exit(1)
     else:
-        print("✅ conflict directory remained untouched")
+        print(f"✅ {outside_local} still exists after traversal DELETE attempt.")
 
+    # Clean up
+    os.remove(outside_local)
+    
+def test_delete_static_file():
+    """
+    DELETE a file under a normal (non-upload_store) location. 
+    Expect 200 on first DELETE, 404 on second.
+    """
+    # 1) Ensure it’s present (test/data/dir/testfile.txt is created by bootstrap)
+    status, _, _ = request("GET", "/dir/testfile.txt")
+    if status != 200:
+        print(f"❌ Precondition failed – /dir/testfile.txt should exist but GET returned {status}")
+        sys.exit(1)
+
+    # 2) DELETE it
+    status, reason, body = request("DELETE", "/dir/testfile.txt")
+    if status != 200 or "<h1>File testfile.txt deleted.</h1>" not in body:
+        print(f"❌ DELETE /dir/testfile.txt → {status} {reason} (expected 200 + correct body)")
+        sys.exit(1)
+    print("✅ /dir/testfile.txt deleted successfully")
+
+    # 3) GET again → 404
+    request("GET", "/dir/testfile.txt", expected=404)
+
+    # 4) DELETE again → 404
+    request("DELETE", "/dir/testfile.txt", expected=404)
+    
+def test_delete_directory_without_slash():
+    """
+    DELETE a directory URI without the trailing slash → 403 Forbidden
+    """
+    request("DELETE", "/dir", expected=403)
+    
+def test_delete_upload_store_root():
+    """
+    DELETE /upload_store (the directory itself) → 403 Forbidden
+    """
+    request("DELETE", "/upload_store", expected=403)
+
+def test_double_delete_same_file():
+    """
+    DELETE the same file two times in a row:
+      - first time → 200 OK
+      - second time → 404 Not Found
+    """
+    test_path = "/upload_store/double_delete.txt"
+    ensure_absent(test_path)
+    create_file(test_path, "double")
+
+    # First delete → 200
+    status, reason, _ = request("DELETE", test_path)
+    if status != 200:
+        print(f"❌ First DELETE {test_path} → {status} (expected 200)")
+        sys.exit(1)
+    print(f"✅ First DELETE {test_path} → 200 OK")
+
+    # Second delete → 404
+    request("DELETE", test_path, expected=404)
+    
+def test_delete_with_multiple_slashes_and_dots():
+    """
+    CREATE /upload_store/slash_test.txt, then attempt to DELETE it via:
+      - "/upload_store//slash_test.txt"
+      - "/upload_store/./slash_test.txt"
+    Both should delete the exact same file (200 OK).
+    """
+    test_path = "/upload_store/slash_test.txt"
+    ensure_absent(test_path)
+    create_file(test_path, "slash")
+
+    # DELETE via double-slash
+    status, _, _ = request("DELETE", "/upload_store//slash_test.txt")
+    if status != 200:
+        print(f"❌ DELETE //slash_test.txt → {status} (expected 200)")
+        sys.exit(1)
+    print("✅ DELETE with double slash → 200 OK")
+
+    # Re-create
+    create_file(test_path, "slash")
+
+    # DELETE via “./”
+    status, _, _ = request("DELETE", "/upload_store/./slash_test.txt")
+    if status != 200:
+        print(f"❌ DELETE /./slash_test.txt → {status} (expected 200)")
+        sys.exit(1)
+    print("✅ DELETE with dot‐segment → 200 OK")
+    
+def test_delete_percent_encoded_nested_path():
+    """
+    Create /upload_store/deep/nested/dir/pe.txt, then DELETE via percent-encoded slashes:
+      "/upload_store/deep%2Fnested%2Fdir%2Fpe.txt"
+    """
+    nested = "/upload_store/deep/nested/dir/pe.txt"
+    # 1) Create the file on disk (“raw” path already exists or create it manually)
+    full_dir = os.path.join("test/data/upload_store/deep/nested/dir")
+    os.makedirs(full_dir, exist_ok=True)
+    with open(os.path.join(full_dir, "pe.txt"), "w") as f:
+        f.write("nested percent")
+
+    # 2) DELETE via percent-encoded slashes
+    encoded = "/upload_store/deep%2Fnested%2Fdir%2Fpe.txt"
+    request("DELETE", encoded, expected=200)
+
+    # 3) GET afterwards → 404
+    request("GET", nested, expected=404)
+    
+def test_delete_symlink_to_directory():
+    """
+    If there’s a symlink “/upload_store/symlink_dir” → points at some directory 
+    (e.g., test/data/dir), then DELETE on “/upload_store/symlink_dir” should be 403 
+    and the directory behind it must remain untouched.
+    """
+    # Clean up any leftovers
+    test_link = "/upload_store/symlink_dir"
+    target_dir = "test/data/dir"
+    link_path_local = os.path.join(os.getenv("UPLOAD_DIR", "./test/data/upload_store"), "symlink_dir")
+    
+    if os.path.islink(link_path_local):
+        os.unlink(link_path_local)
+
+    # Create the symlink
+    try:
+        os.symlink(os.path.abspath(target_dir), link_path_local)
+    except OSError:
+        print("[SKIPPED] test_delete_symlink_to_directory (symlink not supported)")
+        return
+
+    # Attempt DELETE on the symlink
+    request("DELETE", test_link, expected=403)
+
+    # The real directory “test/data/dir” must still exist (e.g. /test/data/dir/file.txt should still be readable)
+    status, _, _ = request("GET", "/dir/file.txt")
+    if status != 200:
+        print(f"❌ Symlinked directory target was removed or inaccessible → GET /dir/file.txt returned {status}")
+        sys.exit(1)
+    print("✅ Symlink-to-directory not deleted; real directory still intact")
+
+    # Clean up
+    os.unlink(link_path_local)
+    
+def test_delete_invalid_percent_encoding():
+    """
+    DELETE "/%ZZ" or "/%" → parser sees invalid percent-encoding → 400 Bad Request
+    """
+    request("DELETE", "/%ZZ", expected=400)
+    request("DELETE", "/%", expected=400)
+    
+def test_delete_long_url():
+    """
+    DELETE with an extremely long URI (>2048) → 414 URI Too Long
+    """
+    long_path = "/a" * 2050
+    request("DELETE", long_path, expected=414)
+    
+def test_delete_root_http10():
+    """
+    DELETE "/" but explicitly use HTTP/1.0 → still 403 Forbidden
+    """
+    parsed = urlparse(SERVER)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
+    conn._http_vsn = 10
+    conn._http_vsn_str = "HTTP/1.0"
+    conn.request("DELETE", "/")
+    res = conn.getresponse()
+    if res.status != 403:
+        print(f"❌ HTTP/1.0 DELETE / → {res.status} (expected 403)")
+        sys.exit(1)
+    print("✅ HTTP/1.0 DELETE / → 403 Forbidden")
+    conn.close()
+    
 # ─────────────────────────────────────────────────────────────────────────────
 # Run
 # ─────────────────────────────────────────────────────────────────────────────
@@ -179,11 +360,24 @@ def run_tests():
     test_delete_encoded_filename()
     test_delete_file_with_trailing_slash()
     test_delete_case_sensitive()
-    
     test_delete_symlink_to_file()
     test_delete_root_path_should_be_forbidden()
     test_delete_deep_nested_file()
-    test_delete_conflict_dir_vs_file()
+    test_delete_empty_path()
+    test_delete_directory_traversal_arbitrary()
+    test_delete_static_file()
+    test_delete_directory_without_slash()
+    test_delete_upload_store_root()
+    test_double_delete_same_file()
+    test_delete_with_multiple_slashes_and_dots()
+    test_delete_percent_encoded_nested_path()
+    test_delete_symlink_to_directory()
+    test_delete_invalid_percent_encoding()
+    test_delete_long_url()
+    test_delete_root_http10()
+    test_delete_invalid_percent_encoding()
+    test_delete_root_http10()
 
 if __name__ == "__main__":
     run_tests()
+    

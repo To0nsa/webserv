@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 13:20:43 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 09:07:13 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,25 @@
 
 HttpResponse handleDelete(const HttpRequest& request, const Server& server, const Location& loc) {
     // 1) Normalize both the request path and the location prefix
-    std::string requestPath   = normalizePath(request.getPath());
+    std::string requestPath = normalizePath(request.getPath());
+    if (requestPath.empty()) {
+        return ResponseBuilder::generateError(403, server, request);
+    }
     std::string locPrefix     = normalizePath(loc.getPath());
     bool        inUploadStore = loc.isUploadEnabled() && requestPath.rfind(locPrefix, 0) == 0;
 
     // 2) Compute the real filesystem path
     std::string filepath;
     if (inUploadStore) {
-        // — Strip the location prefix from the request URI
         std::string relative = requestPath.substr(locPrefix.size());
         while (!relative.empty() && relative.front() == '/')
             relative.erase(0, 1);
 
-        // — Find upload_store base, interpreting relative paths under loc.getRoot()
         std::string uploadRoot = normalizePath(loc.getUploadStore());
         if (!uploadRoot.empty() && uploadRoot.front() != '/')
             uploadRoot = joinPath(normalizePath(loc.getRoot()), uploadRoot);
-
-        // — Final path under upload_store
         filepath = joinPath(uploadRoot, relative);
     } else {
-        // Static content (DELETE outside upload_store)
         filepath = buildFilePath(request, loc);
     }
 
