@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 17:38:32 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/02 21:49:10 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,34 @@ void SocketManager::cleanupCgiForClient(int client_fd) {
 }
 
 void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
-    cleanupCgiForClient(client_fd); // new line
-    _poll_fds.erase(_poll_fds.begin() + index);
-    _client_info.erase(client_fd);
+    // 1. Defensive: bounds check for poll index
+    if (index < _poll_fds.size()) {
+        _poll_fds.erase(_poll_fds.begin() + index);
+    }
+
+    // 2. Cleanup CGI and file_stream if client exists
+    auto it = _client_info.find(client_fd);
+    if (it != _client_info.end()) {
+        ClientInfo& client = it->second;
+
+        // Cleanup CGI pipes and remove cgi stdout_fd from poll
+        cleanupCgiForClient(client_fd);
+
+        // Close file stream if still open
+        if (client.file_stream.is_open()) {
+            client.file_stream.close();
+        }
+
+        _client_info.erase(it);
+    }
+
+    // 3. Close the socket itself
     close(client_fd);
+
     Logger::logFrom(LogLevel::INFO, "SocketManager",
                     "Closed FD (Connection: close): " + std::to_string(client_fd));
 }
+
 
 void SocketManager::resetRequestState(int client_fd) {
     if (!_client_info.count(client_fd))
@@ -117,6 +138,9 @@ bool SocketManager::isSendTimeout(int fd, time_t now) {
 
 bool SocketManager::isIdleTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
+	if (client.cgiProcess.has_value()) {
+        return false;
+	}
     if (client.responses.empty() && client.current_raw_response.empty() && !client.headerComplete &&
         client.headerBytesReceived == 0 && now - client.lastRequestTime > TIMEOUT) {
         Logger::logFrom(LogLevel::WARN, "SocketManager",

@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/02 17:33:54 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/02 21:47:33 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,8 +285,10 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
 }
 
 void cleanupCgi(CgiProcess& cgi) {
-    if (cgi.stdout_fd > 0)
+    if (cgi.stdout_fd > 0) {
         close(cgi.stdout_fd);
+		cgi.stdout_fd = -1;
+	}
     kill(cgi.pid, SIGKILL);
     waitpid(cgi.pid, nullptr, 0);
     if (!cgi.input_path.empty()) {
