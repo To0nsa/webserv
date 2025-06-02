@@ -24,6 +24,10 @@ def main():
     test_post			  = os.path.join(root, "test", "http", "test_post.py")
     test_file_resolution  = os.path.join(root, "test", "http", "test_file_resolution.py")
     test_symlinks         = os.path.join(root, "test", "http", "test_symlinks_forbidden.py")
+    test_stress           = os.path.join(root, "test", "http", "stress_test.py")
+    test_stress_chunked   = os.path.join(root, "test", "http", "stress_chunked.py")
+    test_stress_pipeline  = os.path.join(root, "test", "http", "stress_pipeline.py")
+    # test_ultra_stress     = os.path.join(root, "test", "http", "ultra_stress_test.py")
 
     run(["python3", bootstrap], "bootstrap_test_data.py")
     run(["python3", test_raw_malformed], "test_http_header_parser.py")
@@ -33,6 +37,11 @@ def main():
     run(["python3", test_delete], "test_delete.py")
     run(["python3", test_post], "test_post.py")
     run(["python3", test_slow_lors], "test_slow_loris.py")
+    run(["python3", test_stress], "stress_test.py")
+    run(["python3", test_stress_chunked], "stress_chunked.py")
+    run(["python3", test_stress_pipeline], "stress_pipeline.py")
+    
+    # run(["python3", test_ultra_stress], "ultra_stress_test.py")
 
     print("\n✅ All tests passed!")
 

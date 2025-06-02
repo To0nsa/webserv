@@ -1,6 +1,7 @@
 import http.client
 import os
 import sys
+import shutil
 from urllib.parse import urlparse
 
 SERVER = os.getenv("WEBSERV_URL", "http://localhost:8080")
@@ -143,6 +144,13 @@ def test_delete_deep_nested_file():
     # Run test
     request("DELETE", nested_path, expected=200)
     request("GET", nested_path, expected=404)
+
+    # Cleanup
+    try:
+        shutil.rmtree("test/data/upload_store/deep")
+    except FileNotFoundError:
+        pass
+
     
 def test_delete_empty_path():
     """
@@ -184,11 +192,11 @@ def test_delete_static_file():
     DELETE a file under a normal (non-upload_store) location. 
     Expect 200 on first DELETE, 404 on second.
     """
-    # 1) Ensure it’s present (test/data/dir/testfile.txt is created by bootstrap)
-    status, _, _ = request("GET", "/dir/testfile.txt")
-    if status != 200:
-        print(f"❌ Precondition failed – /dir/testfile.txt should exist but GET returned {status}")
-        sys.exit(1)
+    # Create it explicitly
+    local_dir = os.path.join("test/data/dir")
+    os.makedirs(local_dir, exist_ok=True)
+    with open(os.path.join(local_dir, "testfile.txt"), "w") as f:
+        f.write("static test")
 
     # 2) DELETE it
     status, reason, body = request("DELETE", "/dir/testfile.txt")
@@ -281,6 +289,13 @@ def test_delete_percent_encoded_nested_path():
 
     # 3) GET afterwards → 404
     request("GET", nested, expected=404)
+
+    # Cleanup
+    try:
+        shutil.rmtree("test/data/upload_store/deep")
+    except FileNotFoundError:
+        pass
+
     
 def test_delete_symlink_to_directory():
     """
@@ -288,17 +303,22 @@ def test_delete_symlink_to_directory():
     (e.g., test/data/dir), then DELETE on “/upload_store/symlink_dir” should be 403 
     and the directory behind it must remain untouched.
     """
-    # Clean up any leftovers
+    # Ensure file.txt exists
+    file_txt_path = "test/data/dir/file.txt"
+    os.makedirs(os.path.dirname(file_txt_path), exist_ok=True)
+    if not os.path.exists(file_txt_path):
+        with open(file_txt_path, "w") as f:
+            f.write("This is a file inside /dir/")
+
+    # Clean up any leftover symlink
     test_link = "/upload_store/symlink_dir"
-    target_dir = "test/data/dir"
     link_path_local = os.path.join(os.getenv("UPLOAD_DIR", "./test/data/upload_store"), "symlink_dir")
-    
     if os.path.islink(link_path_local):
         os.unlink(link_path_local)
 
     # Create the symlink
     try:
-        os.symlink(os.path.abspath(target_dir), link_path_local)
+        os.symlink(os.path.abspath("test/data/dir"), link_path_local)
     except OSError:
         print("[SKIPPED] test_delete_symlink_to_directory (symlink not supported)")
         return
@@ -306,7 +326,7 @@ def test_delete_symlink_to_directory():
     # Attempt DELETE on the symlink
     request("DELETE", test_link, expected=403)
 
-    # The real directory “test/data/dir” must still exist (e.g. /test/data/dir/file.txt should still be readable)
+    # Ensure the original file is still there
     status, _, _ = request("GET", "/dir/file.txt")
     if status != 200:
         print(f"❌ Symlinked directory target was removed or inaccessible → GET /dir/file.txt returned {status}")
@@ -360,6 +380,7 @@ def run_tests():
     test_delete_encoded_filename()
     test_delete_file_with_trailing_slash()
     test_delete_case_sensitive()
+    
     test_delete_symlink_to_file()
     test_delete_root_path_should_be_forbidden()
     test_delete_deep_nested_file()

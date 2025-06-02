@@ -23,6 +23,12 @@ def assert_contains(response, expected_status, context):
         print(response)
         print("------------------")
         sys.exit(1)
+        
+def cleanup_test_file():
+    try:
+        os.remove("test/data/upload_store/test.txt")
+    except FileNotFoundError:
+        pass
 
 
 def run_raw_tests():
@@ -89,8 +95,12 @@ def run_raw_tests():
     ]
 
     for raw, expected, context in tests:
+        if "/upload_store/test.txt" in raw:
+            cleanup_test_file()
         res = send_raw_request(raw)
         assert_contains(res, expected, context)
+        if "/upload_store/test.txt" in raw:
+            cleanup_test_file()
 
 
 if __name__ == "__main__":

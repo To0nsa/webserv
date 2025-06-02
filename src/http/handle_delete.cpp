@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 09:07:13 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 17:56:52 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,13 @@ HttpResponse handleDelete(const HttpRequest& request, const Server& server, cons
     // 4) Must exist
     struct stat st;
     if (stat(filepath.c_str(), &st) != 0) {
-        std::cerr << "[DELETE] File not found: " << filepath << std::endl;
+        std::cerr << "[DELETE] Path does not exist: " << filepath << std::endl;
         return ResponseBuilder::generateError(404, server, request);
+    }
+
+    if (S_ISDIR(st.st_mode)) {
+        std::cerr << "[DELETE] Refusing to delete directory: " << filepath << std::endl;
+        return ResponseBuilder::generateError(403, server, request); // Forbidden
     }
 
     // 5) Must be a regular file (directories, sockets, etc. → 403)

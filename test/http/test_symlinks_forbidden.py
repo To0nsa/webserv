@@ -44,7 +44,7 @@ def cleanup():
     for name in ["real.txt", "link_get.txt", "link_post.txt", "link_delete.txt"]:
         path = os.path.join(UPLOAD_PATH, name)
         try:
-            if os.path.islink(path) or os.path.isfile(path):
+            if os.path.exists(path) or os.path.islink(path):
                 os.unlink(path)
         except FileNotFoundError:
             pass

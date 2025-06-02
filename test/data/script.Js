@@ -1,1 +1,0 @@
-console.log('Same script with weird casing');

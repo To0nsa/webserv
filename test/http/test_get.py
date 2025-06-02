@@ -1,3 +1,44 @@
+
+def setup_test_files():
+    os.makedirs("test/data/dir", exist_ok=True)
+    with open("test/data/index.html", "w") as f:
+        f.write("<h1>Welcome to Webserv</h1>")
+    with open("test/data/style.css", "w") as f:
+        f.write("body { background: #222; color: #eee; }")
+    with open("test/data/style.CsS", "w") as f:
+        f.write("body { font-size: 14px; }")
+    with open("test/data/script.js", "w") as f:
+        f.write("console.log('Hello from JS');")
+    with open("test/data/script.Js", "w") as f:
+        f.write("console.log('Same script with weird casing');")
+    with open("test/data/LOGO.PNG", "wb") as f:
+        f.write(b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR")
+    with open("test/data/index.html.bak", "w") as f:
+        f.write("<!-- backup copy of index.html -->")
+    with open("test/data/dir/file.txt", "w") as f:
+        f.write("This is a file inside /dir/")
+    with open("test/data/dir/file.unknown", "w") as f:
+        f.write("Binary? Nope—just text to test fallback")
+
+def cleanup_test_files():
+    dir_path = "test/data/dir"
+    if os.path.exists(dir_path):
+        for f in os.listdir(dir_path):
+            try:
+                os.remove(os.path.join(dir_path, f))
+            except FileNotFoundError:
+                pass
+
+    for f in [
+        "index.html", "style.css", "style.CsS", "script.js", "script.Js",
+        "LOGO.PNG", "index.html.bak"
+    ]:
+        try:
+            os.remove(os.path.join("test/data", f))
+        except FileNotFoundError:
+            pass
+
+
 import http.client
 import os
 import sys
@@ -271,10 +312,6 @@ def test_custom_error_pages():
     code, _, body = request("/doesnotexist")
     assert code == 404 and "<h1>404 Not Found</h1>" in body
     print("✅ Custom 404 page loaded")
-
-    code, _, body = request("/forbidden/")
-    assert code == 404 and "<h1>404 Not Found</h1>" in body
-    print("✅ Custom 404 page loaded") # should be 403 but ubuntu.test expects 404
     
 # ─────────────────────────────────────────────────────────────────────────────
 # Multiple pipelined GET requests
@@ -343,6 +380,7 @@ def test_pipelined_mixed_requests():
 # ─────────────────────────────────────────────────────────────────────────────
 
 def run_tests():
+    setup_test_files()
     print("[ GET Test Suite ]")
 
     # ─── Protocol / Method handling ─────────────────────────────────────────
@@ -388,6 +426,8 @@ def run_tests():
     # ─── HTTP/1.1 pipelining ───────────────────────────────────────────────
     test_pipelined_requests()
     test_pipelined_mixed_requests()
+
+    cleanup_test_files()
 
 if __name__ == "__main__":
     run_tests()

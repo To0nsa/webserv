@@ -26,7 +26,34 @@ def request(path, expected_status, expected_body_substr=None):
     print(f"✅ GET {path} → {res.status} OK")
     return body
 
+
+def setup_test_files():
+    base_dir = "test/data/dir"
+    os.makedirs(base_dir, exist_ok=True)
+    with open(os.path.join(base_dir, "file.txt"), "w") as f:
+        f.write("This is a file inside /dir/")
+    with open(os.path.join(base_dir, "file.unknown"), "w") as f:
+        f.write("Binary? Nope—just text to test fallback")
+
+    with open("test/data/index.html", "w") as f:
+        f.write("<h1>Welcome to Webserv</h1>")
+    with open("test/data/style.CsS", "w") as f:
+        f.write("body { font-size: 14px; }")
+    with open("test/data/index.html.bak", "w") as f:
+        f.write("<!-- backup copy of index.html -->")
+
+def cleanup_test_files():
+    import shutil
+    for f in ["index.html", "style.CsS", "index.html.bak"]:
+        try:
+            os.remove(os.path.join("test/data", f))
+        except FileNotFoundError:
+            pass
+    shutil.rmtree("test/data/dir", ignore_errors=True)
+
+
 def run_tests():
+    setup_test_files()
     print("[ FILE RESOLUTION Test Suite ]")
 
     # 1) Serve static under /dir/ → test/data/dir/file.txt
@@ -49,6 +76,8 @@ def run_tests():
     # 5) Path-traversal is blocked
     request("/dir/../dir/file.txt",    403)
     request("/dir/../../secret.txt",   403)
+
+    cleanup_test_files()
 
 if __name__ == "__main__":
     run_tests()
