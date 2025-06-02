@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 15:13:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 14:20:00 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void SocketManager::resetRequestState(int client_fd) {
     _client_info[client_fd].bodyBytesReceived   = 0;
 }
 
-bool SocketManager::isHeaderTimeout(int fd, time_t now) {
+/* bool SocketManager::isHeaderTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
     if (client.responses.empty() && client.current_raw_response.empty() &&
         (client.headerBytesReceived > 0) && client.headerBytesReceived < HEADER_MIN_LENGTH &&
@@ -90,6 +90,21 @@ bool SocketManager::isHeaderTimeout(int fd, time_t now) {
         respondError(fd, 408);
         return true;
     }
+    return false;
+} */
+
+bool SocketManager::isHeaderTimeout(int fd, time_t now) {
+    ClientInfo& client = _client_info[fd];
+
+    if (client.responses.empty() && client.current_raw_response.empty() && !client.headerComplete &&
+        client.headerBytesReceived > 0 &&
+        now - client.connectionStartTime > HEADER_TIMEOUT_SECONDS) {
+        Logger::logFrom(LogLevel::WARN, "SocketManager",
+                        "Header timeout on fd: " + std::to_string(fd));
+        respondError(fd, 408);
+        return true;
+    }
+
     return false;
 }
 
@@ -213,7 +228,7 @@ void SocketManager::respondError(int fd, int status_code) {
     _client_info[fd].responses.push(err);
 }
 
-bool SocketManager::checkRequestLimits(int fd) {
+/* bool SocketManager::checkRequestLimits(int fd) {
     if (_client_info[fd].headerBytesReceived > HEADER_MAX_LENGTH) {
         Logger::logFrom(LogLevel::WARN, "SocketManager",
                         "Request too large from fd: " + std::to_string(fd));
@@ -221,14 +236,41 @@ bool SocketManager::checkRequestLimits(int fd) {
         return true;
     }
 
-    /*     std::size_t maxBody = _client_info[fd].serverConfig.getClientMaxBodySize();
+    std::size_t maxBody = _client_info[fd].serverConfig.getClientMaxBodySize();
             if (_client_info[fd].bodyBytesReceived > maxBody) {
                     std::cout << "Request body too large on fd: " << fd
                                             << " (" << _client_info[fd].bodyBytesReceived
                                             << " bytes > max " << maxBody << ")\n";
                     respondError(fd, 413);
                     return true;
-            } */
+            }
+
+    return false;
+} */
+
+bool SocketManager::checkRequestLimits(int fd) {
+    ClientInfo& client = _client_info[fd];
+
+    // Only enforce header-length limit while headers are still incomplete
+    if (client.headerBytesReceived > HEADER_MAX_LENGTH) {
+        Logger::logFrom(LogLevel::WARN, "SocketManager",
+                        "Request header too large from fd: " + std::to_string(fd));
+        respondError(fd, 431); // Request Header Fields Too Large
+        return true;
+    }
+
+    // Once headers are complete, enforce the max-body-size limit
+    if (client.headerComplete) {
+        std::size_t maxBody = client.serverConfig.getClientMaxBodySize();
+        if (client.bodyBytesReceived > maxBody) {
+            Logger::logFrom(LogLevel::WARN, "SocketManager",
+                            "Request body too large on fd: " + std::to_string(fd) + " (" +
+                                std::to_string(client.bodyBytesReceived) + " bytes > max " +
+                                std::to_string(maxBody) + ")");
+            respondError(fd, 413); // Payload Too Large
+            return true;
+        }
+    }
 
     return false;
 }

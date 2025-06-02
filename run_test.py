@@ -21,6 +21,7 @@ def main():
     test_raw_malformed    = os.path.join(root, "test", "http", "test_http_header_parser.py")
     test_slow_lors        = os.path.join(root, "test", "http", "test_slow_loris.py")
     test_delete           = os.path.join(root, "test", "http", "test_delete.py")
+    test_post			  = os.path.join(root, "test", "http", "test_post.py")
     test_file_resolution  = os.path.join(root, "test", "http", "test_file_resolution.py")
     test_symlinks         = os.path.join(root, "test", "http", "test_symlinks_forbidden.py")
 
@@ -30,6 +31,7 @@ def main():
     run(["python3", test_get], "test_get.py")
     run(["python3", test_symlinks], "test_symlinks_forbidden.py")
     run(["python3", test_delete], "test_delete.py")
+    run(["python3", test_post], "test_post.py")
     run(["python3", test_slow_lors], "test_slow_loris.py")
 
     print("\n✅ All tests passed!")
