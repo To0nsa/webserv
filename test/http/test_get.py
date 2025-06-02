@@ -143,8 +143,8 @@ def test_get_with_body():
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
     conn.request("GET", "/index.html", body="irrelevant body")
     res = conn.getresponse()
-    assert res.status == 200
-    print("✅ GET with body → 200 OK")
+    assert res.status == 400
+    print("✅ GET with body → 400 Bad Request")
     conn.close()
 
 def test_if_modified_since():

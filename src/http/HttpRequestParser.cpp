@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/02 09:52:29 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 15:23:56 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -441,10 +441,12 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
             return false;
         }
         chunkReqHandler(req, bodyPart, clientMaxBodySize, errorCode, consumedBytes);
-        return errorCode == 0;
+        return (errorCode == 0);
     }
 
     std::size_t len = req.getContentLength();
+
+    // 1) If declared length itself is too large, reject immediately
     if (len > 0 && len >= clientMaxBodySize) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                         "Exceeded max body size in non-chunked transfer");
@@ -453,12 +455,23 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
         return false;
     }
 
+    // 2) If we haven’t received *at least* len bytes yet, wait for more
     if (bodyPart.size() < len) {
         Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete body, waiting for more");
         errorCode = 0;
         return false;
     }
 
+    // 3) NEW: If the client sent more than len bytes, that is a mismatch → 400
+    if (bodyPart.size() > len) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Content-Length mismatch: body too long");
+        errorCode = 400;
+        consumedBytes += bodyPart.size();
+        return false;
+    }
+
+    // 4) Exactly len bytes → accept
     req.setBody(bodyPart.substr(0, len));
     consumedBytes += len;
     errorCode = 0;
@@ -540,7 +553,7 @@ bool validateReq(HttpRequest& req, int& errorCode) {
     return true;
 }
 
-bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
+/* bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
                               std::size_t clientMaxBodySize, int& errorCode,
                               std::size_t& consumedBytes) {
     size_t pos = raw_req.find("\r\n\r\n");
@@ -561,5 +574,81 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& raw_req,
     if (!parseReqBody(req, bodyPart, clientMaxBodySize, errorCode, consumedBytes))
         return false;
 
+    return true;
+} */
+
+bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
+                              std::size_t clientMaxBodySize, int& errorCode,
+                              std::size_t& consumedBytes) {
+    // 1) Find end of header block: "\r\n\r\n"
+    std::size_t headerEndPos = buffer.find("\r\n\r\n");
+    if (headerEndPos == std::string::npos) {
+        Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete header, waiting for more");
+        errorCode = 0;
+        return false;
+    }
+    std::size_t headerLen = headerEndPos + 4;
+
+    // 2) Split into headerPart and remainder
+    std::string headerPart = buffer.substr(0, headerLen);
+    std::string bodyPart   = buffer.substr(headerLen);
+    consumedBytes          = headerLen;
+
+    // 3) Parse request‐line + headers
+    if (!parseReqHeader(req, headerPart, errorCode)) {
+        // parseReqHeader sets errorCode (e.g. 400, 414, 505)
+        return false;
+    }
+
+    // 4) Validate method, path, and mandatory headers
+    if (!validateReq(req, errorCode)) {
+        // validateReq sets errorCode (e.g. 405, 403, 411, 415)
+        return false;
+    }
+
+    // 5) Early exit for methods that do not expect a body (GET, DELETE)
+    std::string method = req.getMethod();
+    if (method == "GET") {
+        // If there is no extra data at all, this is a clean GET/DELETE:
+        if (buffer.size() == headerLen) {
+            consumedBytes = headerLen;
+            errorCode     = 0;
+            return true;
+        }
+
+        // Otherwise, there *are* extra bytes.  Check if those extra bytes look like
+        // the start of a new request‐line (i.e. pipelined).  A quick heuristic is:
+        //   ‣ first byte must be 'A'–'Z'  (valid HTTP method token)
+        //   ‣ then we expect a space somewhere after it.
+        // Here we'll just check that the very next character is an uppercase letter,
+        // which is enough to catch "GET /something HTTP/1.1…" or "POST ..." in practice.
+        char next = buffer[headerLen];
+        if (next >= 'A' && next <= 'Z') {
+            // This almost certainly is the start of another request‐line,
+            // so we treat it as a pipelined request, not as a body.
+            consumedBytes = headerLen;
+            errorCode     = 0;
+            return true;
+        }
+
+        // If we fall through here, the extra data is NOT a valid request‐line,
+        // so it must be a forbidden body‐payload on GET/DELETE → 400.
+        errorCode = 400; // Bad Request
+        return false;
+    }
+
+    // 6) For POST (and other body‐bearing methods), delegate to parseReqBody
+    std::size_t bodyConsumed = 0;
+    bool        bodyOk = parseReqBody(req, bodyPart, clientMaxBodySize, errorCode, bodyConsumed);
+
+    if (!bodyOk) {
+        // parseReqBody sets errorCode (400, 413, etc.) and bodyConsumed
+        consumedBytes = headerLen + bodyConsumed;
+        return false;
+    }
+
+    // 7) Body successfully parsed
+    consumedBytes = headerLen + bodyConsumed;
+    errorCode     = 0;
     return true;
 }

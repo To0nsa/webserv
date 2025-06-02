@@ -45,7 +45,7 @@ def run_raw_tests():
         ('GET / HTTP/1.1\r\n\r\n', '400 Bad Request', 'Missing Host header'),
         ('GET / HTTP/1.1\r\nHost: localhost\r\nHost: evil.com\r\n\r\n', '400 Bad Request', 'Duplicate Host headers'),
         ('GET / HTTP/1.1\r\n\r\n\r\n\r\n', '400 Bad Request', 'Too many CRLF after headers'),
-        ('GET / HTTP/1.1\r\nHost: localhost\r\n\r\n\r\n', '200 OK', 'Extra empty line after headers'),
+        ('GET / HTTP/1.1\r\nHost: localhost\r\n\r\n\r\n', '400 Bad Request', 'Extra empty line after headers'),
         ('GET / HTTP/1.1\r\nHost localhost\r\n\r\n', '400 Bad Request', 'Header without colon'),
         ('GET / HTTP/1.1\r\n: value\r\nHost: localhost\r\n\r\n', '400 Bad Request', 'Empty header name'),
         ('GET / HTTP/1.1\r\n: value\r\n\r\n', '400 Bad Request', 'Header with empty name'),
