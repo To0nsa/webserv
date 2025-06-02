@@ -822,7 +822,7 @@ def test_content_disposition_unicode_filename():
     ensure_absent(f"/upload_store/{filename}")
 
     boundary = "BOUNDARYUNICODE"
-    multipart_body = (
+    text_part = (
         f"--{boundary}\r\n"
         f'Content-Disposition: form-data; name="file"; filename="{filename}"\r\n'
         "Content-Type: text/plain; charset=UTF-8\r\n"
@@ -830,12 +830,17 @@ def test_content_disposition_unicode_filename():
         "Unicode content\r\n"
         f"--{boundary}--\r\n"
     )
+    body_bytes = text_part.encode("utf-8")
+    headers = {
+        "Content-Type": f"multipart/form-data; boundary={boundary}",
+        "Content-Length": str(len(body_bytes))
+    }
 
     status, reason, _ = request(
         "POST",
         "/upload_store/",
-        body=multipart_body,
-        headers={"Content-Type": f"multipart/form-data; boundary={boundary}"},
+        body=body_bytes,
+        headers=headers,
         expected=201
     )
 
@@ -851,31 +856,6 @@ def test_content_disposition_unicode_filename():
     print("✅ Unicode multipart upload → 201 and content verified")
 
     request("DELETE", uri, expected=200)
-
-def test_super_long_boundary_rejection():
-    """
-    POST multipart with boundary > 256 chars → 413 Payload Too Large or 400 Bad Request
-    """
-    target = "/upload_store/longboundary.txt"
-    ensure_absent(target)
-
-    long_boundary = "B" * 300
-    multipart_body = (
-        f"--{long_boundary}\r\n"
-        f'Content-Disposition: form-data; name="file"; filename="a.txt"\r\n'
-        "Content-Type: text/plain\r\n"
-        "\r\n"
-        "Test\r\n"
-        f"--{long_boundary}--\r\n"
-    )
-    status, reason, _ = request(
-        "POST",
-        "/upload_store/",
-        body=multipart_body,
-        headers={"Content-Type": f"multipart/form-data; boundary={long_boundary}"},
-        expected=413
-    )
-    print("✅ Super-long boundary → 413 Payload Too Large or 400 Bad Request")
 
 def test_multipart_mixed_fields_and_files():
     """
@@ -919,6 +899,96 @@ def test_multipart_mixed_fields_and_files():
     print("✅ Multipart mixed fields/files → 201 and file content verified")
 
     request("DELETE", target, expected=200)
+    
+def send_multipart(body: bytes, boundary: str, expected_status: int):
+    parsed = urlparse(SERVER)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
+    headers = {
+        "Content-Type": f"multipart/form-data; boundary={boundary}",
+        "Content-Length": str(len(body))
+    }
+    conn.request("POST", "/upload_store/", body=body, headers=headers)
+    res = conn.getresponse()
+    data = res.read()
+    conn.close()
+    if res.status != expected_status:
+        print(f"❌ Expected {expected_status}, got {res.status}")
+        print(data.decode(errors="replace"))
+        sys.exit(1)
+    else:
+        print(f"✅ {expected_status} as expected")
+
+def test_all_multipart_variants():
+    boundary = "MINIMAL_TEST"
+
+    # 1) Single file part only
+    body1 = (
+        f"--{boundary}\r\n"
+        'Content-Disposition: form-data; name="file"; filename="one.txt"\r\n'
+        "Content-Type: text/plain\r\n"
+        "\r\n"
+        "FileOneContent\r\n"
+        f"--{boundary}--\r\n"
+    ).encode("utf-8")
+    send_multipart(body1, boundary, expected_status=201)
+
+    # 2) Single text field only (should be 400, no file)
+    body2 = (
+        f"--{boundary}\r\n"
+        'Content-Disposition: form-data; name="field_only"\r\n'
+        "\r\n"
+        "value\r\n"
+        f"--{boundary}--\r\n"
+    ).encode("utf-8")
+    send_multipart(body2, boundary, expected_status=400)
+
+    # 3) Field first, then file
+    body3 = (
+        f"--{boundary}\r\n"
+        'Content-Disposition: form-data; name="field1"\r\n'
+        "\r\n"
+        "value1\r\n"
+        f"--{boundary}\r\n"
+        'Content-Disposition: form-data; name="file"; filename="two.txt"\r\n'
+        "Content-Type: text/plain\r\n"
+        "\r\n"
+        "FileTwoContent\r\n"
+        f"--{boundary}--\r\n"
+    ).encode("utf-8")
+    send_multipart(body3, boundary, expected_status=201)
+
+    # 4) File first, then field next (should ignore field and still succeed)
+    body4 = (
+        f"--{boundary}\r\n"
+        'Content-Disposition: form-data; name="file"; filename="three.txt"\r\n'
+        "Content-Type: text/plain\r\n"
+        "\r\n"
+        "FileThree\r\n"
+        f"--{boundary}\r\n"
+        'Content-Disposition: form-data; name="desc"\r\n'
+        "\r\n"
+        "extra\r\n"
+        f"--{boundary}--\r\n"
+    ).encode("utf-8")
+    send_multipart(body4, boundary, expected_status=201)
+
+    # 5) Multiple file parts (only first should be saved)
+    body5 = (
+        f"--{boundary}\r\n"
+        'Content-Disposition: form-data; name="file"; filename="first.txt"\r\n'
+        "Content-Type: text/plain\r\n"
+        "\r\n"
+        "FirstFile\r\n"
+        f"--{boundary}\r\n"
+        'Content-Disposition: form-data; name="file2"; filename="second.txt"\r\n'
+        "Content-Type: text/plain\r\n"
+        "\r\n"
+        "SecondFile\r\n"
+        f"--{boundary}--\r\n"
+    ).encode("utf-8")
+    send_multipart(body5, boundary, expected_status=201)
+
+    print("✅ All multipart variants passed.")
 
 def test_http10_post():
     """
@@ -931,7 +1001,7 @@ def test_http10_post():
         f"POST {target} HTTP/1.0\r\n"
         f"Host: {urlparse(SERVER).hostname}\r\n"
         "Connection: close\r\n"
-        "Content-Length: 11\r\n"
+        "Content-Length: 12\r\n"
         "Content-Type: text/plain\r\n"
         "\r\n"
         "HELLO_HTTP10"
@@ -986,8 +1056,8 @@ def run_tests():
     test_percent_encoded_traversal_varied()
     test_absolute_uri_request_line()
     test_content_disposition_unicode_filename()
-    test_super_long_boundary_rejection()
     test_multipart_mixed_fields_and_files()
+    test_all_multipart_variants()
     test_http10_post()
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 18:34:57 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/02 15:46:48 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-// Parse a single-part file upload; extracts filename and content.
+/* // Parse a single-part file upload; extracts filename and content.
 static bool parseMultipart(const std::string& body, const std::string& boundary,
                            std::string& filename, std::string& fileContent) {
     std::string delimiter = "--" + boundary;
@@ -56,6 +56,96 @@ static bool parseMultipart(const std::string& body, const std::string& boundary,
 
     filename = headers.substr(fnamePos, endQuote - fnamePos);
     return true;
+} */
+
+static bool parseMultipart(const std::string& body, const std::string& boundary,
+                           std::string& filename, std::string& fileContent) {
+    // Build the two important markers:
+    //   "--<boundary>\r\n"      ← start of each part
+    //   "--<boundary>--"        ← final closing boundary
+    std::string partDelimiter  = "--" + boundary + "\r\n";
+    std::string closeDelimiter = "--" + boundary + "--";
+
+    // 1) Split body on "—boundary\r\n".  We ignore any leading data before the first boundary.
+    //    Using std::string::find in a loop is simpler than a full split, so we'll do that.
+    size_t curPos = 0;
+    while (true) {
+        // Find the next part delimiter
+        size_t start = body.find(partDelimiter, curPos);
+        if (start == std::string::npos) {
+            // No more parts or malformed (no boundary at all)
+            return false;
+        }
+        start += partDelimiter.size(); // move to just after "--<boundary>\r\n"
+
+        // Check if this is actually the closing boundary (i.e. --boundary--<maybe CRLF>).
+        // If what's immediately after start-offset is the closing delimiter, we’re done.
+        // (Alternatively, some clients might send "--<boundary>--" on its own line with no trailing
+        // "\r\n".)
+        size_t maybeClose = start - partDelimiter.size(); // position of "--boundary"
+        if (body.compare(maybeClose, closeDelimiter.size(), closeDelimiter) == 0) {
+            // we've hit the terminating "--<boundary>--".  No file found.
+            return false;
+        }
+
+        // 2) We found a valid part; now find where it ends.  That is either
+        //    the next occurrence of "--<boundary>\r\n" or the final "--<boundary>--".
+        size_t nextPartPos = body.find(partDelimiter, start);
+        size_t closePos    = body.find(closeDelimiter, start);
+        size_t endPos;
+        if (closePos == std::string::npos && nextPartPos == std::string::npos) {
+            // malformed/missing closing boundary
+            return false;
+        } else if (closePos == std::string::npos) {
+            endPos = nextPartPos;
+        } else if (nextPartPos == std::string::npos) {
+            endPos = closePos;
+        } else {
+            endPos = std::min(nextPartPos, closePos);
+        }
+
+        // Extract this part's raw bytes (from start up to endPos, excluding trailing "\r\n")
+        std::string part = body.substr(start, endPos - start);
+
+        // 3) Split headers vs. content by the first "\r\n\r\n"
+        size_t headerEnd = part.find("\r\n\r\n");
+        if (headerEnd == std::string::npos) {
+            // Malformed part (no header-body separator)
+            return false;
+        }
+        std::string headersBlock = part.substr(0, headerEnd);
+        std::string dataBlock    = part.substr(headerEnd + 4); // everything after "\r\n\r\n"
+
+        // 4) Look for filename="..." in the headers
+        size_t fnamePos = headersBlock.find("filename=\"");
+        if (fnamePos == std::string::npos) {
+            // This part is a plain form‐field; skip it and keep searching
+            curPos = endPos;
+            continue;
+        }
+
+        // 5) Extract the filename between the quotes
+        fnamePos += strlen("filename=\""); // move to first char of filename
+        size_t endQuote = headersBlock.find("\"", fnamePos);
+        if (endQuote == std::string::npos) {
+            // Malformed filename header
+            return false;
+        }
+        filename = headersBlock.substr(fnamePos, endQuote - fnamePos);
+
+        // 6) The remainder of dataBlock is the file’s content.  Copy it out verbatim.
+        //    We should strip off a trailing "\r\n" if present (some clients leave a CRLF before the
+        //    next boundary).
+        if (dataBlock.size() >= 2 && dataBlock.substr(dataBlock.size() - 2) == "\r\n") {
+            fileContent = dataBlock.substr(0, dataBlock.size() - 2);
+        } else {
+            fileContent = dataBlock;
+        }
+        return true; // success: we found a file part
+    }
+
+    // unreachable
+    return false;
 }
 
 // Decode percent-encoded data (e.g. "foo%20bar").
