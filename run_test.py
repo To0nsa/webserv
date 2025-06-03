@@ -22,6 +22,7 @@ def main():
     test_slow_lors        = os.path.join(root, "test", "http", "test_slow_loris.py")
     test_delete           = os.path.join(root, "test", "http", "test_delete.py")
     test_post			  = os.path.join(root, "test", "http", "test_post.py")
+    test_redirect		  = os.path.join(root, "test", "http", "test_redirect.py")
     test_file_resolution  = os.path.join(root, "test", "http", "test_file_resolution.py")
     test_symlinks         = os.path.join(root, "test", "http", "test_symlinks_forbidden.py")
     test_stress           = os.path.join(root, "test", "http", "stress_test.py")
@@ -29,6 +30,7 @@ def main():
     test_stress_pipeline  = os.path.join(root, "test", "http", "stress_pipeline.py")
     # test_ultra_stress     = os.path.join(root, "test", "http", "ultra_stress_test.py")
 
+    run(["python3", test_redirect], "test_redirect.py")
     run(["python3", bootstrap], "bootstrap_test_data.py")
     run(["python3", test_raw_malformed], "test_http_header_parser.py")
     run(["python3", test_file_resolution], "test_file_resolution.py")
