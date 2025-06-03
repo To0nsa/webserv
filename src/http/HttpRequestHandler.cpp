@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/02 10:12:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 09:59:58 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,33 @@ HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
         }
     }
 
-    // Find best matching location block (longest prefix match)
-    const Location* matched     = nullptr;
-    size_t          maxMatchLen = 0;
-
+    // Try to find an EXACT match on loc.getPath() first ──
+    const Location* matched = nullptr;
+    std::string     uri     = request.getPath();
     for (const Location& loc : server.getLocations()) {
-        const std::string& locPath = normalizePath(loc.getPath());
-        if (path.compare(0, locPath.size(), locPath) == 0 && locPath.size() > maxMatchLen) {
-            matched     = &loc;
-            maxMatchLen = locPath.size();
+        if (uri == loc.getPath()) {
+            matched = &loc;
+            break;
+        }
+    }
+
+    // If no exact match, do longest‐prefix ONLY for locations ending in '/' ──
+    if (!matched) {
+        size_t maxMatchLen = 0;
+        for (const Location& loc : server.getLocations()) {
+            const std::string& locPath = loc.getPath();
+            // Only consider prefix if the location’s path ends with '/'
+            if (!locPath.empty() && locPath.back() == '/') {
+                if (uri.rfind(locPath, 0) == 0 && locPath.size() > maxMatchLen) {
+                    matched     = &loc;
+                    maxMatchLen = locPath.size();
+                }
+            }
         }
     }
 
     if (!matched) {
-        std::cerr << "[Router] ❌ No matching location for path: " << path << std::endl;
+        std::cerr << "[Router] ❌ No matching location for path: " << uri << std::endl;
         return ResponseBuilder::generateError(404, server, request);
     }
 
