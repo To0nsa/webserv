@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 10:55:50 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 17:26:33 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <arpa/inet.h>
 #include <cstring>
 #include <fcntl.h>
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <optional>
@@ -27,7 +28,7 @@
 #include <unistd.h>
 #include <vector>
 
-#define TIMEOUT 10
+#define TIMEOUT 60
 #define HEADER_TIMEOUT_SECONDS 6
 #define HEADER_MIN_LENGTH 15
 #define HEADER_MAX_LENGTH 8192
@@ -50,6 +51,7 @@ struct ClientInfo {
     Server                    serverConfig; // The server config the client is connected to
     std::queue<HttpResponse>  responses;    // Queue of responses to be sent to the client
     std::optional<CgiProcess> cgiProcess;
+    std::ifstream             file_stream;
 };
 
 class SocketManager {
@@ -105,7 +107,6 @@ class SocketManager {
     bool isSendTimeout(int fd, time_t now);
     bool isIdleTimeout(int fd, time_t now);
     void resetRequestState(int client_fd);
-    void handleCgiPollEvents();
     void cleanupCgiForClient(int client_fd);
     bool handleCgiRequest(int client_fd, const HttpRequest& request, const Server& server,
                           const Location& location);

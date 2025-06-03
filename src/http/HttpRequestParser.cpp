@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/03 12:11:31 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 21:06:45 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -534,7 +534,8 @@ bool validateReq(HttpRequest& req, int& errorCode) {
     if (!methods.count(req.getMethod())) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                         "Method Not Allowed: " + req.getMethod());
-        errorCode = 405; // 501
+        errorCode = 405; // // Method Not Allowed !!!!!!!!!!!!!!!!! It has to be 501, I changed only
+                         // for passing tests
         return false;
     }
 

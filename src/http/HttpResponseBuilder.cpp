@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponseBuilder.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 14:47:08 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 17:37:13 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ std::string getDefaultMessage(int status_code) {
                                                      {501, "Not Implemented"},
                                                      {502, "Bad Gateway"},
                                                      {503, "Service Unavailable"},
+                                                     {504, "Gateway Timeout"},
                                                      {505, "HTTP Version Not Supported"}};
 
     // Attempt to find the status code in the map
@@ -104,6 +105,24 @@ HttpResponse generateSuccess(int status_code, const std::string& body,
     response.setHeader("Content-Type", content_type);
     // Attach the response body
     response.setBody(body);
+    return response;
+}
+
+HttpResponse generateSuccessFile(int status_code, const std::string& file_path,
+                                 const std::string& content_type, const HttpRequest& request,
+                                 std::streamsize content_length, std::streamsize cgiBodyOffset) {
+    HttpResponse response;
+    // Get the default reason phrase for the given status code (e.g., "OK")
+    std::string message = MessageHandler::getDefaultMessage(status_code);
+
+    // Set status, connection headers, and keep-alive logic
+    initializeResponse(response, status_code, message, request);
+    // Set the content type (e.g., "text/html", "application/octet-stream")
+    response.setHeader("Content-Type", content_type);
+    response.setHeader("Content-Length", std::to_string(content_length));
+    response.setCgiBodyOffset(cgiBodyOffset);
+    // Set the file path for serving
+    response.setFilePath(file_path);
     return response;
 }
 

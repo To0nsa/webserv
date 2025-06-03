@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filesystemUtils.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:38:32 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/31 13:08:00 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 17:26:40 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <string>
 #include <sys/stat.h>
 
+std::string  make_temp_name(const std::string& prefix, unsigned& counter);
 bool         isFile(const std::string& path);
 HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
                        std::string content_type = "");
