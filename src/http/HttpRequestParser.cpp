@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/03 10:50:22 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 11:39:55 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,15 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         }
     }
 
-    // ── Insert fragment‐stripping here ──
+    // ── absolute‐URI check ──
+    if (decoded.rfind("http://", 0) == 0 || decoded.rfind("https://", 0) == 0) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Rejected absolute-URI request-target: " + decoded);
+        errorCode = 400;
+        return false;
+    }
+
+    // ── fragment‐stripping ──
     size_t hashPos = decoded.find('#');
     if (hashPos != std::string::npos) {
         decoded.erase(hashPos);
@@ -291,13 +299,13 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         return false;
     }
 
-    std::string norm = pathOnly;
-    /*     std::string norm = normalizePath(pathOnly);
-        if (norm.empty()) {
-            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
-            errorCode = 403;
-            return false;
-        } */
+    // std::string norm = pathOnly;
+    std::string norm = normalizePath(pathOnly);
+    if (norm.empty()) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
+        errorCode = 403;
+        return false;
+    }
     req.setPath(norm);
     req.setQuery(query);
     req.setVersion(version);
