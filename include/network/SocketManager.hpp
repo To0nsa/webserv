@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 15:18:01 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 17:26:33 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 #define HEADER_MIN_LENGTH 15
 #define HEADER_MAX_LENGTH 8192
 #define RECV_BUFFER HEADER_MAX_LENGTH * 2
-#define MAX_CLIENTS 512
+#define MAX_CLIENTS 1024
 #define CGI_TIMEOUT_SECONDS 45
 
 struct ClientInfo {
