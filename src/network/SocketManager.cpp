@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 03:05:47 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:48:59 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
 
         // Clean up CGI process
         if (client.cgiProcess) {
-            CGI::cleanupCgi(*client.cgiProcess);
+            CGI::errorOnCgi(*client.cgiProcess);
             client.cgiProcess.reset();
         }
 
@@ -344,8 +344,8 @@ void SocketManager::run() {
             // timeout check
             if (time(NULL) - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
                 Logger::logFrom(LogLevel::WARN, "CGI", "Timeout. Killing CGI process for fd: " + std::to_string(client_fd));
-                CGI::cleanupCgi(cgi);
                 client.responses.push(ResponseBuilder::generateError(504, client.serverConfig, {}));
+				CGI::errorOnCgi(cgi);
                 client.cgiProcess.reset();
                 for (auto& pfd : _poll_fds) {
                     if (pfd.fd == client_fd) {
@@ -358,9 +358,10 @@ void SocketManager::run() {
 
             // check if finished
             if (CGI::tryTerminateCgi(cgi)) {
-                auto maybeResp = CGI::finalizeCgi(cgi, client.serverConfig, {/* dummy req if needed */});
-                auto resp = maybeResp.value_or(ResponseBuilder::generateError(502, client.serverConfig, {}));
+                HttpResponse resp = CGI::finalizeCgi(cgi, client.serverConfig, {/* dummy req if needed */});
+                //HttpResponse resp = maybeResp.value_or(ResponseBuilder::generateError(502, client.serverConfig, {}));
                 client.responses.push(resp);
+				CGI::cleanupCgi(cgi);
                 client.cgiProcess.reset();
 
                 for (auto& pfd : _poll_fds) {
@@ -669,7 +670,6 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
             Logger::logFrom(LogLevel::DEBUG, "SocketManager eof()",
                 "[✅DONE] We sent FILE RESPONSE to fd:" + std::to_string(client_fd));
             _client_info[client_fd].file_stream.close();
-            _client_info[client_fd].responses.pop();
             _client_info[client_fd].current_raw_response.clear();
             offset = 0;
             if (response.isCgiTempFile()) {
@@ -677,16 +677,18 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
                 Logger::logFrom(LogLevel::DEBUG, "SocketManager",
                     "[CGI] Deleting temp file: " + path);
                 if (!path.empty() && unlink(path.c_str()) == 0) {
+					response.setCgiTempFile("");
                     Logger::logFrom(LogLevel::DEBUG, "SocketManager", 
                                    "Deleted temp file: " + path);
                 }
             }
-            if (response.isFileResponse() && _client_info[client_fd].cgiProcess) {
+            /* if (response.isFileResponse() && _client_info[client_fd].cgiProcess) {
                 Logger::logFrom(LogLevel::DEBUG, "SocketManager",
                     "[CGI] Cleaning up CGI process for fd: " + std::to_string(client_fd));
                 CGI::cleanupCgi(*_client_info[client_fd].cgiProcess);
                 _client_info[client_fd].cgiProcess.reset();
-            }
+            } */
+			_client_info[client_fd].responses.pop();
             if (response.isConnectionClose()) {
                 cleanupClientConnectionClose(client_fd, index);
             } else {

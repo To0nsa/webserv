@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:37 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 02:13:43 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:46:46 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 #include <map>
 #include <string>
+#include <unistd.h>
 
 class HttpResponse {
   private:

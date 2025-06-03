@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 00:24:43 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 00:45:17 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:25:03 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,10 @@ namespace CGI {
 
 bool initCgiProcess(CgiProcess& cgi, const HttpRequest& request, const Server& server,
                     const Location& loc, const std::vector<pollfd>& poll_fds);
-std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
+HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server,
                                         const HttpRequest& request);
 void                        cleanupCgi(CgiProcess& cgi);
+void errorOnCgi(CgiProcess& cgi);
 bool                        tryTerminateCgi(CgiProcess& cgi);
 
 } // namespace CGI
