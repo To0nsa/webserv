@@ -82,3 +82,114 @@ REQUEST_URI=/directory/fake.bla \
 SCRIPT_FILENAME=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane/fake.bla \
 REDIRECT_STATUS=200 \
 /home/irychkov/Desktop/webserv/serverfiles/cgi-bin/ubuntu_cgi_tester
+
+ab -n 1000 -c 100 http://localhost:8001/index.html
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8001
+
+Document Path:          /index.html
+Document Length:        244 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.386 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      328000 bytes
+HTML transferred:       244000 bytes
+Requests per second:    2588.51 [#/sec] (mean)
+Time per request:       38.632 [ms] (mean)
+Time per request:       0.386 [ms] (mean, across all concurrent requests)
+Transfer rate:          829.13 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    1   1.5      0       6
+Processing:     7   36   7.8     36      59
+Waiting:        1   36   7.7     36      58
+Total:          7   37   8.4     36      61
+
+Percentage of the requests served within a certain time (ms)
+  50%     36
+  66%     37
+  75%     37
+  80%     38
+  90%     44
+  95%     58
+  98%     60
+  99%     61
+ 100%     61 (longest request)
+
+
+ab -n 10000 -c 200 http://localhost:8001/index.html
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 1000 requests
+Completed 2000 requests
+Completed 3000 requests
+Completed 4000 requests
+Completed 5000 requests
+Completed 6000 requests
+Completed 7000 requests
+Completed 8000 requests
+Completed 9000 requests
+Completed 10000 requests
+Finished 10000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8001
+
+Document Path:          /index.html
+Document Length:        244 bytes
+
+Concurrency Level:      200
+Time taken for tests:   3.503 seconds
+Complete requests:      10000
+Failed requests:        0
+Total transferred:      3280000 bytes
+HTML transferred:       2440000 bytes
+Requests per second:    2855.09 [#/sec] (mean)
+Time per request:       70.050 [ms] (mean)
+Time per request:       0.350 [ms] (mean, across all concurrent requests)
+Transfer rate:          914.52 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   1.7      0      19
+Processing:    10   69   5.9     69      77
+Waiting:        1   69   6.0     69      77
+Total:         21   69   5.3     69      82
+
+Percentage of the requests served within a certain time (ms)
+  50%     69
+  66%     71
+  75%     73
+  80%     74
+  90%     75
+  95%     75
+  98%     76
+  99%     77
+ 100%     82 (longest request)
