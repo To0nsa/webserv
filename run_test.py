@@ -30,7 +30,6 @@ def main():
     test_stress_pipeline  = os.path.join(root, "test", "http", "stress_pipeline.py")
     # test_ultra_stress     = os.path.join(root, "test", "http", "ultra_stress_test.py")
 
-    run(["python3", test_redirect], "test_redirect.py")
     run(["python3", bootstrap], "bootstrap_test_data.py")
     run(["python3", test_raw_malformed], "test_http_header_parser.py")
     run(["python3", test_file_resolution], "test_file_resolution.py")
@@ -38,6 +37,7 @@ def main():
     run(["python3", test_symlinks], "test_symlinks_forbidden.py")
     run(["python3", test_delete], "test_delete.py")
     run(["python3", test_post], "test_post.py")
+    run(["python3", test_redirect], "test_redirect.py")
     run(["python3", test_slow_lors], "test_slow_loris.py")
     run(["python3", test_stress], "stress_test.py")
     run(["python3", test_stress_chunked], "stress_chunked.py")

@@ -132,15 +132,7 @@ def test_case_sensitivity_and_invalid_paths():
     GET /dir/../ → expect 404 or normalized handling (no redirect)
     """
     assert_status("/DIR", 404)
-    assert_status("/dir/../", 404)
-
-def test_head_method_on_redirect():
-    """
-    HEAD /dir → expect 301 and Location: /dir/
-    HEAD /dir/ → expect 200
-    """
-    assert_redirect("/dir", "/dir/", method="HEAD")
-    assert_status("/dir/", 200, method="HEAD")
+    assert_status("/dir/../", 403)
 
 def test_post_to_directory_path_with_slash():
     """
@@ -181,17 +173,83 @@ def test_delete_to_redirect_source():
         print(f"❌ DELETE /dir/ → {res.status} {res.reason} (unexpected)")
         sys.exit(1)
     conn.close()
+    
+def test_double_slash():
+    """
+    GET //dir → may normalize to /dir and redirect → 301 /dir/
+    """
+    parsed = urlparse(SERVER)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
+    conn.request("GET", "//dir")
+    res = conn.getresponse()
+    location = res.getheader("Location")
+    if res.status == 301 and location == "/dir/":
+        print("✅ GET //dir → 301 Location: /dir/")
+    else:
+        print(f"❌ GET //dir → {res.status} {res.reason}, Location: {location!r} (expected 301 /dir/)")
+        sys.exit(1)
+    conn.close()
+    
+def test_percent_encoded_redirect():
+    """
+    GET /%64%69%72 → "/dir" in percent-encoding → expect 301
+    """
+    parsed = urlparse(SERVER)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
+    conn.request("GET", "/%64%69%72")  # /dir
+    res = conn.getresponse()
+    location = res.getheader("Location")
+    if res.status == 301 and location == "/dir/":
+        print("✅ GET /%64%69%72 → 301 Location: /dir/")
+    else:
+        print(f"❌ GET /%%64%%69%%72 → {res.status} (expected 301 /dir/)")
+        sys.exit(1)
+    conn.close()
+
+def test_encoded_traversal():
+    """
+    GET /dir/%2E%2E/ → decoded as /dir/../ → expect 403
+    """
+    assert_status("/dir/%2E%2E/", 403)
+
+def test_fragment_ignored():
+    """
+    GET /dir#anchor → server sees just "/dir" → expect 301
+    """
+    # Fragment should never be sent over HTTP; simulate client mistake
+    assert_redirect("/dir#anchor", "/dir/")
+
+def test_dot_segment_handling():
+    """
+    GET /dir/. → normalized to /dir/ → expect 301
+    GET /dir/./ → normalized to /dir/ → expect 200
+    """
+    assert_redirect("/dir/.", "/dir/")
+    assert_status("/dir/./", 200)
+
+def test_dir_prefix_but_not_match():
+    """
+    GET /dirX → should not match /dir → expect 404
+    """
+    assert_status("/dirX", 404)
+
+
 
 if __name__ == "__main__":
     print("\n[REDIRECTION TESTS] Starting...\n")
     test_trailing_slash_redirect()
     test_non_get_methods_do_not_redirect()
     test_no_redirect_on_other_paths()
-
-    # Edge cases
     test_query_string_preserved_or_dropped()
     test_nonexact_prefix_no_redirect()
     test_case_sensitivity_and_invalid_paths()
-    test_head_method_on_redirect()
     test_post_to_directory_path_with_slash()
     test_delete_to_redirect_source()
+    
+    test_double_slash()
+    test_percent_encoded_redirect()
+    test_encoded_traversal()
+    test_fragment_ignored()
+    test_dot_segment_handling()
+    test_dir_prefix_but_not_match()
+

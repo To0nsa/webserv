@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/31 13:22:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:20:41 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
     return result;
 } */
 
-std::string normalizePath(const std::string& path) {
+/* std::string normalizePath(const std::string& path) {
     if (path.empty())
         return "/";
 
@@ -116,6 +116,57 @@ std::string normalizePath(const std::string& path) {
             } else {
                 // Attempt to go above root: reject this path
                 return ""; // special marker for invalid path
+            }
+        } else {
+            segments.push_back(segment);
+        }
+    }
+
+    std::string result = "/";
+    for (std::size_t i = 0; i < segments.size(); ++i) {
+        result += segments[i];
+        if (i + 1 < segments.size())
+            result += "/";
+    }
+
+    if (hadTrailingSlash && result != "/")
+        result += "/";
+
+    return result;
+} */
+
+std::string normalizePath(const std::string& path) {
+    if (path.empty())
+        return "/";
+
+    // Collapse consecutive slashes into one
+    std::string collapsed;
+    bool        prevWasSlash = false;
+    for (char c : path) {
+        if (c == '/') {
+            if (!prevWasSlash) {
+                collapsed += '/';
+                prevWasSlash = true;
+            }
+        } else {
+            collapsed += c;
+            prevWasSlash = false;
+        }
+    }
+
+    std::vector<std::string> segments;
+    std::string              segment;
+    std::istringstream       stream(collapsed);
+    bool                     hadTrailingSlash = collapsed.back() == '/';
+
+    while (std::getline(stream, segment, '/')) {
+        if (segment.empty() || segment == ".")
+            continue;
+        if (segment == "..") {
+            if (!segments.empty()) {
+                segments.pop_back();
+            } else {
+                return ""; // invalid traversal
             }
         } else {
             segments.push_back(segment);

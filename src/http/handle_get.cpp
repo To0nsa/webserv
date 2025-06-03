@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 23:42:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:41:15 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,10 +319,14 @@ HttpResponse handleGet(const HttpRequest& request, const Server& server, const L
         if (S_ISDIR(fileStat.st_mode)) {
             std::cout << "[GET] 📁 Path is a directory.\n";
 
-            if (!uri.empty() && uri.back() != '/') {
-                std::cout << "[GET] ↪️ Redirecting to URI with trailing slash: " << uri + "/"
+            std::string normalized = normalizePath(uri);
+            if (normalized.empty()) {
+                return ResponseBuilder::generateError(403, server, request);
+            }
+            if (!normalized.empty() && normalized.back() != '/') {
+                std::cout << "[GET] ↪️ Redirecting to URI with trailing slash: " << normalized + "/"
                           << std::endl;
-                return ResponseBuilder::generateRedirect(301, uri + "/", request);
+                return ResponseBuilder::generateRedirect(301, normalized + "/", request);
             }
 
             std::string index_file = loc.getIndex();
