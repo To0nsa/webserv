@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 01:16:19 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 03:05:47 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,33 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
     if (it != _client_info.end()) {
         ClientInfo& client = it->second;
 
+        // Clean up any pending responses with temporary files
+        while (!client.responses.empty()) {
+            HttpResponse& resp = client.responses.front();
+            
+            // Delete temporary files from CGI responses
+            if (resp.isCgiTempFile()) {
+                const std::string& path = resp.getCgiTempFile();
+                if (!path.empty()) {
+                    if (unlink(path.c_str()) == 0) {
+                        Logger::logFrom(LogLevel::DEBUG, "SocketManager", 
+                            "Deleted temp file: " + path);
+                    } else {
+                        Logger::logFrom(LogLevel::ERROR, "SocketManager", 
+                            "Failed to delete temp file: " + path);
+                    }
+                }
+            }
+            client.responses.pop();
+        }
+
+        // Clean up CGI process
         if (client.cgiProcess) {
             CGI::cleanupCgi(*client.cgiProcess);
             client.cgiProcess.reset();
         }
 
+        // Close file stream
         if (client.file_stream.is_open()) {
             client.file_stream.close();
         }
@@ -76,6 +98,7 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
         _client_info.erase(it);
     }
 
+    // Close socket
     close(client_fd);
 
     Logger::logFrom(LogLevel::INFO, "SocketManager cleanupClientConnectionClose",
@@ -628,6 +651,9 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
             std::to_string(bytes_read) + " bytes for fd: " + std::to_string(client_fd));
         if (bytes_read > 0) {
             ssize_t sent = send(client_fd, buffer, bytes_read, MSG_DONTWAIT);
+            Logger::logFrom(LogLevel::DEBUG, "SocketManager sendResponse",
+                "from file stream, sent " + std::to_string(sent) + " bytes for fd: " +
+                std::to_string(client_fd));
             if (sent < 0) {
                 Logger::logFrom(LogLevel::ERROR, "SocketManager",
                                 "send() failed on fd " + std::to_string(client_fd) + ": " +
@@ -640,10 +666,21 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         }
 
         if (_client_info[client_fd].file_stream.eof() || bytes_read == 0) {
+            Logger::logFrom(LogLevel::DEBUG, "SocketManager eof()",
+                "[✅DONE] We sent FILE RESPONSE to fd:" + std::to_string(client_fd));
             _client_info[client_fd].file_stream.close();
             _client_info[client_fd].responses.pop();
             _client_info[client_fd].current_raw_response.clear();
             offset = 0;
+            if (response.isCgiTempFile()) {
+                const std::string& path = response.getCgiTempFile();
+                Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                    "[CGI] Deleting temp file: " + path);
+                if (!path.empty() && unlink(path.c_str()) == 0) {
+                    Logger::logFrom(LogLevel::DEBUG, "SocketManager", 
+                                   "Deleted temp file: " + path);
+                }
+            }
             if (response.isFileResponse() && _client_info[client_fd].cgiProcess) {
                 Logger::logFrom(LogLevel::DEBUG, "SocketManager",
                     "[CGI] Cleaning up CGI process for fd: " + std::to_string(client_fd));

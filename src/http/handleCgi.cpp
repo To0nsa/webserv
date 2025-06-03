@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 01:08:58 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 02:55:56 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,20 +274,31 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
     std::streamsize bodySize = totalSize - headerEnd;
     in.close();
 
-    return ResponseBuilder::generateSuccessFile(code, cgi.output_path, contentType, req, bodySize, headerEnd);
+	HttpResponse resp = ResponseBuilder::generateSuccessFile(code, cgi.output_path, contentType, req, bodySize, headerEnd);
+	resp.setCgiTempFile(cgi.output_path);
+	Logger::logFrom(LogLevel::DEBUG, "CGI", "CGI process completed with PID: " + std::to_string(cgi.pid) +
+		", output file: " + cgi.output_path + ", status code: " + std::to_string(code));
+	if (!cgi.input_path.empty()) {
+        unlink(cgi.input_path.c_str());
+        cgi.input_path.clear();
+    }
+
+    return resp;
 }
 
 void cleanupCgi(CgiProcess& cgi) {
+	Logger::logFrom(LogLevel::DEBUG, "CGI", "Cleaning up CGI process with PID: " + std::to_string(cgi.pid));
     kill(cgi.pid, SIGKILL);
     waitpid(cgi.pid, nullptr, 0);
+    // Only delete input file (output file is managed by HttpResponse)
     if (!cgi.input_path.empty()) {
-        unlink(cgi.input_path.c_str());
-        Logger::logFrom(LogLevel::DEBUG, "CGI", "Deleted input temp file: " + cgi.input_path);
-    }
-
-    if (!cgi.output_path.empty()) {
-        unlink(cgi.output_path.c_str());
-        Logger::logFrom(LogLevel::DEBUG, "CGI", "Deleted output temp file: " + cgi.output_path);
+        if (unlink(cgi.input_path.c_str()) == 0) {
+            Logger::logFrom(LogLevel::DEBUG, "CGI", 
+                "Deleted input temp file: " + cgi.input_path);
+        } else {
+            Logger::logFrom(LogLevel::ERROR, "CGI", 
+                "Failed to delete input temp file: " + cgi.input_path);
+        }
     }
 }
 

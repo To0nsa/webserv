@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:37 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 17:25:40 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 02:13:43 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class HttpResponse {
     std::string                        _http_version;
     std::string                        _connection_header;
 	std::string                        _file_path;
+	std::string                        _cgi_temp_file;
 	std::streamsize _cgiBodyOffset;
 
   public:
@@ -50,4 +51,7 @@ class HttpResponse {
 	const std::map<std::string, std::string>& getHeaders(void) const;
 	void setCgiBodyOffset(std::streamsize offset);
 	std::streamsize getCgiBodyOffset() const;
+	void setCgiTempFile(const std::string& temp_file);
+	const std::string& getCgiTempFile() const;
+	bool isCgiTempFile() const;
 };

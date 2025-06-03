@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:56:54 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 17:26:04 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 02:13:45 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,4 +127,15 @@ void HttpResponse::setCgiBodyOffset(std::streamsize offset) {
 
 std::streamsize HttpResponse::getCgiBodyOffset() const {
 	return _cgiBodyOffset;
+}
+
+void HttpResponse::setCgiTempFile(const std::string& temp_file) {
+	_cgi_temp_file = temp_file;
+}
+const std::string& HttpResponse::getCgiTempFile() const {
+	return _cgi_temp_file;
+}
+
+bool HttpResponse::isCgiTempFile() const {
+	return !_cgi_temp_file.empty();
 }
