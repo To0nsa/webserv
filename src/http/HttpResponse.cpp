@@ -17,7 +17,7 @@
 HttpResponse ::HttpResponse(void) {
     _status_code    = 200;
     _status_message = "OK";
-	_cgiBodyOffset = 0;
+    _cgiBodyOffset  = 0;
 }
 
 HttpResponse ::~HttpResponse(void) {
@@ -98,44 +98,44 @@ std::string HttpResponse ::toHttpString(void) const {
 }
 
 void HttpResponse::setFilePath(const std::string& path) {
-	_file_path = path;
+    _file_path = path;
 }
 
 const std::string& HttpResponse::getFilePath() const {
-	return _file_path;
+    return _file_path;
 }
 
 bool HttpResponse::isFileResponse() const {
-	return !_file_path.empty();
+    return !_file_path.empty();
 }
 
 int HttpResponse::getStatusCode(void) const {
-	return _status_code;
+    return _status_code;
 }
 
 const std::string& HttpResponse::getStatusMessage(void) const {
-	return _status_message;
+    return _status_message;
 }
 
 const std::map<std::string, std::string>& HttpResponse::getHeaders(void) const {
-	return _headers;
+    return _headers;
 }
 
 void HttpResponse::setCgiBodyOffset(std::streamsize offset) {
-	_cgiBodyOffset = offset;
+    _cgiBodyOffset = offset;
 }
 
 std::streamsize HttpResponse::getCgiBodyOffset() const {
-	return _cgiBodyOffset;
+    return _cgiBodyOffset;
 }
 
 void HttpResponse::setCgiTempFile(const std::string& temp_file) {
-	_cgi_temp_file = temp_file;
+    _cgi_temp_file = temp_file;
 }
 const std::string& HttpResponse::getCgiTempFile() const {
-	return _cgi_temp_file;
+    return _cgi_temp_file;
 }
 
 bool HttpResponse::isCgiTempFile() const {
-	return !_cgi_temp_file.empty();
+    return !_cgi_temp_file.empty();
 }

@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 16:06:54 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 17:19:17 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "http/HttpResponseBuilder.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -27,6 +28,21 @@ namespace fs = std::filesystem;
 
 bool isFile(const std::string& path) {
     return fs::exists(path) && fs::is_regular_file(path);
+}
+
+std::string make_temp_name(const std::string& prefix, unsigned& counter) {
+    // 1) Where to put it (e.g. "/tmp" on Linux, or $TMPDIR)
+    fs::path tmpdir = fs::temp_directory_path();
+
+    // 2) High-precision timestamp (nanoseconds since epoch)
+    auto now = std::chrono::high_resolution_clock::now();
+    auto ns  = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
+
+    // 3) Build "<prefix>_<pid>_<nanoseconds>_<counter>.tmp"
+    std::ostringstream ss;
+    ss << prefix << "_" << ns << "_" << counter++ << ".tmp";
+
+    return (tmpdir / ss.str()).string();
 }
 
 std::string detectMimeType(const std::string& file_path) {

@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 16:41:44 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 17:19:46 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,17 +112,11 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     }
 
     // === Generate a unique temporary file path ===
-    static int        counter = 0;
-    std::stringstream ss;
-    ss << "/home/irychkov/Desktop/webserv_team/temp_in" << getpid() << "_" << time(nullptr) << "_"
-       << counter++ << ".tmp";
-    std::string       temp_in = ss.str();
-    std::stringstream ss1;
-    ss1 << "/home/irychkov/Desktop/webserv_team/temp_out_" << getpid() << "_" << time(nullptr) << "_"
-        << counter++ << ".tmp";
-    std::string temp_out = ss1.str();
-    cgi.input_path       = temp_in;
-    cgi.output_path      = temp_out;
+    static unsigned counter  = 0;
+    std::string     temp_in  = make_temp_name("webserv_in", counter);
+    std::string     temp_out = make_temp_name("webserv_out", counter);
+    cgi.input_path           = temp_in;
+    cgi.output_path          = temp_out;
 
     // === Write request body to temp file ===
     std::ofstream out(temp_in, std::ios::binary);
@@ -159,7 +153,8 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         close(body_fd);
         dup2(output_fd, STDOUT_FILENO);
         close(output_fd);
-        for (std::vector<pollfd>::const_iterator it = poll_fds.begin(); it != poll_fds.end(); ++it) {
+        for (std::vector<pollfd>::const_iterator it = poll_fds.begin(); it != poll_fds.end();
+             ++it) {
             int fd = it->fd;
             if (fd != STDIN_FILENO && fd != STDOUT_FILENO && fd != STDERR_FILENO) {
                 close(fd);
@@ -212,8 +207,7 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     return true;
 }
 
-HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server,
-                                        const HttpRequest& req) {
+HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpRequest& req) {
 
     cgi.last_activity = time(NULL);
     std::ifstream in(cgi.output_path, std::ios::binary);
@@ -222,35 +216,36 @@ HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server,
         return ResponseBuilder::generateError(500, server, req);
     }
 
-	in.seekg(0, std::ios::end);
-	std::streamsize totalSize = in.tellg();
-	in.seekg(0, std::ios::beg);
+    in.seekg(0, std::ios::end);
+    std::streamsize totalSize = in.tellg();
+    in.seekg(0, std::ios::beg);
 
     // Read the first 16KB only to find headers
-    const size_t MAX_HEADER_SCAN = 16 * 1024;
+    const size_t      MAX_HEADER_SCAN = 16 * 1024;
     std::vector<char> buffer(MAX_HEADER_SCAN);
     in.read(buffer.data(), MAX_HEADER_SCAN);
     std::streamsize bytesRead = in.gcount();
-    std::string partialOutput(buffer.data(), bytesRead);
+    std::string     partialOutput(buffer.data(), bytesRead);
 
     // Look for header delimiter
-    size_t pos = partialOutput.find("\r\n\r\n");
-	size_t delimLen = 4;
+    size_t pos      = partialOutput.find("\r\n\r\n");
+    size_t delimLen = 4;
     if (pos == std::string::npos) {
-        pos = partialOutput.find("\n\n");
-		delimLen = 2;
-	}
+        pos      = partialOutput.find("\n\n");
+        delimLen = 2;
+    }
     if (pos == std::string::npos) {
-        Logger::logFrom(LogLevel::ERROR, "CGI", "finalizeCgi(): Header delimiter not found in first 16KB");
+        Logger::logFrom(LogLevel::ERROR, "CGI",
+                        "finalizeCgi(): Header delimiter not found in first 16KB");
         return ResponseBuilder::generateError(500, server, req);
     }
 
-    std::string header = partialOutput.substr(0, pos);
+    std::string header      = partialOutput.substr(0, pos);
     std::string contentType = "text/plain";
     int         code        = 200;
 
     std::istringstream headerStream(header);
-    std::string line;
+    std::string        line;
     while (std::getline(headerStream, line)) {
         if (line.find("Content-Type:") == 0)
             contentType = trim(line.substr(13));
@@ -258,64 +253,64 @@ HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server,
             code = std::stoi(trim(line.substr(7)));
     }
 
-	std::streamsize headerEnd = static_cast<std::streamsize>(pos + delimLen);
-    std::streamsize bodySize = totalSize - headerEnd;
+    std::streamsize headerEnd = static_cast<std::streamsize>(pos + delimLen);
+    std::streamsize bodySize  = totalSize - headerEnd;
     in.close();
 
-	HttpResponse resp = ResponseBuilder::generateSuccessFile(code, cgi.output_path, contentType, req, bodySize, headerEnd);
-	resp.setCgiTempFile(cgi.output_path);
-	Logger::logFrom(LogLevel::DEBUG, "CGI", "CGI process completed with PID: " + std::to_string(cgi.pid) +
-		", output file: " + cgi.output_path + ", status code: " + std::to_string(code));
+    HttpResponse resp = ResponseBuilder::generateSuccessFile(code, cgi.output_path, contentType,
+                                                             req, bodySize, headerEnd);
+    resp.setCgiTempFile(cgi.output_path);
+    Logger::logFrom(LogLevel::DEBUG, "CGI",
+                    "CGI process completed with PID: " + std::to_string(cgi.pid) +
+                        ", output file: " + cgi.output_path +
+                        ", status code: " + std::to_string(code));
 
     return resp;
 }
 
-
 void errorOnCgi(CgiProcess& cgi) {
-	Logger::logFrom(LogLevel::DEBUG, "CGI", "Killing CGI process with PID: " + std::to_string(cgi.pid));
+    Logger::logFrom(LogLevel::DEBUG, "CGI",
+                    "Killing CGI process with PID: " + std::to_string(cgi.pid));
     kill(cgi.pid, SIGKILL);
     waitpid(cgi.pid, nullptr, 0);
     if (!cgi.input_path.empty()) {
         if (unlink(cgi.input_path.c_str()) == 0) {
-            Logger::logFrom(LogLevel::DEBUG, "CGI", 
-                "Deleted input temp file: " + cgi.input_path);
+            Logger::logFrom(LogLevel::DEBUG, "CGI", "Deleted input temp file: " + cgi.input_path);
         } else {
-            Logger::logFrom(LogLevel::ERROR, "CGI", 
-                "Failed to delete input temp file: " + cgi.input_path);
+            Logger::logFrom(LogLevel::ERROR, "CGI",
+                            "Failed to delete input temp file: " + cgi.input_path);
         }
     }
-	if (!cgi.output_path.empty()) {
-		if (unlink(cgi.output_path.c_str()) == 0) {
-			Logger::logFrom(LogLevel::DEBUG, "CGI", 
-				"Deleted output temp file: " + cgi.output_path);
-		} else {
-			Logger::logFrom(LogLevel::ERROR, "CGI", 
-				"Failed to delete output temp file: " + cgi.output_path);
-		}
-	}
+    if (!cgi.output_path.empty()) {
+        if (unlink(cgi.output_path.c_str()) == 0) {
+            Logger::logFrom(LogLevel::DEBUG, "CGI", "Deleted output temp file: " + cgi.output_path);
+        } else {
+            Logger::logFrom(LogLevel::ERROR, "CGI",
+                            "Failed to delete output temp file: " + cgi.output_path);
+        }
+    }
 
-	cgi.pid           = -1;
-	cgi.start_time    = 0;
-	cgi.last_activity = 0;
-	cgi.input_path.clear();
-	cgi.script_path.clear();
+    cgi.pid           = -1;
+    cgi.start_time    = 0;
+    cgi.last_activity = 0;
+    cgi.input_path.clear();
+    cgi.script_path.clear();
 }
 
 void cleanupCgi(CgiProcess& cgi) {
     // Only delete input file (output file is managed by HttpResponse)
     if (!cgi.input_path.empty()) {
         if (unlink(cgi.input_path.c_str()) == 0) {
-            Logger::logFrom(LogLevel::DEBUG, "CGI", 
-                "Deleted input temp file: " + cgi.input_path);
+            Logger::logFrom(LogLevel::DEBUG, "CGI", "Deleted input temp file: " + cgi.input_path);
         } else {
-            Logger::logFrom(LogLevel::ERROR, "CGI", 
-                "Failed to delete input temp file: " + cgi.input_path);
+            Logger::logFrom(LogLevel::ERROR, "CGI",
+                            "Failed to delete input temp file: " + cgi.input_path);
         }
     }
-	cgi.pid           = -1;
-	cgi.start_time    = 0;
-	cgi.last_activity = 0;
-	cgi.input_path.clear();
+    cgi.pid           = -1;
+    cgi.start_time    = 0;
+    cgi.last_activity = 0;
+    cgi.input_path.clear();
 }
 
 bool tryTerminateCgi(CgiProcess& cgi) {
@@ -330,7 +325,8 @@ bool tryTerminateCgi(CgiProcess& cgi) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "waitpid failed: " + std::string(strerror(errno)));
         return true;
     }
-	Logger::logFrom(LogLevel::DEBUG, "CGI", "CGI process terminated with PID: " + std::to_string(cgi.pid));
+    Logger::logFrom(LogLevel::DEBUG, "CGI",
+                    "CGI process terminated with PID: " + std::to_string(cgi.pid));
     return true;
 }
 

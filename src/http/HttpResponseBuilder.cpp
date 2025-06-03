@@ -109,9 +109,8 @@ HttpResponse generateSuccess(int status_code, const std::string& body,
 }
 
 HttpResponse generateSuccessFile(int status_code, const std::string& file_path,
-                                  const std::string& content_type, const HttpRequest& request,
-								  std::streamsize content_length,
-								  std::streamsize cgiBodyOffset) {
+                                 const std::string& content_type, const HttpRequest& request,
+                                 std::streamsize content_length, std::streamsize cgiBodyOffset) {
     HttpResponse response;
     // Get the default reason phrase for the given status code (e.g., "OK")
     std::string message = MessageHandler::getDefaultMessage(status_code);
@@ -120,8 +119,8 @@ HttpResponse generateSuccessFile(int status_code, const std::string& file_path,
     initializeResponse(response, status_code, message, request);
     // Set the content type (e.g., "text/html", "application/octet-stream")
     response.setHeader("Content-Type", content_type);
-	response.setHeader("Content-Length", std::to_string(content_length));
-	response.setCgiBodyOffset(cgiBodyOffset);
+    response.setHeader("Content-Length", std::to_string(content_length));
+    response.setCgiBodyOffset(cgiBodyOffset);
     // Set the file path for serving
     response.setFilePath(file_path);
     return response;

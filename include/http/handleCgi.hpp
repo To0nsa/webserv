@@ -18,10 +18,10 @@
 #include "http/HttpResponse.hpp"
 
 #include <optional>
+#include <poll.h>
 #include <string>
 #include <unistd.h>
 #include <vector>
-#include <poll.h>
 
 struct CgiProcess {
     pid_t       pid           = -1;
@@ -35,12 +35,11 @@ struct CgiProcess {
 
 namespace CGI {
 
-bool initCgiProcess(CgiProcess& cgi, const HttpRequest& request, const Server& server,
-                    const Location& loc, const std::vector<pollfd>& poll_fds);
-HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server,
-                                        const HttpRequest& request);
-void                        cleanupCgi(CgiProcess& cgi);
-void errorOnCgi(CgiProcess& cgi);
-bool                        tryTerminateCgi(CgiProcess& cgi);
+bool         initCgiProcess(CgiProcess& cgi, const HttpRequest& request, const Server& server,
+                            const Location& loc, const std::vector<pollfd>& poll_fds);
+HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpRequest& request);
+void         cleanupCgi(CgiProcess& cgi);
+void         errorOnCgi(CgiProcess& cgi);
+bool         tryTerminateCgi(CgiProcess& cgi);
 
 } // namespace CGI

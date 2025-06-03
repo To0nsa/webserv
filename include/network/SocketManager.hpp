@@ -18,6 +18,7 @@
 #include <arpa/inet.h>
 #include <cstring>
 #include <fcntl.h>
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <optional>
@@ -26,7 +27,6 @@
 #include <signal.h>
 #include <unistd.h>
 #include <vector>
-#include <fstream>
 
 #define TIMEOUT 60
 #define HEADER_TIMEOUT_SECONDS 6
@@ -51,7 +51,7 @@ struct ClientInfo {
     Server                    serverConfig; // The server config the client is connected to
     std::queue<HttpResponse>  responses;    // Queue of responses to be sent to the client
     std::optional<CgiProcess> cgiProcess;
-	std::ifstream file_stream;
+    std::ifstream             file_stream;
 };
 
 class SocketManager {
