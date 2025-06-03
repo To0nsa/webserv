@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 13:48:59 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:53:46 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void SocketManager::cleanupCgiForClient(int client_fd) {
 }
 
 void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
+	Logger::logFrom(LogLevel::DEBUG, "SocketManager cleanupClientConnectionClose", 
+    "Called cleanup for fd: " + std::to_string(client_fd));
     // 1. Defensive: bounds check for poll index
     if (index < _poll_fds.size()) {
         _poll_fds.erase(_poll_fds.begin() + index);
@@ -349,6 +351,7 @@ void SocketManager::run() {
                 client.cgiProcess.reset();
                 for (auto& pfd : _poll_fds) {
                     if (pfd.fd == client_fd) {
+						Logger::logFrom(LogLevel::DEBUG, "CGI", "Requesting POLLOUT for fd: " + std::to_string(client_fd));
                         pfd.events |= POLLOUT;
                         break;
                     }
@@ -595,6 +598,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 
 // Accept new client and add to poll list
 void SocketManager::sendResponse(int client_fd, size_t index) {
+	Logger::logFrom(LogLevel::DEBUG, "SocketManager sendResponse", "About to send response to fd: " + std::to_string(client_fd));
     HttpResponse& response = _client_info[client_fd].responses.front();
     size_t&        offset  = _client_info[client_fd].bytes_sent;
 
@@ -674,20 +678,12 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
             offset = 0;
             if (response.isCgiTempFile()) {
                 const std::string& path = response.getCgiTempFile();
-                Logger::logFrom(LogLevel::DEBUG, "SocketManager",
-                    "[CGI] Deleting temp file: " + path);
                 if (!path.empty() && unlink(path.c_str()) == 0) {
-					response.setCgiTempFile("");
                     Logger::logFrom(LogLevel::DEBUG, "SocketManager", 
                                    "Deleted temp file: " + path);
+					response.setCgiTempFile("");
                 }
             }
-            /* if (response.isFileResponse() && _client_info[client_fd].cgiProcess) {
-                Logger::logFrom(LogLevel::DEBUG, "SocketManager",
-                    "[CGI] Cleaning up CGI process for fd: " + std::to_string(client_fd));
-                CGI::cleanupCgi(*_client_info[client_fd].cgiProcess);
-                _client_info[client_fd].cgiProcess.reset();
-            } */
 			_client_info[client_fd].responses.pop();
             if (response.isConnectionClose()) {
                 cleanupClientConnectionClose(client_fd, index);
@@ -719,6 +715,8 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
             _client_info[client_fd].responses.pop();
             _client_info[client_fd].current_raw_response.clear();
             offset = 0;
+			Logger::logFrom(LogLevel::DEBUG, "SocketManager sendResponse",
+				"[✅DONE] We sent RESPONSE to fd:" + std::to_string(client_fd));
             if (response.isConnectionClose()) {
                 Logger::logFrom(LogLevel::INFO, "SocketManager",
                     "Connection: close - closing the connection");

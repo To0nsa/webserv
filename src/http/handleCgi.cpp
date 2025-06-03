@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 13:24:08 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:56:41 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,6 +287,15 @@ void errorOnCgi(CgiProcess& cgi) {
                 "Failed to delete input temp file: " + cgi.input_path);
         }
     }
+	if (!cgi.output_path.empty()) {
+		if (unlink(cgi.output_path.c_str()) == 0) {
+			Logger::logFrom(LogLevel::DEBUG, "CGI", 
+				"Deleted output temp file: " + cgi.output_path);
+		} else {
+			Logger::logFrom(LogLevel::ERROR, "CGI", 
+				"Failed to delete output temp file: " + cgi.output_path);
+		}
+	}
 
 	cgi.pid           = -1;
 	cgi.start_time    = 0;
