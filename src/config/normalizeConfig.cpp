@@ -35,7 +35,7 @@ static void normalizeServer(Server& server) {
             loc.setRoot(DEFAULT_ROOT);
         }
 
-        if (loc.getIndexFiles().empty()) {
+        if (loc.getIndexFiles().empty() && loc.getPath() == "/") {
             loc.addIndexFile(DEFAULT_INDEX);
         }
 

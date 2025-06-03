@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 14:53:46 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:12:57 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,21 @@ bool SocketManager::isHeaderTimeout(int fd, time_t now) {
     return false;
 }
 
+/* bool SocketManager::isHeaderTimeout(int fd, time_t now) {
+    ClientInfo& client = _client_info[fd];
+
+    if (client.responses.empty() && client.current_raw_response.empty() && !client.headerComplete &&
+        client.headerBytesReceived > 0 &&
+        now - client.connectionStartTime > HEADER_TIMEOUT_SECONDS) {
+        Logger::logFrom(LogLevel::WARN, "SocketManager",
+                        "Header timeout on fd: " + std::to_string(fd));
+        respondError(fd, 408);
+        return true;
+    }
+
+    return false;
+} */
+
 bool SocketManager::isBodyTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
     if (client.headerComplete && now - client.connectionStartTime > TIMEOUT) {
@@ -209,10 +224,10 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
         return false;
     }
     buffer[bytes] = '\0';
-    /*     std::cout << "======================Received RAW request: {" << buffer << "} bytes: {" <<
-       bytes << "}"
-                  << std::endl;
-        std::cout << "==================================================" << std::endl; */
+    //    std::cout << "======================Received RAW request: {" << buffer << "} bytes: {" <<
+    //   bytes << "}"
+    //              << std::endl;
+    //    std::cout << "==================================================" << std::endl;
 
     std::string single_msg(buffer, bytes);
     _client_info[client_fd].requestBuffer += single_msg;
@@ -245,6 +260,82 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
     return true;
 }
 
+/* bool SocketManager::receiveFromClient(int client_fd, size_t index) {
+    // Update the timestamp for timeout tracking
+    _client_info[client_fd].lastRequestTime = time(NULL);
+
+    // Keep calling recv() until there’s no more data immediately available
+    while (true) {
+        char buffer[RECV_BUFFER];
+        // Attempt to read up to RECV_BUFFER - 1 bytes from the socket
+        ssize_t bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
+
+        if (bytes > 0) {
+            // We got some bytes; append them to the client’s requestBuffer
+            buffer[bytes] = '\0';
+            _client_info[client_fd].requestBuffer.append(buffer, bytes);
+
+            // Check if we have seen the end of the HTTP headers yet
+            size_t headerEndPos = _client_info[client_fd].requestBuffer.find("\r\n\r\n");
+            if (headerEndPos == std::string::npos) {
+                // Still inside headers—haven’t found “\r\n\r\n”
+                if (_client_info[client_fd].headerBytesReceived == 0) {
+                    // First time we’re receiving header data for this request
+                    _client_info[client_fd].connectionStartTime = time(NULL);
+                }
+                // Accumulate header bytes count for timeout and size checks
+                _client_info[client_fd].headerBytesReceived += bytes;
+            } else {
+                // We have at least one full header block in requestBuffer
+                if (!_client_info[client_fd].headerComplete) {
+                    // Just crossed the boundary from headers to body
+                    size_t fullHeaderSize = headerEndPos + 4;  // “\r\n\r\n” length = 4
+                    size_t oldSize = _client_info[client_fd].requestBuffer.size() - bytes;
+                    // Compute how many of these bytes belonged to the header portion
+                    size_t headerThisTime = std::max(
+                        (ssize_t)0,
+                        (ssize_t)(fullHeaderSize - oldSize)
+                    );
+                    _client_info[client_fd].headerBytesReceived += headerThisTime;
+                    // The rest of the bytes read belong to the body
+                    _client_info[client_fd].bodyBytesReceived += (bytes - headerThisTime);
+                    _client_info[client_fd].headerComplete = true;
+                } else {
+                    // Already past header parsing—these bytes are all body
+                    _client_info[client_fd].bodyBytesReceived += bytes;
+                }
+            }
+            // Continue looping to consume any additional data waiting on the socket
+            continue;
+        }
+
+        if (bytes == 0) {
+            // The client closed the connection cleanly (EOF)
+            Logger::logFrom(LogLevel::INFO, "SocketManager",
+                            "Client fd " + std::to_string(client_fd) + " disconnected.");
+            cleanupClientConnectionClose(client_fd, index);
+            return false;
+        }
+
+        if (bytes < 0) {
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                // No more data is ready on the socket right now.
+                // Break out so that the parser can run on the accumulated buffer.
+                break;
+            }
+            // An actual recv() error occurred (e.g., ECONNRESET)
+            Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                            std::string("recv() failed: ") + std::strerror(errno));
+            cleanupClientConnectionClose(client_fd, index);
+            return false;
+        }
+    }
+
+    // We’ve drained all available data from the socket for now.
+    // The accumulated requestBuffer (headers + any body) is ready for parsing.
+    return true;
+} */
+
 void SocketManager::respondError(int fd, int status_code) {
     HttpRequest  empty;
     HttpResponse err =
@@ -252,13 +343,50 @@ void SocketManager::respondError(int fd, int status_code) {
     _client_info[fd].responses.push(err);
 }
 
-bool SocketManager::checkRequestLimits(int fd) {
+/* bool SocketManager::checkRequestLimits(int fd) {
     if (_client_info[fd].headerBytesReceived > HEADER_MAX_LENGTH) {
         Logger::logFrom(LogLevel::WARN, "SocketManager",
                         "Request too large from fd: " + std::to_string(fd));
-        respondError(fd, 413);
+        respondError(fd, 431); // Request Header Fields Too Large
         return true;
     }
+
+    std::size_t maxBody = _client_info[fd].serverConfig.getClientMaxBodySize();
+            if (_client_info[fd].bodyBytesReceived > maxBody) {
+                    std::cout << "Request body too large on fd: " << fd
+                                            << " (" << _client_info[fd].bodyBytesReceived
+                                            << " bytes > max " << maxBody << ")\n";
+                    respondError(fd, 413);
+                    return true;
+            }
+
+    return false;
+} */
+
+bool SocketManager::checkRequestLimits(int fd) {
+    ClientInfo& client = _client_info[fd];
+
+    // Only enforce header-length limit while headers are still incomplete
+    if (client.headerBytesReceived > HEADER_MAX_LENGTH) {
+        Logger::logFrom(LogLevel::WARN, "SocketManager",
+                        "Request header too large from fd: " + std::to_string(fd));
+        respondError(fd, 431); // Request Header Fields Too Large
+        return true;
+    }
+
+/* // Once headers are complete, enforce the max-body-size limit //LETS DISCUSS!!!!!
+    if (client.headerComplete) {
+        std::size_t maxBody = client.serverConfig.getClientMaxBodySize();
+        if (client.bodyBytesReceived > maxBody) {
+            Logger::logFrom(LogLevel::WARN, "SocketManager",
+                            "Request body too large on fd: " + std::to_string(fd) + " (" +
+                                std::to_string(client.bodyBytesReceived) + " bytes > max " +
+                                std::to_string(maxBody) + ")");
+            respondError(fd, 413); // Payload Too Large
+            return true;
+        }
+    } */
+
     return false;
 }
 
@@ -563,8 +691,15 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
             return true;
         } */
         std::string resolved = location->resolveAbsolutePath(request.getPath());
+		Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+			"Resolved path for request: " + resolved + " | location path: " + location->getPath());
         if (!resolved.empty()) {
             std::string script_path = std::filesystem::absolute(resolved);
+			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Script path resolved to: " + script_path);
+			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Checking if script is CGI: " + std::to_string(location->isCgiRequest(normalizePath(request.getPath()))));
+			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Checking if script exists: " + std::to_string(isFile(script_path)));
+			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Checking if script is executable: " + std::to_string(access(script_path.c_str(), X_OK) == 0));
+			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Request method: " + request.getMethod());
             if ((request.getMethod() == "POST" || request.getMethod() == "GET") &&
                 location->isCgiRequest(normalizePath(request.getPath())) && isFile(script_path) &&
                 access(script_path.c_str(), X_OK) == 0) {

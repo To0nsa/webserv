@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:10 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 21:08:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/05/28 23:06:39 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,7 @@ class HttpRequest {
     void setBody(const std::string& body);
     void setContentLength(size_t len);
     void setUrl(const Url& url);
+    void setQuery(const std::string& query);
+
+    bool hasHeader(const std::string& key) const;
 };

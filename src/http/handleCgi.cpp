@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 14:56:41 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:32:35 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,9 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     std::string requestPath  = normalizePath(req.getPath());
     std::string locationPath = normalizePath(loc.getPath());
     std::string scriptName   = std::filesystem::path(scriptPath).filename().string();
-    std::string scriptUri    = locationPath;
+
+    // SCRIPT_NAME = URL path to the script (/directory/youpi.bla)
+    std::string scriptUri = locationPath;
     if (!scriptUri.empty() && scriptUri.back() != '/')
         scriptUri += "/";
     scriptUri += scriptName;
@@ -60,6 +62,7 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     set("CONTENT_LENGTH", std::to_string(req.getContentLength()));
     if (!req.getHeader("Content-Type").empty())
         set("CONTENT_TYPE", req.getHeader("Content-Type"));
+
     set("SERVER_PROTOCOL", "HTTP/1.1");
     set("GATEWAY_INTERFACE", "CGI/1.1");
     set("SERVER_SOFTWARE", "webserv/1.0");
@@ -77,12 +80,15 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
         std::replace(envKey.begin(), envKey.end(), '-', '_');
         set(envKey, value);
     }
+
     return env;
 }
 
-std::vector<char*> toCharPtrArray(const std::vector<std::string>& vec) {
+// Helper to convert vector<string> → vector<char*>
+std::vector<char*> toCharPtrArray(const std::vector<std::string>& vs) {
     std::vector<char*> out;
-    for (const auto& s : vec)
+    out.reserve(vs.size() + 1);
+    for (const auto& s : vs)
         out.push_back(const_cast<char*>(s.c_str()));
     out.push_back(nullptr);
     return out;
