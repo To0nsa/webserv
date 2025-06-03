@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 02:55:56 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 12:31:49 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,11 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     // === Generate a unique temporary file path ===
     static int        counter = 0;
     std::stringstream ss;
-    ss << "/home/irychkov/Desktop/webserv/temp_in" << getpid() << "_" << time(nullptr) << "_"
+    ss << "/home/irychkov/Desktop/webserv_team/temp_in" << getpid() << "_" << time(nullptr) << "_"
        << counter++ << ".tmp";
     std::string       temp_in = ss.str();
     std::stringstream ss1;
-    ss1 << "/home/irychkov/Desktop/webserv/temp_out_" << getpid() << "_" << time(nullptr) << "_"
+    ss1 << "/home/irychkov/Desktop/webserv_team/temp_out_" << getpid() << "_" << time(nullptr) << "_"
         << counter++ << ".tmp";
     std::string temp_out = ss1.str();
     cgi.input_path       = temp_in;
@@ -216,7 +216,7 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
 
 std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
                                         const HttpRequest& req) {
-    // Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "Finalizing CGI process for script");
+    Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "Finalizing CGI process for script");
     int status;
     if (waitpid(cgi.pid, &status, WNOHANG) == 0) {
         // Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "CGI process is still running");
@@ -278,14 +278,11 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
 	resp.setCgiTempFile(cgi.output_path);
 	Logger::logFrom(LogLevel::DEBUG, "CGI", "CGI process completed with PID: " + std::to_string(cgi.pid) +
 		", output file: " + cgi.output_path + ", status code: " + std::to_string(code));
-	if (!cgi.input_path.empty()) {
-        unlink(cgi.input_path.c_str());
-        cgi.input_path.clear();
-    }
 
     return resp;
 }
 
+// Cleanup CGI process and its temporary files if it is still running
 void cleanupCgi(CgiProcess& cgi) {
 	Logger::logFrom(LogLevel::DEBUG, "CGI", "Cleaning up CGI process with PID: " + std::to_string(cgi.pid));
     kill(cgi.pid, SIGKILL);
@@ -300,13 +297,26 @@ void cleanupCgi(CgiProcess& cgi) {
                 "Failed to delete input temp file: " + cgi.input_path);
         }
     }
+	if (!cgi.output_path.empty()) {
+		if (unlink(cgi.output_path.c_str()) == 0) {
+			Logger::logFrom(LogLevel::DEBUG, "CGI", 
+				"Deleted output temp file: " + cgi.output_path);
+		} else {
+			Logger::logFrom(LogLevel::ERROR, "CGI", 
+				"Failed to delete output temp file: " + cgi.output_path);
+		}
+	}
+	cgi.pid           = -1;
+	cgi.start_time    = 0;
+	cgi.last_activity = 0;
+	cgi.input_path.clear();
+	cgi.output_path.clear();
+	cgi.script_path.clear();
 }
 
 bool tryTerminateCgi(CgiProcess& cgi) {
     int   status;
     pid_t result = waitpid(cgi.pid, &status, WNOHANG);
-    // Logger::logFrom(LogLevel::DEBUG, "CGI", "tryTerminateCgi() → waitpid returned " +
-    // std::to_string(result));
 
     if (result == 0) {
         return false;
@@ -316,6 +326,7 @@ bool tryTerminateCgi(CgiProcess& cgi) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "waitpid failed: " + std::string(strerror(errno)));
         return true;
     }
+	Logger::logFrom(LogLevel::DEBUG, "CGI", "CGI process terminated with PID: " + std::to_string(cgi.pid));
     return true;
 }
 
