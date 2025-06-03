@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/03 11:39:55 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 12:11:31 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,14 +289,22 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         return false;
     }
 
-    // — Initialize request
+    // ── Initialize request ──
     req = HttpRequest();
     req.setMethod(method);
-    if (pathOnly.find("..") != std::string::npos) {
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
-                        "Rejected traversal attempt: " + pathOnly);
-        errorCode = 403;
-        return false;
+
+    // Split on ‘/’ and reject only true “..” segments:
+    {
+        std::istringstream segstream(pathOnly);
+        std::string        seg;
+        while (std::getline(segstream, seg, '/')) {
+            if (seg == "..") {
+                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                                "Rejected traversal attempt: " + pathOnly);
+                errorCode = 403;
+                return false;
+            }
+        }
     }
 
     // std::string norm = pathOnly;
