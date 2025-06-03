@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleCgi.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/31 13:35:37 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/05/31 16:37:51 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,19 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     std::string requestPath  = normalizePath(req.getPath());
     std::string locationPath = normalizePath(loc.getPath());
     std::string scriptName   = std::filesystem::path(scriptPath).filename().string();
-    std::string scriptUri    = locationPath;
+
+    // SCRIPT_NAME = URL path to the script (/directory/youpi.bla)
+    std::string scriptUri = locationPath;
     if (!scriptUri.empty() && scriptUri.back() != '/')
         scriptUri += "/";
     scriptUri += scriptName;
 
+    // PATH_INFO = remainder of the path after SCRIPT_NAME
     std::string pathInfo;
-    if (requestPath.size() > scriptUri.size() &&
-        requestPath.compare(0, scriptUri.size(), scriptUri) == 0) {
+    if (requestPath.rfind(scriptUri, 0) == 0 && requestPath.size() > scriptUri.size()) {
         pathInfo = requestPath.substr(scriptUri.size());
-        if (!pathInfo.empty() && pathInfo[0] != '/')
-            pathInfo = "/" + pathInfo;
+        if (!pathInfo.empty() && pathInfo.front() != '/')
+            pathInfo.insert(pathInfo.begin(), '/');
     }
     set("SCRIPT_NAME", req.getPath());
     if (pathInfo.empty()) {
@@ -60,6 +62,7 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
     set("CONTENT_LENGTH", std::to_string(req.getContentLength()));
     if (!req.getHeader("Content-Type").empty())
         set("CONTENT_TYPE", req.getHeader("Content-Type"));
+
     set("SERVER_PROTOCOL", "HTTP/1.1");
     set("GATEWAY_INTERFACE", "CGI/1.1");
     set("SERVER_SOFTWARE", "webserv/1.0");
@@ -77,12 +80,15 @@ std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server
         std::replace(envKey.begin(), envKey.end(), '-', '_');
         set(envKey, value);
     }
+
     return env;
 }
 
-std::vector<char*> toCharPtrArray(const std::vector<std::string>& vec) {
+// Helper to convert vector<string> → vector<char*>
+std::vector<char*> toCharPtrArray(const std::vector<std::string>& vs) {
     std::vector<char*> out;
-    for (const auto& s : vec)
+    out.reserve(vs.size() + 1);
+    for (const auto& s : vs)
         out.push_back(const_cast<char*>(s.c_str()));
     out.push_back(nullptr);
     return out;
@@ -111,11 +117,11 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     // === Generate a unique temporary file path ===
     static int        counter = 0;
     std::stringstream ss;
-    ss << "/home/irychkov/Desktop/webserv/temp_in" << getpid() << "_" << time(nullptr) << "_"
+    ss << "/home/toonsa/myProjects/webserv/temp_in" << getpid() << "_" << time(nullptr) << "_"
        << counter++ << ".tmp";
     std::string       temp_in = ss.str();
     std::stringstream ss1;
-    ss1 << "/home/irychkov/Desktop/webserv/temp_out_" << getpid() << "_" << time(nullptr) << "_"
+    ss1 << "/home/toonsa/myProjects/webserv/temp_out_" << getpid() << "_" << time(nullptr) << "_"
         << counter++ << ".tmp";
     std::string temp_out = ss1.str();
     cgi.input_path       = temp_in;
@@ -167,22 +173,25 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         std::string ext        = std::filesystem::path(scriptPath).extension().string();
         std::string interp     = loc.getCgiInterpreter(ext);
 
-        // 2. Build argv using references to scoped strings
+        // Build argv: [interp?, SCRIPT_URI]
         std::vector<std::string> argvStorage;
-        if (!interp.empty()) {
+        if (!interp.empty())
             argvStorage.push_back(interp);
-        }
-        argvStorage.push_back(scriptPath);
 
-        std::vector<char*> argv;
-        for (size_t i = 0; i < argvStorage.size(); ++i) {
-            argv.push_back(const_cast<char*>(argvStorage[i].c_str()));
-        }
-        argv.push_back(nullptr);
+        // SCRIPT_URI is the URL path used by the client
+        std::string locationPath = normalizePath(loc.getPath());
+        std::string scriptName   = std::filesystem::path(cgi.script_path).filename().string();
+        std::string scriptUri    = locationPath;
+        if (!scriptUri.empty() && scriptUri.back() != '/')
+            scriptUri += '/';
+        scriptUri += scriptName;
 
-        // 3. Environment: same principle
-        std::vector<std::string> envStrs = prepareEnv(req, server, loc, scriptPath);
-        std::vector<char*>       envp    = toCharPtrArray(envStrs);
+        argvStorage.push_back(scriptUri);
+        auto argv = toCharPtrArray(argvStorage);
+
+        // Build envp
+        auto envStrs = prepareEnv(req, server, loc, cgi.script_path);
+        auto envp    = toCharPtrArray(envStrs);
 
         // 4. chdir safely
         const std::string cgiDir = std::filesystem::path(scriptPath).parent_path().string();
@@ -263,6 +272,7 @@ std::optional<HttpResponse> finalizeCgi(CgiProcess& cgi, const Server& server,
     int                code        = 200;
     std::istringstream iss(header);
     std::string        line;
+
     while (std::getline(iss, line)) {
         if (line.find("Content-Type:") == 0)
             contentType = trim(line.substr(13));
