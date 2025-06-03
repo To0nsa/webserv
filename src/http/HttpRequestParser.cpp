@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/03 10:40:13 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:50:22 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,12 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
             errorCode = 400;
             return false;
         }
+    }
+
+    // ── Insert fragment‐stripping here ──
+    size_t hashPos = decoded.find('#');
+    if (hashPos != std::string::npos) {
+        decoded.erase(hashPos);
     }
 
     // — Split path/query
