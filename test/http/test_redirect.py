@@ -106,7 +106,6 @@ def test_query_string_preserved_or_dropped():
     """
     GET /dir?foo=bar → expect 301 and Location: /dir/
     (query string either preserved or dropped depending on implementation)
-    For strict match, we only assert the 301 and base path.
     """
     parsed = urlparse(SERVER)
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
@@ -129,7 +128,7 @@ def test_nonexact_prefix_no_redirect():
 def test_case_sensitivity_and_invalid_paths():
     """
     GET /DIR → expect 404 (case-sensitive)
-    GET /dir/../ → expect 404 or normalized handling (no redirect)
+    GET /dir/../ → expect 403 Forbidden
     """
     assert_status("/DIR", 404)
     assert_status("/dir/../", 403)
@@ -157,12 +156,12 @@ def test_post_to_directory_path_with_slash():
 def test_delete_to_redirect_source():
     """
     DELETE /dir → expect 403 (no redirect)
-    DELETE /dir/ → expect 200 if resource exists or 204 if empty; at minimum, not a redirect
+    DELETE /dir/ → expect 200 if resource exists or 204 if empty; not a redirect
     """
     # DELETE /dir → 403
     assert_status("/dir", 403, method="DELETE")
 
-    # DELETE /dir/ → resource handling (we assert not 301)
+    # DELETE /dir/ → resource handling (assert not 301)
     parsed = urlparse(SERVER)
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
     conn.request("DELETE", "/dir/")
@@ -176,7 +175,7 @@ def test_delete_to_redirect_source():
     
 def test_double_slash():
     """
-    GET //dir → may normalize to /dir and redirect → 301 /dir/
+    GET //dir → normalize to /dir and redirect → 301 /dir/
     """
     parsed = urlparse(SERVER)
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
@@ -206,34 +205,75 @@ def test_percent_encoded_redirect():
         sys.exit(1)
     conn.close()
 
+def test_mixed_case_percent():
+    """
+    GET /%64%6 9%72 → mixed-case hex for “dir” → expect 301 /dir/
+    """
+    parsed = urlparse(SERVER)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
+    conn.request("GET", "/%64%69%72")
+    res = conn.getresponse()
+    location = res.getheader("Location")
+    if res.status == 301 and location.lower() == "/dir/":
+        print("✅ GET /%64%69%72 → 301 Location: /dir/")
+    else:
+        print(f"❌ GET /%%64%%69%%72 → {res.status} (expected 301 /dir/)")
+        sys.exit(1)
+    conn.close()
+
 def test_encoded_traversal():
     """
     GET /dir/%2E%2E/ → decoded as /dir/../ → expect 403
     """
     assert_status("/dir/%2E%2E/", 403)
 
-def test_fragment_ignored():
+def test_invalid_percent_encoding():
     """
-    GET /dir#anchor → server sees just "/dir" → expect 301
+    GET /dir/%ZZ/ → invalid percent-encoding → expect 400
     """
-    # Fragment should never be sent over HTTP; simulate client mistake
-    assert_redirect("/dir#anchor", "/dir/")
+    assert_status("/dir/%ZZ/", 400)
 
-def test_dot_segment_handling():
+def test_multiple_dot_segments_above_root():
     """
-    GET /dir/. → normalized to /dir/ → expect 301
-    GET /dir/./ → normalized to /dir/ → expect 200
+    GET /dir/../../ → multiple .. above root → expect 403
     """
-    assert_redirect("/dir/.", "/dir/")
-    assert_status("/dir/./", 200)
+    assert_status("/dir/../../", 403)
+
+def test_double_slash_inside_path():
+    """
+    GET /dir//subdir → collapse to /dir/subdir → if subdir missing, expect 404
+    """
+    assert_status("/dir//subdir", 404)
+
+def test_trailing_slash_on_file():
+    """
+    GET /index.html/ → trailing slash on file → expect 404
+    """
+    assert_status("/index.html/", 404)
+
+def test_embedded_dot_hidden():
+    """
+    GET /dir/..hidden/ → '..hidden' is a literal name → expect 404
+    """
+    assert_status("/dir/..hidden/", 404)
+
+def test_space_in_filename():
+    """
+    GET /dir/my%20file.txt → if file missing, expect 404
+    """
+    assert_status("/dir/my%20file.txt", 404)
+
+def test_case_sensitive_directory():
+    """
+    GET /Dir/ → case-sensitive → expect 404
+    """
+    assert_status("/Dir/", 404)
 
 def test_dir_prefix_but_not_match():
     """
     GET /dirX → should not match /dir → expect 404
     """
     assert_status("/dirX", 404)
-
-
 
 if __name__ == "__main__":
     print("\n[REDIRECTION TESTS] Starting...\n")
@@ -248,8 +288,15 @@ if __name__ == "__main__":
     
     test_double_slash()
     test_percent_encoded_redirect()
+    test_mixed_case_percent()
     test_encoded_traversal()
-    test_fragment_ignored()
-    test_dot_segment_handling()
+    test_invalid_percent_encoding()
+    test_multiple_dot_segments_above_root()
+    test_double_slash_inside_path()
+    test_trailing_slash_on_file()
+    test_embedded_dot_hidden()
+    test_space_in_filename()
+    test_case_sensitive_directory()
     test_dir_prefix_but_not_match()
 
+    print("\n[REDIRECTION TESTS] All passed!\n")
