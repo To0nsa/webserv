@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/29 16:56:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:43:51 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,13 @@
 #include <unistd.h>
 #include <vector>
 
-#define TIMEOUT 5
-#define HEADER_TIMEOUT_SECONDS 5
+#define TIMEOUT 300
+#define HEADER_TIMEOUT_SECONDS 6
 #define HEADER_MIN_LENGTH 15
 #define HEADER_MAX_LENGTH 8192
 #define RECV_BUFFER HEADER_MAX_LENGTH * 2
-#define MAX_CLIENTS 1024
+#define MAX_CLIENTS 512
+#define CGI_TIMEOUT_SECONDS 45
 
 struct ClientInfo {
     int                       client_fd;       // File descriptor of the client socket
@@ -75,7 +76,7 @@ class SocketManager {
     std::map<int, Server>
         _listen_map; ///< Maps listening socket fds to their corresponding server configurations.
     std::map<int, ClientInfo> _client_info; /// Stores all information about each client
-    std::map<int, std::pair<int, std::string>> _fd_to_cgi; // fd → {client_fd, "stdin"/"stdout"}
+    std::map<int, int>        _fd_to_cgi;   ///< Maps CGI stdout fds to client fds
 
     void setupSockets(const std::vector<Server>& servers);
     void handleNewConnection(int listen_fd);

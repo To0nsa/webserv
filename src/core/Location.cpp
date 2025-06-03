@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/30 18:01:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:45:29 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ bool Location::matchesPath(const std::string& uri) const {
 
 std::string Location::resolveAbsolutePath(const std::string& uri) const {
     std::string cleanUri = normalizePath(uri);
-    if (!matchesPath(cleanUri))
+    if (!matchesPath(cleanUri) || _path.length() > cleanUri.length())
         return "";
     return joinPath(_root, cleanUri.substr(_path.length()));
 }

@@ -42,3 +42,43 @@ echo -ne 'GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\nGET / HT
 echo -ne 'GET / HTTP/1.1\r\nHost: localhost\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc 127.0.0.1 8080
 
 echo -ne 'GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' | nc 127.0.0.1 8080
+
+
+irychkov@irychkov42:~/Desktop/webserv/serverfiles/cgi-bin$ SCRIPT_NAME=/directory/fake.bla \
+PATH_INFO=/directory/fake.bla \
+REQUEST_METHOD=GET \
+QUERY_STRING= \
+CONTENT_LENGTH=0 \
+CONTENT_TYPE=text/plain \
+SERVER_PROTOCOL=HTTP/1.1 \
+GATEWAY_INTERFACE=CGI/1.1 \
+SERVER_SOFTWARE=webserv/1.0 \
+DOCUMENT_ROOT=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane \
+SERVER_NAME=localhost \
+SERVER_PORT=8080 \
+PATH_TRANSLATED=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane/fake.bla \
+REMOTE_ADDR=127.0.0.1 \
+REQUEST_URI=/directory/fake.bla \
+SCRIPT_FILENAME=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane/fake.bla \
+/home/irychkov/Desktop/webserv/serverfiles/cgi-bin/ubuntu_cgi_tester < /dev/null
+
+
+echo -n "name=test&value=123" | \
+SCRIPT_NAME=/directory/fake.bla \
+PATH_INFO=/directory/fake.bla \
+REQUEST_METHOD=POST \
+QUERY_STRING= \
+CONTENT_LENGTH=21 \
+CONTENT_TYPE=application/x-www-form-urlencoded \
+SERVER_PROTOCOL=HTTP/1.1 \
+GATEWAY_INTERFACE=CGI/1.1 \
+SERVER_SOFTWARE=webserv/1.0 \
+DOCUMENT_ROOT=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane \
+SERVER_NAME=localhost \
+SERVER_PORT=8080 \
+PATH_TRANSLATED=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane/fake.bla \
+REMOTE_ADDR=127.0.0.1 \
+REQUEST_URI=/directory/fake.bla \
+SCRIPT_FILENAME=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane/fake.bla \
+REDIRECT_STATUS=200 \
+/home/irychkov/Desktop/webserv/serverfiles/cgi-bin/ubuntu_cgi_tester
