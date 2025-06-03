@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 16:32:35 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:41:44 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
                     const Location& loc, const std::vector<pollfd>& poll_fds) {
     cgi.last_activity = time(NULL);
     cgi.script_path   = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
-    Logger::logFrom(LogLevel::DEBUG, "CGI", "Initializing CGI for script: " + cgi.script_path);
     if (!isFile(cgi.script_path)) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "File is invalid");
         return false;
@@ -111,8 +110,6 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         Logger::logFrom(LogLevel::ERROR, "CGI", "File is not executable");
         return false;
     }
-
-    std::cerr << "[CGI] Script is executable: " << cgi.script_path << std::endl;
 
     // === Generate a unique temporary file path ===
     static int        counter = 0;
@@ -155,11 +152,6 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         close(body_fd);
         close(output_fd);
         return false;
-    }
-
-    if (pid > 0) {
-        Logger::logFrom(LogLevel::DEBUG, "CGI",
-                        "Forked PID: " + std::to_string(pid) + ", script: " + cgi.script_path);
     }
 
     if (pid == 0) {
@@ -222,7 +214,6 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
 
 HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server,
                                         const HttpRequest& req) {
-    Logger::logFrom(LogLevel::DEBUG, "CGI finalizeCgi", "Finalizing CGI process for script");
 
     cgi.last_activity = time(NULL);
     std::ifstream in(cgi.output_path, std::ios::binary);
@@ -311,7 +302,6 @@ void errorOnCgi(CgiProcess& cgi) {
 }
 
 void cleanupCgi(CgiProcess& cgi) {
-	Logger::logFrom(LogLevel::DEBUG, "CGI", "Cleaning up CGI process with PID: " + std::to_string(cgi.pid));
     // Only delete input file (output file is managed by HttpResponse)
     if (!cgi.input_path.empty()) {
         if (unlink(cgi.input_path.c_str()) == 0) {

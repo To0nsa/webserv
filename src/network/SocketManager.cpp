@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 16:12:57 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:39:46 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -479,7 +479,6 @@ void SocketManager::run() {
                 client.cgiProcess.reset();
                 for (auto& pfd : _poll_fds) {
                     if (pfd.fd == client_fd) {
-						Logger::logFrom(LogLevel::DEBUG, "CGI", "Requesting POLLOUT for fd: " + std::to_string(client_fd));
                         pfd.events |= POLLOUT;
                         break;
                     }
@@ -691,15 +690,8 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
             return true;
         } */
         std::string resolved = location->resolveAbsolutePath(request.getPath());
-		Logger::logFrom(LogLevel::DEBUG, "SocketManager",
-			"Resolved path for request: " + resolved + " | location path: " + location->getPath());
         if (!resolved.empty()) {
             std::string script_path = std::filesystem::absolute(resolved);
-			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Script path resolved to: " + script_path);
-			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Checking if script is CGI: " + std::to_string(location->isCgiRequest(normalizePath(request.getPath()))));
-			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Checking if script exists: " + std::to_string(isFile(script_path)));
-			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Checking if script is executable: " + std::to_string(access(script_path.c_str(), X_OK) == 0));
-			Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Request method: " + request.getMethod());
             if ((request.getMethod() == "POST" || request.getMethod() == "GET") &&
                 location->isCgiRequest(normalizePath(request.getPath())) && isFile(script_path) &&
                 access(script_path.c_str(), X_OK) == 0) {
@@ -733,7 +725,6 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 
 // Accept new client and add to poll list
 void SocketManager::sendResponse(int client_fd, size_t index) {
-	Logger::logFrom(LogLevel::DEBUG, "SocketManager sendResponse", "About to send response to fd: " + std::to_string(client_fd));
     HttpResponse& response = _client_info[client_fd].responses.front();
     size_t&        offset  = _client_info[client_fd].bytes_sent;
 
