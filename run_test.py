@@ -26,11 +26,13 @@ def main():
     test_file_resolution  = os.path.join(root, "test", "http", "test_file_resolution.py")
     test_symlinks         = os.path.join(root, "test", "http", "test_symlinks_forbidden.py")
     test_directory_listing = os.path.join(root, "test", "http", "test_directory_listing.py")
+    test_mime_static    = os.path.join(root, "test", "http", "test_mime_static.py")
     test_stress           = os.path.join(root, "test", "http", "stress_test.py")
     test_stress_chunked   = os.path.join(root, "test", "http", "stress_chunked.py")
     test_stress_pipeline  = os.path.join(root, "test", "http", "stress_pipeline.py")
     # test_ultra_stress     = os.path.join(root, "test", "http", "ultra_stress_test.py")
 
+    run(["python3", test_mime_static], "test_mime_static.py")
     run(["python3", test_directory_listing], "test_directory_listing.py")
     run(["python3", test_redirect], "test_redirect.py")
     run(["python3", bootstrap], "bootstrap_test_data.py")
