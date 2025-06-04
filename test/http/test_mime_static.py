@@ -264,4 +264,3 @@ if __name__ == "__main__":
     test_content_type_sniffing()
     test_large_file_streaming()
     test_empty_directory_autoindex()
-    print("🎉 All tests passed.\n")

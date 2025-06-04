@@ -32,11 +32,11 @@ def main():
     test_stress_pipeline  = os.path.join(root, "test", "http", "stress_pipeline.py")
     # test_ultra_stress     = os.path.join(root, "test", "http", "ultra_stress_test.py")
 
+    run(["python3", test_raw_malformed], "test_http_header_parser.py")
     run(["python3", test_mime_static], "test_mime_static.py")
     run(["python3", test_directory_listing], "test_directory_listing.py")
     run(["python3", test_redirect], "test_redirect.py")
     run(["python3", bootstrap], "bootstrap_test_data.py")
-    run(["python3", test_raw_malformed], "test_http_header_parser.py")
     run(["python3", test_file_resolution], "test_file_resolution.py")
     run(["python3", test_get], "test_get.py")
     run(["python3", test_symlinks], "test_symlinks_forbidden.py")

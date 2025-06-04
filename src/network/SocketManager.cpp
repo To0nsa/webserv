@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/04 10:35:28 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/04 13:32:14 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,26 +343,6 @@ void SocketManager::respondError(int fd, int status_code) {
 }
 
 bool SocketManager::checkRequestLimits(int fd) {
-    if (_client_info[fd].headerBytesReceived > HEADER_MAX_LENGTH) {
-        Logger::logFrom(LogLevel::WARN, "SocketManager",
-                        "Request too large from fd: " + std::to_string(fd));
-        respondError(fd, 431); // Request Header Fields Too Large
-        return true;
-    }
-
-    std::size_t maxBody = _client_info[fd].serverConfig.getClientMaxBodySize();
-            if (_client_info[fd].bodyBytesReceived > maxBody) {
-                    std::cout << "Request body too large on fd: " << fd
-                                            << " (" << _client_info[fd].bodyBytesReceived
-                                            << " bytes > max " << maxBody << ")\n";
-                    respondError(fd, 413);
-                    return true;
-            }
-
-    return false;
-}
-
-/* bool SocketManager::checkRequestLimits(int fd) {
     ClientInfo& client = _client_info[fd];
 
     // Only enforce header-length limit while headers are still incomplete
@@ -373,21 +353,8 @@ bool SocketManager::checkRequestLimits(int fd) {
         return true;
     }
 
-    // Once headers are complete, enforce the max-body-size limit //LETS DISCUSS!!!!!
-        if (client.headerComplete) {
-            std::size_t maxBody = client.serverConfig.getClientMaxBodySize();
-            if (client.bodyBytesReceived > maxBody) {
-                Logger::logFrom(LogLevel::WARN, "SocketManager",
-                                "Request body too large on fd: " + std::to_string(fd) + " (" +
-                                    std::to_string(client.bodyBytesReceived) + " bytes > max " +
-                                    std::to_string(maxBody) + ")");
-                respondError(fd, 413); // Payload Too Large
-                return true;
-            }
-        }
-
     return false;
-} */
+}
 
 // Custom exception for socket errors
 SocketManager::SocketError::SocketError(const std::string& msg) {
@@ -695,8 +662,8 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         if (!resolved.empty()) {
             std::string script_path = std::filesystem::absolute(resolved);
             if ((request.getMethod() == "POST" || request.getMethod() == "GET") &&
-                location->isCgiRequest(normalizePath(request.getPath())) && isFile(script_path) &&
-                access(script_path.c_str(), X_OK) == 0) {
+                location->isCgiRequest(normalizePath(request.getPath()))/*  && isFile(script_path) &&
+                access(script_path.c_str(), X_OK) == 0 */) {
 
                 Logger::logFrom(LogLevel::kDEBUG, "SocketManager", "Handling CGI request");
                 return handleCgiRequest(client_fd, request, server, *location);
@@ -812,13 +779,13 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         if (_client_info[client_fd].file_stream.eof() || bytes_read == 0) {
             Logger::logFrom(LogLevel::kDEBUG, "SocketManager eof()",
                             "[✅DONE] We sent FILE RESPONSE to fd:" + std::to_string(client_fd));
-            Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
+            /* Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
                             "============================RAW===================");
             // At this point, offset == raw.size(), so raw.c_str() + offset is safe
             Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
                             _client_info[client_fd].current_raw_response.c_str() + offset);
             Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
-                            "==================================================");
+                            "=================================================="); */
 
             _client_info[client_fd].file_stream.close();
             _client_info[client_fd].current_raw_response.clear();
@@ -881,12 +848,12 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 
             Logger::logFrom(LogLevel::kDEBUG, "SocketManager sendResponse",
                             "[✅DONE] We sent RESPONSE to fd:" + std::to_string(client_fd));
-            Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
+/*             Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
                             "============================RAW===================");
             Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
                             raw.c_str());
             Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
-                            "==================================================");
+                            "=================================================="); */
 
             _client_info[client_fd].current_raw_response.clear();
             if (!response.isConnectionClose()) {

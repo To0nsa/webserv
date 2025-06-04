@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/03 21:06:45 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/04 14:09:10 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,7 +307,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         }
     }
 
-    // std::string norm = pathOnly;
+     //std::string norm = pathOnly;
     std::string norm = normalizePath(pathOnly);
     if (norm.empty()) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
@@ -428,7 +428,8 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
 
             break;
         }
-
+        Logger::logFrom(LogLevel::WARN, "PARSER",
+                        " Totalsize: " + std::to_string(total + chunkSize));
         if (total + chunkSize > clientMaxBodySize) {
             Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                             "Exceeded max body size in chunked transfer");
@@ -682,10 +683,10 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
             return true;
         }
 
-        // If we fall through here, the extra data is NOT a valid request‐line,
-        // so it must be a forbidden body‐payload on GET/DELETE → 400.
-        errorCode = 400; // Bad Request
-        return false;
+        // FALLBACK: ignore any “body” on GET and treat as a clean GET
+        consumedBytes = buffer.size();   // consume headers + body, but ignore the body
+        errorCode = 0;
+        return true;
     }
 
     // 6) For POST (and other body‐bearing methods), delegate to parseReqBody

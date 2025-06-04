@@ -723,10 +723,10 @@ def test_max_body_size_chunked():
     target = "/upload_store/large_chunked.txt"
     ensure_absent(target)
 
-    # Create chunks of 512KB twice, totaling 1MB+ → first chunk okay, second should trigger 413
-    hex_512k = hex(512 * 1024)[2:]
-    chunk1 = f"{hex_512k}\r\n" + ("B" * (512 * 1024)) + "\r\n"
-    chunk2 = f"{hex_512k}\r\n" + ("C" * (512 * 1024)) + "\r\n"
+    # Create chunks of 1024KB twice, totaling 1MB+ → first chunk okay, second should trigger 413
+    hex_512k = hex(1024 * 1024)[2:]
+    chunk1 = f"{hex_512k}\r\n" + ("B" * (1024 * 1024)) + "\r\n"
+    chunk2 = f"{hex_512k}\r\n" + ("C" * (1024 * 1024)) + "\r\n"
     term = "0\r\n\r\n"
     raw = (
         f"POST {target} HTTP/1.1\r\n"

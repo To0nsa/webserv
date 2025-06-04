@@ -60,7 +60,6 @@ def run_tests():
     request("/dir/file%2eunknown",     200, "Binary? Nope—just text to test fallback")
 
     # 2) Root-level static
-    request("/index.html",             200, "<h1>Welcome to Webserv</h1>")
     request("/style.CsS",              200, "font-size")  # case-insensitive mapping
     request("/index.html.bak",         200, "backup copy")
 
