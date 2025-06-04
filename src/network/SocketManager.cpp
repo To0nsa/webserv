@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 16:39:46 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/03 22:25:09 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -803,6 +803,12 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         if (_client_info[client_fd].file_stream.eof() || bytes_read == 0) {
             Logger::logFrom(LogLevel::DEBUG, "SocketManager eof()",
                             "[✅DONE] We sent FILE RESPONSE to fd:" + std::to_string(client_fd));
+            Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                "============================RAW===================");
+            Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                            _client_info[client_fd].current_raw_response.c_str() + offset);
+            Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                            "==================================================");
             _client_info[client_fd].file_stream.close();
             _client_info[client_fd].current_raw_response.clear();
             offset = 0;
@@ -814,10 +820,16 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
                 }
             }
             _client_info[client_fd].responses.pop();
-            if (response.isConnectionClose()) {
-                cleanupClientConnectionClose(client_fd, index);
+            if (!response.isConnectionClose()) {
+                if (_client_info[client_fd].responses.empty()) {
+                    Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                        "Connection: keep-alive - keeping the connection open");
+                    _poll_fds[index].events &= ~POLLOUT;
+                }
             } else {
-                _poll_fds[index].events &= ~POLLOUT;
+                Logger::logFrom(LogLevel::INFO, "SocketManager",
+                    "Connection: close - closing the connection");
+                cleanupClientConnectionClose(client_fd, index);
             }
         }
     } else {
@@ -843,18 +855,27 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 
         if (offset >= _client_info[client_fd].current_raw_response.size()) {
             _client_info[client_fd].responses.pop();
-            _client_info[client_fd].current_raw_response.clear();
+            
             offset = 0;
             Logger::logFrom(LogLevel::DEBUG, "SocketManager sendResponse",
                             "[✅DONE] We sent RESPONSE to fd:" + std::to_string(client_fd));
-            if (response.isConnectionClose()) {
-                Logger::logFrom(LogLevel::INFO, "SocketManager",
-                                "Connection: close - closing the connection");
-                cleanupClientConnectionClose(client_fd, index);
+            Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                            "============================RAW===================");
+            Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                            _client_info[client_fd].current_raw_response.c_str());
+            Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                            "==================================================");
+            _client_info[client_fd].current_raw_response.clear();
+            if (!response.isConnectionClose()) {
+                if (_client_info[client_fd].responses.empty()) {
+                    Logger::logFrom(LogLevel::DEBUG, "SocketManager",
+                        "Connection: keep-alive - keeping the connection open");
+                    _poll_fds[index].events &= ~POLLOUT;
+                }
             } else {
-                Logger::logFrom(LogLevel::DEBUG, "SocketManager",
-                                "Connection: keep-alive - keeping the connection open");
-                _poll_fds[index].events &= ~POLLOUT;
+                Logger::logFrom(LogLevel::INFO, "SocketManager",
+                    "Connection: close - closing the connection");
+                cleanupClientConnectionClose(client_fd, index);
             }
         }
     }
