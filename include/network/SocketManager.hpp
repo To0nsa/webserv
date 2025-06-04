@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/04 15:36:18 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 00:29:11 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 #include <unistd.h>
 #include <vector>
 
-#define TIMEOUT 6
+#define TIMEOUT 20
 #define HEADER_TIMEOUT_SECONDS 6
 #define HEADER_MIN_LENGTH 15
 #define HEADER_MAX_LENGTH 8192
@@ -50,6 +50,7 @@ struct ClientInfo {
     bool                      keepAlive;    // Keep-alive flag
     Server                    serverConfig; // The server config the client is connected to
     std::queue<HttpResponse>  responses;    // Queue of responses to be sent to the client
+    std::queue<HttpRequest>   pendingRequests;
     std::optional<CgiProcess> cgiProcess;
     bool                      isCgiProcessRunning;
     HttpRequest               currentCgiRequest;
@@ -112,4 +113,5 @@ class SocketManager {
     void cleanupCgiForClient(int client_fd);
     bool handleCgiRequest(int client_fd, const HttpRequest& request, const Server& server,
                           const Location& location);
+    void processPendingRequests(int client_fd);
 };

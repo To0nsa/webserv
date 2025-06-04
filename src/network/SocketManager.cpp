@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/04 16:36:00 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 00:31:23 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,16 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
 void SocketManager::resetRequestState(int client_fd) {
     if (!_client_info.count(client_fd))
         return;
+    // If there is still any data in requestBuffer, treat it as a partial header:
+    if (!_client_info[client_fd].requestBuffer.empty()) {
+        _client_info[client_fd].headerComplete = false;
+        // headerBytesReceived should reflect how many bytes are already in the buffer.
+        // But if we are just about to parse a brand‐new header, headerBytesReceived
+        // should have already been set by receiveFromClient(...) when those bytes first arrived.
+        // So here we do NOT zero it out—leave it alone so the header‐timer can still tick.
+        return;
+    }
+    // If requestBuffer is empty, then there is no partial header in progress.
     _client_info[client_fd].headerComplete      = false;
     _client_info[client_fd].headerBytesReceived = 0;
     _client_info[client_fd].bodyBytesReceived   = 0;
@@ -384,6 +394,15 @@ void SocketManager::run() {
                         break;
                     }
                 }
+                size_t idx = 0;
+                for (; idx < _poll_fds.size(); ++idx) {
+                    if (_poll_fds[idx].fd == client_fd) {
+                        break;
+                    }
+                }
+                if (idx < _poll_fds.size()) {
+                    processPendingRequests(client_fd);
+                }
             }
         }
 
@@ -501,118 +520,142 @@ static const Location* findMatchingLocation(const std::string& path, const Serve
     return best;
 }
 
+void SocketManager::processPendingRequests(int client_fd) {
+    ClientInfo& client = _client_info[client_fd];
+
+    // As long as there is at least one pending request AND no CGI is currently running:
+    while (!client.pendingRequests.empty() && !client.isCgiProcessRunning) {
+        HttpRequest nextReq = client.pendingRequests.front();
+
+        if (nextReq.getParseErrorCode() != 0) {
+            int code = nextReq.getParseErrorCode();
+            HttpResponse err =
+                ResponseBuilder::generateError(code, client.serverConfig, nextReq);
+            client.responses.push(err);
+            client.pendingRequests.pop();
+            if (err.isConnectionClose()) return;
+            continue;
+        }
+
+        // 1) Determine which Location matches
+        const Server&   server   = client.serverConfig;
+        const Location* location =
+            findMatchingLocation(normalizePath(nextReq.getPath()), server);
+
+        if (!location) {
+            // No matching location → 404, enqueue it, then pop pendingRequests
+            HttpResponse err = ResponseBuilder::generateError(404, server, nextReq);
+            client.responses.push(err);
+            client.pendingRequests.pop();
+
+            // If Connection: close, schedule a close:
+            if (err.isConnectionClose()) {
+                // we’ll close once sendResponse() finishes sending this
+                return;
+            }
+            // Otherwise, keep going to try the next pending request.
+            continue;
+        }
+
+        // 2) Is it a CGI path?
+        std::string resolved = location->resolveAbsolutePath(nextReq.getPath());
+        bool        wantCgi  =
+            !resolved.empty()
+            && (nextReq.getMethod() == "GET" || nextReq.getMethod() == "POST")
+            && location->isCgiRequest(normalizePath(nextReq.getPath()));
+
+        if (wantCgi) {
+            // ── SPAWN A CGI ──
+            client.currentCgiRequest = nextReq;
+            client.isCgiProcessRunning = true;
+
+            /* bool ok =  */(void)handleCgiRequest(client_fd, nextReq, server, *location);
+            // handleCgiRequest(…) should already enqueue an error-response
+            // if it fails to fork/exec. In that case, we want to remove this request
+            // from pendingRequests anyway, so that we don’t loop infinitely:
+            client.pendingRequests.pop();
+            return; // Stop here. Wait for CGI to finish before doing anything else.
+        }
+
+        // 3) Otherwise, it’s a normal static/GET/POST handler:
+        HttpResponse resp = handleRequest(nextReq, server);
+        client.responses.push(resp);
+        client.pendingRequests.pop();
+
+        // If the response says “Connection: close”, we stop here; the connection
+        // will be torn down after we send this last response.
+        if (resp.isConnectionClose()) {
+            return;
+        }
+
+        // Otherwise, loop to see if there is another request waiting that can also
+        // be immediately turned into a response (so that you can “drain” the queue”).
+        continue;
+    }
+    // If we get here, either pendingRequests is empty, or there’s a CGI in flight.
+}
+
+
 bool SocketManager::handleClientData(int client_fd, size_t index) {
-   /*  if (_client_info[client_fd].cgiProcess) {
-        Logger::logFrom(LogLevel::kDEBUG, "SocketManager", "CGI in progress, skipping further request parsing.");
-        return false;
-    } */
     if (!receiveFromClient(client_fd, index)) {
         return false;
     }
+    ClientInfo& client = _client_info[client_fd];
     while (true) {
         if (checkRequestLimits(client_fd)) {
+            client.requestBuffer.clear();
             resetRequestState(client_fd);
-            _client_info[client_fd].requestBuffer.clear();
             return true;
-        }
-        if (_client_info[client_fd].isCgiProcessRunning) {
-            Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
-                            "CGI in progress, skipping further request parsing.");
-            //return false; THINK! MAYBE WE CREATE A QUEUE
         }
         HttpRequest request;
         int         errorCode     = 0;
         std::size_t consumedBytes = 0;
-        if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
-                                      _client_info[client_fd].serverConfig.getClientMaxBodySize(),
-                                      errorCode, consumedBytes)) {
-
+        bool parseOK = HttpRequestParser::parse(
+            request,
+            client.requestBuffer,
+            client.serverConfig.getClientMaxBodySize(),
+            errorCode,
+            consumedBytes
+        );
+        if (!parseOK) {
             if (errorCode == 0) {
-                // Logger::logFrom(LogLevel::kDEBUG, "SocketManager", "Incomplete request, waiting
-                // for more data");
                 return false; // Incomplete data — wait for more
             } else {
-                HttpResponse err = ResponseBuilder::generateError(
-                    errorCode, _client_info[client_fd].serverConfig, request);
-                resetRequestState(client_fd);
-                // Optionally log request details:
+                request.setParseErrorCode(errorCode);
                 request.printRequest();
                 Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
-                                "[2]requestBuffer size is {" +
-                                    std::to_string(_client_info[client_fd].requestBuffer.size()) +
-                                    "}, [2]consumedBytes size is {" +
-                                    std::to_string(consumedBytes) +
-                                    "}, [2]requestBuffer size after erase is {" +
-                                    std::to_string(_client_info[client_fd].requestBuffer.size() -
-                                                   consumedBytes) +
-                                    "}");
-                _client_info[client_fd].requestBuffer.erase(0, consumedBytes);
-                _client_info[client_fd].responses.push(err);
-                // If keep-alive is false, break the loop to close connection
-                if (err.isConnectionClose()) {
-                    break;
-                }
+                    "[2]requestBuffer size is {" + std::to_string(client.requestBuffer.size()) +
+                        "}, [2]consumedBytes size is {" + std::to_string(consumedBytes) +
+                        "}, [2]requestBuffer size after erase is {" +
+                        std::to_string(client.requestBuffer.size() - consumedBytes) + "}");
+                client.requestBuffer.erase(0, consumedBytes);
+                resetRequestState(client_fd); //DO WE NEED IT?
+                client.pendingRequests.push(request);
                 // If no more complete request left, break
-                if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
+                if (client.requestBuffer.find("\r\n\r\n") == std::string::npos) {
                     break;
                 }
                 continue; // We queued a response and continue processing the next request in
                           // pipeline
             }
         }
-        // Optionally log request details:
-        // request.printRequest();
-        resetRequestState(client_fd);
         Logger::logFrom(
             LogLevel::kDEBUG, "SocketManager",
             "[3]requestBuffer size is {" +
-                std::to_string(_client_info[client_fd].requestBuffer.size()) +
+                std::to_string(client.requestBuffer.size()) +
                 "}, [3]consumedBytes size is {" + std::to_string(consumedBytes) +
                 "}, [3]requestBuffer size after erase is {" +
-                std::to_string(_client_info[client_fd].requestBuffer.size() - consumedBytes) + "}");
-        _client_info[client_fd].requestBuffer.erase(0, consumedBytes);
-
-        const Server&   server   = _client_info[client_fd].serverConfig;
-        const Location* location = findMatchingLocation(normalizePath(request.getPath()), server);
-
-        if (!location) {
-            respondError(client_fd, 404);
-            return true;
-        }
-
-        /* if (!location->isMethodAllowed(request.getMethod())) { // Only for passing tests
-            respondError(client_fd, 405);
-            return true;
-        } */
-        std::string resolved = location->resolveAbsolutePath(request.getPath());
-        if (!resolved.empty()) {
-            std::string script_path = std::filesystem::absolute(resolved);
-            if ((request.getMethod() == "POST" || request.getMethod() == "GET") &&
-                location->isCgiRequest(normalizePath(request.getPath()))/*  && isFile(script_path) &&
-                access(script_path.c_str(), X_OK) == 0 */) {
-
-                Logger::logFrom(LogLevel::kDEBUG, "SocketManager", "Handling CGI request");
-                _client_info[client_fd].currentCgiRequest = request;
-                _client_info[client_fd].isCgiProcessRunning= true;
-                (void) handleCgiRequest(client_fd, request, server, *location);
-                continue;
-            }
-        }
-
-        // Fallback to standard GET/POST/DELETE handler
-        HttpResponse response = handleRequest(request, server);
-        _client_info[client_fd].responses.push(response);
-        // If keep-alive is false, break the loop to close connection
-        if (response.isConnectionClose()) {
-            break;
-        }
+                std::to_string(client.requestBuffer.size() - consumedBytes) + "}");
+        client.requestBuffer.erase(0, consumedBytes);
+        resetRequestState(client_fd);
+        client.pendingRequests.push(request);
 
         // If no more complete request left, break
         if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
             break;
         }
     }
-
+    processPendingRequests(client_fd);
     return (true);
 }
 
