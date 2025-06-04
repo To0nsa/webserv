@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleCgi.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 17:19:46 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/04 09:48:22 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,7 @@ HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpReques
     HttpResponse resp = ResponseBuilder::generateSuccessFile(code, cgi.output_path, contentType,
                                                              req, bodySize, headerEnd);
     resp.setCgiTempFile(cgi.output_path);
-    Logger::logFrom(LogLevel::DEBUG, "CGI",
+    Logger::logFrom(LogLevel::kDEBUG, "CGI",
                     "CGI process completed with PID: " + std::to_string(cgi.pid) +
                         ", output file: " + cgi.output_path +
                         ", status code: " + std::to_string(code));
@@ -269,13 +269,13 @@ HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpReques
 }
 
 void errorOnCgi(CgiProcess& cgi) {
-    Logger::logFrom(LogLevel::DEBUG, "CGI",
+    Logger::logFrom(LogLevel::kDEBUG, "CGI",
                     "Killing CGI process with PID: " + std::to_string(cgi.pid));
     kill(cgi.pid, SIGKILL);
     waitpid(cgi.pid, nullptr, 0);
     if (!cgi.input_path.empty()) {
         if (unlink(cgi.input_path.c_str()) == 0) {
-            Logger::logFrom(LogLevel::DEBUG, "CGI", "Deleted input temp file: " + cgi.input_path);
+            Logger::logFrom(LogLevel::kDEBUG, "CGI", "Deleted input temp file: " + cgi.input_path);
         } else {
             Logger::logFrom(LogLevel::ERROR, "CGI",
                             "Failed to delete input temp file: " + cgi.input_path);
@@ -283,7 +283,7 @@ void errorOnCgi(CgiProcess& cgi) {
     }
     if (!cgi.output_path.empty()) {
         if (unlink(cgi.output_path.c_str()) == 0) {
-            Logger::logFrom(LogLevel::DEBUG, "CGI", "Deleted output temp file: " + cgi.output_path);
+            Logger::logFrom(LogLevel::kDEBUG, "CGI", "Deleted output temp file: " + cgi.output_path);
         } else {
             Logger::logFrom(LogLevel::ERROR, "CGI",
                             "Failed to delete output temp file: " + cgi.output_path);
@@ -301,7 +301,7 @@ void cleanupCgi(CgiProcess& cgi) {
     // Only delete input file (output file is managed by HttpResponse)
     if (!cgi.input_path.empty()) {
         if (unlink(cgi.input_path.c_str()) == 0) {
-            Logger::logFrom(LogLevel::DEBUG, "CGI", "Deleted input temp file: " + cgi.input_path);
+            Logger::logFrom(LogLevel::kDEBUG, "CGI", "Deleted input temp file: " + cgi.input_path);
         } else {
             Logger::logFrom(LogLevel::ERROR, "CGI",
                             "Failed to delete input temp file: " + cgi.input_path);
@@ -325,7 +325,7 @@ bool tryTerminateCgi(CgiProcess& cgi) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "waitpid failed: " + std::string(strerror(errno)));
         return true;
     }
-    Logger::logFrom(LogLevel::DEBUG, "CGI",
+    Logger::logFrom(LogLevel::kDEBUG, "CGI",
                     "CGI process terminated with PID: " + std::to_string(cgi.pid));
     return true;
 }
