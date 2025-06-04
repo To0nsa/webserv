@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleCgi.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/04 09:48:22 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:07:40 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,7 @@ HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpReques
     std::streamsize headerEnd = static_cast<std::streamsize>(pos + delimLen);
     std::streamsize bodySize  = totalSize - headerEnd;
     in.close();
-
+	req.printRequest();
     HttpResponse resp = ResponseBuilder::generateSuccessFile(code, cgi.output_path, contentType,
                                                              req, bodySize, headerEnd);
     resp.setCgiTempFile(cgi.output_path);

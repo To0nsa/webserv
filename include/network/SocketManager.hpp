@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/04 10:24:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:36:18 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ struct ClientInfo {
     Server                    serverConfig; // The server config the client is connected to
     std::queue<HttpResponse>  responses;    // Queue of responses to be sent to the client
     std::optional<CgiProcess> cgiProcess;
+    bool                      isCgiProcessRunning;
+    HttpRequest               currentCgiRequest;
     std::ifstream             file_stream;
 };
 
