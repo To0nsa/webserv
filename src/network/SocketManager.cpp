@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/04 13:32:14 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/04 21:42:19 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -670,9 +670,9 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
             }
         }
         /* if (request.getMethod() == "POST" &&
-        location->isCgiRequest(normalizePath(request.getPath()))) { Logger::logFrom(LogLevel::kDEBUG,
-        "SocketManager", "Handling CGI request"); return handleCgiRequest(client_fd, request,
-        server, *location);
+        location->isCgiRequest(normalizePath(request.getPath()))) {
+        Logger::logFrom(LogLevel::kDEBUG, "SocketManager", "Handling CGI request"); return
+        handleCgiRequest(client_fd, request, server, *location);
         } */
 
         // Fallback to standard GET/POST/DELETE handler
@@ -694,7 +694,10 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 
 void SocketManager::sendResponse(int client_fd, size_t index) {
     HttpResponse& response = _client_info[client_fd].responses.front();
-    size_t&       offset   = _client_info[client_fd].bytes_sent;
+    Logger::logFrom(LogLevel::INFO, "SocketManager sendResponse",
+                    "Sending HTTP " + std::to_string(response.getStatusCode()) + " → fd " +
+                        std::to_string(client_fd));
+    size_t& offset = _client_info[client_fd].bytes_sent;
 
     if (response.isFileResponse()) {
         // If this is the first time sending this file response, open the file and build headers
@@ -724,12 +727,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         // Send any remaining bytes of the HTTP headers first
         std::string& raw = _client_info[client_fd].current_raw_response;
         if (offset < raw.size()) {
-            ssize_t sent = send(
-                client_fd,
-                raw.c_str() + offset,
-                raw.size() - offset,
-                MSG_DONTWAIT
-            );
+            ssize_t sent = send(client_fd, raw.c_str() + offset, raw.size() - offset, MSG_DONTWAIT);
             if (sent < 0) {
                 Logger::logFrom(LogLevel::ERROR, "SocketManager",
                                 "send() failed on fd " + std::to_string(client_fd) + ": " +
@@ -825,12 +823,8 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 
         std::string& raw = _client_info[client_fd].current_raw_response;
         if (offset < raw.size()) {
-            ssize_t bytes_sent = send(
-                client_fd,
-                raw.c_str() + offset,
-                raw.size() - offset,
-                MSG_DONTWAIT
-            );
+            ssize_t bytes_sent =
+                send(client_fd, raw.c_str() + offset, raw.size() - offset, MSG_DONTWAIT);
             if (bytes_sent < 0) {
                 Logger::logFrom(LogLevel::ERROR, "SocketManager",
                                 "send() failed on fd " + std::to_string(client_fd) + ": " +
@@ -848,12 +842,12 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 
             Logger::logFrom(LogLevel::kDEBUG, "SocketManager sendResponse",
                             "[✅DONE] We sent RESPONSE to fd:" + std::to_string(client_fd));
-/*             Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
-                            "============================RAW===================");
-            Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
-                            raw.c_str());
-            Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
-                            "=================================================="); */
+            /*             Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
+                                        "============================RAW===================");
+                        Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
+                                        raw.c_str());
+                        Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
+                                        "=================================================="); */
 
             _client_info[client_fd].current_raw_response.clear();
             if (!response.isConnectionClose()) {
@@ -870,7 +864,6 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         }
     }
 }
-
 
 /* // Accept new client and add to poll list
 void SocketManager::sendResponse(int client_fd, size_t index) {
@@ -962,8 +955,8 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
             if (response.isCgiTempFile()) {
                 const std::string& path = response.getCgiTempFile();
                 if (!path.empty() && unlink(path.c_str()) == 0) {
-                    Logger::logFrom(LogLevel::kDEBUG, "SocketManager", "Deleted temp file: " + path);
-                    response.setCgiTempFile("");
+                    Logger::logFrom(LogLevel::kDEBUG, "SocketManager", "Deleted temp file: " +
+path); response.setCgiTempFile("");
                 }
             }
             _client_info[client_fd].responses.pop();
@@ -1002,7 +995,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 
         if (offset >= _client_info[client_fd].current_raw_response.size()) {
             _client_info[client_fd].responses.pop();
-            
+
             offset = 0;
             Logger::logFrom(LogLevel::kDEBUG, "SocketManager sendResponse",
                             "[✅DONE] We sent RESPONSE to fd:" + std::to_string(client_fd));

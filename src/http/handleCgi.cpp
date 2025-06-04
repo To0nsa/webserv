@@ -283,7 +283,8 @@ void errorOnCgi(CgiProcess& cgi) {
     }
     if (!cgi.output_path.empty()) {
         if (unlink(cgi.output_path.c_str()) == 0) {
-            Logger::logFrom(LogLevel::kDEBUG, "CGI", "Deleted output temp file: " + cgi.output_path);
+            Logger::logFrom(LogLevel::kDEBUG, "CGI",
+                            "Deleted output temp file: " + cgi.output_path);
         } else {
             Logger::logFrom(LogLevel::ERROR, "CGI",
                             "Failed to delete output temp file: " + cgi.output_path);
