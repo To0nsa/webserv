@@ -274,6 +274,18 @@ def test_dir_prefix_but_not_match():
     GET /dirX → should not match /dir → expect 404
     """
     assert_status("/dirX", 404)
+    
+def test_trailing_slash_nested():
+    """
+    Suppose /dir/sub/ actually exists on disk (or in your config). Then:
+    GET /dir/sub      → 301 Location: /dir/sub/
+    GET /dir/sub/     → 200 OK (no redirect)
+    """
+    # First, ensure /dir/sub/ exists in your test root.
+    # (If it doesn’t, this will correctly return 404, so adapt as needed.)
+    assert_redirect("/dir/sub", "/dir/sub/")
+    assert_status("/dir/sub/", 200)
+
 
 if __name__ == "__main__":
     print("\n[REDIRECTION TESTS] Starting...\n")
@@ -298,5 +310,4 @@ if __name__ == "__main__":
     test_space_in_filename()
     test_case_sensitive_directory()
     test_dir_prefix_but_not_match()
-
-    print("\n[REDIRECTION TESTS] All passed!\n")
+    test_trailing_slash_nested()
