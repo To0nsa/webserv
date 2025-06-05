@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 10:57:29 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:17:09 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,12 +197,18 @@ bool SocketManager::checkClientTimeouts(int client_fd, size_t index) {
 }
 
 void SocketManager::handlePollError(int fd, size_t index, short revents) {
-    if (revents & POLLERR)
+    if (revents & POLLNVAL) {
+        Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                        "Invalid poll event on fd: " + std::to_string(fd));
+    }
+    else if (revents & POLLERR) {
         Logger::logFrom(LogLevel::ERROR, "SocketManager",
                         "Socket error on fd: " + std::to_string(fd));
-    if (revents & POLLHUP)
+    }
+    else if (revents & POLLHUP) {
         Logger::logFrom(LogLevel::INFO, "SocketManager",
                         "Client disconnected (POLLHUP) on fd: " + std::to_string(fd));
+ }
     cleanupClientConnectionClose(fd, index);
 }
 
@@ -420,7 +426,7 @@ void SocketManager::run() {
             }
 
             // Now error/hangup on *client* sockets
-            if (revents & POLLERR || revents & POLLHUP) {
+            if (revents & POLLERR || revents & POLLHUP || revents & POLLNVAL) {
                 handlePollError(current_fd, i, revents);
                 continue;
             }
@@ -449,6 +455,12 @@ void SocketManager::run() {
 void SocketManager::handleNewConnection(int listen_fd) {
     int client_fd = accept(listen_fd, NULL, NULL);
     if (client_fd < 0) {
+        if (errno == EMFILE || errno == ENFILE) {
+            // We’ve hit the per‐process or system FD limit.
+            Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                            "Out of file descriptors (accept failed: " + std::string(strerror(errno)) + ")");
+            return;
+        }
         Logger::logFrom(LogLevel::ERROR, "SocketManager",
                         "accept() failed: " + std::string(std::strerror(errno)));
         return;

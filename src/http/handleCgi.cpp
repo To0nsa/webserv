@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/04 15:07:40 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:26:34 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,8 +220,8 @@ HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpReques
     std::streamsize totalSize = in.tellg();
     in.seekg(0, std::ios::beg);
 
-    // Read the first 16KB only to find headers
-    const size_t      MAX_HEADER_SCAN = 16 * 1024;
+    // Read the first 9KB only to find headers
+    const size_t      MAX_HEADER_SCAN = 9 * 1024;
     std::vector<char> buffer(MAX_HEADER_SCAN);
     in.read(buffer.data(), MAX_HEADER_SCAN);
     std::streamsize bytesRead = in.gcount();
@@ -236,7 +236,7 @@ HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpReques
     }
     if (pos == std::string::npos) {
         Logger::logFrom(LogLevel::ERROR, "CGI",
-                        "finalizeCgi(): Header delimiter not found in first 16KB");
+                        "finalizeCgi(): Header delimiter not found in first 9KB");
         return ResponseBuilder::generateError(500, server, req);
     }
 
