@@ -6,7 +6,7 @@
 /*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 01:15:12 by ktieu            ###   ########.fr       */
+/*   Updated: 2025/06/06 02:37:49 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ class SocketManager {
     std::map<int, ClientInfo> _client_info; /// Stores all information about each client
     std::map<int, int>        _fd_to_cgi;   ///< Maps CGI stdout fds to client fds
     std::vector<Server> _servers; ///< List of all servers to listen on
+    Server& _default_server; ///< Default server for requests without a matching host
 
     void setupSockets(const std::vector<Server>& servers);
     void handleNewConnection(int listen_fd);

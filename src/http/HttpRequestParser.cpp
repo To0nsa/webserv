@@ -6,7 +6,7 @@
 /*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/06 01:38:10 by ktieu            ###   ########.fr       */
+/*   Updated: 2025/06/06 02:42:50 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,24 +52,14 @@ namespace {
         return res;
     }
 
-    Url parseUrlHttpVersion1_0(HttpRequest& req, const std::string& url, const std::vector<Server>& servers)
-    {
-
-        std::string host = req.getHeader("HOST");
-
-        // Fallback if no HOST header
-        if (req.getVersion() == "HTTP/1.0" && host.empty()) {
-            Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
-                            "No HOST in HTTP/1.0 request — falling back to default server");
-
+     Url parseUrl(const std::string& url) {
+        Url                     res;
             static const std::regex re(
                 R"((https?://)?(?:([^:@]+)(?::([^:@]*))?@)?([^:/?#]+)(?::(\d+))?(/[^?#]*)?(?:\?([^#]*))?(?:#(.*))?)");
             std::smatch m;
             if (!std::regex_match(url, m, re)) {
                 throw std::invalid_argument("Invalid URL");
             }
-            Url res;
-
             res.scheme   = m[1].str();
             res.user     = m[2].str();
             res.password = m[3].str();
@@ -79,15 +69,7 @@ namespace {
             res.query    = m[7].str();
             res.fragment = m[8].str();
 
-            int port = std::stoi(res.port);
-            const Server& matchedServer = findMatchingServer(servers, port, host);
-            host = matchedServer.getHost();
-
-            // Optionally normalize the request by setting HOST header
-            req.setHeader("HOST", host);
             return res;
-        }
-        throw std::invalid_argument("Invalid call to parseUrlHttpVersion1_0");
     }
 
 /** Checks that method tokens only contain RFC-allowed characters. */
@@ -375,7 +357,9 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, std::vector
         if (req.getVersion() == "HTTP/1.1" || !req.getHeader("HOST").empty()) {
             url = parseUrlHttpVersion1_1(req, req.getHeader("HOST") + req.getPath());
         } else {
-            url = parseUrlHttpVersion1_0(req, req.getHeader("HOST") + req.getPath(), servers);
+            std::string urlStr = "http://" + servers[0].getHost() + req.getPath();
+            Url url;
+            url = parseUrl(urlStr);
         }
         req.setUrl(url);
     } catch (const std::exception& e) {

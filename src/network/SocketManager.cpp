@@ -6,7 +6,7 @@
 /*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 01:37:32 by ktieu            ###   ########.fr       */
+/*   Updated: 2025/06/06 02:40:49 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,10 @@ static void signalHandler(int signum) {
 }
 
 // Constructor: sets up sockets for each server defined in the config
-SocketManager::SocketManager(const std::vector<Server>& servers) {
+SocketManager::SocketManager(const std::vector<Server>& servers) : _servers(servers), _default_server(_servers[0]) {
     signal(SIGINT, signalHandler);
     signal(SIGPIPE, SIG_IGN);
     setupSockets(servers);
-    _servers = servers;
 }
 
 SocketManager::~SocketManager() {
