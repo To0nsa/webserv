@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 17:26:33 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 01:15:12 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ class SocketManager {
         _listen_map; ///< Maps listening socket fds to their corresponding server configurations.
     std::map<int, ClientInfo> _client_info; /// Stores all information about each client
     std::map<int, int>        _fd_to_cgi;   ///< Maps CGI stdout fds to client fds
+    std::vector<Server> _servers; ///< List of all servers to listen on
 
     void setupSockets(const std::vector<Server>& servers);
     void handleNewConnection(int listen_fd);

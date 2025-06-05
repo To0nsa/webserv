@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 16:39:46 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 01:37:32 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ SocketManager::SocketManager(const std::vector<Server>& servers) {
     signal(SIGINT, signalHandler);
     signal(SIGPIPE, SIG_IGN);
     setupSockets(servers);
+    _servers = servers;
 }
 
 SocketManager::~SocketManager() {
@@ -632,7 +633,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         std::size_t consumedBytes = 0;
         if (!HttpRequestParser::parse(request, _client_info[client_fd].requestBuffer,
                                       _client_info[client_fd].serverConfig.getClientMaxBodySize(),
-                                      errorCode, consumedBytes)) {
+                                      errorCode, consumedBytes, _servers)) {
 
             if (errorCode == 0) {
                 // Logger::logFrom(LogLevel::DEBUG, "SocketManager", "Incomplete request, waiting
