@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequestParser.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/03 17:36:58 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:09:10 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,20 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         }
     }
 
+    // ── absolute‐URI check ──
+    if (decoded.rfind("http://", 0) == 0 || decoded.rfind("https://", 0) == 0) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                        "Rejected absolute-URI request-target: " + decoded);
+        errorCode = 400;
+        return false;
+    }
+
+    // ── fragment‐stripping ──
+    size_t hashPos = decoded.find('#');
+    if (hashPos != std::string::npos) {
+        decoded.erase(hashPos);
+    }
+
     // — Split path/query
     std::string pathOnly = decoded, query;
     size_t      qpos     = decoded.find('?');
@@ -275,23 +289,31 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         return false;
     }
 
-    // — Initialize request
+    // ── Initialize request ──
     req = HttpRequest();
     req.setMethod(method);
-    if (pathOnly.find("..") != std::string::npos) {
-        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
-                        "Rejected traversal attempt: " + pathOnly);
+
+    // Split on ‘/’ and reject only true “..” segments:
+    {
+        std::istringstream segstream(pathOnly);
+        std::string        seg;
+        while (std::getline(segstream, seg, '/')) {
+            if (seg == "..") {
+                Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
+                                "Rejected traversal attempt: " + pathOnly);
+                errorCode = 403;
+                return false;
+            }
+        }
+    }
+
+    // std::string norm = pathOnly;
+    std::string norm = normalizePath(pathOnly);
+    if (norm.empty()) {
+        Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
         errorCode = 403;
         return false;
     }
-
-    std::string norm = pathOnly;
-    /*     std::string norm = normalizePath(pathOnly);
-        if (norm.empty()) {
-            Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
-            errorCode = 403;
-            return false;
-        } */
     req.setPath(norm);
     req.setQuery(query);
     req.setVersion(version);
@@ -406,7 +428,8 @@ void chunkReqHandler(HttpRequest& req, const std::string& bodyPart, std::size_t 
 
             break;
         }
-
+        Logger::logFrom(LogLevel::WARN, "PARSER",
+                        " Totalsize: " + std::to_string(total + chunkSize));
         if (total + chunkSize > clientMaxBodySize) {
             Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                             "Exceeded max body size in chunked transfer");
@@ -660,10 +683,10 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
             return true;
         }
 
-        // If we fall through here, the extra data is NOT a valid request‐line,
-        // so it must be a forbidden body‐payload on GET/DELETE → 400.
-        errorCode = 400; // Bad Request
-        return false;
+        // FALLBACK: ignore any “body” on GET and treat as a clean GET
+        consumedBytes = buffer.size(); // consume headers + body, but ignore the body
+        errorCode     = 0;
+        return true;
     }
 
     // 6) For POST (and other body‐bearing methods), delegate to parseReqBody

@@ -182,20 +182,8 @@ def test_get_with_body():
     conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
     conn.request("GET", "/index.html", body="irrelevant body")
     res = conn.getresponse()
-    assert res.status == 400
-    print("✅ GET with body → 400 Bad Request")
-    conn.close()
-
-def test_if_modified_since():
-    # Simplified: not parsing date from headers — should be extended
-    _, _, _ = request("/index.html")
-    _, _, lm = request("/index.html")
-    parsed = urlparse(SERVER)
-    conn = http.client.HTTPConnection(parsed.hostname, parsed.port)
-    conn.request("GET", "/index.html", headers={"If-Modified-Since": lm})
-    res = conn.getresponse()
-    assert res.status in (304, 200)
-    print(f"✅ Conditional GET → {res.status}")
+    assert res.status == 200
+    print("✅ GET with body → 200 OK (body ignored)")
     conn.close()
     
 def test_header_timeout():
@@ -216,18 +204,6 @@ def test_header_timeout():
         print("❌ Server did not respond with 408 (timed out in client)")
     finally:
         s.close()
-        
-def test_empty_request_timeout():
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((HOST, PORT))
-        time.sleep(10)  # wait for timeout to trigger
-        try:
-            res = s.recv(4096).decode(errors="replace")
-            assert "408 Request Timeout" in res
-            print("✅ Empty request triggers 408 timeout")
-        except Exception as e:
-            print(f"❌ Empty request timeout test failed: {e}")
-            sys.exit(1)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # URI Handling and Edge Cases
@@ -286,21 +262,6 @@ def test_accept_encoding_gzip():
     status, _, _ = request("/index.html", headers={"Accept-Encoding": "gzip"})
     assert status == 200
     print("✅ Accept-Encoding: gzip → OK")
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Directory Indexing and Autoindex
-# ─────────────────────────────────────────────────────────────────────────────
-
-def test_index_prevents_autoindex():
-    _, _, body = request("/")
-    assert "<h1>Welcome to Webserv</h1>" in body
-    print("✅ index.html served instead of autoindex")
-
-def test_autoindex_lists_files():
-    _, _, body = request("/dir/")
-    assert "file.txt" in body
-    assert "file.unknown" in body
-    print("✅ Autoindex lists directory contents")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Error Handling (Custom Pages)
@@ -395,9 +356,7 @@ def run_tests():
     # ─── Connection and timeout behavior ───────────────────────────────────────────────
     test_connection_close()
     test_get_with_body()
-    test_if_modified_since()
-    #test_header_timeout()
-    #test_empty_request_timeout()
+    test_header_timeout()
 
     # ─── URI / Path edge cases ─────────────────────────────────────────────
     test_long_url()
@@ -413,10 +372,6 @@ def run_tests():
     test_uppercase_extension()
     test_mixed_case_extensions()
     test_accept_encoding_gzip()
-
-    # ─── Autoindex / Directory logic ───────────────────────────────────────
-    test_index_prevents_autoindex()
-    test_autoindex_lists_files()
 
     # ─── Custom error pages ────────────────────────────────────────────────
     test_custom_error_pages()

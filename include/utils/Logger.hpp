@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Logger.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 12:09:58 by ktieu             #+#    #+#             */
-/*   Updated: 2025/05/25 12:10:01 by ktieu            ###   ########.fr       */
+/*   Updated: 2025/06/04 09:48:22 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <iostream>
 #include <string>
 
-enum class LogLevel { DEBUG, INFO, WARN, ERROR };
+enum class LogLevel { kDEBUG, INFO, WARN, ERROR };
 
 class Logger {
   public:

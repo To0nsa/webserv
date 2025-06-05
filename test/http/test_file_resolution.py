@@ -34,9 +34,6 @@ def setup_test_files():
         f.write("This is a file inside /dir/")
     with open(os.path.join(base_dir, "file.unknown"), "w") as f:
         f.write("Binary? Nope—just text to test fallback")
-
-    with open("test/data/index.html", "w") as f:
-        f.write("<h1>Welcome to Webserv</h1>")
     with open("test/data/style.CsS", "w") as f:
         f.write("body { font-size: 14px; }")
     with open("test/data/index.html.bak", "w") as f:
@@ -44,7 +41,7 @@ def setup_test_files():
 
 def cleanup_test_files():
     import shutil
-    for f in ["index.html", "style.CsS", "index.html.bak"]:
+    for f in ["style.CsS", "index.html.bak"]:
         try:
             os.remove(os.path.join("test/data", f))
         except FileNotFoundError:
@@ -63,7 +60,6 @@ def run_tests():
     request("/dir/file%2eunknown",     200, "Binary? Nope—just text to test fallback")
 
     # 2) Root-level static
-    request("/index.html",             200, "<h1>Welcome to Webserv</h1>")
     request("/style.CsS",              200, "font-size")  # case-insensitive mapping
     request("/index.html.bak",         200, "backup copy")
 

@@ -13,7 +13,7 @@
 
 std::string levelToString(LogLevel level) {
     switch (level) {
-    case LogLevel::DEBUG:
+    case LogLevel::kDEBUG:
         return "DEBUG";
     case LogLevel::INFO:
         return "INFO";
@@ -28,7 +28,7 @@ std::string levelToString(LogLevel level) {
 
 const char* levelColor(LogLevel level) {
     switch (level) {
-    case LogLevel::DEBUG:
+    case LogLevel::kDEBUG:
         return COLOR_DEBUG;
     case LogLevel::INFO:
         return COLOR_INFO;
