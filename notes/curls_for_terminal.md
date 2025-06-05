@@ -53,6 +53,11 @@ echo -ne 'GET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-
 echo -ne 'GET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nPOST /upload_store/hello.txt HTTP/1.1\r\nHost: localhost\r\nContent-Length: 20\r\nConnection: keep-alive\r\n\r\nHELLO'| nc 127.0.0.1 8001
 
 
+echo -ne 'POST /upload_store/hello.txt HTTP/1.1\r\nHost: localhost\r\nContent-Length: 20\r\nContent-Type: text/plain\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n'| nc 127.0.0.1 8001
+
+
+echo -ne 'POST /upload_store/hello.txt HTTP/1.1\r\nHost: localhost\r\nContent-Length: 20\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n'| nc 127.0.0.1 8001
+
 irychkov@irychkov42:~/Desktop/webserv/serverfiles/cgi-bin$ SCRIPT_NAME=/directory/fake.bla \
 PATH_INFO=/directory/fake.bla \
 REQUEST_METHOD=GET \

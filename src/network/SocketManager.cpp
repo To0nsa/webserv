@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 00:31:23 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:17:57 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -628,7 +628,11 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
                         "}, [2]consumedBytes size is {" + std::to_string(consumedBytes) +
                         "}, [2]requestBuffer size after erase is {" +
                         std::to_string(client.requestBuffer.size() - consumedBytes) + "}");
-                client.requestBuffer.erase(0, consumedBytes);
+                if (errorCode == 415 || errorCode == 411 || errorCode == 400 || errorCode == 413) {
+                    client.requestBuffer.clear();
+                } else {
+                    client.requestBuffer.erase(0, consumedBytes);
+                }
                 resetRequestState(client_fd); //DO WE NEED IT?
                 client.pendingRequests.push(request);
                 // If no more complete request left, break
