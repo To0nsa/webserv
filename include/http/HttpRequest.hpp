@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:10 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/28 23:06:39 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/05 00:23:42 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class HttpRequest {
     std::size_t                        _contentLength{0};
     std::string /* _uri; */            _query; ///< extracted from URI after '?'
     Url                                _url;
+    int                                _parseError{0};
 
   public:
     HttpRequest(void);
@@ -43,6 +44,7 @@ class HttpRequest {
     const std::string&                        getBody(void) const;
     std::size_t                               getContentLength(void) const;
     /* const std::string& getUri(void) const; */ const std::string& getQuery() const;
+    int getParseErrorCode(void) const;
 
     void setMethod(const std::string& method);
     void setPath(const std::string& path);
@@ -52,6 +54,6 @@ class HttpRequest {
     void setContentLength(size_t len);
     void setUrl(const Url& url);
     void setQuery(const std::string& query);
-
+    void setParseErrorCode(int error);
     bool hasHeader(const std::string& key) const;
 };
