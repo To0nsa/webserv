@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/05 14:50:27 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:15:56 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,22 +98,24 @@ std::vector<char*> toCharPtrArray(const std::vector<std::string>& vs) {
 
 namespace CGI {
 
-static void unlinkWithErrorLog(const std::string& path, const std::string& context) {
+void unlinkWithErrorLog(const std::string& path, const std::string& context) {
     if (!path.empty() && unlink(path.c_str()) != 0) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to delete " + context + ": " + path);
     }
 }
 
 bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& server,
-                    const Location& loc, const std::vector<pollfd>& poll_fds) {
+                    const Location& loc, const std::vector<pollfd>& poll_fds, int& errorCode) {
     cgi.last_activity = time(NULL);
     cgi.script_path   = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
     if (!isFile(cgi.script_path)) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "File is invalid");
+        errorCode = 404;
         return false;
     }
     if (access(cgi.script_path.c_str(), X_OK) != 0) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "File is not executable");
+        errorCode = 403;
         return false;
     }
 
@@ -155,9 +157,17 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     }
 
     if (pid == 0) {
-        dup2(body_fd, STDIN_FILENO);
+        if (dup2(body_fd, STDIN_FILENO) == -1) {
+            Logger::logFrom(LogLevel::ERROR, "CGI CHILD",
+                            "dup2 stdin failed: " + std::string(strerror(errno)));
+            exit(1);
+        }
         close(body_fd);
-        dup2(output_fd, STDOUT_FILENO);
+        if (dup2(output_fd, STDOUT_FILENO) == -1) {
+            Logger::logFrom(LogLevel::ERROR, "CGI CHILD",
+                            "dup2 stdout failed: " + std::string(strerror(errno)));
+            exit(1);
+        }
         close(output_fd);
         for (std::vector<pollfd>::const_iterator it = poll_fds.begin(); it != poll_fds.end();
              ++it) {

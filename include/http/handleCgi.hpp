@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 00:24:43 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 13:25:03 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:17:53 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ struct CgiProcess {
 
 namespace CGI {
 
+void         unlinkWithErrorLog(const std::string& path, const std::string& context);
 bool         initCgiProcess(CgiProcess& cgi, const HttpRequest& request, const Server& server,
-                            const Location& loc, const std::vector<pollfd>& poll_fds);
+                            const Location& loc, const std::vector<pollfd>& poll_fds, int& errorCode);
 HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpRequest& request);
 void         cleanupCgi(CgiProcess& cgi);
 void         errorOnCgi(CgiProcess& cgi);

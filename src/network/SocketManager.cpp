@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 14:55:45 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:17:31 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -489,15 +489,17 @@ bool SocketManager::handleCgiRequest(int client_fd, const HttpRequest& request,
     ClientInfo& client = _client_info[client_fd];
     client.cgiProcess.emplace();
 
-    if (!CGI::initCgiProcess(*client.cgiProcess, request, server, location, _poll_fds)) {
+    int errorCode = 500;
+    if (!CGI::initCgiProcess(*client.cgiProcess, request, server, location, _poll_fds, errorCode)) {
         Logger::logFrom(LogLevel::ERROR, "SocketManager",
                         "[CGI] Failed to initialize CGI process for client_fd " +
                             std::to_string(client_fd) + " with script: " + location.getPath());
-        respondError(client_fd, 500);
+        HttpResponse err = ResponseBuilder::generateError(errorCode, server, request);
+        _client_info[client_fd].responses.push(err);
         client.cgiProcess.reset();
         client.isCgiProcessRunning = false;
         client.currentCgiRequest   = HttpRequest(); // clears request
-        return true;                                // error response queued
+        return false;                               // error response queued
     }
 
     return true; // handled as CGI
@@ -563,11 +565,14 @@ void SocketManager::processPendingRequests(int client_fd) {
             client.currentCgiRequest   = nextReq;
             client.isCgiProcessRunning = true;
 
-            /* bool ok =  */ (void) handleCgiRequest(client_fd, nextReq, server, *location);
+            bool ok = handleCgiRequest(client_fd, nextReq, server, *location);
             // handleCgiRequest(…) should already enqueue an error-response
             // if it fails to fork/exec. In that case, we want to remove this request
             // from pendingRequests anyway, so that we don’t loop infinitely:
             client.pendingRequests.pop();
+            if (!ok) {
+                continue;
+            }
             return; // Stop here. Wait for CGI to finish before doing anything else.
         }
 
