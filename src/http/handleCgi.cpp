@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/05 14:16:58 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:50:27 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,12 @@ std::vector<char*> toCharPtrArray(const std::vector<std::string>& vs) {
 } // namespace
 
 namespace CGI {
+
+static void unlinkWithErrorLog(const std::string& path, const std::string& context) {
+    if (!path.empty() && unlink(path.c_str()) != 0) {
+        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to delete " + context + ": " + path);
+    }
+}
 
 bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& server,
                     const Location& loc, const std::vector<pollfd>& poll_fds) {
@@ -256,7 +262,7 @@ HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpReques
     std::streamsize headerEnd = static_cast<std::streamsize>(pos + delimLen);
     std::streamsize bodySize  = totalSize - headerEnd;
     in.close();
-	req.printRequest();
+    req.printRequest();
     HttpResponse resp = ResponseBuilder::generateSuccessFile(code, cgi.output_path, contentType,
                                                              req, bodySize, headerEnd);
     resp.setCgiTempFile(cgi.output_path);
@@ -264,16 +270,12 @@ HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpReques
 }
 
 void errorOnCgi(CgiProcess& cgi) {
-    Logger::logFrom(LogLevel::kDEBUG, "CGI",
+    Logger::logFrom(LogLevel::ERROR, "CGI",
                     "Killing CGI process with PID: " + std::to_string(cgi.pid));
     kill(cgi.pid, SIGKILL);
     waitpid(cgi.pid, nullptr, 0);
-    if (!cgi.input_path.empty() && unlink(cgi.input_path.c_str()) != 0) {
-		Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to delete input temp file: " + cgi.input_path);
-	}
-	if (!cgi.output_path.empty() && unlink(cgi.output_path.c_str()) != 0) {
-		Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to delete output temp file: " + cgi.output_path);
-	}
+    unlinkWithErrorLog(cgi.input_path, "input temp file");
+    unlinkWithErrorLog(cgi.output_path, "output temp file");
 
     cgi.pid           = -1;
     cgi.start_time    = 0;
@@ -283,9 +285,7 @@ void errorOnCgi(CgiProcess& cgi) {
 }
 
 void cleanupCgi(CgiProcess& cgi) {
-    if (!cgi.input_path.empty() && unlink(cgi.input_path.c_str()) != 0) {
-        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to delete input temp file: " + cgi.input_path);
-    }
+    unlinkWithErrorLog(cgi.input_path, "input temp file");
     cgi.pid           = -1;
     cgi.start_time    = 0;
     cgi.last_activity = 0;

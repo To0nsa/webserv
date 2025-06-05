@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 14:33:12 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:55:45 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void SocketManager::cleanupCgiForClient(int client_fd) {
     CGI::cleanupCgi(*client.cgiProcess);
     client.cgiProcess.reset();
     client.isCgiProcessRunning = false;
-    client.currentCgiRequest = HttpRequest();
+    client.currentCgiRequest   = HttpRequest();
 }
 
 void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
@@ -72,11 +72,7 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
 
             // Delete temporary files from CGI responses
             if (resp.isCgiTempFile()) {
-                const std::string& path = resp.getCgiTempFile();
-                if (!path.empty() && unlink(path.c_str()) != 0) {
-                    Logger::logFrom(LogLevel::ERROR, "SocketManager",
-                                    "Failed to delete temp file: " + path);
-                }
+                CGI::unlinkWithErrorLog(resp.getCgiTempFile(), "out temp file");
             }
             client.responses.pop();
         }
@@ -86,7 +82,7 @@ void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
             CGI::errorOnCgi(*client.cgiProcess);
             client.cgiProcess.reset();
             client.isCgiProcessRunning = false;
-            client.currentCgiRequest = HttpRequest();
+            client.currentCgiRequest   = HttpRequest();
         }
 
         // Close file stream
@@ -193,15 +189,13 @@ void SocketManager::handlePollError(int fd, size_t index, short revents) {
     if (revents & POLLNVAL) {
         Logger::logFrom(LogLevel::ERROR, "SocketManager",
                         "Invalid poll event on fd: " + std::to_string(fd));
-    }
-    else if (revents & POLLERR) {
+    } else if (revents & POLLERR) {
         Logger::logFrom(LogLevel::ERROR, "SocketManager",
                         "Socket error on fd: " + std::to_string(fd));
-    }
-    else if (revents & POLLHUP) {
+    } else if (revents & POLLHUP) {
         Logger::logFrom(LogLevel::INFO, "SocketManager",
                         "Client disconnected (POLLHUP) on fd: " + std::to_string(fd));
- }
+    }
     cleanupClientConnectionClose(fd, index);
 }
 
@@ -361,7 +355,7 @@ void SocketManager::run() {
                 CGI::errorOnCgi(cgi);
                 client.cgiProcess.reset();
                 client.isCgiProcessRunning = false;
-                client.currentCgiRequest = HttpRequest();  // clears request
+                client.currentCgiRequest   = HttpRequest(); // clears request
                 for (auto& pfd : _poll_fds) {
                     if (pfd.fd == client_fd) {
                         pfd.events |= POLLOUT;
@@ -380,8 +374,8 @@ void SocketManager::run() {
                 client.responses.push(resp);
                 CGI::cleanupCgi(cgi);
                 client.cgiProcess.reset();
-                client.isCgiProcessRunning = false;  // optional if used independently
-                client.currentCgiRequest = HttpRequest();  // clears request
+                client.isCgiProcessRunning = false;         // optional if used independently
+                client.currentCgiRequest   = HttpRequest(); // clears request
 
                 for (auto& pfd : _poll_fds) {
                     if (pfd.fd == client_fd) {
@@ -446,8 +440,9 @@ void SocketManager::handleNewConnection(int listen_fd) {
     if (client_fd < 0) {
         if (errno == EMFILE || errno == ENFILE) {
             // We’ve hit the per‐process or system FD limit.
-            Logger::logFrom(LogLevel::ERROR, "SocketManager",
-                            "Out of file descriptors (accept failed: " + std::string(strerror(errno)) + ")");
+            Logger::logFrom(
+                LogLevel::ERROR, "SocketManager",
+                "Out of file descriptors (accept failed: " + std::string(strerror(errno)) + ")");
             return;
         }
         Logger::logFrom(LogLevel::ERROR, "SocketManager",
@@ -501,8 +496,8 @@ bool SocketManager::handleCgiRequest(int client_fd, const HttpRequest& request,
         respondError(client_fd, 500);
         client.cgiProcess.reset();
         client.isCgiProcessRunning = false;
-        client.currentCgiRequest = HttpRequest(); // clears request
-        return true; // error response queued
+        client.currentCgiRequest   = HttpRequest(); // clears request
+        return true;                                // error response queued
     }
 
     return true; // handled as CGI
@@ -529,19 +524,18 @@ void SocketManager::processPendingRequests(int client_fd) {
         HttpRequest nextReq = client.pendingRequests.front();
 
         if (nextReq.getParseErrorCode() != 0) {
-            int code = nextReq.getParseErrorCode();
-            HttpResponse err =
-                ResponseBuilder::generateError(code, client.serverConfig, nextReq);
+            int          code = nextReq.getParseErrorCode();
+            HttpResponse err  = ResponseBuilder::generateError(code, client.serverConfig, nextReq);
             client.responses.push(err);
             client.pendingRequests.pop();
-            if (err.isConnectionClose()) return;
+            if (err.isConnectionClose())
+                return;
             continue;
         }
 
         // 1) Determine which Location matches
         const Server&   server   = client.serverConfig;
-        const Location* location =
-            findMatchingLocation(normalizePath(nextReq.getPath()), server);
+        const Location* location = findMatchingLocation(normalizePath(nextReq.getPath()), server);
 
         if (!location) {
             // No matching location → 404, enqueue it, then pop pendingRequests
@@ -560,17 +554,16 @@ void SocketManager::processPendingRequests(int client_fd) {
 
         // 2) Is it a CGI path?
         std::string resolved = location->resolveAbsolutePath(nextReq.getPath());
-        bool        wantCgi  =
-            !resolved.empty()
-            && (nextReq.getMethod() == "GET" || nextReq.getMethod() == "POST")
-            && location->isCgiRequest(normalizePath(nextReq.getPath()));
+        bool        wantCgi  = !resolved.empty() &&
+                       (nextReq.getMethod() == "GET" || nextReq.getMethod() == "POST") &&
+                       location->isCgiRequest(normalizePath(nextReq.getPath()));
 
         if (wantCgi) {
             // ── SPAWN A CGI ──
-            client.currentCgiRequest = nextReq;
+            client.currentCgiRequest   = nextReq;
             client.isCgiProcessRunning = true;
 
-            /* bool ok =  */(void)handleCgiRequest(client_fd, nextReq, server, *location);
+            /* bool ok =  */ (void) handleCgiRequest(client_fd, nextReq, server, *location);
             // handleCgiRequest(…) should already enqueue an error-response
             // if it fails to fork/exec. In that case, we want to remove this request
             // from pendingRequests anyway, so that we don’t loop infinitely:
@@ -596,7 +589,6 @@ void SocketManager::processPendingRequests(int client_fd) {
     // If we get here, either pendingRequests is empty, or there’s a CGI in flight.
 }
 
-
 bool SocketManager::handleClientData(int client_fd, size_t index) {
     if (!receiveFromClient(client_fd, index)) {
         return false;
@@ -611,13 +603,9 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         HttpRequest request;
         int         errorCode     = 0;
         std::size_t consumedBytes = 0;
-        bool parseOK = HttpRequestParser::parse(
-            request,
-            client.requestBuffer,
-            client.serverConfig.getClientMaxBodySize(),
-            errorCode,
-            consumedBytes
-        );
+        bool        parseOK       = HttpRequestParser::parse(request, client.requestBuffer,
+                                                             client.serverConfig.getClientMaxBodySize(),
+                                                             errorCode, consumedBytes);
         if (!parseOK) {
             if (errorCode == 0) {
                 return false; // Incomplete data — wait for more
@@ -629,7 +617,7 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
                 } else {
                     client.requestBuffer.erase(0, consumedBytes);
                 }
-                resetRequestState(client_fd); //DO WE NEED IT?
+                resetRequestState(client_fd); // DO WE NEED IT?
                 client.pendingRequests.push(request);
                 // If no more complete request left, break
                 if (client.requestBuffer.find("\r\n\r\n") == std::string::npos) {
@@ -751,11 +739,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 
             // If this was a temporary CGI file, delete it now
             if (response.isCgiTempFile()) {
-                const std::string& path = response.getCgiTempFile();
-                if (!path.empty() && unlink(path.c_str()) != 0) {
-                    Logger::logFrom(LogLevel::ERROR, "SocketManager",
-                                    "Failed to delete temp file: " + path);
-                }
+                CGI::unlinkWithErrorLog(response.getCgiTempFile(), "out temp file");
                 response.setCgiTempFile("");
             }
 
