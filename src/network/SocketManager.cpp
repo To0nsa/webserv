@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 10:17:57 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:57:29 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -665,7 +665,10 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
 
 void SocketManager::sendResponse(int client_fd, size_t index) {
     HttpResponse& response = _client_info[client_fd].responses.front();
-    size_t&       offset   = _client_info[client_fd].bytes_sent;
+    Logger::logFrom(LogLevel::INFO, "SocketManager sendResponse",
+                    "Sending HTTP " + std::to_string(response.getStatusCode()) + " → fd " +
+                        std::to_string(client_fd));
+    size_t& offset = _client_info[client_fd].bytes_sent;
 
     if (response.isFileResponse()) {
         // If this is the first time sending this file response, open the file and build headers
@@ -695,12 +698,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
         // Send any remaining bytes of the HTTP headers first
         std::string& raw = _client_info[client_fd].current_raw_response;
         if (offset < raw.size()) {
-            ssize_t sent = send(
-                client_fd,
-                raw.c_str() + offset,
-                raw.size() - offset,
-                MSG_DONTWAIT
-            );
+            ssize_t sent = send(client_fd, raw.c_str() + offset, raw.size() - offset, MSG_DONTWAIT);
             if (sent < 0) {
                 Logger::logFrom(LogLevel::ERROR, "SocketManager",
                                 "send() failed on fd " + std::to_string(client_fd) + ": " +
@@ -788,12 +786,8 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
 
         std::string& raw = _client_info[client_fd].current_raw_response;
         if (offset < raw.size()) {
-            ssize_t bytes_sent = send(
-                client_fd,
-                raw.c_str() + offset,
-                raw.size() - offset,
-                MSG_DONTWAIT
-            );
+            ssize_t bytes_sent =
+                send(client_fd, raw.c_str() + offset, raw.size() - offset, MSG_DONTWAIT);
             if (bytes_sent < 0) {
                 Logger::logFrom(LogLevel::ERROR, "SocketManager",
                                 "send() failed on fd " + std::to_string(client_fd) + ": " +

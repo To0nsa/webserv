@@ -307,7 +307,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         }
     }
 
-     //std::string norm = pathOnly;
+    // std::string norm = pathOnly;
     std::string norm = normalizePath(pathOnly);
     if (norm.empty()) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", "Path escapes root: " + pathOnly);
@@ -684,8 +684,8 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
         }
 
         // FALLBACK: ignore any “body” on GET and treat as a clean GET
-        consumedBytes = buffer.size();   // consume headers + body, but ignore the body
-        errorCode = 0;
+        consumedBytes = buffer.size(); // consume headers + body, but ignore the body
+        errorCode     = 0;
         return true;
     }
 
