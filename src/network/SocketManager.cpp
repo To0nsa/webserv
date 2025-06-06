@@ -6,19 +6,30 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 12:47:03 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 13:26:16 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/SocketManager.hpp"
-#include "http/HttpRequest.hpp"
-#include "http/HttpRequestHandler.hpp"
-#include "http/HttpRequestParser.hpp"
-#include "http/HttpResponse.hpp"
-#include "http/HttpResponseBuilder.hpp"
-#include "utils/Logger.hpp"
-#include "utils/filesystemUtils.hpp"
-#include <sstream> // For stringstream, we will remove it later
+#include "core/Location.hpp"            // for Location
+#include "http/HttpRequest.hpp"         // for HttpRequest
+#include "http/HttpRequestHandler.hpp"  // for handleRequest
+#include "http/HttpRequestParser.hpp"   // for HttpRequestParser
+#include "http/HttpResponse.hpp"        // for HttpResponse
+#include "http/HttpResponseBuilder.hpp" // for generateError
+#include "utils/Logger.hpp"             // for LogLevel, Logger
+#include "utils/filesystemUtils.hpp"    // for getCurrentTime, normalizePath
+#include <algorithm>                    // for copy, max
+#include <arpa/inet.h>                  // for inet_addr, htons
+#include <bits/types/sig_atomic_t.h>    // for sig_atomic_t
+#include <cstring>                      // for strerror, NULL, size_t
+#include <errno.h>                      // for errno, EINTR, EMFILE, ENFILE
+#include <fcntl.h>                      // for fcntl, F_SETFL, O_NONBLOCK
+#include <netinet/in.h>                 // for sockaddr_in, in_addr
+#include <sstream>                      // for basic_ostringstream
+#include <sys/socket.h>                 // for send, MSG_DONTWAIT, AF_INET
+#include <unistd.h>                     // for close, ssize_t
+#include <utility>                      // for pair
 
 // Signal handler for exiting the server
 static volatile sig_atomic_t running = 1;

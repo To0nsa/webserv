@@ -6,22 +6,18 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:38:32 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 12:44:52 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 13:35:04 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "core/Location.hpp"
-#include "core/Server.hpp"
-#include "http/HttpRequest.hpp"
-#include "http/HttpResponse.hpp"
-#include <cstring>
-#include <filesystem>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <sys/stat.h>
+#include "http/HttpResponse.hpp" // for HttpResponse
+#include <string>                // for string, allocator
+#include <time.h>                // for time_t
+
+class HttpRequest;
+class Location;
 
 std::string  make_temp_name(const std::string& prefix, unsigned& counter);
 bool         isFile(const std::string& path);
