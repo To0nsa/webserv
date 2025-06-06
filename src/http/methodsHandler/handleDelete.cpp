@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 17:23:17 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 21:30:10 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "utils/filesystemUtils.hpp"
 
 #include <sstream>
+#include <string.h>
 #include <string>
 #include <sys/stat.h>
 #include <unistd.h>

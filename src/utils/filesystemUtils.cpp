@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 21:19:46 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 21:33:19 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <regex>
 #include <sstream>
 #include <string>
+#include <sys/stat.h>
 
 namespace fs = std::filesystem;
 
