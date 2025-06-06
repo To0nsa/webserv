@@ -6,17 +6,15 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 12:46:48 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 12:55:57 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handleCgi.hpp"
 #include "http/HttpResponseBuilder.hpp"
-#include "network/SocketManager.hpp"
 #include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
 #include "utils/stringUtils.hpp"
-#include <cstdio>
 #include <fcntl.h>
 #include <filesystem>
 #include <fstream>
