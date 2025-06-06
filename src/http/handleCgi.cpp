@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/05 15:15:56 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 12:26:29 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,70 +94,99 @@ std::vector<char*> toCharPtrArray(const std::vector<std::string>& vs) {
     return out;
 }
 
-} // namespace
-
-namespace CGI {
-
-void unlinkWithErrorLog(const std::string& path, const std::string& context) {
-    if (!path.empty() && unlink(path.c_str()) != 0) {
-        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to delete " + context + ": " + path);
-    }
+std::pair<std::string, std::streamsize> readInitialOutput(std::ifstream& file, size_t maxBytes) {
+    std::vector<char> buffer(maxBytes);
+    file.read(buffer.data(), maxBytes);
+    std::streamsize bytesRead = file.gcount();
+    return { std::string(buffer.data(), bytesRead), bytesRead };
 }
 
-bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& server,
-                    const Location& loc, const std::vector<pollfd>& poll_fds, int& errorCode) {
-    cgi.last_activity = time(NULL);
-    cgi.script_path   = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
-    if (!isFile(cgi.script_path)) {
+std::optional<size_t> findHeaderDelimiter(const std::string& data, size_t& delimiterLength) {
+    size_t pos = data.find("\r\n\r\n");
+    delimiterLength = 4;
+    if (pos == std::string::npos) {
+        pos = data.find("\n\n");
+        delimiterLength = 2;
+    }
+    if (pos != std::string::npos) {
+        return std::optional<size_t>(pos);
+    }
+    return std::nullopt;
+}
+
+std::pair<int, std::string> parseHeaders(const std::string& header) {
+    std::istringstream stream(header);
+    std::string line, contentType = "";
+    int statusCode = 200;
+
+    while (std::getline(stream, line)) {
+        if (line.find("Content-Type:") == 0)
+            contentType = trim(line.substr(13));
+        else if (line.find("Status:") == 0) {
+            try {
+                statusCode = std::stoi(trim(line.substr(7)));
+            } catch (...) {
+                Logger::logFrom(LogLevel::WARN, "CGI", "Invalid status code in CGI response");
+                statusCode = 500;
+            }
+        }
+    }
+    return { statusCode, contentType };
+}
+
+bool validateCgiScript(const std::filesystem::path& path, int& errorCode) {
+    if (!isFile(path)) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "File is invalid");
         errorCode = 404;
         return false;
     }
-    if (access(cgi.script_path.c_str(), X_OK) != 0) {
+    if (access(path.c_str(), X_OK) != 0) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "File is not executable");
         errorCode = 403;
         return false;
     }
+    return true;
+}
 
-    // === Generate a unique temporary file path ===
-    static unsigned counter  = 0;
-    std::string     temp_in  = make_temp_name("webserv_in", counter);
-    std::string     temp_out = make_temp_name("webserv_out", counter);
-    cgi.input_path           = temp_in;
-    cgi.output_path          = temp_out;
+bool prepareCgiTempFiles(CgiProcess& cgi, const HttpRequest& req, int& bodyFd, int& outputFd) {
+    static unsigned counter = 0;
+    cgi.input_path  = make_temp_name("webserv_in", counter);
+    cgi.output_path = make_temp_name("webserv_out", counter);
 
-    // === Write request body to temp file ===
-    std::ofstream out(temp_in, std::ios::binary);
+    std::ofstream out(cgi.input_path, std::ios::binary);
     if (!out.is_open()) {
-        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to create temp file");
+        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to create temp input file");
         return false;
     }
     out.write(req.getBody().data(), req.getBody().size());
     out.close();
 
-    // === Open the temp file for reading ===
-    int body_fd = open(temp_in.c_str(), O_RDONLY);
-    if (body_fd < 0) {
+    bodyFd = open(cgi.input_path.c_str(), O_RDONLY);
+    if (bodyFd < 0) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to reopen temp_in file for CGI input");
         return false;
     }
-    cgi.last_activity = time(NULL);
-    int output_fd     = open(temp_out.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0600);
-    if (output_fd < 0) {
+
+    outputFd = open(cgi.output_path.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0600);
+    if (outputFd < 0) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to create CGI output file");
-        close(body_fd);
+        close(bodyFd);
         return false;
     }
 
-    pid_t pid = fork();
-    if (pid < 0) {
-        close(body_fd);
-        close(output_fd);
-        return false;
-    }
+    return true;
+}
 
-    if (pid == 0) {
-        if (dup2(body_fd, STDIN_FILENO) == -1) {
+void setupAndRunCgiChild(
+    const CgiProcess& cgi,
+    int body_fd,
+    int output_fd,
+    const HttpRequest& req,
+    const Server& server,
+    const Location& loc,
+    const std::vector<pollfd>& poll_fds)
+{
+    if (dup2(body_fd, STDIN_FILENO) == -1) {
             Logger::logFrom(LogLevel::ERROR, "CGI CHILD",
                             "dup2 stdin failed: " + std::string(strerror(errno)));
             exit(1);
@@ -212,6 +241,43 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         Logger::logFrom(LogLevel::ERROR, "CGI CHILD",
                         "execve failed: " + std::string(strerror(errno)));
         exit(1);
+}
+
+
+} // namespace
+
+namespace CGI {
+
+void unlinkWithErrorLog(const std::string& path, const std::string& context) {
+    if (!path.empty() && unlink(path.c_str()) != 0) {
+        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to delete " + context + ": " + path);
+    }
+}
+
+bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& server,
+                    const Location& loc, const std::vector<pollfd>& poll_fds, int& errorCode) {
+    cgi.last_activity = time(NULL);
+    cgi.script_path   = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
+    if (!validateCgiScript(cgi.script_path, errorCode)) {
+        return false;
+    }
+
+    int body_fd = -1, output_fd = -1;
+    if (!prepareCgiTempFiles(cgi, req, body_fd, output_fd)) {
+        errorCode = 500;
+        return false;
+    }
+    cgi.last_activity = time(NULL);
+
+    pid_t pid = fork();
+    if (pid < 0) {
+        close(body_fd);
+        close(output_fd);
+        return false;
+    }
+
+    if (pid == 0) {
+        setupAndRunCgiChild(cgi, body_fd, output_fd, req, server, loc, poll_fds);
     }
 
     close(body_fd);
@@ -237,39 +303,20 @@ HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpReques
     in.seekg(0, std::ios::beg);
 
     // Read the first 9KB only to find headers
-    const size_t      MAX_HEADER_SCAN = 9 * 1024;
-    std::vector<char> buffer(MAX_HEADER_SCAN);
-    in.read(buffer.data(), MAX_HEADER_SCAN);
-    std::streamsize bytesRead = in.gcount();
-    std::string     partialOutput(buffer.data(), bytesRead);
-
-    // Look for header delimiter
-    size_t pos      = partialOutput.find("\r\n\r\n");
-    size_t delimLen = 4;
-    if (pos == std::string::npos) {
-        pos      = partialOutput.find("\n\n");
-        delimLen = 2;
-    }
-    if (pos == std::string::npos) {
-        Logger::logFrom(LogLevel::ERROR, "CGI",
-                        "finalizeCgi(): Header delimiter not found in first 9KB");
+    constexpr size_t MAX_HEADER_SCAN = 9 * 1024;
+    auto [initialData, bytesRead] = readInitialOutput(in, MAX_HEADER_SCAN);
+    size_t delimLen = 0;
+    auto headerEndOpt = findHeaderDelimiter(initialData, delimLen);
+    if (!headerEndOpt) {
+        Logger::logFrom(LogLevel::ERROR, "CGI", "Header delimiter not found in first 9KB");
         return ResponseBuilder::generateError(500, server, req);
     }
 
-    std::string header      = partialOutput.substr(0, pos);
-    std::string contentType = "text/plain";
-    int         code        = 200;
+    size_t headerPos = *headerEndOpt;
+    std::string headerSection = initialData.substr(0, headerPos);
+    auto [code, contentType] = parseHeaders(headerSection);
 
-    std::istringstream headerStream(header);
-    std::string        line;
-    while (std::getline(headerStream, line)) {
-        if (line.find("Content-Type:") == 0)
-            contentType = trim(line.substr(13));
-        else if (line.find("Status:") == 0)
-            code = std::stoi(trim(line.substr(7)));
-    }
-
-    std::streamsize headerEnd = static_cast<std::streamsize>(pos + delimLen);
+    std::streamsize headerEnd = static_cast<std::streamsize>(headerPos + delimLen);
     std::streamsize bodySize  = totalSize - headerEnd;
     in.close();
     req.printRequest();
