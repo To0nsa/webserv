@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 12:55:57 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 13:07:40 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,7 +328,10 @@ void errorOnCgi(CgiProcess& cgi) {
     Logger::logFrom(LogLevel::ERROR, "CGI",
                     "Killing CGI process with PID: " + std::to_string(cgi.pid));
     kill(cgi.pid, SIGKILL);
-    waitpid(cgi.pid, nullptr, 0);
+    if (waitpid(cgi.pid, nullptr, 0) == -1) {
+        Logger::logFrom(LogLevel::ERROR, "CGI",
+                        "waitpid failed after killing CGI process: " + std::string(strerror(errno)));
+    }
     unlinkWithErrorLog(cgi.input_path, "input temp file");
     unlinkWithErrorLog(cgi.output_path, "output temp file");
 
