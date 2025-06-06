@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/05 11:07:07 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 08:55:16 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,7 +257,7 @@ HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpReques
     std::streamsize headerEnd = static_cast<std::streamsize>(pos + delimLen);
     std::streamsize bodySize  = totalSize - headerEnd;
     in.close();
-
+    req.printRequest();
     HttpResponse resp = ResponseBuilder::generateSuccessFile(code, cgi.output_path, contentType,
                                                              req, bodySize, headerEnd);
     resp.setCgiTempFile(cgi.output_path);
