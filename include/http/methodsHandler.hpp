@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_get.hpp                                     :+:      :+:    :+:   */
+/*   methodsHandler.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/15 12:41:46 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/22 21:04:15 by nlouis           ###   ########.fr       */
+/*   Created: 2025/06/05 10:46:53 by nlouis            #+#    #+#             */
+/*   Updated: 2025/06/05 17:22:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "http/HttpResponseBuilder.hpp"
-#include "utils/filesystemUtils.hpp"
-#include <algorithm>
-#include <chrono>
-#include <dirent.h>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <sys/stat.h>
+class Server;
+class Location;
+class HttpRequest;
+class HttpResponse;
 
 HttpResponse handleGet(const HttpRequest&, const Server&, const Location&);
+HttpResponse generateAutoindex(const std::string& filepath, const std::string& uri,
+                               const HttpRequest& request, const Server& server);
+
+HttpResponse handlePost(const HttpRequest&, const Server&, const Location&);
+HttpResponse handleDelete(const HttpRequest&, const Server&, const Location&);

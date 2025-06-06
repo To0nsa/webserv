@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_post.cpp                                    :+:      :+:    :+:   */
+/*   handlePost.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 15:46:48 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/05 11:07:44 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "http/handle_post.hpp"
+#include "http/responseBuilder.hpp"
 #include "utils/filesystemUtils.hpp"
 
 #include <ctime>

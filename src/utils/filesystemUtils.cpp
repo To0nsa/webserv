@@ -6,12 +6,12 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 21:09:08 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/05 17:09:17 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/filesystemUtils.hpp"
-#include "http/HttpResponseBuilder.hpp"
+#include "http/responseBuilder.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -25,6 +25,38 @@
 #include <string>
 
 namespace fs = std::filesystem;
+
+std::string extractFileName(const std::string& uri) {
+    std::size_t pos = uri.find_last_of('/');
+    if (pos == std::string::npos)
+        return uri;
+    else
+        return uri.substr(pos + 1);
+}
+
+std::string resolvePhysicalPath(const HttpRequest& req, const Location& loc) {
+    std::string requestPath = normalizePath(req.getPath());
+    if (requestPath.empty())
+        return "";
+
+    std::string locPrefix     = normalizePath(loc.getPath());
+    bool        inUploadStore = loc.isUploadEnabled() && requestPath.rfind(locPrefix, 0) == 0;
+
+    if (inUploadStore) {
+        std::string relative = requestPath.substr(locPrefix.size());
+        while (!relative.empty() && relative.front() == '/')
+            relative.erase(0, 1);
+
+        std::string uploadRoot = normalizePath(loc.getUploadStore());
+        if (!uploadRoot.empty() && uploadRoot.front() != '/')
+            uploadRoot = joinPath(normalizePath(loc.getRoot()), uploadRoot);
+
+        return joinPath(uploadRoot, relative);
+    }
+
+    // Not under upload_store: delegate to buildFilePath for “root + remainder”
+    return buildFilePath(req, loc);
+}
 
 bool isFile(const std::string& path) {
     return fs::exists(path) && fs::is_regular_file(path);

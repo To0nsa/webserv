@@ -6,16 +6,17 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/04 09:48:22 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/05 11:07:07 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handleCgi.hpp"
-#include "http/HttpResponseBuilder.hpp"
+#include "http/responseBuilder.hpp"
 #include "network/SocketManager.hpp"
 #include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
 #include "utils/stringUtils.hpp"
+
 #include <cstdio>
 #include <fcntl.h>
 #include <filesystem>

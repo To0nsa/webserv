@@ -6,16 +6,16 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/04 21:42:19 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/05 11:08:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/SocketManager.hpp"
 #include "http/HttpRequest.hpp"
-#include "http/HttpRequestHandler.hpp"
 #include "http/HttpRequestParser.hpp"
 #include "http/HttpResponse.hpp"
-#include "http/HttpResponseBuilder.hpp"
+#include "http/requestRouter.hpp"
+#include "http/responseBuilder.hpp"
 #include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
 #include <sstream> // For stringstream, we will remove it later

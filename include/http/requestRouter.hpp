@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_post.hpp                                    :+:      :+:    :+:   */
+/*   HttpRequestHandler.hpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/19 10:21:00 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 22:59:12 by nlouis           ###   ########.fr       */
+/*   Created: 2025/05/12 23:11:50 by nlouis            #+#    #+#             */
+/*   Updated: 2025/06/05 10:58:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "http/HttpResponseBuilder.hpp"
-#include "utils/filesystemUtils.hpp"
-#include <chrono>
-#include <fstream>
-#include <string.h>
+class Server;
+class HttpRequest;
+class HttpResponse;
 
-HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc);
+HttpResponse handleRequest(const HttpRequest& request, const Server& server);
