@@ -127,9 +127,9 @@ bool HttpRequest::hasHeader(const std::string& key) const {
 }
 
 void HttpRequest::setParseErrorCode(int error) {
-	_parseError = error;
+    _parseError = error;
 }
 
 int HttpRequest::getParseErrorCode(void) const {
-	return _parseError;
+    return _parseError;
 }

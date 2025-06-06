@@ -6,27 +6,26 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 00:29:11 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 13:27:20 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "core/Server.hpp"
-#include "http/HttpResponse.hpp"
-#include "http/handleCgi.hpp"
-#include <arpa/inet.h>
-#include <cstring>
-#include <fcntl.h>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <optional>
-#include <poll.h>
-#include <queue>
-#include <signal.h>
-#include <unistd.h>
-#include <vector>
+#include "core/Server.hpp"       // for Server
+#include "http/HttpRequest.hpp"  // for HttpRequest
+#include "http/HttpResponse.hpp" // for HttpResponse
+#include "http/handleCgi.hpp"    // for CgiProcess
+#include <exception>             // for exception
+#include <fstream>               // for basic_ifstream, ifstream
+#include <map>                   // for map
+#include <optional>              // for optional
+#include <poll.h>                // for pollfd
+#include <queue>                 // for queue
+#include <signal.h>              // for size_t
+#include <string>                // for string
+#include <time.h>                // for time_t
+#include <vector>                // for vector
 
 #define TIMEOUT 20
 #define HEADER_TIMEOUT_SECONDS 6
@@ -35,6 +34,8 @@
 #define RECV_BUFFER HEADER_MAX_LENGTH * 2
 #define MAX_CLIENTS 1024
 #define CGI_TIMEOUT_SECONDS 45
+
+class Location;
 
 struct ClientInfo {
     int                       client_fd;       // File descriptor of the client socket

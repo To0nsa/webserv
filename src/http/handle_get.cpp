@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_get.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/04 22:37:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 13:40:46 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <ctime>
 #include <dirent.h>
 #include <iomanip>
+#include <iostream>
 #include <sstream>
 #include <sys/stat.h>
 #include <vector>

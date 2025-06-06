@@ -44,7 +44,7 @@ class HttpRequest {
     const std::string&                        getBody(void) const;
     std::size_t                               getContentLength(void) const;
     /* const std::string& getUri(void) const; */ const std::string& getQuery() const;
-    int getParseErrorCode(void) const;
+    int                                                             getParseErrorCode(void) const;
 
     void setMethod(const std::string& method);
     void setPath(const std::string& path);

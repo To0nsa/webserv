@@ -3,26 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   filesystemUtils.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 21:09:08 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 13:37:27 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/filesystemUtils.hpp"
-#include "http/HttpResponseBuilder.hpp"
-
-#include <algorithm>
-#include <chrono>
-#include <filesystem>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <map>
-#include <regex>
-#include <sstream>
-#include <string>
+#include "core/Location.hpp"            // for Location
+#include "core/Server.hpp"              // for Server
+#include "http/HttpRequest.hpp"         // for HttpRequest
+#include "http/HttpResponseBuilder.hpp" // for generateError, generateSuccess
+#include <algorithm>                    // for transform
+#include <chrono>                       // for duration_cast, duration, hig...
+#include <cstring>                      // for size_t, strerror
+#include <ctype.h>                      // for isxdigit, tolower
+#include <errno.h>                      // for errno, EEXIST
+#include <filesystem>                   // for path, exists, is_regular_file
+#include <fstream>                      // for basic_ifstream, basic_filebuf
+#include <iostream>                     // for basic_ostream, operator<<
+#include <map>                          // for map, operator==, _Rb_tree_co...
+#include <sstream>                      // for basic_ostringstream, basic_i...
+#include <stdexcept>                    // for invalid_argument
+#include <string>                       // for char_traits, allocator, string
+#include <sys/stat.h>                   // for mkdir
+#include <utility>                      // for pair
+#include <vector>                       // for vector
 
 namespace fs = std::filesystem;
 
@@ -316,6 +323,12 @@ std::string decodePercentEncoding(const std::string& encoded) {
 
 bool isSymlink(const std::string& path) {
     return fs::is_symlink(fs::path(path));
+}
+
+time_t getCurrentTime() {
+    return std::chrono::duration_cast<std::chrono::seconds>(
+               std::chrono::system_clock::now().time_since_epoch())
+        .count();
 }
 
 /* std::string normalizePath(const std::string& path) {
