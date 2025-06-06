@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 11:07:44 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 11:47:43 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,43 +20,6 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <unistd.h>
-
-/* // Parse a single-part file upload; extracts filename and content.
-static bool parseMultipart(const std::string& body, const std::string& boundary,
-                           std::string& filename, std::string& fileContent) {
-    std::string delimiter = "--" + boundary;
-    size_t      pos       = body.find(delimiter);
-    if (pos == std::string::npos)
-        return false;
-
-    pos += delimiter.length() + 2; // skip "\r\n"
-    size_t end = body.find(delimiter + "--");
-    if (end == std::string::npos)
-        return false;
-
-    std::string part = body.substr(pos, end - pos);
-
-    // Separate headers from content.
-    size_t headerEnd = part.find("\r\n\r\n");
-    if (headerEnd == std::string::npos)
-        return false;
-
-    std::string headers = part.substr(0, headerEnd);
-    fileContent         = part.substr(headerEnd + 4); // after "\r\n\r\n"
-
-    // Extract filename="..."
-    size_t fnamePos = headers.find("filename=\"");
-    if (fnamePos == std::string::npos)
-        return false;
-
-    fnamePos += 10; // strlen("filename=\"")
-    size_t endQuote = headers.find("\"", fnamePos);
-    if (endQuote == std::string::npos)
-        return false;
-
-    filename = headers.substr(fnamePos, endQuote - fnamePos);
-    return true;
-} */
 
 static bool parseMultipart(const std::string& body, const std::string& boundary,
                            std::string& filename, std::string& fileContent) {

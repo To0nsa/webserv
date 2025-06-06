@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 08:55:46 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 10:10:17 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -352,6 +352,7 @@ void SocketManager::run() {
         // handleCgiPollEvents();
         //  === CGI Completion Check ===
         for (auto& [client_fd, client] : _client_info) {
+
             if (!client.cgiProcess)
                 continue;
 

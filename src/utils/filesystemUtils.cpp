@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/05 17:09:17 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 11:10:51 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,72 +75,6 @@ std::string make_temp_name(const std::string& prefix, unsigned& counter) {
     ss << prefix << "_" << ns << "_" << counter++ << ".tmp";
 
     return (tmpdir / ss.str()).string();
-}
-
-std::string detectMimeType(const std::string& file_path) {
-    // Static MIME type mapping: file extension → MIME type
-    static const std::map<std::string, std::string> mime_types = {
-        {".html", "text/html"},        {".htm", "text/html"},
-        {".css", "text/css"},          {".js", "application/javascript"},
-        {".json", "application/json"}, {".txt", "text/plain"},
-        {".jpg", "image/jpeg"},        {".jpeg", "image/jpeg"},
-        {".png", "image/png"},         {".gif", "image/gif"},
-        {".svg", "image/svg+xml"},     {".ico", "image/x-icon"},
-        {".pdf", "application/pdf"},   {".zip", "application/zip"},
-        {".tar", "application/x-tar"}, {".xml", "application/xml"},
-        {".mp3", "audio/mpeg"},        {".mp4", "video/mp4"},
-        {".wasm", "application/wasm"}};
-
-    // Extract the file extension from the path (e.g., ".html")
-    fs::path    path(file_path);
-    std::string ext = path.extension().string();
-
-    // Convert the extension to lowercase to ensure case-insensitive matching
-    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-
-    // Look up the extension in the MIME type map
-    std::map<std::string, std::string>::const_iterator it = mime_types.find(ext);
-    if (it != mime_types.end())
-        return it->second; // Known type found
-
-    // Fallback: return generic binary stream for unknown extensions
-    return "application/octet-stream";
-}
-
-HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
-                       std::string content_type) {
-    // Check if the file exists and is a regular file
-    if (!isFile(file_path)) {
-        return ResponseBuilder::generateError(404, Server(), request);
-    }
-
-    // Try to open file
-    std::ifstream file(file_path, std::ios::binary | std::ios::ate); // Open at end to get size
-    if (!file.is_open()) {
-        return ResponseBuilder::generateError(403, Server(), request);
-    }
-
-    std::streamsize size = file.tellg(); // Get file size
-    file.seekg(0, std::ios::beg);        // Reset pointer
-
-    // Detect content type if not provided
-    if (content_type.empty()) {
-        content_type = detectMimeType(file_path);
-    }
-
-    // Threshold for in-memory vs streaming (100 KB)
-    const std::streamsize MEMORY_LIMIT = 100 * 1024;
-
-    if (size <= MEMORY_LIMIT) {
-        // Small file: read into memory
-        std::ostringstream buffer;
-        buffer << file.rdbuf();
-        std::string body = buffer.str();
-        return ResponseBuilder::generateSuccess(200, body, content_type, request);
-    } else {
-        // Large file: stream from disk
-        return ResponseBuilder::generateSuccessFile(200, file_path, content_type, request, size);
-    }
 }
 
 /* std::string normalizePath(const std::string& path) {
