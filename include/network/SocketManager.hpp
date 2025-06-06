@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 13:27:20 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:02:24 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ struct ClientInfo {
     std::string               requestBuffer;
     std::string               current_raw_response;
     bool                      keepAlive;    // Keep-alive flag
-    Server                    serverConfig; // The server config the client is connected to
+    std::vector<Server> serversOnPort;
+	Server selectedServer;
     std::queue<HttpResponse>  responses;    // Queue of responses to be sent to the client
     std::queue<HttpRequest>   pendingRequests;
     std::optional<CgiProcess> cgiProcess;
@@ -79,8 +80,7 @@ class SocketManager {
 
   private:
     std::vector<pollfd> _poll_fds; ///< Monitored file descriptors for poll().
-    std::map<int, Server>
-        _listen_map; ///< Maps listening socket fds to their corresponding server configurations.
+    std::map<int, std::vector<Server>> _listen_map; ///< Maps listen fds to their corresponding servers
     std::map<int, ClientInfo> _client_info; /// Stores all information about each client
     std::map<int, int>        _fd_to_cgi;   ///< Maps CGI stdout fds to client fds
 
