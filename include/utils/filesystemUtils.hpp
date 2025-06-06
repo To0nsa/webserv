@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:38:32 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 17:26:40 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 12:44:52 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ std::string  buildFilePath(const HttpRequest& request, const Location& loc);
 bool         mkdirRecursive(const std::string& path);
 std::string  decodePercentEncoding(const std::string& encoded);
 bool         isSymlink(const std::string& path);
+time_t       getCurrentTime();
 
 /* bool isInvalidAbsolutePath(const std::string& pathStr);
 bool isSuspiciousFilename(const std::string& pathStr); */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filesystemUtils.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/03 21:09:08 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 12:43:26 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,6 +316,12 @@ std::string decodePercentEncoding(const std::string& encoded) {
 
 bool isSymlink(const std::string& path) {
     return fs::is_symlink(fs::path(path));
+}
+
+time_t getCurrentTime() {
+    return std::chrono::duration_cast<std::chrono::seconds>(
+               std::chrono::system_clock::now().time_since_epoch()
+           ).count();
 }
 
 /* std::string normalizePath(const std::string& path) {

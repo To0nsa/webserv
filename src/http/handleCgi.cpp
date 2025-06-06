@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 12:26:29 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 12:46:48 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,7 @@ void unlinkWithErrorLog(const std::string& path, const std::string& context) {
 
 bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& server,
                     const Location& loc, const std::vector<pollfd>& poll_fds, int& errorCode) {
-    cgi.last_activity = time(NULL);
+    cgi.last_activity = getCurrentTime();
     cgi.script_path   = std::filesystem::absolute(loc.resolveAbsolutePath(req.getPath()));
     if (!validateCgiScript(cgi.script_path, errorCode)) {
         return false;
@@ -267,7 +267,7 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
         errorCode = 500;
         return false;
     }
-    cgi.last_activity = time(NULL);
+    cgi.last_activity = getCurrentTime();
 
     pid_t pid = fork();
     if (pid < 0) {
@@ -284,14 +284,14 @@ bool initCgiProcess(CgiProcess& cgi, const HttpRequest& req, const Server& serve
     close(output_fd);
 
     cgi.pid           = pid;
-    cgi.start_time    = time(NULL);
-    cgi.last_activity = time(NULL);
+    cgi.start_time    = getCurrentTime();
+    cgi.last_activity = getCurrentTime();
     return true;
 }
 
 HttpResponse finalizeCgi(CgiProcess& cgi, const Server& server, const HttpRequest& req) {
 
-    cgi.last_activity = time(NULL);
+    cgi.last_activity = getCurrentTime();
     std::ifstream in(cgi.output_path, std::ios::binary);
     if (!in.is_open()) {
         Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to open CGI output file");

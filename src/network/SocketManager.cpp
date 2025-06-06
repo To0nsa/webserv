@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 16:17:31 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 12:47:03 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ bool SocketManager::checkClientTimeouts(int client_fd, size_t index) {
     if (!_client_info.count(client_fd))
         return false;
 
-    time_t now = time(NULL);
+    time_t now = getCurrentTime();
     if (isIdleTimeout(client_fd, now) || isSendTimeout(client_fd, now)) {
         cleanupClientConnectionClose(client_fd, index);
         return false;
@@ -201,7 +201,7 @@ void SocketManager::handlePollError(int fd, size_t index, short revents) {
 
 bool SocketManager::receiveFromClient(int client_fd, size_t index) {
     char buffer[RECV_BUFFER];
-    _client_info[client_fd].lastRequestTime = time(NULL);
+    _client_info[client_fd].lastRequestTime = getCurrentTime();
     int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); // MacOS only
     // int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
     if (bytes == 0) {
@@ -224,7 +224,7 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
 
     if (headerEndPos == std::string::npos) {
         if (_client_info[client_fd].headerBytesReceived == 0) {
-            _client_info[client_fd].connectionStartTime = time(NULL);
+            _client_info[client_fd].connectionStartTime = getCurrentTime();
         }
         _client_info[client_fd].headerBytesReceived += bytes;
     } else {
@@ -347,7 +347,7 @@ void SocketManager::run() {
             CgiProcess& cgi = *client.cgiProcess;
 
             // timeout check
-            if (time(NULL) - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
+            if (getCurrentTime() - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
                 Logger::logFrom(LogLevel::WARN, "CGI",
                                 "Timeout. Killing CGI process for fd: " +
                                     std::to_string(client_fd));
@@ -464,8 +464,8 @@ void SocketManager::handleNewConnection(int listen_fd) {
 
     auto& info               = _client_info[client_fd];
     info.client_fd           = client_fd;
-    info.lastRequestTime     = time(NULL);
-    info.connectionStartTime = time(NULL);
+    info.lastRequestTime     = getCurrentTime();
+    info.connectionStartTime = getCurrentTime();
     info.headerBytesReceived = 0;
     info.bodyBytesReceived   = 0;
     info.headerComplete      = false;
@@ -707,7 +707,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
                 return;
             }
             offset += sent;
-            _client_info[client_fd].lastSendAttemptTime = time(NULL);
+            _client_info[client_fd].lastSendAttemptTime = getCurrentTime();
             if (offset < raw.size()) {
                 // Not done sending headers yet; wait for next POLLOUT
                 return;
@@ -727,7 +727,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
                 cleanupClientConnectionClose(client_fd, index);
                 return;
             }
-            _client_info[client_fd].lastSendAttemptTime = time(NULL);
+            _client_info[client_fd].lastSendAttemptTime = getCurrentTime();
             // ─────────────────────────────────────────────────────────────────
             // IMPORTANT: Do NOT modify `offset` here. It tracks only how many
             // bytes of `current_raw_response` have been sent.
@@ -782,7 +782,7 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
                 return;
             }
             offset += bytes_sent;
-            _client_info[client_fd].lastSendAttemptTime = time(NULL);
+            _client_info[client_fd].lastSendAttemptTime = getCurrentTime();
         }
 
         if (offset >= raw.size()) {
