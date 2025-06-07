@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:10 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 00:23:42 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/07 14:58:39 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "utils/stringUtils.hpp"
 #include <map>
 #include <string>
+#include <vector>
+#include "core/Server.hpp" // for Server
 
 class HttpRequest {
 
@@ -29,6 +31,8 @@ class HttpRequest {
     std::string /* _uri; */            _query; ///< extracted from URI after '?'
     Url                                _url;
     int                                _parseError{0};
+	int _matchedServerIndex;
+	std::string _host;
 
   public:
     HttpRequest(void);
@@ -56,4 +60,8 @@ class HttpRequest {
     void setQuery(const std::string& query);
     void setParseErrorCode(int error);
     bool hasHeader(const std::string& key) const;
+	int getMatchedServerIndex() const;
+	void setMatchedServerIndex(int index);
+	void setHost(const std::string& host);
+    const std::string& getHost() const;
 };
