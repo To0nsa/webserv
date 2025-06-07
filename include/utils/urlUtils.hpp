@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_post.hpp                                    :+:      :+:    :+:   */
+/*   urlUtils.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/19 10:21:00 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 22:59:12 by nlouis           ###   ########.fr       */
+/*   Created: 2025/06/06 13:11:40 by nlouis            #+#    #+#             */
+/*   Updated: 2025/06/06 13:26:29 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include <string>
+#include <unordered_map>
 
-#include "http/HttpResponseBuilder.hpp"
-#include "utils/filesystemUtils.hpp"
-#include <chrono>
-#include <fstream>
-#include <string.h>
-
-HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc);
+std::string                                  decodePercentEncoding(const std::string& encoded);
+std::string                                  percentDecodeForm(const std::string& input);
+std::unordered_map<std::string, std::string> parseFormUrlEncoded(const std::string& body);

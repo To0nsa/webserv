@@ -6,13 +6,15 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/04 14:09:10 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 13:19:41 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/HttpRequestParser.hpp"
 #include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
+#include "utils/urlUtils.hpp"
+
 #include <algorithm>
 #include <array>
 #include <cctype>

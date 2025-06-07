@@ -3,37 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   handleCgi.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 13:25:12 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/06 21:26:20 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/handleCgi.hpp"
-#include "core/Location.hpp"            // for Location
-#include "core/Server.hpp"              // for Server
-#include "http/HttpRequest.hpp"         // for HttpRequest
-#include "http/HttpResponseBuilder.hpp" // for generateError, generateSucce...
-#include "utils/Logger.hpp"             // for LogLevel, Logger
-#include "utils/filesystemUtils.hpp"    // for getCurrentTime, make_temp_name
-#include "utils/stringUtils.hpp"        // for trim, toUpper
-#include <algorithm>                    // for replace
-#include <errno.h>                      // for errno
-#include <fcntl.h>                      // for open, O_CREAT, O_RDONLY, O_RDWR
-#include <filesystem>                   // for path, absolute
-#include <fstream>                      // for basic_ifstream, basic_istream
-#include <map>                          // for map, operator==, _Rb_tree_co...
-#include <optional>                     // for optional, nullopt
-#include <poll.h>                       // for pollfd
-#include <signal.h>                     // for kill, SIGKILL
-#include <sstream>                      // for basic_istringstream
-#include <stdlib.h>                     // for exit
-#include <string.h>                     // for strerror
-#include <sys/wait.h>                   // for waitpid, WNOHANG
-#include <unistd.h>                     // for close, size_t, dup2, STDIN_F...
-#include <utility>                      // for pair
-#include <vector>                       // for vector
+#include "core/Location.hpp"         // for Location
+#include "core/Server.hpp"           // for Server
+#include "http/HttpRequest.hpp"      // for HttpRequest
+#include "http/responseBuilder.hpp"  // for generateError, generateSucce...
+#include "utils/Logger.hpp"          // for LogLevel, Logger
+#include "utils/filesystemUtils.hpp" // for getCurrentTime, make_temp_name
+#include "utils/stringUtils.hpp"     // for trim, toUpper
+#include <algorithm>                 // for replace
+#include <errno.h>                   // for errno
+#include <fcntl.h>                   // for open, O_CREAT, O_RDONLY, O_RDWR
+#include <filesystem>                // for path, absolute
+#include <fstream>                   // for basic_ifstream, basic_istream
+#include <map>                       // for map, operator==, _Rb_tree_co...
+#include <optional>                  // for optional, nullopt
+#include <poll.h>                    // for pollfd
+#include <signal.h>                  // for kill, SIGKILL
+#include <sstream>                   // for basic_istringstream
+#include <stdlib.h>                  // for exit
+#include <string.h>                  // for strerror
+#include <sys/wait.h>                // for waitpid, WNOHANG
+#include <unistd.h>                  // for close, size_t, dup2, STDIN_F...
+#include <utility>                   // for pair
+#include <vector>                    // for vector
 
 namespace {
 

@@ -1,0 +1,79 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   urlUtils.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/06 13:22:39 by nlouis            #+#    #+#             */
+/*   Updated: 2025/06/06 13:25:59 by nlouis           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <cctype>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <unordered_map>
+
+std::string decodePercentEncoding(const std::string& encoded) {
+    std::ostringstream result;
+    for (size_t i = 0; i < encoded.length(); ++i) {
+        if (encoded[i] == '%') {
+            if (i + 2 >= encoded.length())
+                throw std::invalid_argument("Incomplete percent-encoding at end of URI");
+
+            char hex1 = encoded[i + 1];
+            char hex2 = encoded[i + 2];
+            if (!std::isxdigit(static_cast<unsigned char>(hex1)) ||
+                !std::isxdigit(static_cast<unsigned char>(hex2))) {
+                throw std::invalid_argument(std::string{"Invalid hex in percent-encoding: %"} +
+                                            hex1 + hex2);
+            }
+
+            int byte = std::stoi(encoded.substr(i + 1, 2), nullptr, 16);
+            result << static_cast<char>(byte);
+            i += 2;
+        } else {
+            result << encoded[i];
+        }
+    }
+    return result.str();
+}
+
+std::string percentDecodeForm(const std::string& input) {
+    std::string temp;
+    temp.reserve(input.size());
+    for (char c : input) {
+        temp.push_back(c == '+' ? ' ' : c);
+    }
+
+    return decodePercentEncoding(temp);
+}
+
+std::unordered_map<std::string, std::string> parseFormUrlEncoded(const std::string& body) {
+    std::unordered_map<std::string, std::string> form;
+    size_t                                       start = 0;
+
+    while (start < body.size()) {
+        size_t      amp    = body.find('&', start);
+        size_t      length = (amp == std::string::npos ? body.size() : amp) - start;
+        std::string pair   = body.substr(start, length);
+
+        if (!pair.empty()) {
+            size_t eq = pair.find('=');
+            if (eq != std::string::npos) {
+                std::string key = percentDecodeForm(pair.substr(0, eq));
+                std::string val = percentDecodeForm(pair.substr(eq + 1));
+                form.emplace(std::move(key), std::move(val));
+            }
+        }
+
+        if (amp == std::string::npos) {
+            break;
+        }
+        start = amp + 1;
+    }
+
+    return form;
+}
