@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/07 13:10:42 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/07 15:14:09 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,8 +258,9 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
 
 void SocketManager::respondError(int fd, int status_code) {
     HttpRequest  empty;
+	const Server& fallback = _client_info[fd].serversOnPort.front();
     HttpResponse err =
-        ResponseBuilder::generateError(status_code, _client_info[fd].selectedServer, empty);
+        ResponseBuilder::generateError(status_code, fallback, empty);
     _client_info[fd].responses.push(err);
 }
 
@@ -372,13 +373,14 @@ void SocketManager::run() {
                 continue;
 
             CgiProcess& cgi = *client.cgiProcess;
+			const Server& server = client.serversOnPort[client.currentCgiRequest.getMatchedServerIndex()];
 
             // timeout check
             if (getCurrentTime() - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
                 Logger::logFrom(LogLevel::WARN, "CGI",
                                 "Timeout. Killing CGI process for fd: " +
                                     std::to_string(client_fd));
-                client.responses.push(ResponseBuilder::generateError(504, client.selectedServer, {}));
+                client.responses.push(ResponseBuilder::generateError(504, server, {}));
                 CGI::errorOnCgi(cgi);
                 client.cgiProcess.reset();
                 client.isCgiProcessRunning = false;
@@ -395,7 +397,7 @@ void SocketManager::run() {
             // check if finished
             if (CGI::tryTerminateCgi(cgi)) {
                 HttpResponse resp =
-                    CGI::finalizeCgi(cgi, client.selectedServer, client.currentCgiRequest);
+                    CGI::finalizeCgi(cgi, server, client.currentCgiRequest);
                 // HttpResponse resp = maybeResp.value_or(ResponseBuilder::generateError(502,
                 // client.serverConfig, {}));
                 client.responses.push(resp);
@@ -499,7 +501,6 @@ void SocketManager::handleNewConnection(int listen_fd) {
     info.bytes_sent          = 0;
     info.keepAlive           = true;
     info.serversOnPort = _listen_map[listen_fd];
-    info.selectedServer = info.serversOnPort[0]; // Default to the first server on this port
 
     _poll_fds.push_back((pollfd){client_fd, POLLIN, 0});
     Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
@@ -552,10 +553,11 @@ void SocketManager::processPendingRequests(int client_fd) {
     // As long as there is at least one pending request AND no CGI is currently running:
     while (!client.pendingRequests.empty() && !client.isCgiProcessRunning) {
         HttpRequest nextReq = client.pendingRequests.front();
+		const Server& server = client.serversOnPort[nextReq.getMatchedServerIndex()];
 
         if (nextReq.getParseErrorCode() != 0) {
             int          code = nextReq.getParseErrorCode();
-            HttpResponse err  = ResponseBuilder::generateError(code, client.selectedServer, nextReq);
+            HttpResponse err  = ResponseBuilder::generateError(code, server, nextReq);
             client.responses.push(err);
             client.pendingRequests.pop();
             if (err.isConnectionClose())
@@ -564,7 +566,6 @@ void SocketManager::processPendingRequests(int client_fd) {
         }
 
         // 1) Determine which Location matches
-        const Server&   server   = client.selectedServer;
         const Location* location = findMatchingLocation(normalizePath(nextReq.getPath()), server);
 
         if (!location) {

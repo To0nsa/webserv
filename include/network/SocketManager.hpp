@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/07 13:11:04 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/07 14:27:00 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ struct ClientInfo {
     std::string               current_raw_response;
     bool                      keepAlive;    // Keep-alive flag
     std::vector<Server> serversOnPort;
-	Server selectedServer;
     std::queue<HttpResponse>  responses;    // Queue of responses to be sent to the client
     std::queue<HttpRequest>   pendingRequests;
     std::optional<CgiProcess> cgiProcess;
