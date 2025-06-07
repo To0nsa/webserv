@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/07 15:18:06 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/07 15:43:08 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
 #include "utils/urlUtils.hpp"
-#include "core/server_utils.hpp"
 #include <algorithm>
 #include <array>
 #include <cctype>
@@ -372,12 +371,14 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Using fallback Url for HTTP/1.0");
     }
 
-    // ── Set host explicitly for easier access downstream // Kha, I'm not sure if it is a right place. Check it out please.
+    // ── Set host explicitly for easier access downstream // Kha, I'm not sure if it is a right
+    // place. Check it out please.
     std::string hostHeader = req.getHeader("HOST");
-    std::size_t colonPos = hostHeader.find(':');
+    std::size_t colonPos   = hostHeader.find(':');
     if (colonPos != std::string::npos)
         hostHeader = hostHeader.substr(0, colonPos); // strip port
-    std::transform(hostHeader.begin(), hostHeader.end(), hostHeader.begin(), ::tolower); // normalize
+    std::transform(hostHeader.begin(), hostHeader.end(), hostHeader.begin(),
+                   ::tolower); // normalize
     req.setHost(hostHeader);
 
     return true;
@@ -643,11 +644,12 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
                               std::vector<Server> serversOnPort, int& errorCode,
                               std::size_t& consumedBytes) {
     // !!!!!!!!!!!
-    std::size_t clientMaxBodySize = serversOnPort[0].getClientMaxBodySize(); // Kha, TODO: as soon as you parse headers, you can
-    // get the server from the request and use its max body size!!!!!!!!!!!!!!!!!!!!!!!!!!!! REmove this line when you implement
-    // that
+    std::size_t clientMaxBodySize =
+        serversOnPort[0].getClientMaxBodySize(); // Kha, TODO: as soon as you parse headers, you can
+    // get the server from the request and use its max body size!!!!!!!!!!!!!!!!!!!!!!!!!!!! REmove
+    // this line when you implement that
     // !!!!!!!!!!!
-    
+
     // 1) Find end of header block: "\r\n\r\n"
     std::size_t headerEndPos = buffer.find("\r\n\r\n");
     if (headerEndPos == std::string::npos) {
@@ -676,10 +678,10 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
 
     // Kha, check it out PLEASE
     std::string hostHeader = req.getHeader("Host");
-    int bestMatch = 0;
+    int         bestMatch  = 0;
 
     for (size_t i = 0; i < serversOnPort.size(); ++i) {
-        const Server& srv = serversOnPort[i];
+        const Server&                   srv   = serversOnPort[i];
         const std::vector<std::string>& names = srv.getServerNames();
         if (std::find(names.begin(), names.end(), hostHeader) != names.end()) {
             bestMatch = i;
@@ -688,7 +690,8 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
     }
 
     req.setMatchedServerIndex(bestMatch);
-    clientMaxBodySize = serversOnPort[bestMatch].getClientMaxBodySize(); // use the matched server's body limit
+    clientMaxBodySize =
+        serversOnPort[bestMatch].getClientMaxBodySize(); // use the matched server's body limit
 
     // 5) Early exit for methods that do not expect a body (GET, DELETE)
     std::string method = req.getMethod();

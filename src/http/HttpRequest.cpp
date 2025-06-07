@@ -19,7 +19,7 @@
 #include <sstream>
 
 HttpRequest::HttpRequest(void) {
-	_matchedServerIndex = 0; // Default to the first server
+    _matchedServerIndex = 0; // Default to the first server
 }
 
 HttpRequest::~HttpRequest(void) {
@@ -136,11 +136,11 @@ int HttpRequest::getParseErrorCode(void) const {
 }
 
 void HttpRequest::setMatchedServerIndex(int index) {
-	_matchedServerIndex = index;
+    _matchedServerIndex = index;
 }
 
 int HttpRequest::getMatchedServerIndex() const {
-	return _matchedServerIndex;
+    return _matchedServerIndex;
 }
 
 void HttpRequest::setHost(const std::string& host) {

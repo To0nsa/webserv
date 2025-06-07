@@ -48,9 +48,9 @@ struct ClientInfo {
     size_t                    bytes_sent;
     std::string               requestBuffer;
     std::string               current_raw_response;
-    bool                      keepAlive;    // Keep-alive flag
-    std::vector<Server> serversOnPort;
-    std::queue<HttpResponse>  responses;    // Queue of responses to be sent to the client
+    bool                      keepAlive; // Keep-alive flag
+    std::vector<Server>       serversOnPort;
+    std::queue<HttpResponse>  responses; // Queue of responses to be sent to the client
     std::queue<HttpRequest>   pendingRequests;
     std::optional<CgiProcess> cgiProcess;
     bool                      isCgiProcessRunning;
@@ -79,7 +79,8 @@ class SocketManager {
 
   private:
     std::vector<pollfd> _poll_fds; ///< Monitored file descriptors for poll().
-    std::map<int, std::vector<Server>> _listen_map; ///< Maps listen fds to their corresponding servers
+    std::map<int, std::vector<Server>>
+                              _listen_map;  ///< Maps listen fds to their corresponding servers
     std::map<int, ClientInfo> _client_info; /// Stores all information about each client
     std::map<int, int>        _fd_to_cgi;   ///< Maps CGI stdout fds to client fds
 

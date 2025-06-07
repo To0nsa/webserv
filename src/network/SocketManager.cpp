@@ -257,10 +257,9 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
 }
 
 void SocketManager::respondError(int fd, int status_code) {
-    HttpRequest  empty;
-	const Server& fallback = _client_info[fd].serversOnPort.front();
-    HttpResponse err =
-        ResponseBuilder::generateError(status_code, fallback, empty);
+    HttpRequest   empty;
+    const Server& fallback = _client_info[fd].serversOnPort.front();
+    HttpResponse  err      = ResponseBuilder::generateError(status_code, fallback, empty);
     _client_info[fd].responses.push(err);
 }
 
@@ -329,8 +328,8 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 
         if (bind(fd, (sockaddr*) &addr, sizeof(addr)) < 0) { // Bind socket to IP:port
             close(fd);
-            throw SocketError("bind() failed on " + host + ":" +
-                              std::to_string(port) + ": " + strerror(errno));
+            throw SocketError("bind() failed on " + host + ":" + std::to_string(port) + ": " +
+                              strerror(errno));
         }
 
         if (listen(fd, SOMAXCONN) < 0) { // Start listening for incoming connections
@@ -349,8 +348,7 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 
         _listen_map[fd] = vhosts;
         Logger::logFrom(LogLevel::INFO, "SocketManager",
-                        "Listening on " + host + ":" +
-                            std::to_string(port));
+                        "Listening on " + host + ":" + std::to_string(port));
     }
 }
 
@@ -372,8 +370,9 @@ void SocketManager::run() {
             if (!client.cgiProcess)
                 continue;
 
-            CgiProcess& cgi = *client.cgiProcess;
-			const Server& server = client.serversOnPort[client.currentCgiRequest.getMatchedServerIndex()];
+            CgiProcess&   cgi = *client.cgiProcess;
+            const Server& server =
+                client.serversOnPort[client.currentCgiRequest.getMatchedServerIndex()];
 
             // timeout check
             if (getCurrentTime() - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
@@ -396,8 +395,7 @@ void SocketManager::run() {
 
             // check if finished
             if (CGI::tryTerminateCgi(cgi)) {
-                HttpResponse resp =
-                    CGI::finalizeCgi(cgi, server, client.currentCgiRequest);
+                HttpResponse resp = CGI::finalizeCgi(cgi, server, client.currentCgiRequest);
                 // HttpResponse resp = maybeResp.value_or(ResponseBuilder::generateError(502,
                 // client.serverConfig, {}));
                 client.responses.push(resp);
@@ -500,7 +498,7 @@ void SocketManager::handleNewConnection(int listen_fd) {
     info.headerComplete      = false;
     info.bytes_sent          = 0;
     info.keepAlive           = true;
-    info.serversOnPort = _listen_map[listen_fd];
+    info.serversOnPort       = _listen_map[listen_fd];
 
     _poll_fds.push_back((pollfd){client_fd, POLLIN, 0});
     Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
@@ -552,8 +550,8 @@ void SocketManager::processPendingRequests(int client_fd) {
 
     // As long as there is at least one pending request AND no CGI is currently running:
     while (!client.pendingRequests.empty() && !client.isCgiProcessRunning) {
-        HttpRequest nextReq = client.pendingRequests.front();
-		const Server& server = client.serversOnPort[nextReq.getMatchedServerIndex()];
+        HttpRequest   nextReq = client.pendingRequests.front();
+        const Server& server  = client.serversOnPort[nextReq.getMatchedServerIndex()];
 
         if (nextReq.getParseErrorCode() != 0) {
             int          code = nextReq.getParseErrorCode();
@@ -637,9 +635,8 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         HttpRequest request;
         int         errorCode     = 0;
         std::size_t consumedBytes = 0;
-        bool        parseOK       = HttpRequestParser::parse(request, client.requestBuffer,
-                                                             client.serversOnPort,
-                                                             errorCode, consumedBytes);
+        bool parseOK = HttpRequestParser::parse(request, client.requestBuffer, client.serversOnPort,
+                                                errorCode, consumedBytes);
         if (!parseOK) {
             if (errorCode == 0) {
                 return false; // Incomplete data — wait for more
