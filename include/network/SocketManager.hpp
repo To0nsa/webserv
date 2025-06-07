@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/07 21:23:54 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/07 21:54:08 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,28 +86,19 @@ class SocketManager {
 
     void setupSockets(const std::vector<Server>& servers);
     void handleNewConnection(int listen_fd);
-
     bool handleClientData(int client_fd, size_t index);
-
+	void logResponseStatus(int status, int fd);
+	bool sendFileResponse(int fd, size_t index, HttpResponse& response);
+	bool sendRawResponse(int fd, size_t index, HttpResponse& response);
     void sendResponse(int client_fd, size_t index);
-
     void cleanupClientConnectionClose(int client_fd, size_t index);
 	void removePollFd(size_t index);
     void cleanupClientState(int client_fd);
-
     bool checkClientTimeouts(int client_fd, size_t index);
-    /**
-     * @brief Handles poll errors and cleans up the client connection.
-     *
-     * @param fd File descriptor of the socket with error.
-     * @param index Index of the fd in the `_poll_fds` vector.
-     * @param revents Events that occurred on the socket.
-     */
     void handlePollError(int fd, size_t index, short revents);
     bool receiveFromClient(int fd, size_t index);
     void respondError(int fd, int status_code);
     bool checkRequestLimits(int fd);
-
     bool isHeaderTimeout(int fd, time_t now);
     bool isBodyTimeout(int fd, time_t now);
     bool isSendTimeout(int fd, time_t now);

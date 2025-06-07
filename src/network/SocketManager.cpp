@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/07 21:25:46 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/07 22:07:02 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,30 +294,21 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
         std::pair<std::string, int> key = std::make_pair(host, port);
         if (bound.count(key))
             continue; // Already bound, skip
-
         bound.insert(key);
-        int fd = socket(AF_INET, SOCK_STREAM, 0);
-        // int fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0); // Create a TCP socket
+
+        int fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
         if (fd < 0)
             throw SocketError("socket() failed: " + std::string(std::strerror(errno)));
 
-        int opt =
-            1; // To tell the OS: "I want to reuse this port immediately, even if it's in TIME_WAIT
+        int opt = 1; // Reuse same address/port if the server is restarted quickly
         if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
             close(fd);
             throw SocketError("setsockopt() failed: " + std::string(std::strerror(errno)));
         }
 
-        // MacOS
-        if (fcntl(fd, F_SETFL, O_NONBLOCK) < 0) { // Make socket non-blocking
-            close(fd);
-            throw SocketError("fcntl() failed: " + std::string(std::strerror(errno)));
-        }
-
         sockaddr_in addr;
         addr.sin_family = AF_INET;
         addr.sin_port   = htons(port); // Convert port to network byte order
-
         // Convert hostname to IP address
         if (host == "localhost")
             addr.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -669,163 +660,135 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
     return (true);
 }
 
+void SocketManager::logResponseStatus(int status, int fd) {
+    std::string message = "Sending HTTP " + std::to_string(status) + " → fd " + std::to_string(fd);
+    if (status < 400)
+        Logger::logFrom(LogLevel::INFO, "SocketManager sendResponse", message);
+    else if (status < 500)
+        Logger::logFrom(LogLevel::WARN, "SocketManager sendResponse", message);
+    else
+        Logger::logFrom(LogLevel::ERROR, "SocketManager sendResponse", message);
+}
+
+
+bool SocketManager::sendFileResponse(int fd, size_t index, HttpResponse& response) {
+    ClientInfo& client = _client_info[fd];
+
+    if (!client.file_stream.is_open()) {
+        client.file_stream.open(response.getFilePath(), std::ios::binary);
+        if (!client.file_stream.is_open()) {
+            respondError(fd, 500);
+            return false;
+        }
+        if (response.getCgiBodyOffset() > 0)
+            client.file_stream.seekg(response.getCgiBodyOffset());
+
+        std::ostringstream head;
+        head << "HTTP/1.1 " << response.getStatusCode() << " " << response.getStatusMessage() << "\r\n";
+        for (const auto& header : response.getHeaders())
+            head << header.first << ": " << header.second << "\r\n";
+        head << "\r\n";
+        client.current_raw_response = head.str();
+    }
+
+    std::string& raw = client.current_raw_response;
+    size_t& offset = client.bytes_sent;
+    if (offset < raw.size()) {
+        ssize_t sent = send(fd, raw.c_str() + offset, raw.size() - offset, MSG_DONTWAIT);
+        if (sent < 0) {
+            Logger::logFrom(LogLevel::ERROR, "SocketManager", "send() failed on fd " + std::to_string(fd) + ": " + strerror(errno));
+            cleanupClientConnectionClose(fd, index);
+            return false;
+        }
+        offset += sent;
+        client.lastSendAttemptTime = getCurrentTime();
+        if (offset < raw.size()) return true;
+    }
+
+    char buffer[8192];
+    client.file_stream.read(buffer, sizeof(buffer));
+    std::streamsize bytes_read = client.file_stream.gcount();
+    if (bytes_read > 0) {
+        ssize_t sent = send(fd, buffer, bytes_read, MSG_DONTWAIT);
+        if (sent < 0) {
+            Logger::logFrom(LogLevel::ERROR, "SocketManager", "send() failed on fd " + std::to_string(fd) + ": " + strerror(errno));
+            cleanupClientConnectionClose(fd, index);
+            return false;
+        }
+        client.lastSendAttemptTime = getCurrentTime();
+        return true;
+    }
+
+    if (client.file_stream.eof() || bytes_read == 0) {
+        Logger::logFrom(LogLevel::INFO, "SocketManager", "[DONE] We sent full FILE RESPONSE to fd:" + std::to_string(fd));
+        client.file_stream.close();
+        client.current_raw_response.clear();
+        offset = 0;
+
+        if (response.isCgiTempFile()) {
+            CGI::unlinkWithErrorLog(response.getCgiTempFile(), "out temp file");
+            response.setCgiTempFile("");
+        }
+        client.responses.pop();
+    }
+
+    return true;
+}
+
+
+bool SocketManager::sendRawResponse(int fd, size_t index, HttpResponse& response) {
+    ClientInfo& client = _client_info[fd];
+    size_t& offset = client.bytes_sent;
+
+    if (client.current_raw_response.empty()) {
+        client.current_raw_response = response.toHttpString();
+        offset = 0;
+    }
+
+    std::string& raw = client.current_raw_response;
+    if (offset < raw.size()) {
+        ssize_t sent = send(fd, raw.c_str() + offset, raw.size() - offset, MSG_DONTWAIT);
+        if (sent < 0) {
+            Logger::logFrom(LogLevel::ERROR, "SocketManager", "send() failed on fd " + std::to_string(fd) + ": " + strerror(errno));
+            cleanupClientConnectionClose(fd, index);
+            return false;
+        }
+        offset += sent;
+        client.lastSendAttemptTime = getCurrentTime();
+    }
+
+    if (offset >= raw.size()) {
+        client.responses.pop();
+        offset = 0;
+        Logger::logFrom(LogLevel::INFO, "SocketManager", "[DONE] We sent full RESPONSE to fd:" + std::to_string(fd));
+        client.current_raw_response.clear();
+    }
+
+    return true;
+}
+
+
 void SocketManager::sendResponse(int client_fd, size_t index) {
     HttpResponse& response = _client_info[client_fd].responses.front();
 
-    // Log at appropriate level based on status code
-    int status = response.getStatusCode();
-    if (status >= 200 && status < 400) {
-        Logger::logFrom(LogLevel::INFO, "SocketManager sendResponse",
-                        "Sending HTTP " + std::to_string(status) + " → fd " +
-                            std::to_string(client_fd));
-    } else if (status >= 400 && status < 500) {
-        Logger::logFrom(LogLevel::WARN, "SocketManager sendResponse",
-                        "Sending HTTP " + std::to_string(status) + " → fd " +
-                            std::to_string(client_fd));
-    } else if (status >= 500) {
-        Logger::logFrom(LogLevel::ERROR, "SocketManager sendResponse",
-                        "Sending HTTP " + std::to_string(status) + " → fd " +
-                            std::to_string(client_fd));
-    } else {
-        Logger::logFrom(LogLevel::kDEBUG, "SocketManager sendResponse",
-                        "Sending HTTP " + std::to_string(status) + " → fd " +
-                            std::to_string(client_fd));
-    }
-
-    size_t& offset = _client_info[client_fd].bytes_sent;
+    logResponseStatus(response.getStatusCode(), client_fd);
 
     if (response.isFileResponse()) {
-        // If this is the first time sending this file response, open the file and build headers
-        if (!_client_info[client_fd].file_stream.is_open()) {
-            _client_info[client_fd].file_stream.open(response.getFilePath(), std::ios::binary);
-            if (!_client_info[client_fd].file_stream.is_open()) {
-                respondError(client_fd, 500);
-                return;
-            }
-
-            // If this is a CGI-generated file, skip past the CGI headers in the temp file
-            if (response.getCgiBodyOffset() > 0) {
-                _client_info[client_fd].file_stream.seekg(response.getCgiBodyOffset());
-            }
-
-            // Build the HTTP response head
-            std::ostringstream head;
-            head << "HTTP/1.1 " << response.getStatusCode() << " " << response.getStatusMessage()
-                 << "\r\n";
-            for (const auto& header : response.getHeaders()) {
-                head << header.first << ": " << header.second << "\r\n";
-            }
-            head << "\r\n";
-            _client_info[client_fd].current_raw_response = head.str();
-        }
-
-        // Send any remaining bytes of the HTTP headers first
-        std::string& raw = _client_info[client_fd].current_raw_response;
-        if (offset < raw.size()) {
-            ssize_t sent = send(client_fd, raw.c_str() + offset, raw.size() - offset, MSG_DONTWAIT);
-            if (sent < 0) {
-                Logger::logFrom(LogLevel::ERROR, "SocketManager",
-                                "send() failed on fd " + std::to_string(client_fd) + ": " +
-                                    std::strerror(errno));
-                cleanupClientConnectionClose(client_fd, index);
-                return;
-            }
-            offset += sent;
-            _client_info[client_fd].lastSendAttemptTime = getCurrentTime();
-            if (offset < raw.size()) {
-                // Not done sending headers yet; wait for next POLLOUT
-                return;
-            }
-        }
-
-        // Entire header has been sent; now stream the file in 8KB chunks
-        char buffer[8192];
-        _client_info[client_fd].file_stream.read(buffer, sizeof(buffer));
-        std::streamsize bytes_read = _client_info[client_fd].file_stream.gcount();
-        if (bytes_read > 0) {
-            ssize_t sent = send(client_fd, buffer, bytes_read, MSG_DONTWAIT);
-            if (sent < 0) {
-                Logger::logFrom(LogLevel::ERROR, "SocketManager",
-                                "send() failed on fd " + std::to_string(client_fd) + ": " +
-                                    std::strerror(errno));
-                cleanupClientConnectionClose(client_fd, index);
-                return;
-            }
-            _client_info[client_fd].lastSendAttemptTime = getCurrentTime();
-            // ─────────────────────────────────────────────────────────────────
-            // IMPORTANT: Do NOT modify `offset` here. It tracks only how many
-            // bytes of `current_raw_response` have been sent.
-            // ─────────────────────────────────────────────────────────────────
-        }
-
-        // If EOF reached or zero bytes were read, finish up and clean state
-        if (_client_info[client_fd].file_stream.eof() || bytes_read == 0) {
-            Logger::logFrom(LogLevel::INFO, "SocketManager sendResponse",
-                            "[DONE] We sent full FILE RESPONSE to fd:" + std::to_string(client_fd));
-            _client_info[client_fd].file_stream.close();
-            _client_info[client_fd].current_raw_response.clear();
-            offset = 0;
-
-            // If this was a temporary CGI file, delete it now
-            if (response.isCgiTempFile()) {
-                CGI::unlinkWithErrorLog(response.getCgiTempFile(), "out temp file");
-                response.setCgiTempFile("");
-            }
-
-            _client_info[client_fd].responses.pop();
-
-            if (!response.isConnectionClose()) {
-                if (_client_info[client_fd].responses.empty()) {
-                    Logger::logFrom(LogLevel::INFO, "SocketManager",
-                                    "Connection: keep-alive - keeping the connection open");
-                    _poll_fds[index].events &= ~POLLOUT;
-                }
-            } else {
-                Logger::logFrom(LogLevel::INFO, "SocketManager",
-                                "Connection: close - closing the connection");
-                cleanupClientConnectionClose(client_fd, index);
-            }
-        }
-
+        if (!sendFileResponse(client_fd, index, response)) return;
     } else {
-        // Non-file responses (e.g., autogenerated bodies) go here
-        if (_client_info[client_fd].current_raw_response.empty()) {
-            _client_info[client_fd].current_raw_response = response.toHttpString();
-            offset                                       = 0;
-        }
+        if (!sendRawResponse(client_fd, index, response)) return;
+    }
 
-        std::string& raw = _client_info[client_fd].current_raw_response;
-        if (offset < raw.size()) {
-            ssize_t bytes_sent =
-                send(client_fd, raw.c_str() + offset, raw.size() - offset, MSG_DONTWAIT);
-            if (bytes_sent < 0) {
-                Logger::logFrom(LogLevel::ERROR, "SocketManager",
-                                "send() failed on fd " + std::to_string(client_fd) + ": " +
-                                    std::strerror(errno));
-                cleanupClientConnectionClose(client_fd, index);
-                return;
-            }
-            offset += bytes_sent;
-            _client_info[client_fd].lastSendAttemptTime = getCurrentTime();
-        }
+    if (_client_info[client_fd].responses.empty() &&
+    _client_info[client_fd].current_raw_response.empty() &&
+    !_client_info[client_fd].file_stream.is_open()) {
 
-        if (offset >= raw.size()) {
-            _client_info[client_fd].responses.pop();
-            offset = 0;
-            Logger::logFrom(LogLevel::INFO, "SocketManager sendResponse",
-                            "[DONE] We sent full RESPONSE to fd:" + std::to_string(client_fd));
-            _client_info[client_fd].current_raw_response.clear();
-            if (!response.isConnectionClose()) {
-                if (_client_info[client_fd].responses.empty()) {
-                    Logger::logFrom(LogLevel::INFO, "SocketManager",
-                                    "Connection: keep-alive - keeping the connection open");
-                    _poll_fds[index].events &= ~POLLOUT;
-                }
-            } else {
-                Logger::logFrom(LogLevel::INFO, "SocketManager",
-                                "Connection: close - closing the connection");
-                cleanupClientConnectionClose(client_fd, index);
-            }
+        if (!response.isConnectionClose()) {
+            Logger::logFrom(LogLevel::INFO, "SocketManager", "Connection: keep-alive - keeping the connection open");
+            _poll_fds[index].events &= ~POLLOUT;
+        } else {
+            Logger::logFrom(LogLevel::INFO, "SocketManager", "Connection: close - closing the connection");
+            cleanupClientConnectionClose(client_fd, index);
         }
     }
 }
