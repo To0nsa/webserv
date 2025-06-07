@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 21:23:16 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/07 15:14:09 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,9 +257,9 @@ bool SocketManager::receiveFromClient(int client_fd, size_t index) {
 }
 
 void SocketManager::respondError(int fd, int status_code) {
-    HttpRequest  empty;
-    HttpResponse err =
-        ResponseBuilder::generateError(status_code, _client_info[fd].serverConfig, empty);
+    HttpRequest   empty;
+    const Server& fallback = _client_info[fd].serversOnPort.front();
+    HttpResponse  err      = ResponseBuilder::generateError(status_code, fallback, empty);
     _client_info[fd].responses.push(err);
 }
 
@@ -288,7 +288,16 @@ const char* SocketManager::SocketError::what() const throw() {
 
 // Set up sockets for each server (host:port)
 void SocketManager::setupSockets(const std::vector<Server>& servers) {
+    std::set<std::pair<std::string, int>> bound;
     for (size_t i = 0; i < servers.size(); ++i) {
+        const std::string& host = servers[i].getHost();
+        int                port = servers[i].getPort();
+
+        std::pair<std::string, int> key = std::make_pair(host, port);
+        if (bound.count(key))
+            continue; // Already bound, skip
+
+        bound.insert(key);
         int fd = socket(AF_INET, SOCK_STREAM, 0);
         // int fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0); // Create a TCP socket
         if (fd < 0)
@@ -309,18 +318,18 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 
         sockaddr_in addr;
         addr.sin_family = AF_INET;
-        addr.sin_port   = htons(servers[i].getPort()); // Convert port to network byte order
+        addr.sin_port   = htons(port); // Convert port to network byte order
 
         // Convert hostname to IP address
-        if (servers[i].getHost() == "localhost")
+        if (host == "localhost")
             addr.sin_addr.s_addr = inet_addr("127.0.0.1");
         else
-            addr.sin_addr.s_addr = inet_addr(servers[i].getHost().c_str());
+            addr.sin_addr.s_addr = inet_addr(host.c_str());
 
         if (bind(fd, (sockaddr*) &addr, sizeof(addr)) < 0) { // Bind socket to IP:port
             close(fd);
-            throw SocketError("bind() failed on " + servers[i].getHost() + ":" +
-                              std::to_string(servers[i].getPort()) + ": " + strerror(errno));
+            throw SocketError("bind() failed on " + host + ":" + std::to_string(port) + ": " +
+                              strerror(errno));
         }
 
         if (listen(fd, SOMAXCONN) < 0) { // Start listening for incoming connections
@@ -330,11 +339,16 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
 
         // Register fd in poll list
         _poll_fds.push_back((pollfd){fd, POLLIN, 0});
-        _listen_map[fd] = servers[i]; // Map fd to its corresponding server
+        // Collect all servers for this host:port
+        std::vector<Server> vhosts;
+        for (size_t j = 0; j < servers.size(); ++j) {
+            if (servers[j].getHost() == host && servers[j].getPort() == port)
+                vhosts.push_back(servers[j]);
+        }
 
+        _listen_map[fd] = vhosts;
         Logger::logFrom(LogLevel::INFO, "SocketManager",
-                        "Listening on " + servers[i].getHost() + ":" +
-                            std::to_string(servers[i].getPort()));
+                        "Listening on " + host + ":" + std::to_string(port));
     }
 }
 
@@ -356,14 +370,16 @@ void SocketManager::run() {
             if (!client.cgiProcess)
                 continue;
 
-            CgiProcess& cgi = *client.cgiProcess;
+            CgiProcess&   cgi = *client.cgiProcess;
+            const Server& server =
+                client.serversOnPort[client.currentCgiRequest.getMatchedServerIndex()];
 
             // timeout check
             if (getCurrentTime() - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
                 Logger::logFrom(LogLevel::WARN, "CGI",
                                 "Timeout. Killing CGI process for fd: " +
                                     std::to_string(client_fd));
-                client.responses.push(ResponseBuilder::generateError(504, client.serverConfig, {}));
+                client.responses.push(ResponseBuilder::generateError(504, server, {}));
                 CGI::errorOnCgi(cgi);
                 client.cgiProcess.reset();
                 client.isCgiProcessRunning = false;
@@ -379,8 +395,7 @@ void SocketManager::run() {
 
             // check if finished
             if (CGI::tryTerminateCgi(cgi)) {
-                HttpResponse resp =
-                    CGI::finalizeCgi(cgi, client.serverConfig, client.currentCgiRequest);
+                HttpResponse resp = CGI::finalizeCgi(cgi, server, client.currentCgiRequest);
                 // HttpResponse resp = maybeResp.value_or(ResponseBuilder::generateError(502,
                 // client.serverConfig, {}));
                 client.responses.push(resp);
@@ -483,7 +498,7 @@ void SocketManager::handleNewConnection(int listen_fd) {
     info.headerComplete      = false;
     info.bytes_sent          = 0;
     info.keepAlive           = true;
-    info.serverConfig        = _listen_map[listen_fd];
+    info.serversOnPort       = _listen_map[listen_fd];
 
     _poll_fds.push_back((pollfd){client_fd, POLLIN, 0});
     Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
@@ -535,11 +550,12 @@ void SocketManager::processPendingRequests(int client_fd) {
 
     // As long as there is at least one pending request AND no CGI is currently running:
     while (!client.pendingRequests.empty() && !client.isCgiProcessRunning) {
-        HttpRequest nextReq = client.pendingRequests.front();
+        HttpRequest   nextReq = client.pendingRequests.front();
+        const Server& server  = client.serversOnPort[nextReq.getMatchedServerIndex()];
 
         if (nextReq.getParseErrorCode() != 0) {
             int          code = nextReq.getParseErrorCode();
-            HttpResponse err  = ResponseBuilder::generateError(code, client.serverConfig, nextReq);
+            HttpResponse err  = ResponseBuilder::generateError(code, server, nextReq);
             client.responses.push(err);
             client.pendingRequests.pop();
             if (err.isConnectionClose())
@@ -548,7 +564,6 @@ void SocketManager::processPendingRequests(int client_fd) {
         }
 
         // 1) Determine which Location matches
-        const Server&   server   = client.serverConfig;
         const Location* location = findMatchingLocation(normalizePath(nextReq.getPath()), server);
 
         if (!location) {
@@ -620,9 +635,8 @@ bool SocketManager::handleClientData(int client_fd, size_t index) {
         HttpRequest request;
         int         errorCode     = 0;
         std::size_t consumedBytes = 0;
-        bool        parseOK       = HttpRequestParser::parse(request, client.requestBuffer,
-                                                             client.serverConfig.getClientMaxBodySize(),
-                                                             errorCode, consumedBytes);
+        bool parseOK = HttpRequestParser::parse(request, client.requestBuffer, client.serversOnPort,
+                                                errorCode, consumedBytes);
         if (!parseOK) {
             if (errorCode == 0) {
                 return false; // Incomplete data — wait for more
