@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/07 14:27:00 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/07 21:23:54 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ class SocketManager {
     void sendResponse(int client_fd, size_t index);
 
     void cleanupClientConnectionClose(int client_fd, size_t index);
+	void removePollFd(size_t index);
+    void cleanupClientState(int client_fd);
 
     bool checkClientTimeouts(int client_fd, size_t index);
     /**

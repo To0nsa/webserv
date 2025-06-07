@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/07 15:14:09 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/07 21:25:46 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,47 +66,45 @@ void SocketManager::cleanupCgiForClient(int client_fd) {
     client.currentCgiRequest   = HttpRequest();
 }
 
-void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
-    // 1. Defensive: bounds check for poll index
+void SocketManager::removePollFd(size_t index) {
     if (index < _poll_fds.size()) {
         _poll_fds.erase(_poll_fds.begin() + index);
     }
+}
 
-    // 2. Cleanup CGI and file_stream if client exists
+void SocketManager::cleanupClientState(int client_fd) {
     auto it = _client_info.find(client_fd);
-    if (it != _client_info.end()) {
-        ClientInfo& client = it->second;
+    if (it == _client_info.end())
+        return;
 
-        // Clean up any pending responses with temporary files
-        while (!client.responses.empty()) {
-            HttpResponse& resp = client.responses.front();
+    ClientInfo& client = it->second;
 
-            // Delete temporary files from CGI responses
-            if (resp.isCgiTempFile()) {
-                CGI::unlinkWithErrorLog(resp.getCgiTempFile(), "out temp file");
-            }
-            client.responses.pop();
+    while (!client.responses.empty()) {
+        HttpResponse& resp = client.responses.front();
+        if (resp.isCgiTempFile()) {
+            CGI::unlinkWithErrorLog(resp.getCgiTempFile(), "out temp file");
         }
-
-        // Clean up CGI process
-        if (client.cgiProcess) {
-            CGI::errorOnCgi(*client.cgiProcess);
-            client.cgiProcess.reset();
-            client.isCgiProcessRunning = false;
-            client.currentCgiRequest   = HttpRequest();
-        }
-
-        // Close file stream
-        if (client.file_stream.is_open()) {
-            client.file_stream.close();
-        }
-
-        _client_info.erase(it);
+        client.responses.pop();
     }
 
-    // Close socket
-    close(client_fd);
+    if (client.cgiProcess) {
+        CGI::errorOnCgi(*client.cgiProcess);
+        client.cgiProcess.reset();
+        client.isCgiProcessRunning = false;
+        client.currentCgiRequest   = HttpRequest();
+    }
 
+    if (client.file_stream.is_open()) {
+        client.file_stream.close();
+    }
+
+    _client_info.erase(it);
+}
+
+void SocketManager::cleanupClientConnectionClose(int client_fd, size_t index) {
+    removePollFd(index);
+    cleanupClientState(client_fd);
+    close(client_fd);
     Logger::logFrom(LogLevel::INFO, "SocketManager cleanupClientConnectionClose",
                     "Closed FD (Connection: close): " + std::to_string(client_fd));
 }
