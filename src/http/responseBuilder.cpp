@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HttpResponseBuilder.cpp                            :+:      :+:    :+:   */
+/*   responseBuilder.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 17:37:13 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:06:21 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "http/HttpResponseBuilder.hpp"
+#include "http/responseBuilder.hpp"
 #include "http/HttpResponse.hpp"
 #include "utils/filesystemUtils.hpp"
 #include <fstream>

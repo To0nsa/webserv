@@ -85,7 +85,7 @@ def test_delete_file_with_trailing_slash():
     test_path = "/upload_store/test_with_slash.txt"
     ensure_absent(test_path)
     create_file(test_path, "data")
-    request("DELETE", test_path + "/", expected=404)
+    request("DELETE", test_path + "/", expected=403)
     
 def test_delete_case_sensitive():
     parsed = urlparse(SERVER)

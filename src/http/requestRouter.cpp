@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HttpRequestHandler.cpp                             :+:      :+:    :+:   */
+/*   requestRouter.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/04 22:46:51 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/05 11:06:41 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "core/Location.hpp"
 #include "core/Server.hpp"
 #include "http/HttpRequest.hpp"
-#include "http/HttpResponseBuilder.hpp"
 #include "http/handleCgi.hpp"
-#include "http/handle_delete.hpp"
-#include "http/handle_get.hpp"
-#include "http/handle_post.hpp"
+#include "http/methodsHandler.hpp"
+#include "http/responseBuilder.hpp"
 #include "utils/filesystemUtils.hpp"
 
 #include <fstream>

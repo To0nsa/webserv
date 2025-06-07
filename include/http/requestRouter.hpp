@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_get.hpp                                     :+:      :+:    :+:   */
+/*   HttpRequestHandler.hpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/15 12:41:46 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/22 21:04:15 by nlouis           ###   ########.fr       */
+/*   Created: 2025/05/12 23:11:50 by nlouis            #+#    #+#             */
+/*   Updated: 2025/06/05 10:58:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "http/HttpResponseBuilder.hpp"
-#include "utils/filesystemUtils.hpp"
-#include <algorithm>
-#include <chrono>
-#include <dirent.h>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <sys/stat.h>
+class Server;
+class HttpRequest;
+class HttpResponse;
 
-HttpResponse handleGet(const HttpRequest&, const Server&, const Location&);
+HttpResponse handleRequest(const HttpRequest& request, const Server& server);
