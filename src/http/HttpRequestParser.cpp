@@ -6,7 +6,7 @@
 /*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/09 01:30:15 by ktieu            ###   ########.fr       */
+/*   Updated: 2025/06/09 01:35:51 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,7 @@ bool insertValidatedHeader(HttpRequest& req, const std::string& key, const std::
     return true;
 }
 
-bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorCode, std::vector<Server> servers) {
+bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorCode, std::vector<Server> servers, size_t& clientMaxBodySize) {
     std::istringstream stream(headerPart);
     std::string        line;
 
@@ -399,6 +399,7 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     try {
         Url url;
         const Server& foundServer = searchBestMatchedServers(servers, req.getHeader("HOST"));
+        clientMaxBodySize = foundServer.getClientMaxBodySize();
         std::string urlStr = "http://" + foundServer.getHost() + req.getPath();
         if (req.getVersion() == "HTTP/1.1" || !req.getHeader("HOST").empty()) {
             url = parseUrlHttpVersion1_1(req, urlStr);
@@ -661,12 +662,6 @@ bool validateReq(HttpRequest& req, int& errorCode) {
 bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
                               std::vector<Server> serversOnPort, int& errorCode,
                               std::size_t& consumedBytes) {
-    // !!!!!!!!!!!
-    std::size_t clientMaxBodySize =
-        serversOnPort[0].getClientMaxBodySize(); // Kha, TODO: as soon as you parse headers, you can
-    // get the server from the request and use its max body size!!!!!!!!!!!!!!!!!!!!!!!!!!!! REmove
-    // this line when you implement that
-    // !!!!!!!!!!!
 
     // 1) Find end of header block: "\r\n\r\n"
     std::size_t headerEndPos = buffer.find("\r\n\r\n");
@@ -683,10 +678,13 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
     consumedBytes          = headerLen;
 
     // 3) Parse request‐line + headers
-    if (!parseReqHeader(req, headerPart, errorCode, serversOnPort)) {
+     std::size_t clientMaxBodySize;
+    if (!parseReqHeader(req, headerPart, errorCode, serversOnPort, clientMaxBodySize)) {
         // parseReqHeader sets errorCode (e.g. 400, 414, 505)
         return false;
     }
+
+
 
     // 4) Validate method, path, and mandatory headers
     if (!validateReq(req, errorCode)) {
