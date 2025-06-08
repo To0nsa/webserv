@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 12:59:58 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 13:31:28 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,49 +345,64 @@ void SocketManager::handleCgiPollEvents() {
         if (!client.cgiProcess)
             continue;
 
-        CgiProcess&   cgi = *client.cgiProcess;
-        const Server& server =
-            client.serversOnPort[client.currentCgiRequest.getMatchedServerIndex()];
+        try {
+            CgiProcess&   cgi = *client.cgiProcess;
+            const Server& server =
+                client.serversOnPort[client.currentCgiRequest.getMatchedServerIndex()];
 
-        if (getCurrentTime() - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
-            Logger::logFrom(LogLevel::WARN, "CGI",
-                            "Timeout. Killing CGI process for fd: " + std::to_string(client_fd));
-            client.responses.push(ResponseBuilder::generateError(504, server, {}));
-            CGI::errorOnCgi(cgi);
-            client.cgiProcess.reset();
-            client.isCgiProcessRunning = false;
-            client.currentCgiRequest   = HttpRequest();
-            for (auto& pfd : _poll_fds) {
-                if (pfd.fd == client_fd) {
-                    pfd.events |= POLLOUT;
-                    break;
+            if (getCurrentTime() - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
+                Logger::logFrom(LogLevel::WARN, "CGI",
+                                "Timeout. Killing CGI process for fd: " + std::to_string(client_fd));
+                client.responses.push(ResponseBuilder::generateError(504, server, {}));
+                CGI::errorOnCgi(cgi);
+                client.cgiProcess.reset();
+                client.isCgiProcessRunning = false;
+                client.currentCgiRequest   = HttpRequest();
+                for (auto& pfd : _poll_fds) {
+                    if (pfd.fd == client_fd) {
+                        pfd.events |= POLLOUT;
+                        break;
+                    }
                 }
+                continue;
             }
-            continue;
+
+            if (CGI::tryTerminateCgi(cgi)) {
+                HttpResponse resp = CGI::finalizeCgi(cgi, server, client.currentCgiRequest);
+                throw std::bad_alloc(); // Simulate memory allocation failure for testing
+                client.responses.push(resp);
+                CGI::cleanupCgi(cgi);
+                client.cgiProcess.reset();
+                client.isCgiProcessRunning = false;
+                client.currentCgiRequest   = HttpRequest();
+
+                for (auto& pfd : _poll_fds) {
+                    if (pfd.fd == client_fd) {
+                        pfd.events |= POLLOUT;
+                        break;
+                    }
+                }
+
+                size_t idx = 0;
+                for (; idx < _poll_fds.size(); ++idx) {
+                    if (_poll_fds[idx].fd == client_fd)
+                        break;
+                }
+                if (idx < _poll_fds.size())
+                    processPendingRequests(client_fd);
+            }
         }
-
-        if (CGI::tryTerminateCgi(cgi)) {
-            HttpResponse resp = CGI::finalizeCgi(cgi, server, client.currentCgiRequest);
-            client.responses.push(resp);
-            CGI::cleanupCgi(cgi);
-            client.cgiProcess.reset();
-            client.isCgiProcessRunning = false;
-            client.currentCgiRequest   = HttpRequest();
-
-            for (auto& pfd : _poll_fds) {
-                if (pfd.fd == client_fd) {
-                    pfd.events |= POLLOUT;
-                    break;
+        catch (const std::exception& e) {
+            Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                "Exception during CGI handling for fd " + std::to_string(client_fd) + ": " + e.what());
+                respondError(client_fd, 500);
+                cleanupCgiForClient(client_fd);
+                for (auto& pfd : _poll_fds) {
+                    if (pfd.fd == client_fd) {
+                        pfd.events |= POLLOUT;
+                        break;
                 }
             }
-
-            size_t idx = 0;
-            for (; idx < _poll_fds.size(); ++idx) {
-                if (_poll_fds[idx].fd == client_fd)
-                    break;
-            }
-            if (idx < _poll_fds.size())
-                processPendingRequests(client_fd);
         }
     }
 }
