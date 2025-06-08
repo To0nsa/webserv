@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 12:41:22 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 12:59:58 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -768,30 +768,46 @@ bool SocketManager::sendRawResponse(int fd, size_t index, HttpResponse& response
 }
 
 void SocketManager::sendResponse(int client_fd, size_t index) {
-    HttpResponse& response = _client_info[client_fd].responses.front();
+    try {
+        HttpResponse& response = _client_info[client_fd].responses.front();
 
-    logResponseStatus(response.getStatusCode(), client_fd);
+        logResponseStatus(response.getStatusCode(), client_fd);
 
-    if (response.isFileResponse()) {
-        if (!sendFileResponse(client_fd, index, response))
-            return;
-    } else {
-        if (!sendRawResponse(client_fd, index, response))
-            return;
-    }
-
-    if (_client_info[client_fd].responses.empty() &&
-        _client_info[client_fd].current_raw_response.empty() &&
-        !_client_info[client_fd].file_stream.is_open()) {
-
-        if (!response.isConnectionClose()) {
-            Logger::logFrom(LogLevel::INFO, "SocketManager",
-                            "Connection: keep-alive - keeping the connection open");
-            _poll_fds[index].events &= ~POLLOUT;
+        if (response.isFileResponse()) {
+            if (!sendFileResponse(client_fd, index, response))
+                return;
         } else {
-            Logger::logFrom(LogLevel::INFO, "SocketManager",
-                            "Connection: close - closing the connection");
-            cleanupClientConnectionClose(client_fd, index);
+            if (!sendRawResponse(client_fd, index, response))
+                return;
         }
+
+        if (_client_info[client_fd].responses.empty() &&
+            _client_info[client_fd].current_raw_response.empty() &&
+            !_client_info[client_fd].file_stream.is_open()) {
+
+            if (!response.isConnectionClose()) {
+                Logger::logFrom(LogLevel::INFO, "SocketManager",
+                                "Connection: keep-alive - keeping the connection open");
+                _poll_fds[index].events &= ~POLLOUT;
+            } else {
+                Logger::logFrom(LogLevel::INFO, "SocketManager",
+                                "Connection: close - closing the connection");
+                cleanupClientConnectionClose(client_fd, index);
+            }
+        }
+        return;
     }
+    catch (const std::bad_alloc& e) {
+        Logger::logFrom(LogLevel::ERROR, "SocketManager",
+            "Fatal memory allocation error while sending response to fd " + std::to_string(client_fd));
+    }
+    catch (const std::exception& e) {
+        Logger::logFrom(LogLevel::ERROR, "SocketManager",
+            "Exception in sendResponse for fd " + std::to_string(client_fd) + ": " + e.what());
+    }
+    catch (...) {
+        Logger::logFrom(LogLevel::ERROR, "SocketManager",
+            "Unknown fatal error in sendResponse for fd " + std::to_string(client_fd));
+    }
+    cleanupClientConnectionClose(client_fd, index);
 }
