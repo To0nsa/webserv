@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 10:57:02 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 11:30:37 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,24 +38,32 @@
 class Location;
 
 struct ClientInfo {
-    int                       client_fd;       // File descriptor of the client socket
-    time_t                    lastRequestTime; // Last request time for timeout management
-    time_t                    connectionStartTime;
-    time_t                    lastSendAttemptTime;
-    size_t                    headerBytesReceived;
-    size_t                    bodyBytesReceived;
-    bool                      headerComplete;
-    size_t                    bytes_sent;
-    std::string               requestBuffer;
-    std::string               current_raw_response;
-    bool                      keepAlive; // Keep-alive flag
-    std::vector<Server>       serversOnPort;
-    std::queue<HttpResponse>  responses; // Queue of responses to be sent to the client
-    std::queue<HttpRequest>   pendingRequests;
+    // Core identifiers and timing
+    int    client_fd;
+    time_t lastRequestTime;
+    time_t connectionStartTime;
+    time_t lastSendAttemptTime;
+
+    // Byte tracking
+    size_t headerBytesReceived;
+    size_t bodyBytesReceived;
+    size_t bytes_sent;
+
+    // Request/response flow
+    bool                     headerComplete;
+    std::string              requestBuffer;
+    std::string              current_raw_response;
+    std::vector<Server>      serversOnPort;
+    std::queue<HttpRequest>  pendingRequests;
+    std::queue<HttpResponse> responses;
+
+    // CGI
     std::optional<CgiProcess> cgiProcess;
     bool                      isCgiProcessRunning;
     HttpRequest               currentCgiRequest;
-    std::ifstream             file_stream;
+
+    // File I/O
+    std::ifstream file_stream;
 };
 
 class SocketManager {
@@ -78,35 +86,52 @@ class SocketManager {
     };
 
   private:
-    std::vector<pollfd> _poll_fds; ///< Monitored file descriptors for poll().
-    std::map<int, std::vector<Server>>
-                              _listen_map;  ///< Maps listen fds to their corresponding servers
-    std::map<int, ClientInfo> _client_info; /// Stores all information about each client
-    std::map<int, int>        _fd_to_cgi;   ///< Maps CGI stdout fds to client fds
+    // Data structures
+    std::vector<pollfd>                _poll_fds;
+    std::map<int, std::vector<Server>> _listen_map;
+    std::map<int, ClientInfo>          _client_info;
+    std::map<int, int>                 _fd_to_cgi;
 
+    // Setup & connection
     void setupSockets(const std::vector<Server>& servers);
     void handleNewConnection(int listen_fd);
+
+    // Event handling
     bool handleClientData(int client_fd, size_t index);
-	void logResponseStatus(int status, int fd);
-	bool sendFileResponse(int fd, size_t index, HttpResponse& response);
-	bool sendRawResponse(int fd, size_t index, HttpResponse& response);
     void sendResponse(int client_fd, size_t index);
-    void cleanupClientConnectionClose(int client_fd, size_t index);
-	void removePollFd(size_t index);
-    void cleanupClientState(int client_fd);
-    bool checkClientTimeouts(int client_fd, size_t index);
     void handlePollError(int fd, size_t index, short revents);
+
+    // Response helpers
+    void logResponseStatus(int status, int fd);
+    bool sendFileResponse(int fd, size_t index, HttpResponse& response);
+    bool sendRawResponse(int fd, size_t index, HttpResponse& response);
+
+    // Client lifecycle
+    void cleanupClientConnectionClose(int client_fd, size_t index);
+    void removePollFd(size_t index);
+    void cleanupClientState(int client_fd);
+    void cleanupCgiForClient(int client_fd);
+    void resetRequestState(int client_fd);
+
+    // Request processing
     bool receiveFromClient(int fd, size_t index);
-    void respondError(int fd, int status_code);
     bool checkRequestLimits(int fd);
+    bool parseAndQueueRequests(int client_fd);
+    void processPendingRequests(int client_fd);
+
+    // Timeout checks
+    bool checkClientTimeouts(int client_fd, size_t index);
     bool isHeaderTimeout(int fd, time_t now);
     bool isBodyTimeout(int fd, time_t now);
     bool isSendTimeout(int fd, time_t now);
     bool isIdleTimeout(int fd, time_t now);
-    void resetRequestState(int client_fd);
-    void cleanupCgiForClient(int client_fd);
+
+    // Request routing and CGI
     bool handleCgiRequest(int client_fd, const HttpRequest& request, const Server& server,
                           const Location& location);
-    void processPendingRequests(int client_fd);
-	bool parseAndQueueRequests(int client_fd);
+    bool handleRequestErrorIfAny(int fd, int code, HttpRequest& req, const Server& server);
+    bool shouldSpawnCgi(const HttpRequest& req, const Location& location);
+
+    // Error utility
+    void respondError(int fd, int status_code);
 };
