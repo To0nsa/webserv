@@ -6,7 +6,7 @@
 /*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/08 23:26:09 by ktieu            ###   ########.fr       */
+/*   Updated: 2025/06/09 01:30:15 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -541,7 +541,7 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                         "Exceeded max body size in non-chunked transfer");
         errorCode = 413;
-        consumedBytes += bodyPart.size();<HttpRequestParser>: adding logic for matching servers on the sam
+        consumedBytes += bodyPart.size();
         return false;
     }
 
@@ -620,7 +620,7 @@ bool validateReq(HttpRequest& req, int& errorCode) {
             Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                             "POST without Content-Length or Transfer-Encoding");
             errorCode = 411;
-            return false;<HttpRequestParser>: adding logic for matching servers on the sam
+            return false;
         }
 
         std::string ct = req.getHeader("CONTENT-TYPE");

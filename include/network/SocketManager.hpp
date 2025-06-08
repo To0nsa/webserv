@@ -6,7 +6,7 @@
 /*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 18:56:16 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/09 01:29:01 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ class SocketManager {
                               _listen_map;  ///< Maps listen fds to their corresponding servers
     std::map<int, ClientInfo> _client_info; /// Stores all information about each client
     std::map<int, int>        _fd_to_cgi;   ///< Maps CGI stdout fds to client fds
-    std::vector<Server> _servers; ///< List of all servers to listen on
 
     // Setup & connection
     void setupSockets(const std::vector<Server>& servers);
