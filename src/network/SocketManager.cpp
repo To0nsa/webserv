@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 11:26:13 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 11:53:23 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,6 +340,58 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
     }
 }
 
+
+void SocketManager::handleCgiPollEvents() {
+    for (auto& [client_fd, client] : _client_info) {
+        if (!client.cgiProcess)
+            continue;
+
+        CgiProcess& cgi = *client.cgiProcess;
+        const Server& server = client.serversOnPort[client.currentCgiRequest.getMatchedServerIndex()];
+
+        if (getCurrentTime() - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
+            Logger::logFrom(LogLevel::WARN, "CGI", "Timeout. Killing CGI process for fd: " + std::to_string(client_fd));
+            client.responses.push(ResponseBuilder::generateError(504, server, {}));
+            CGI::errorOnCgi(cgi);
+            client.cgiProcess.reset();
+            client.isCgiProcessRunning = false;
+            client.currentCgiRequest = HttpRequest();
+            for (auto& pfd : _poll_fds) {
+                if (pfd.fd == client_fd) {
+                    pfd.events |= POLLOUT;
+                    break;
+                }
+            }
+            continue;
+        }
+
+        if (CGI::tryTerminateCgi(cgi)) {
+            HttpResponse resp = CGI::finalizeCgi(cgi, server, client.currentCgiRequest);
+            client.responses.push(resp);
+            CGI::cleanupCgi(cgi);
+            client.cgiProcess.reset();
+            client.isCgiProcessRunning = false;
+            client.currentCgiRequest = HttpRequest();
+
+            for (auto& pfd : _poll_fds) {
+                if (pfd.fd == client_fd) {
+                    pfd.events |= POLLOUT;
+                    break;
+                }
+            }
+
+            size_t idx = 0;
+            for (; idx < _poll_fds.size(); ++idx) {
+                if (_poll_fds[idx].fd == client_fd)
+                    break;
+            }
+            if (idx < _poll_fds.size())
+                processPendingRequests(client_fd);
+        }
+    }
+}
+
+
 void SocketManager::run() {
     while (running) {
         int n = poll(&_poll_fds[0], _poll_fds.size(), 1000);
@@ -351,64 +403,7 @@ void SocketManager::run() {
             throw SocketError("poll() failed: " + std::string(std::strerror(errno)));
         }
 
-        // handleCgiPollEvents();
-        //  === CGI Completion Check ===
-        for (auto& [client_fd, client] : _client_info) {
-
-            if (!client.cgiProcess)
-                continue;
-
-            CgiProcess&   cgi = *client.cgiProcess;
-            const Server& server =
-                client.serversOnPort[client.currentCgiRequest.getMatchedServerIndex()];
-
-            // timeout check
-            if (getCurrentTime() - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
-                Logger::logFrom(LogLevel::WARN, "CGI",
-                                "Timeout. Killing CGI process for fd: " +
-                                    std::to_string(client_fd));
-                client.responses.push(ResponseBuilder::generateError(504, server, {}));
-                CGI::errorOnCgi(cgi);
-                client.cgiProcess.reset();
-                client.isCgiProcessRunning = false;
-                client.currentCgiRequest   = HttpRequest(); // clears request
-                for (auto& pfd : _poll_fds) {
-                    if (pfd.fd == client_fd) {
-                        pfd.events |= POLLOUT;
-                        break;
-                    }
-                }
-                continue;
-            }
-
-            // check if finished
-            if (CGI::tryTerminateCgi(cgi)) {
-                HttpResponse resp = CGI::finalizeCgi(cgi, server, client.currentCgiRequest);
-                // HttpResponse resp = maybeResp.value_or(ResponseBuilder::generateError(502,
-                // client.serverConfig, {}));
-                client.responses.push(resp);
-                CGI::cleanupCgi(cgi);
-                client.cgiProcess.reset();
-                client.isCgiProcessRunning = false;         // optional if used independently
-                client.currentCgiRequest   = HttpRequest(); // clears request
-
-                for (auto& pfd : _poll_fds) {
-                    if (pfd.fd == client_fd) {
-                        pfd.events |= POLLOUT;
-                        break;
-                    }
-                }
-                size_t idx = 0;
-                for (; idx < _poll_fds.size(); ++idx) {
-                    if (_poll_fds[idx].fd == client_fd) {
-                        break;
-                    }
-                }
-                if (idx < _poll_fds.size()) {
-                    processPendingRequests(client_fd);
-                }
-            }
-        }
+        handleCgiPollEvents();
 
         // Then handle sockets — but skip *all* CGI FDs before doing error/HUP checks
         for (size_t i = _poll_fds.size(); i-- > 0;) {
@@ -449,6 +444,19 @@ void SocketManager::run() {
     Logger::logFrom(LogLevel::INFO, "SocketManager", "Shutting down server");
 }
 
+void SocketManager::initializeClientInfo(int client_fd, int listen_fd) {
+    ClientInfo& info = _client_info[client_fd];
+
+    info.client_fd           = client_fd;
+    info.lastRequestTime     = getCurrentTime();
+    info.connectionStartTime = getCurrentTime();
+    info.headerBytesReceived = 0;
+    info.bodyBytesReceived   = 0;
+    info.headerComplete      = false;
+    info.bytes_sent          = 0;
+    info.serversOnPort       = _listen_map[listen_fd];
+}
+
 // Accept new client and add to poll list
 void SocketManager::handleNewConnection(int listen_fd) {
     int client_fd = accept(listen_fd, NULL, NULL);
@@ -472,16 +480,7 @@ void SocketManager::handleNewConnection(int listen_fd) {
         return;
     }
 
-    auto& info               = _client_info[client_fd];
-    info.client_fd           = client_fd;
-    info.lastRequestTime     = getCurrentTime();
-    info.connectionStartTime = getCurrentTime();
-    info.headerBytesReceived = 0;
-    info.bodyBytesReceived   = 0;
-    info.headerComplete      = false;
-    info.bytes_sent          = 0;
-    info.serversOnPort       = _listen_map[listen_fd];
-
+    initializeClientInfo(client_fd, listen_fd);
     _poll_fds.push_back((pollfd){client_fd, POLLIN, 0});
     Logger::logFrom(LogLevel::kDEBUG, "SocketManager",
                     "Accept returned fd: " + std::to_string(client_fd) +

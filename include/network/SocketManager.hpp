@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 11:30:37 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 11:54:09 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ class SocketManager {
 
     // Event handling
     bool handleClientData(int client_fd, size_t index);
+    void handleCgiPollEvents();
     void sendResponse(int client_fd, size_t index);
     void handlePollError(int fd, size_t index, short revents);
 
@@ -107,6 +108,7 @@ class SocketManager {
     bool sendRawResponse(int fd, size_t index, HttpResponse& response);
 
     // Client lifecycle
+    void initializeClientInfo(int client_fd, int listen_fd);
     void cleanupClientConnectionClose(int client_fd, size_t index);
     void removePollFd(size_t index);
     void cleanupClientState(int client_fd);
