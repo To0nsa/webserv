@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 09:08:33 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 10:41:07 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/08 23:22:30 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,39 +184,6 @@ std::string htmlHeader(const std::string& uri) {
   <meta charset="UTF-8">
   <title>Index of )"
        << uri << R"(</title>
-  <style>
-    body {
-      background: #1e1e1e;
-      color: #dcdcdc;
-      font-family: "Segoe UI", sans-serif;
-      padding: 2rem;
-    }
-    h1 {
-      color: #4fc3f7;
-      margin-bottom: 1rem;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-    th, td {
-      padding: 0.75rem 1.5rem;
-      text-align: left;
-      font-family: monospace;
-      border-bottom: 1px solid #333;
-    }
-    tr:hover {
-      background-color: #2e2e2e;
-    }
-    a {
-      color: #81d4fa;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
 </head>
 <body>
   <h1>Index of )"

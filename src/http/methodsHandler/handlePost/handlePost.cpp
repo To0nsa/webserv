@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 22:29:41 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/08 22:00:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <sys/stat.h>
@@ -38,8 +39,8 @@ static HttpResponse handleUrlEncodedForm(const HttpRequest& request, const Serve
     }
 
     std::string html = "<html><body><h1>Form Received</h1>";
-    for (auto& kv : form) {
-        html += "<p><b>" + kv.first + ":</b> " + kv.second + "</p>";
+    for (auto& formField : form) {
+        html += "<p><b>" + formField.first + ":</b> " + formField.second + "</p>";
     }
     html += "</body></html>";
 
@@ -81,7 +82,7 @@ static HttpResponse handleRawBody(const HttpRequest& request, const Server& serv
         return ResponseBuilder::generateError(500, server, request);
     }
 
-    Logger::logFrom(LogLevel::INFO, "Post Handler", "Successfully saved raw body to: " + fullpath);
+    Logger::logFrom(LogLevel::INFO, "Post Handler", "Successfully saved file to: " + fullpath);
     return ResponseBuilder::generateSuccess(
         201, "<html><body><h1>File " + filename + " created.</h1></body></html>", "text/html",
         request);
@@ -93,61 +94,124 @@ static std::string generateFilename() {
 
 } // namespace
 
-HttpResponse handlePost(const HttpRequest& request, const Server& server, const Location& loc) {
+static std::optional<HttpResponse>
+validatePostRequest(HttpRequest const& request, Server const& server, Location const& location) {
     if (request.getBody().empty()) {
+        Logger::logFrom(LogLevel::WARN, "Post Handler",
+                        "Empty body → rejecting POST for URI: " + request.getPath());
         return ResponseBuilder::generateError(400, server, request);
     }
 
     if (request.getBody().size() > server.getClientMaxBodySize()) {
+        Logger::logFrom(LogLevel::WARN, "Post Handler",
+                        "Body size " + std::to_string(request.getBody().size()) +
+                            " exceeds max client body size " +
+                            std::to_string(server.getClientMaxBodySize()) +
+                            " → rejecting POST for URI: " + request.getPath());
         return ResponseBuilder::generateError(413, server, request);
     }
 
-    if (loc.getUploadStore().empty()) {
+    if (location.getUploadStore().empty()) {
+        Logger::logFrom(LogLevel::WARN, "Post Handler",
+                        "No upload store configured → rejecting POST for URI: " +
+                            request.getPath());
         return ResponseBuilder::generateError(403, server, request);
     }
 
-    std::string candidate = resolvePhysicalPath(request, loc);
+    return std::nullopt;
+}
 
-    if (candidate.empty()) {
+static std::optional<HttpResponse>
+preparePostTargetPath(HttpRequest const& request, Server const& server, Location const& location,
+                      std::filesystem::path& outTargetPath, std::string& outTargetDirectory,
+                      std::string& outTargetFilename) {
+    std::string physicalPath = resolvePhysicalPath(request, location);
+    if (physicalPath.empty()) {
+        Logger::logFrom(LogLevel::WARN, "Post Handler",
+                        "Path empty → rejecting POST for URI: " + request.getPath());
         return ResponseBuilder::generateError(403, server, request);
     }
 
-    std::filesystem::path candPath(candidate);
-    if (std::filesystem::is_directory(candPath) || candidate.back() == '/') {
-        std::string genName = generateFilename();
-        candPath            = candPath / genName;
-        candidate           = candPath.string();
+    std::filesystem::path candidatePath(physicalPath);
+
+    // If it’s a directory (or ends with '/'), generate a filename
+    if (std::filesystem::is_directory(candidatePath) || physicalPath.back() == '/') {
+        std::string generatedFilename = generateFilename();
+        candidatePath /= generatedFilename;
     }
 
-    std::filesystem::path fsCandidate(candidate);
-    std::filesystem::path dirPath     = fsCandidate.parent_path();
-    std::string           fullDirPath = dirPath.string();
-    std::string           filename    = fsCandidate.filename().string();
+    std::filesystem::path directoryPath = candidatePath.parent_path();
+    outTargetDirectory                  = directoryPath.string();
+    outTargetFilename                   = candidatePath.filename().string();
 
-    if (filename.find("..") != std::string::npos) {
+    if (outTargetFilename.find("..") != std::string::npos) {
+        Logger::logFrom(LogLevel::WARN, "Post Handler",
+                        "Path traversal detected in filename → rejecting POST for URI: " +
+                            request.getPath() + " filename: " + outTargetFilename);
         return ResponseBuilder::generateError(400, server, request);
     }
 
-    if (isSymlink(candidate)) {
+    if (isSymlink(candidatePath.string())) {
+        Logger::logFrom(LogLevel::WARN, "Post Handler",
+                        "Target is a symlink → rejecting POST for URI: " + request.getPath() +
+                            " path: " + candidatePath.string());
         return ResponseBuilder::generateError(403, server, request);
     }
 
-    if (!mkdirRecursive(fullDirPath)) {
+    if (!mkdirRecursive(outTargetDirectory)) {
+        Logger::logFrom(LogLevel::WARN, "Post Handler",
+                        "Failed to create directory: " + outTargetDirectory +
+                            " → rejecting POST for URI: " + request.getPath());
         return ResponseBuilder::generateError(500, server, request);
     }
 
-    if (isFile(candidate)) {
+    if (isFile(candidatePath.string())) {
+        Logger::logFrom(LogLevel::WARN, "Post Handler",
+                        "File already exists → rejecting POST for URI: " + request.getPath() +
+                            " path: " + candidatePath.string());
         return ResponseBuilder::generateError(400, server, request);
     }
 
-    const std::string contentType = request.getHeader("Content-Type");
-    if (!contentType.empty() && contentType.find("multipart/form-data") != std::string::npos) {
-        return handleMultipartForm(request, server, fullDirPath);
-    }
-    if (!contentType.empty() &&
-        contentType.find("application/x-www-form-urlencoded") != std::string::npos) {
-        return handleUrlEncodedForm(request, server, candidate, filename);
+    outTargetPath = candidatePath;
+    return std::nullopt;
+}
+
+static HttpResponse dispatchPostByContentType(HttpRequest const& request, Server const& server,
+                                              std::filesystem::path const& targetPath,
+                                              std::string const&           targetDirectory,
+                                              std::string const&           targetFilename) {
+    std::string contentTypeHeader = request.getHeader("Content-Type");
+
+    if (contentTypeHeader.find("multipart/form-data") != std::string::npos) {
+        return handleMultipartForm(request, server, targetDirectory);
     }
 
-    return handleRawBody(request, server, candidate, filename);
+    if (contentTypeHeader.find("application/x-www-form-urlencoded") != std::string::npos) {
+        return handleUrlEncodedForm(request, server, targetPath.string(), targetFilename);
+    }
+
+    return handleRawBody(request, server, targetPath.string(), targetFilename);
+}
+
+HttpResponse handlePost(HttpRequest const& request, Server const& server,
+                        Location const& location) {
+    // 1) Preconditions
+    std::optional<HttpResponse> maybeErrorResponse = validatePostRequest(request, server, location);
+    if (maybeErrorResponse.has_value()) {
+        return *maybeErrorResponse;
+    }
+
+    // 2) Filesystem path prep
+    std::filesystem::path targetPath;
+    std::string           targetDirectory;
+    std::string           targetFilename;
+
+    std::optional<HttpResponse> maybePreparationError = preparePostTargetPath(
+        request, server, location, targetPath, targetDirectory, targetFilename);
+    if (maybePreparationError.has_value()) {
+        return *maybePreparationError;
+    }
+
+    // 3) Content-type dispatch
+    return dispatchPostByContentType(request, server, targetPath, targetDirectory, targetFilename);
 }
