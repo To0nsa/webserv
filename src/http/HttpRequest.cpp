@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/07 15:03:24 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:31:21 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,7 @@ std::size_t HttpRequest::getContentLength(void) const {
 }
 
 const std::string& HttpRequest::getQuery() const {
-    /* const std::string& HttpRequest::getUri(void) const { */
-    return /* _uri; */ _query;
+    return _query;
 }
 
 void HttpRequest::setMethod(const std::string& method) {
