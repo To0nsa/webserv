@@ -541,13 +541,14 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                         "Exceeded max body size in non-chunked transfer");
         errorCode = 413;
-        consumedBytes += bodyPart.size();
+        consumedBytes += bodyPart.size();<HttpRequestParser>: adding logic for matching servers on the sam
         return false;
     }
 
     // 2) If we haven’t received *at least* len bytes yet, wait for more
     if (bodyPart.size() < len) {
-        Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete body, waiting for more");
+        // Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete body, waiting for
+        // more");
         errorCode = 0;
         return false;
     }
@@ -619,7 +620,7 @@ bool validateReq(HttpRequest& req, int& errorCode) {
             Logger::logFrom(LogLevel::ERROR, "HttpRequestParser",
                             "POST without Content-Length or Transfer-Encoding");
             errorCode = 411;
-            return false;
+            return false;<HttpRequestParser>: adding logic for matching servers on the sam
         }
 
         std::string ct = req.getHeader("CONTENT-TYPE");

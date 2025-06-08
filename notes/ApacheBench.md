@@ -41,3 +41,6 @@ ab -n 1000 -c 100 http://localhost:8001/index.html
 - For big file tests, generate a file with:  
   `dd if=/dev/urandom of=huge.mp4 bs=1M count=100`
 
+
+dd if=/dev/zero of=upload.bin bs=1M count=100
+ab -n 10 -c 2 -p upload.bin -T "application/octet-stream" http://localhost:8001/uploads/upload.bin
