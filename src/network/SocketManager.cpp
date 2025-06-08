@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 11:53:23 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 12:41:22 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,22 +340,23 @@ void SocketManager::setupSockets(const std::vector<Server>& servers) {
     }
 }
 
-
 void SocketManager::handleCgiPollEvents() {
     for (auto& [client_fd, client] : _client_info) {
         if (!client.cgiProcess)
             continue;
 
-        CgiProcess& cgi = *client.cgiProcess;
-        const Server& server = client.serversOnPort[client.currentCgiRequest.getMatchedServerIndex()];
+        CgiProcess&   cgi = *client.cgiProcess;
+        const Server& server =
+            client.serversOnPort[client.currentCgiRequest.getMatchedServerIndex()];
 
         if (getCurrentTime() - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
-            Logger::logFrom(LogLevel::WARN, "CGI", "Timeout. Killing CGI process for fd: " + std::to_string(client_fd));
+            Logger::logFrom(LogLevel::WARN, "CGI",
+                            "Timeout. Killing CGI process for fd: " + std::to_string(client_fd));
             client.responses.push(ResponseBuilder::generateError(504, server, {}));
             CGI::errorOnCgi(cgi);
             client.cgiProcess.reset();
             client.isCgiProcessRunning = false;
-            client.currentCgiRequest = HttpRequest();
+            client.currentCgiRequest   = HttpRequest();
             for (auto& pfd : _poll_fds) {
                 if (pfd.fd == client_fd) {
                     pfd.events |= POLLOUT;
@@ -371,7 +372,7 @@ void SocketManager::handleCgiPollEvents() {
             CGI::cleanupCgi(cgi);
             client.cgiProcess.reset();
             client.isCgiProcessRunning = false;
-            client.currentCgiRequest = HttpRequest();
+            client.currentCgiRequest   = HttpRequest();
 
             for (auto& pfd : _poll_fds) {
                 if (pfd.fd == client_fd) {
@@ -390,7 +391,6 @@ void SocketManager::handleCgiPollEvents() {
         }
     }
 }
-
 
 void SocketManager::run() {
     while (running) {
@@ -631,11 +631,27 @@ bool SocketManager::parseAndQueueRequests(int client_fd) {
 }
 
 bool SocketManager::handleClientData(int client_fd, size_t index) {
-    if (!receiveFromClient(client_fd, index))
-        return false;
-    if (!parseAndQueueRequests(client_fd))
-        return false;
-    processPendingRequests(client_fd);
+    try {
+        if (!receiveFromClient(client_fd, index))
+            return false;
+        if (!parseAndQueueRequests(client_fd))
+            return false;
+        processPendingRequests(client_fd);
+        return (true);
+    } catch (const std::bad_alloc& e) {
+        Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                        "Memory allocation failed while handling client " +
+                            std::to_string(client_fd) + ": " + e.what());
+    } catch (const std::exception& e) {
+        Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                        "Exception while handling client " + std::to_string(client_fd) + ": " +
+                            e.what());
+    } catch (...) {
+        Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                        "Unknown exception while handling client " + std::to_string(client_fd));
+    }
+    _poll_fds[index].events &= ~POLLIN;
+    respondError(client_fd, 500);
     return (true);
 }
 
