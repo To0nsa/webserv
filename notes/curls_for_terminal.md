@@ -207,3 +207,5 @@ Percentage of the requests served within a certain time (ms)
   98%     76
   99%     77
  100%     82 (longest request)
+
+throw std::bad_alloc(); // Simulate memory allocation failure for testing

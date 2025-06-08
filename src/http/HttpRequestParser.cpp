@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/07 15:43:08 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 18:06:35 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -506,7 +506,8 @@ bool parseReqBody(HttpRequest& req, const std::string& bodyPart, std::size_t cli
 
     // 2) If we haven’t received *at least* len bytes yet, wait for more
     if (bodyPart.size() < len) {
-        Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete body, waiting for more");
+        // Logger::logFrom(LogLevel::INFO, "HttpRequestParser", "Incomplete body, waiting for
+        // more");
         errorCode = 0;
         return false;
     }
