@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 11:54:09 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 18:56:16 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@
 #include <optional>              // for optional
 #include <poll.h>                // for pollfd
 #include <queue>                 // for queue
-#include <signal.h>              // for size_t
 #include <string>                // for string
-#include <time.h>                // for time_t
+#include <time.h>                // for size_t, time_t
 #include <vector>                // for vector
 
 #define TIMEOUT 20
