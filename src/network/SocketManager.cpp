@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 13:31:28 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 14:13:40 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -369,7 +369,6 @@ void SocketManager::handleCgiPollEvents() {
 
             if (CGI::tryTerminateCgi(cgi)) {
                 HttpResponse resp = CGI::finalizeCgi(cgi, server, client.currentCgiRequest);
-                throw std::bad_alloc(); // Simulate memory allocation failure for testing
                 client.responses.push(resp);
                 CGI::cleanupCgi(cgi);
                 client.cgiProcess.reset();
@@ -422,36 +421,46 @@ void SocketManager::run() {
 
         // Then handle sockets — but skip *all* CGI FDs before doing error/HUP checks
         for (size_t i = _poll_fds.size(); i-- > 0;) {
-            short revents    = _poll_fds[i].revents;
-            int   current_fd = _poll_fds[i].fd;
-            if (checkClientTimeouts(current_fd, i)) {
-                _poll_fds[i].events |= POLLOUT; // If connection keep-alive but client idle we close
-            }
-
-            // **FIX**: skip CGI pipe FDs entirely
-            if (_fd_to_cgi.contains(current_fd)) {
-                continue;
-            }
-
-            // Now error/hangup on *client* sockets
-            if (revents & POLLERR || revents & POLLHUP || revents & POLLNVAL) {
-                handlePollError(current_fd, i, revents);
-                continue;
-            }
-
-            if (revents & POLLIN) {
-                if (_listen_map.count(current_fd)) {
-                    handleNewConnection(current_fd);
-                } else {
-                    if (!handleClientData(current_fd, i))
-                        continue;
-                    // we have a response queued, request poll‐out
-                    _poll_fds[i].events |= POLLOUT;
+            try {
+                short revents    = _poll_fds[i].revents;
+                int   current_fd = _poll_fds[i].fd;
+                if (checkClientTimeouts(current_fd, i)) {
+                    _poll_fds[i].events |= POLLOUT; // If connection keep-alive but client idle we close
                 }
-            }
 
-            if ((revents & POLLOUT) && !_client_info[current_fd].responses.empty()) {
-                sendResponse(current_fd, i);
+                // **FIX**: skip CGI pipe FDs entirely
+                if (_fd_to_cgi.contains(current_fd)) {
+                    continue;
+                }
+
+                // Now error/hangup on *client* sockets
+                if (revents & POLLERR || revents & POLLHUP || revents & POLLNVAL) {
+                    handlePollError(current_fd, i, revents);
+                    continue;
+                }
+
+                if (revents & POLLIN) {
+                    if (_listen_map.count(current_fd)) {
+                        handleNewConnection(current_fd);
+                    } else {
+                        if (!handleClientData(current_fd, i))
+                            continue;
+                        // we have a response queued, request poll‐out
+                        _poll_fds[i].events |= POLLOUT;
+                    }
+                }
+
+                if ((revents & POLLOUT) && !_client_info[current_fd].responses.empty()) {
+                    sendResponse(current_fd, i);
+                }
+            } catch (const std::exception& e) {
+                Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                                "Exception in poll loop for fd: " + std::to_string(_poll_fds[i].fd) + ": " + e.what());
+                cleanupClientConnectionClose(_poll_fds[i].fd, i);
+            } catch (...) {
+                Logger::logFrom(LogLevel::ERROR, "SocketManager",
+                                "Unknown exception in poll loop for fd: " + std::to_string(_poll_fds[i].fd));
+                cleanupClientConnectionClose(_poll_fds[i].fd, i);
             }
         }
     }
