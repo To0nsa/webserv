@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 15:03:19 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 18:58:11 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 19:09:54 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ bool SocketManager::isHeaderTimeout(int fd, time_t now) {
     if (client.responses.empty() && client.current_raw_response.empty() && !client.headerComplete &&
         client.headerBytesReceived > 0 &&
         now - client.connectionStartTime > HEADER_TIMEOUT_SECONDS) {
-        Logger::logFrom(LogLevel::WARN, "SocketManager",
-                        "Header timeout on fd: " + std::to_string(fd));
+        Logger::logFrom(LogLevel::WARN, "SocketManager", "Timeout on fd: " + std::to_string(fd));
         respondError(fd, 408);
         return true;
     }
@@ -40,9 +39,9 @@ bool SocketManager::isHeaderTimeout(int fd, time_t now) {
 
 bool SocketManager::isBodyTimeout(int fd, time_t now) {
     ClientInfo& client = _client_info[fd];
-    if (client.headerComplete && now - client.connectionStartTime > TIMEOUT) {
-        Logger::logFrom(LogLevel::WARN, "SocketManager",
-                        "Body timeout on fd: " + std::to_string(fd));
+    if (client.responses.empty() && client.current_raw_response.empty() && client.headerComplete &&
+        now - client.connectionStartTime > TIMEOUT) {
+        Logger::logFrom(LogLevel::WARN, "SocketManager", "Timeout on fd: " + std::to_string(fd));
         respondError(fd, 408);
         return true;
     }
