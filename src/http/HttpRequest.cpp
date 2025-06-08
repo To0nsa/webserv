@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 23:21:12 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/07 15:03:24 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <sstream>
 
 HttpRequest::HttpRequest(void) {
+    _matchedServerIndex = 0; // Default to the first server
 }
 
 HttpRequest::~HttpRequest(void) {
@@ -124,4 +125,28 @@ void HttpRequest::setQuery(const std::string& query) {
 
 bool HttpRequest::hasHeader(const std::string& key) const {
     return _headers.find(key) != _headers.end();
+}
+
+void HttpRequest::setParseErrorCode(int error) {
+    _parseError = error;
+}
+
+int HttpRequest::getParseErrorCode(void) const {
+    return _parseError;
+}
+
+void HttpRequest::setMatchedServerIndex(int index) {
+    _matchedServerIndex = index;
+}
+
+int HttpRequest::getMatchedServerIndex() const {
+    return _matchedServerIndex;
+}
+
+void HttpRequest::setHost(const std::string& host) {
+    _host = host;
+}
+
+const std::string& HttpRequest::getHost() const {
+    return _host;
 }

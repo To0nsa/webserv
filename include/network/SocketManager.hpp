@@ -6,35 +6,36 @@
 /*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 02:37:49 by ktieu            ###   ########.fr       */
+/*   Updated: 2025/06/07 14:27:00 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "core/Server.hpp"
-#include "http/HttpResponse.hpp"
-#include "http/handleCgi.hpp"
-#include <arpa/inet.h>
-#include <cstring>
-#include <fcntl.h>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <optional>
-#include <poll.h>
-#include <queue>
-#include <signal.h>
-#include <unistd.h>
-#include <vector>
+#include "core/Server.hpp"       // for Server
+#include "http/HttpRequest.hpp"  // for HttpRequest
+#include "http/HttpResponse.hpp" // for HttpResponse
+#include "http/handleCgi.hpp"    // for CgiProcess
+#include <exception>             // for exception
+#include <fstream>               // for basic_ifstream, ifstream
+#include <map>                   // for map
+#include <optional>              // for optional
+#include <poll.h>                // for pollfd
+#include <queue>                 // for queue
+#include <signal.h>              // for size_t
+#include <string>                // for string
+#include <time.h>                // for time_t
+#include <vector>                // for vector
 
-#define TIMEOUT 60
+#define TIMEOUT 20
 #define HEADER_TIMEOUT_SECONDS 6
 #define HEADER_MIN_LENGTH 15
 #define HEADER_MAX_LENGTH 8192
 #define RECV_BUFFER HEADER_MAX_LENGTH * 2
 #define MAX_CLIENTS 1024
 #define CGI_TIMEOUT_SECONDS 45
+
+class Location;
 
 struct ClientInfo {
     int                       client_fd;       // File descriptor of the client socket
@@ -47,10 +48,13 @@ struct ClientInfo {
     size_t                    bytes_sent;
     std::string               requestBuffer;
     std::string               current_raw_response;
-    bool                      keepAlive;    // Keep-alive flag
-    Server                    serverConfig; // The server config the client is connected to
-    std::queue<HttpResponse>  responses;    // Queue of responses to be sent to the client
+    bool                      keepAlive; // Keep-alive flag
+    std::vector<Server>       serversOnPort;
+    std::queue<HttpResponse>  responses; // Queue of responses to be sent to the client
+    std::queue<HttpRequest>   pendingRequests;
     std::optional<CgiProcess> cgiProcess;
+    bool                      isCgiProcessRunning;
+    HttpRequest               currentCgiRequest;
     std::ifstream             file_stream;
 };
 
@@ -75,8 +79,8 @@ class SocketManager {
 
   private:
     std::vector<pollfd> _poll_fds; ///< Monitored file descriptors for poll().
-    std::map<int, Server>
-        _listen_map; ///< Maps listening socket fds to their corresponding server configurations.
+    std::map<int, std::vector<Server>>
+                              _listen_map;  ///< Maps listen fds to their corresponding servers
     std::map<int, ClientInfo> _client_info; /// Stores all information about each client
     std::map<int, int>        _fd_to_cgi;   ///< Maps CGI stdout fds to client fds
     std::vector<Server> _servers; ///< List of all servers to listen on
@@ -112,4 +116,5 @@ class SocketManager {
     void cleanupCgiForClient(int client_fd);
     bool handleCgiRequest(int client_fd, const HttpRequest& request, const Server& server,
                           const Location& location);
+    void processPendingRequests(int client_fd);
 };

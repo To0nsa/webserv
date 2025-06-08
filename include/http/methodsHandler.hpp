@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_delete.hpp                                  :+:      :+:    :+:   */
+/*   methodsHandler.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/21 15:06:57 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 22:58:54 by nlouis           ###   ########.fr       */
+/*   Created: 2025/06/05 10:46:53 by nlouis            #+#    #+#             */
+/*   Updated: 2025/06/05 17:22:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include "core/Location.hpp"
-#include "core/Server.hpp"
-#include "http/HttpRequest.hpp"
-#include "http/HttpResponse.hpp"
-#include "http/HttpResponseBuilder.hpp"
-#include "utils/filesystemUtils.hpp"
-#include <sys/stat.h>
-#include <unistd.h>
 
+class Server;
+class Location;
+class HttpRequest;
+class HttpResponse;
+
+HttpResponse handleGet(const HttpRequest&, const Server&, const Location&);
+HttpResponse generateAutoindex(const std::string& filepath, const std::string& uri,
+                               const HttpRequest& request, const Server& server);
+
+HttpResponse handlePost(const HttpRequest&, const Server&, const Location&);
 HttpResponse handleDelete(const HttpRequest&, const Server&, const Location&);
