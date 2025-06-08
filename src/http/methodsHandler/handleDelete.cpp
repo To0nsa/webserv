@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 21:30:10 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 21:56:24 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "http/responseBuilder.hpp"
 #include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
+#include "utils/urlUtils.hpp"
 
 #include <sstream>
 #include <string.h>
@@ -149,7 +150,7 @@ HttpResponse handleDelete(const HttpRequest& req, const Server& server, const Lo
         return errResp;
     }
 
-    std::string fileName = extractFileName(req.getPath());
+    std::string fileName = extractFilenameFromUri(req.getPath());
     std::string body     = generateDeleteHtml(fileName);
     Logger::logFrom(LogLevel::INFO, "Delete Handler",
                     "Successfully deleted “" + fileName + "” → sending HTML confirmation");

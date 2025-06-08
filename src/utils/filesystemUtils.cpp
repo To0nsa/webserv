@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 21:33:19 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 21:51:34 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@
 #include <sys/stat.h>
 
 namespace fs = std::filesystem;
-
-std::string extractFileName(const std::string& uri) {
-    std::size_t pos = uri.find_last_of('/');
-    if (pos == std::string::npos)
-        return uri;
-    else
-        return uri.substr(pos + 1);
-}
 
 std::string resolvePhysicalPath(const HttpRequest& req, const Location& loc) {
     std::string requestPath = normalizePath(req.getPath());
