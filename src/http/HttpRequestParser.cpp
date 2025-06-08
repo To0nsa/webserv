@@ -6,7 +6,7 @@
 /*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/09 01:35:51 by ktieu            ###   ########.fr       */
+/*   Updated: 2025/06/09 01:41:15 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -692,22 +692,24 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
         return false;
     }
 
-    // Kha, check it out PLEASE
-    std::string hostHeader = req.getHeader("Host");
-    int         bestMatch  = 0;
+    //--------------------------------------------------------
+    // Kha: Temporary commented out the following code. The same logic can be found in parseReqHeader and 
+    //--------------------------------------------------------
+    // std::string hostHeader = req.getHeader("Host");
+    // int         bestMatch  = 0;
 
-    for (size_t i = 0; i < serversOnPort.size(); ++i) {
-        const Server&                   srv   = serversOnPort[i];
-        const std::vector<std::string>& names = srv.getServerNames();
-        if (std::find(names.begin(), names.end(), hostHeader) != names.end()) {
-            bestMatch = i;
-            break;
-        }
-    }
+    // for (size_t i = 0; i < serversOnPort.size(); ++i) {
+    //     const Server&                   srv   = serversOnPort[i];
+    //     const std::vector<std::string>& names = srv.getServerNames();
+    //     if (std::find(names.begin(), names.end(), hostHeader) != names.end()) {
+    //         bestMatch = i;
+    //         break;
+    //     }
+    // }
 
-    req.setMatchedServerIndex(bestMatch);
-    clientMaxBodySize =
-        serversOnPort[bestMatch].getClientMaxBodySize(); // use the matched server's body limit
+    // req.setMatchedServerIndex(bestMatch);
+    // clientMaxBodySize =
+    //     serversOnPort[bestMatch].getClientMaxBodySize(); // use the matched server's body limit
 
     // 5) Early exit for methods that do not expect a body (GET, DELETE)
     std::string method = req.getMethod();
