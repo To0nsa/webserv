@@ -352,7 +352,8 @@ void SocketManager::handleCgiPollEvents() {
 
             if (getCurrentTime() - cgi.last_activity > CGI_TIMEOUT_SECONDS) {
                 Logger::logFrom(LogLevel::WARN, "CGI",
-                                "Timeout. Killing CGI process for fd: " + std::to_string(client_fd));
+                                "Timeout. Killing CGI process for fd: " +
+                                    std::to_string(client_fd));
                 client.responses.push(ResponseBuilder::generateError(504, server, {}));
                 CGI::errorOnCgi(cgi);
                 client.cgiProcess.reset();
@@ -390,16 +391,16 @@ void SocketManager::handleCgiPollEvents() {
                 if (idx < _poll_fds.size())
                     processPendingRequests(client_fd);
             }
-        }
-        catch (const std::exception& e) {
+        } catch (const std::exception& e) {
             Logger::logFrom(LogLevel::ERROR, "SocketManager",
-                "Exception during CGI handling for fd " + std::to_string(client_fd) + ": " + e.what());
-                respondError(client_fd, 500);
-                cleanupCgiForClient(client_fd);
-                for (auto& pfd : _poll_fds) {
-                    if (pfd.fd == client_fd) {
-                        pfd.events |= POLLOUT;
-                        break;
+                            "Exception during CGI handling for fd " + std::to_string(client_fd) +
+                                ": " + e.what());
+            respondError(client_fd, 500);
+            cleanupCgiForClient(client_fd);
+            for (auto& pfd : _poll_fds) {
+                if (pfd.fd == client_fd) {
+                    pfd.events |= POLLOUT;
+                    break;
                 }
             }
         }
@@ -425,7 +426,8 @@ void SocketManager::run() {
                 short revents    = _poll_fds[i].revents;
                 int   current_fd = _poll_fds[i].fd;
                 if (checkClientTimeouts(current_fd, i)) {
-                    _poll_fds[i].events |= POLLOUT; // If connection keep-alive but client idle we close
+                    _poll_fds[i].events |=
+                        POLLOUT; // If connection keep-alive but client idle we close
                 }
 
                 // **FIX**: skip CGI pipe FDs entirely
@@ -455,11 +457,13 @@ void SocketManager::run() {
                 }
             } catch (const std::exception& e) {
                 Logger::logFrom(LogLevel::ERROR, "SocketManager",
-                                "Exception in poll loop for fd: " + std::to_string(_poll_fds[i].fd) + ": " + e.what());
+                                "Exception in poll loop for fd: " +
+                                    std::to_string(_poll_fds[i].fd) + ": " + e.what());
                 cleanupClientConnectionClose(_poll_fds[i].fd, i);
             } catch (...) {
                 Logger::logFrom(LogLevel::ERROR, "SocketManager",
-                                "Unknown exception in poll loop for fd: " + std::to_string(_poll_fds[i].fd));
+                                "Unknown exception in poll loop for fd: " +
+                                    std::to_string(_poll_fds[i].fd));
                 cleanupClientConnectionClose(_poll_fds[i].fd, i);
             }
         }
@@ -820,18 +824,17 @@ void SocketManager::sendResponse(int client_fd, size_t index) {
             }
         }
         return;
-    }
-    catch (const std::bad_alloc& e) {
+    } catch (const std::bad_alloc& e) {
         Logger::logFrom(LogLevel::ERROR, "SocketManager",
-            "Fatal memory allocation error while sending response to fd " + std::to_string(client_fd));
-    }
-    catch (const std::exception& e) {
+                        "Fatal memory allocation error while sending response to fd " +
+                            std::to_string(client_fd));
+    } catch (const std::exception& e) {
         Logger::logFrom(LogLevel::ERROR, "SocketManager",
-            "Exception in sendResponse for fd " + std::to_string(client_fd) + ": " + e.what());
-    }
-    catch (...) {
+                        "Exception in sendResponse for fd " + std::to_string(client_fd) + ": " +
+                            e.what());
+    } catch (...) {
         Logger::logFrom(LogLevel::ERROR, "SocketManager",
-            "Unknown fatal error in sendResponse for fd " + std::to_string(client_fd));
+                        "Unknown fatal error in sendResponse for fd " + std::to_string(client_fd));
     }
     cleanupClientConnectionClose(client_fd, index);
 }
