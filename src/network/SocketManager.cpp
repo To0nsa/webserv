@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/07 22:07:02 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/08 10:56:33 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,8 +211,7 @@ void SocketManager::handlePollError(int fd, size_t index, short revents) {
 bool SocketManager::receiveFromClient(int client_fd, size_t index) {
     char buffer[RECV_BUFFER];
     _client_info[client_fd].lastRequestTime = getCurrentTime();
-    int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, 0); // MacOS only
-    // int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
+    int bytes = recv(client_fd, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
     if (bytes == 0) {
         Logger::logFrom(LogLevel::INFO, "SocketManager",
                         "Client fd " + std::to_string(client_fd) + " disconnected.");
@@ -473,11 +472,6 @@ void SocketManager::handleNewConnection(int listen_fd) {
         return;
     }
 
-    if (fcntl(client_fd, F_SETFL, O_NONBLOCK) < 0) { // MacOS only
-        close(client_fd);
-        return; // Shall we log it?
-    }
-
     auto& info               = _client_info[client_fd];
     info.client_fd           = client_fd;
     info.lastRequestTime     = getCurrentTime();
@@ -610,52 +604,60 @@ void SocketManager::processPendingRequests(int client_fd) {
     // If we get here, either pendingRequests is empty, or there’s a CGI in flight.
 }
 
-bool SocketManager::handleClientData(int client_fd, size_t index) {
-    if (!receiveFromClient(client_fd, index)) {
-        return false;
-    }
+bool SocketManager::parseAndQueueRequests(int client_fd) {
     ClientInfo& client = _client_info[client_fd];
+
     while (true) {
         if (checkRequestLimits(client_fd)) {
             client.requestBuffer.clear();
             resetRequestState(client_fd);
             return true;
         }
+
         HttpRequest request;
         int         errorCode     = 0;
         std::size_t consumedBytes = 0;
-        bool parseOK = HttpRequestParser::parse(request, client.requestBuffer, client.serversOnPort,
-                                                errorCode, consumedBytes);
-        if (!parseOK) {
-            if (errorCode == 0) {
-                return false; // Incomplete data — wait for more
-            } else {
-                request.setParseErrorCode(errorCode);
-                request.printRequest();
-                if (errorCode == 415 || errorCode == 411 || errorCode == 400 || errorCode == 413) {
-                    client.requestBuffer.clear();
-                } else {
-                    client.requestBuffer.erase(0, consumedBytes);
-                }
-                resetRequestState(client_fd); // DO WE NEED IT?
-                client.pendingRequests.push(request);
-                // If no more complete request left, break
-                if (client.requestBuffer.find("\r\n\r\n") == std::string::npos) {
-                    break;
-                }
-                continue; // We queued a response and continue processing the next request in
-                          // pipeline
-            }
+
+        bool ok = HttpRequestParser::parse(request, client.requestBuffer,
+                                           client.serversOnPort, errorCode, consumedBytes);
+
+        if (!ok) {
+            if (errorCode == 0)
+                return false; // incomplete
+
+            request.setParseErrorCode(errorCode);
+            request.printRequest();
+
+            if (errorCode == 415 || errorCode == 411 || errorCode == 400 || errorCode == 413)
+                client.requestBuffer.clear();
+            else
+                client.requestBuffer.erase(0, consumedBytes);
+
+            resetRequestState(client_fd);
+            client.pendingRequests.push(request);
+
+            if (client.requestBuffer.find("\r\n\r\n") == std::string::npos)
+                break;
+
+            continue;
         }
+
         client.requestBuffer.erase(0, consumedBytes);
         resetRequestState(client_fd);
         client.pendingRequests.push(request);
 
-        // If no more complete request left, break
-        if (_client_info[client_fd].requestBuffer.find("\r\n\r\n") == std::string::npos) {
+        if (client.requestBuffer.find("\r\n\r\n") == std::string::npos)
             break;
-        }
     }
+
+    return true;
+}
+
+bool SocketManager::handleClientData(int client_fd, size_t index) {
+    if (!receiveFromClient(client_fd, index))
+        return false;
+    if (!parseAndQueueRequests(client_fd))
+        return false;
     processPendingRequests(client_fd);
     return (true);
 }
