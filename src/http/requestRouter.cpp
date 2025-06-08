@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/08 23:58:41 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 00:18:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,6 @@ const Location* findLocation(const std::string& uri, const Server& server) {
             best    = &loc;
             bestLen = locPath.size();
         }
-    }
-    if (best != nullptr) {
-        std::cout << "[Router]   Longest-prefix location chosen: \""
-                  << normalizePath(best->getPath()) << "\"\n\n";
     }
     return best;
 }

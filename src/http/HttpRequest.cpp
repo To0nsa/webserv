@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 23:31:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 00:04:41 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "utils/stringUtils.hpp"
 
 #include <algorithm>
+#include <cctype>
+#include <iomanip>
 #include <iostream>
 #include <set>
 #include <sstream>
@@ -26,30 +28,49 @@ HttpRequest::~HttpRequest(void) {
 }
 
 void HttpRequest::printRequest() const {
-    std::cout << "\n========== HTTP REQUEST ==========\n";
-    std::cout << "Method: {" << _method << "}\n";
-    std::cout << "Path: {" << _path << "}\n";
-    std::cout << "Query: {" << _query << "}\n";
-    std::cout << "Version: {" << _version << "}\n";
+    // Header
+    std::cout << "\n===== HTTP REQUEST =====\n"
+              << "Method:  " << _method << "\n"
+              << "Path:    " << _path << "\n"
+              << "Query:   " << (_query.empty() ? "(none)" : _query) << "\n"
+              << "Version: " << _version << "\n\n";
 
-    std::cout << "------------- Headers -------------\n";
+    // Headers
+    std::cout << "----- Headers -----\n";
     if (_headers.empty()) {
-        std::cout << "Headers: {(none)}\n";
+        std::cout << "  (none)\n";
     } else {
-        for (std::map<std::string, std::string>::const_iterator it = _headers.begin();
-             it != _headers.end(); ++it) {
-            std::cout << it->first << ": {" << it->second << "}\n";
+        for (const auto& [key, value] : _headers) {
+            std::cout << "  " << std::left << std::setw(20) << key << ": " << value << "\n";
         }
     }
 
-    std::cout << "-------------- Body ---------------\n";
-    /*     if (!_body.empty()) {
-            std::cout << "Body: {\n" << _body << "\n}\n";
-        } else {
-            std::cout << "Body: {(empty)}\n";
-        } */
+    // Body
+    std::cout << "\n------ Body ------\n";
+    if (_body.empty()) {
+        std::cout << "  (empty)\n";
+    } else {
+        // Check if all chars are printable
+        bool allPrint = std::all_of(_body.begin(), _body.end(), [](char c) {
+            return std::isprint(static_cast<unsigned char>(c));
+        });
 
-    std::cout << "===================================\n";
+        if (!allPrint) {
+            std::cout << "  (binary data)\n";
+        } else {
+            // Truncate to 100 chars
+            std::size_t showLen = std::min<std::size_t>(_body.size(), 100);
+            std::string snippet = _body.substr(0, showLen);
+            std::cout << "  " << snippet;
+            if (_body.size() > showLen) {
+                std::cout << "... (+" << (_body.size() - showLen) << " more)";
+            }
+            std::cout << "\n";
+        }
+    }
+
+    // Footer
+    std::cout << "=======================\n";
 }
 
 const std::string& HttpRequest::getMethod(void) const {
