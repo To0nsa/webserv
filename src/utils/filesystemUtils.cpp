@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 21:51:34 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 14:21:32 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,47 @@
 namespace fs = std::filesystem;
 
 std::string resolvePhysicalPath(const HttpRequest& req, const Location& loc) {
+    // Normalize the request path
+    std::string requestPath = normalizePath(req.getPath());
+    if (requestPath.empty())
+        return "";
+
+    // 1) Try resolving against the real root
+    std::string rootPath = buildFilePath(req, loc);
+    // If this isn't a POST *and* the file actually exists under root, use it
+    if (req.getMethod() != "POST" && !rootPath.empty() && fs::exists(rootPath)) {
+        return rootPath;
+    }
+
+    // 2) Otherwise, if upload_store is enabled and the URI matches the location prefix,
+    //    map into the upload‐store
+    std::string locPrefix = normalizePath(loc.getPath());
+    if (loc.isUploadEnabled() && requestPath.rfind(locPrefix, 0) == 0) {
+        // strip leading slashes from the remainder
+        std::string relative = requestPath.substr(locPrefix.size());
+        while (!relative.empty() && relative.front() == '/')
+            relative.erase(0, 1);
+
+        // figure out the absolute upload‐store path
+        std::string uploadRoot = normalizePath(loc.getUploadStore());
+        if (!uploadRoot.empty() && uploadRoot.front() != '/')
+            uploadRoot = joinPath(normalizePath(loc.getRoot()), uploadRoot);
+
+        return joinPath(uploadRoot, relative);
+    }
+
+    // 3) Fallback to the root path (even if it doesn't exist)
+    return rootPath;
+}
+
+/* std::string resolvePhysicalPath(const HttpRequest& req, const Location& loc) {
     std::string requestPath = normalizePath(req.getPath());
     if (requestPath.empty())
         return "";
 
     std::string locPrefix     = normalizePath(loc.getPath());
-    bool        inUploadStore = loc.isUploadEnabled() && requestPath.rfind(locPrefix, 0) == 0;
+    bool        inUploadStore = (req.getMethod() == "POST") && loc.isUploadEnabled() &&
+requestPath.rfind(locPrefix, 0) == 0;
 
     if (inUploadStore) {
         std::string relative = requestPath.substr(locPrefix.size());
@@ -48,7 +83,7 @@ std::string resolvePhysicalPath(const HttpRequest& req, const Location& loc) {
     }
 
     return buildFilePath(req, loc);
-}
+} */
 
 bool isFile(const std::string& path) {
     return fs::exists(path) && fs::is_regular_file(path);

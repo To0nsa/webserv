@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/09 11:37:47 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 12:33:38 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,20 +140,30 @@ static std::optional<HttpResponse>
 preparePostTargetPath(HttpRequest const& request, Server const& server, Location const& location,
                       std::filesystem::path& outTargetPath, std::string& outTargetDirectory,
                       std::string& outTargetFilename) {
-    std::string physicalPath = resolvePhysicalPath(request, location);
+    // NGINX: any POST to "/file.ext/" MUST be 404 if "file.ext" exists in the root.
 
-    // Reject POST “/file.ext/” when “file.ext” is a real file
-    if (!request.getPath().empty() && request.getPath().back() == '/') {
-        std::string physNoSlash = physicalPath;
-        if (!physNoSlash.empty() && physNoSlash.back() == '/')
-            physNoSlash.pop_back();
-        if (isFile(physNoSlash)) {
+    // normalize URI and location prefix
+    std::string reqPath = normalizePath(request.getPath());
+    std::string locPref = normalizePath(location.getPath());
+    // only if URI ends with '/'
+    if (!reqPath.empty() && reqPath.back() == '/' && reqPath.rfind(locPref, 0) == 0) {
+        // compute the root-based file path (ignore upload_store)
+        std::string rel = reqPath.substr(locPref.size());
+        while (!rel.empty() && rel.front() == '/')
+            rel.erase(0, 1);
+        std::string rootBase = normalizePath(location.getRoot());
+        std::string rootFull = joinPath(rootBase, rel);
+        // strip trailing slash if any
+        if (!rootFull.empty() && rootFull.back() == '/')
+            rootFull.pop_back();
+        if (isFile(rootFull)) {
             Logger::logFrom(LogLevel::WARN, "Post Handler",
                             "Trailing slash on file → rejecting POST for URI: " +
                                 request.getPath());
             return ResponseBuilder::generateError(404, server, request);
         }
     }
+    std::string physicalPath = resolvePhysicalPath(request, location);
 
     if (physicalPath.empty()) {
         Logger::logFrom(LogLevel::WARN, "Post Handler",

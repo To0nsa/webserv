@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 21:56:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 13:27:09 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,39 +77,6 @@ std::string generateDeleteHtml(const std::string& filename) {
   <meta charset="UTF-8">
   <title>Deleted: )"
          << filename << R"(</title>
-  <style>
-    body {
-      background: #1e1e1e;
-      color: #dcdcdc;
-      font-family: "Segoe UI", sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .container {
-      text-align: center;
-    }
-    h1 {
-      color: #e57373;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1rem;
-      color: #b0bec5;
-    }
-    a {
-      color: #81d4fa;
-      text-decoration: none;
-      margin-top: 1rem;
-      display: inline-block;
-      font-size: 0.9rem;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
 </head>
 <body>
   <div class="container">

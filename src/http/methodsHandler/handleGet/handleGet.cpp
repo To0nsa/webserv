@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/09 00:07:17 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 11:49:31 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,20 @@ static HttpResponse processDirectory(const std::string& dirPath, const std::stri
 
 HttpResponse handleGet(const HttpRequest& request, const Server& server, const Location& loc) {
     std::string filepath = resolvePhysicalPath(request, loc);
+
+    // NGINX: any GET ending in '/' is a directory lookup.
+    // If stripping the slash yields an existing file, return 404.
+    const std::string& uri = request.getPath();
+    if (!uri.empty() && uri.back() == '/') {
+        std::string fileNoSlash = filepath;
+        if (!fileNoSlash.empty() && fileNoSlash.back() == '/')
+            fileNoSlash.pop_back();
+        if (isFile(fileNoSlash)) {
+            Logger::logFrom(LogLevel::WARN, "Get Handler",
+                            "Trailing slash on file → returning 404 for URI: " + uri);
+            return ResponseBuilder::generateError(404, server, request);
+        }
+    }
 
     if (isSymlink(filepath)) {
         Logger::logFrom(LogLevel::WARN, "Get Handler",
