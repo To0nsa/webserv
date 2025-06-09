@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/09 11:11:28 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 11:37:47 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,20 @@ preparePostTargetPath(HttpRequest const& request, Server const& server, Location
                       std::filesystem::path& outTargetPath, std::string& outTargetDirectory,
                       std::string& outTargetFilename) {
     std::string physicalPath = resolvePhysicalPath(request, location);
+
+    // Reject POST “/file.ext/” when “file.ext” is a real file
+    if (!request.getPath().empty() && request.getPath().back() == '/') {
+        std::string physNoSlash = physicalPath;
+        if (!physNoSlash.empty() && physNoSlash.back() == '/')
+            physNoSlash.pop_back();
+        if (isFile(physNoSlash)) {
+            Logger::logFrom(LogLevel::WARN, "Post Handler",
+                            "Trailing slash on file → rejecting POST for URI: " +
+                                request.getPath());
+            return ResponseBuilder::generateError(404, server, request);
+        }
+    }
+
     if (physicalPath.empty()) {
         Logger::logFrom(LogLevel::WARN, "Post Handler",
                         "Path empty → rejecting POST for URI: " + request.getPath());
