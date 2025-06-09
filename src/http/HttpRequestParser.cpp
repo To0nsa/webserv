@@ -6,7 +6,7 @@
 /*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/09 10:52:11 by ktieu            ###   ########.fr       */
+/*   Updated: 2025/06/10 01:33:08 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,22 +411,18 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         }
 
         req.setUrl(url);
-        req.setHost(url.host);
+        
+        // ── Set host explicitly for easier access downstream 
+        std::string& headerAfterParseUrl = url.host;
+        std::transform(headerAfterParseUrl.begin(), headerAfterParseUrl.end(), headerAfterParseUrl.begin(), ::tolower); // normalize
+        req.setHost(headerAfterParseUrl);
+        Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
+                        "Parsed URL: " + urlStr + " with host: " + headerAfterParseUrl);
     } catch (const std::exception& e) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", e.what());
         errorCode = 400;
         return false;
     }
-
-    // ── Set host explicitly for easier access downstream // Kha, I'm not sure if it is a right
-    // place. Check it out please.
-    std::string hostHeader = req.getHeader("HOST");
-    std::size_t colonPos   = hostHeader.find(':');
-    if (colonPos != std::string::npos)
-        hostHeader = hostHeader.substr(0, colonPos); // strip port
-    std::transform(hostHeader.begin(), hostHeader.end(), hostHeader.begin(),
-                   ::tolower); // normalize
-    req.setHost(hostHeader);
 
     return true;
 }
