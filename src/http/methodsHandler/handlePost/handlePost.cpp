@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/09 12:33:38 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 22:43:04 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "http/responseBuilder.hpp"
 #include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
+#include "utils/htmlUtils.hpp"
 #include "utils/urlUtils.hpp"
 
 #include <atomic>
@@ -42,7 +43,8 @@ static HttpResponse handleUrlEncodedForm(const HttpRequest& request, const Serve
 
     std::string html = "<html><body><h1>Form Received</h1>";
     for (auto& formField : form) {
-        html += "<p><b>" + formField.first + ":</b> " + formField.second + "</p>";
+        html += "<p><b>" + htmlEscape(formField.first) + ":</b> " + htmlEscape(formField.second) +
+                "</p>";
     }
     html += "</body></html>";
 
@@ -86,8 +88,8 @@ static HttpResponse handleRawBody(const HttpRequest& request, const Server& serv
 
     Logger::logFrom(LogLevel::INFO, "Post Handler", "Successfully saved file to: " + fullpath);
     return ResponseBuilder::generateSuccess(
-        201, "<html><body><h1>File " + filename + " created.</h1></body></html>", "text/html",
-        request);
+        201, "<html><body><h1>File " + htmlEscape(filename) + " created.</h1></body></html>",
+        "text/html", request);
 }
 
 /* static std::string generateFilename() {

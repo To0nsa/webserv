@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/09 22:15:26 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 22:22:38 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,16 @@ static std::string detectMimeType(const std::string& file_path) {
 }
 
 static HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
-                              std::string content_type) {
+                              const Server& server, std::string content_type) {
     if (!isFile(file_path)) {
         Logger::logFrom(LogLevel::WARN, "Get Handler", "File not found: " + file_path);
-        return ResponseBuilder::generateError(404, Server(), request);
+        return ResponseBuilder::generateError(404, server, request);
     }
 
     std::ifstream file(file_path, std::ios::binary | std::ios::ate);
     if (!file.is_open()) {
         Logger::logFrom(LogLevel::WARN, "Get Handler", "Cannot open file: " + file_path);
-        return ResponseBuilder::generateError(403, Server(), request);
+        return ResponseBuilder::generateError(403, server, request);
     }
 
     std::streamsize size = file.tellg();
@@ -113,7 +113,7 @@ static HttpResponse processDirectory(const std::string& dirPath, const std::stri
     if (!indexName.empty()) {
         std::string indexFullPath = joinPath(dirPath, indexName);
         if (isFile(indexFullPath)) {
-            return serveFile(indexFullPath, request, "");
+            return serveFile(indexFullPath, request, server, "");
         }
 
         if (loc.isAutoindexEnabled()) {
@@ -168,7 +168,7 @@ HttpResponse handleGet(const HttpRequest& request, const Server& server, const L
         }
 
         if (S_ISREG(fileStat.st_mode)) {
-            return serveFile(filepath, request, "");
+            return serveFile(filepath, request, server, "");
         }
     }
 

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 21:44:51 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/09 22:19:57 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 22:42:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "http/responseBuilder.hpp"
 #include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
+#include "utils/htmlUtils.hpp"
 
 #include <algorithm>
 #include <cctype>
@@ -254,6 +255,6 @@ HttpResponse handleMultipartForm(const HttpRequest& request, const Server& serve
 
     Logger::logFrom(LogLevel::INFO, "handleMultipartForm", "Successfully uploaded: " + fullpath);
     return ResponseBuilder::generateSuccess(
-        201, "<html><body><h1>Uploaded: " + extractedFilename + "</h1></body></html>", "text/html",
-        request);
+        201, "<html><body><h1>Uploaded: " + htmlEscape(extractedFilename) + "</h1></body></html>",
+        "text/html", request);
 }

@@ -6,13 +6,15 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 11:06:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 22:36:14 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/responseBuilder.hpp"
 #include "http/HttpResponse.hpp"
 #include "utils/filesystemUtils.hpp"
+#include "utils/htmlUtils.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -156,7 +158,8 @@ HttpResponse generateError(int status_code, const Server& server, const HttpRequ
     // Fallback default page
     if (body.empty()) {
         std::ostringstream ss;
-        ss << "<html><body><h1>" << status_code << " " << message << "</h1></body></html>";
+        ss << "<html><body><h1>" << status_code << " " << htmlEscape(message)
+           << "</h1></body></html>";
         body = ss.str();
     }
 
