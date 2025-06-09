@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 22:00:12 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 11:11:28 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "utils/filesystemUtils.hpp"
 #include "utils/urlUtils.hpp"
 
+#include <atomic>
+#include <chrono>
 #include <ctime>
 #include <filesystem>
 #include <fstream>
@@ -88,8 +90,21 @@ static HttpResponse handleRawBody(const HttpRequest& request, const Server& serv
         request);
 }
 
-static std::string generateFilename() {
+/* static std::string generateFilename() {
     return "upload_" + std::to_string(std::time(nullptr));
+} */
+
+static std::atomic<uint64_t> uploadCounter{0};
+
+static std::string generateFilename() {
+    // 1) high-res time → nanoseconds since epoch
+    auto     now = std::chrono::system_clock::now().time_since_epoch();
+    uint64_t ns  = std::chrono::duration_cast<std::chrono::nanoseconds>(now).count();
+    // 2) per-process counter to break ties within the same nanosecond
+    uint64_t           seq = uploadCounter.fetch_add(1, std::memory_order_relaxed);
+    std::ostringstream oss;
+    oss << "upload_" << ns << "_" << seq;
+    return oss.str();
 }
 
 } // namespace
