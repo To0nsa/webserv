@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 21:44:51 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 22:20:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 22:12:16 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,13 @@
 #include "utils/filesystemUtils.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <ctime>
+#include <filesystem>
 #include <fstream>
+#include <iomanip>
+#include <regex>
+#include <sstream>
 #include <string>
 
 namespace {
@@ -64,22 +69,48 @@ bool parseHeadersAndData(const std::string& part, std::string& headersBlock,
     return true;
 }
 
+static std::string sanitizeFilename(const std::string& raw) {
+    // 1. Drop any path components (strips '/', '\', '..', etc.)
+    std::filesystem::path p(raw);
+    std::string           name = p.filename().string();
+
+    // 2. Whitelist characters [A-Za-z0-9._-], replace others with '_'
+    static const std::regex allowed{R"([^A-Za-z0-9._-])"};
+    name = std::regex_replace(name, allowed, "_");
+
+    // 3. Prevent names like "" or "." or ".."
+    if (name.empty() || name == "." || name == "..") {
+        // fallback: timestamp-based name
+        auto               now = std::chrono::system_clock::now();
+        auto               t   = std::chrono::system_clock::to_time_t(now);
+        std::ostringstream oss;
+        oss << "upload_" << std::put_time(std::gmtime(&t), "%Y%m%d%H%M%S");
+        name = oss.str();
+    }
+
+    return name;
+}
+
 /**
  * Look for filename="..." inside headersBlock. If found, extract the filename
  * (without the quotes) into `outFilename` and return true. Otherwise return false.
  */
 bool extractFilename(const std::string& headersBlock, std::string& outFilename) {
     const std::string token = "filename=\"";
-    size_t            pos   = headersBlock.find(token);
+    auto              pos   = headersBlock.find(token);
     if (pos == std::string::npos)
         return false;
 
     pos += token.size();
-    size_t endQuote = headersBlock.find("\"", pos);
+    auto endQuote = headersBlock.find('"', pos);
     if (endQuote == std::string::npos)
         return false;
 
-    outFilename = headersBlock.substr(pos, endQuote - pos);
+    // 1. Extract the raw filename
+    std::string rawName = headersBlock.substr(pos, endQuote - pos);
+
+    // 2. Sanitize it before returning
+    outFilename = sanitizeFilename(rawName);
     return true;
 }
 
