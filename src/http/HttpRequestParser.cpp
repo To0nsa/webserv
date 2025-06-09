@@ -6,7 +6,7 @@
 /*   By: ktieu <ktieu@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 10:36:15 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/09 01:41:15 by ktieu            ###   ########.fr       */
+/*   Updated: 2025/06/09 10:52:11 by ktieu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -396,17 +396,22 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     }
 
     // — Build URL
+    std::string hostHeader = req.getHeader("HOST");
     try {
         Url url;
-        const Server& foundServer = searchBestMatchedServers(servers, req.getHeader("HOST"));
+        const Server& foundServer = searchBestMatchedServers(servers, hostHeader);
         clientMaxBodySize = foundServer.getClientMaxBodySize();
-        std::string urlStr = "http://" + foundServer.getHost() + req.getPath();
-        if (req.getVersion() == "HTTP/1.1" || !req.getHeader("HOST").empty()) {
+
+        std::string urlStr = "http://" + (hostHeader.empty() ? foundServer.getHost() : hostHeader) + req.getPath();
+
+        if (req.getVersion() == "HTTP/1.1") {
             url = parseUrlHttpVersion1_1(req, urlStr);
         } else {
-            url = parseUrl(urlStr);  // use existing `Url url;`
+            url = parseUrl(urlStr);
         }
+
         req.setUrl(url);
+        req.setHost(url.host);
     } catch (const std::exception& e) {
         Logger::logFrom(LogLevel::ERROR, "HttpRequestParser", e.what());
         errorCode = 400;
@@ -693,7 +698,7 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
     }
 
     //--------------------------------------------------------
-    // Kha: Temporary commented out the following code. The same logic can be found in parseReqHeader and 
+    // Kha: Temporary commented out the following code. The same logic can be found in parseReqHeader and
     //--------------------------------------------------------
     // std::string hostHeader = req.getHeader("Host");
     // int         bestMatch  = 0;
