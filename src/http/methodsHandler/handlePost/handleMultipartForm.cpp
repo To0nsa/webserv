@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 21:44:51 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/09 22:12:16 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 22:19:57 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "utils/filesystemUtils.hpp"
 
 #include <algorithm>
+#include <cctype>
 #include <chrono>
 #include <ctime>
 #include <filesystem>
@@ -69,23 +70,30 @@ bool parseHeadersAndData(const std::string& part, std::string& headersBlock,
     return true;
 }
 
+// Fallback generator (same as before)
+static std::string makeFallbackName() {
+    auto               now = std::chrono::system_clock::now();
+    auto               t   = std::chrono::system_clock::to_time_t(now);
+    std::ostringstream oss;
+    oss << "upload_" << std::put_time(std::gmtime(&t), "%Y%m%d%H%M%S");
+    return oss.str();
+}
+
 static std::string sanitizeFilename(const std::string& raw) {
-    // 1. Drop any path components (strips '/', '\', '..', etc.)
-    std::filesystem::path p(raw);
-    std::string           name = p.filename().string();
+    namespace fs = std::filesystem;
+    // 1) Drop any leading path components
+    fs::path    p(raw);
+    std::string name = p.filename().string();
 
-    // 2. Whitelist characters [A-Za-z0-9._-], replace others with '_'
-    static const std::regex allowed{R"([^A-Za-z0-9._-])"};
-    name = std::regex_replace(name, allowed, "_");
+    // 2) Remove path separators and control chars, keep everything else (including Unicode bytes)
+    name.erase(
+        std::remove_if(name.begin(), name.end(),
+                       [](unsigned char c) { return c == '/' || c == '\\' || std::iscntrl(c); }),
+        name.end());
 
-    // 3. Prevent names like "" or "." or ".."
+    // 3) If that produced empty or “.”/“..”, fallback
     if (name.empty() || name == "." || name == "..") {
-        // fallback: timestamp-based name
-        auto               now = std::chrono::system_clock::now();
-        auto               t   = std::chrono::system_clock::to_time_t(now);
-        std::ostringstream oss;
-        oss << "upload_" << std::put_time(std::gmtime(&t), "%Y%m%d%H%M%S");
-        name = oss.str();
+        name = makeFallbackName();
     }
 
     return name;
