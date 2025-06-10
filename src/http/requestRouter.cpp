@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/09 00:18:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 21:23:52 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,6 @@ namespace {
 // 1) Redirect “/foo” → “/foo/” when GET
 std::optional<HttpResponse> redirectOnDirectorySlash(const HttpRequest& request,
                                                      const Server& server, const std::string& uri) {
-    const std::string& method = request.getMethod();
-    if (method != "GET") {
-        return std::nullopt;
-    }
 
     for (const Location& loc : server.getLocations()) {
         std::string locPath = normalizePath(loc.getPath());
@@ -75,8 +71,7 @@ const Location* findLocation(const std::string& uri, const Server& server) {
 
 // 3) Handle configured “return” redirects on GET
 std::optional<HttpResponse> redirectOnConfigured(const HttpRequest& request, const Location& loc) {
-    const std::string& method = request.getMethod();
-    if (method == "GET" && loc.hasRedirect()) {
+    if (loc.hasRedirect()) {
         Logger::logFrom(LogLevel::INFO, "Router",
                         "Configured redirect for URI \"" + request.getPath() + "\" to \"" +
                             loc.getRedirect() + "\"");

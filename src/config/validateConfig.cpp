@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 23:23:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/26 13:44:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 21:26:06 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,20 +247,18 @@ void validateErrorPageCodes(const std::vector<Server>& servers) {
 }
 
 void validateRedirectCodes(const std::vector<Server>& servers) {
-    for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
-        const std::vector<Location>& locations = servers[serverIndex].getLocations();
+    static const std::array<int, 5> ALLOWED = {{301, 302, 303, 307, 308}};
+    for (std::size_t i = 0; i < servers.size(); ++i) {
+        for (const Location& loc : servers[i].getLocations()) {
+            if (!loc.hasRedirect())
+                continue;
 
-        for (const Location& loc : locations) {
-            if (loc.hasRedirect()) {
-                int code = loc.getReturnCode();
-
-                if (code < 300 || code > 399) {
-                    throw ValidationError("Invalid redirect code " + std::to_string(code) +
-                                          " in location '" + loc.getPath() + "' of server #" +
-                                          std::to_string(serverIndex + 1) +
-                                          "\n→ Redirect codes must be between 300 and 399 (301 for "
-                                          "permanent, 302 for temporary)");
-                }
+            int code = loc.getReturnCode();
+            if (std::find(ALLOWED.begin(), ALLOWED.end(), code) == ALLOWED.end()) {
+                throw ValidationError(
+                    "Invalid redirect code " + std::to_string(code) + " in location '" +
+                    loc.getPath() + "' of server #" + std::to_string(i + 1) +
+                    "\n→ Supported redirect codes are 301, 302, 303, 307 and 308");
             }
         }
     }

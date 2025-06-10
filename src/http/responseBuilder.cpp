@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/09 22:36:14 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 21:23:05 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ std::string getDefaultMessage(int status_code) {
                                                      {201, "Created"},
                                                      {301, "Moved Permanently"},
                                                      {302, "Found"},
+                                                     {307, "Temporary Redirect"},
+                                                     {308, "Permanent Redirect"},
                                                      {400, "Bad Request"},
                                                      {403, "Forbidden"},
                                                      {404, "Not Found"},
