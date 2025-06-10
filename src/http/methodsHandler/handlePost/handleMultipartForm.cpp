@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 21:44:51 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/10 21:48:10 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 23:08:59 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,15 @@ HttpResponse handleMultipartForm(const HttpRequest& request, const Server& serve
     if (!parseMultipartForm(request.getBody(), boundary, extractedFilename, fileContent)) {
         Logger::logFrom(LogLevel::WARN, "handleMultipartForm", "Failed to parse multipart form");
         return ResponseBuilder::generateError(400, server, request);
+    }
+
+    // Enforce per-part size limit to avoid DoS
+    size_t maxBody = server.getClientMaxBodySize();
+    if (fileContent.size() > maxBody) {
+        Logger::logFrom(LogLevel::WARN, "handleMultipartForm",
+                        "Uploaded part size " + std::to_string(fileContent.size()) +
+                            " exceeds max client body size " + std::to_string(maxBody));
+        return ResponseBuilder::generateError(413, server, request);
     }
 
     if (extractedFilename.empty()) {
