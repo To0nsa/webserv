@@ -1,9 +1,9 @@
 
 #pragma once
 
+#include "core/Server.hpp"
 #include "http/HttpRequest.hpp"
 #include "utils/stringUtils.hpp"
-#include "core/Server.hpp"
 #include <string>
 
 class HttpRequestParser {

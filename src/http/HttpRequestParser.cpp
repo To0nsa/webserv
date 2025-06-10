@@ -28,104 +28,105 @@
 namespace fs = std::filesystem;
 
 namespace {
-    /** Checks that method tokens only contain RFC-allowed characters. */
-    static bool isValidHttpMethodToken(const std::string& method) {
-        if (method.empty())
+/** Checks that method tokens only contain RFC-allowed characters. */
+static bool isValidHttpMethodToken(const std::string& method) {
+    if (method.empty())
+        return false;
+    for (char c : method) {
+        unsigned char uc = static_cast<unsigned char>(c);
+        if (!std::isalnum(uc) && c != '!' && c != '#' && c != '$' && c != '%' && c != '&' &&
+            c != '\'' && c != '*' && c != '+' && c != '-' && c != '.' && c != '^' && c != '_' &&
+            c != '`' && c != '|' && c != '~') {
             return false;
-        for (char c : method) {
-            unsigned char uc = static_cast<unsigned char>(c);
-            if (!std::isalnum(uc) && c != '!' && c != '#' && c != '$' && c != '%' && c != '&' &&
-                c != '\'' && c != '*' && c != '+' && c != '-' && c != '.' && c != '^' && c != '_' &&
-                c != '`' && c != '|' && c != '~') {
-                return false;
-            }
         }
-        return true;
     }
-
-    /** Validates that a normalized path neither escapes “/” nor has repeated “//”. */
-    static bool isValidPath(const std::string& rawPath) {
-        fs::path    p(rawPath);
-        std::string s = p.string();
-        if (s == "/")
-            return true;
-        if (s.empty() || s.front() != '/')
-            return false;
-        /*     if (s.find("//") != std::string::npos)
-                return false; */
-        if (s == "/.." || s.find("/../") != std::string::npos || s.ends_with("/.."))
-            return false;
-        return true;
-    }
-
-    /** Parses a full URL (scheme, host, port, path, etc.) or throws. */
-    static Url parseUrlHttpVersion1_1(HttpRequest& req, const std::string& url) {
-        if (req.getVersion() == "HTTP/1.1" && req.getHeader("HOST").empty()) {
-            throw std::invalid_argument("Missing HOST header (required in HTTP/1.1)");
-        }
-        Url                     res;
-        static const std::regex re(
-            R"((https?://)?(?:([^:@]+)(?::([^:@]*))?@)?([^:/?#]+)(?::(\d+))?(/[^?#]*)?(?:\?([^#]*))?(?:#(.*))?)");
-        std::smatch m;
-        if (!std::regex_match(url, m, re)) {
-            throw std::invalid_argument("Invalid URL");
-        }
-        res.scheme   = m[1].str();
-        res.user     = m[2].str();
-        res.password = m[3].str();
-        res.host     = m[4].str();
-        res.port     = m[5].str();
-        res.path     = m[6].str();
-        res.query    = m[7].str();
-        res.fragment = m[8].str();
-
-        return res;
-    }
-
-    static Url parseUrl(const std::string& url) {
-        Url                     res;
-        static const std::regex re(
-            R"((https?://)?(?:([^:@]+)(?::([^:@]*))?@)?([^:/?#]+)(?::(\d+))?(/[^?#]*)?(?:\?([^#]*))?(?:#(.*))?)");
-        std::smatch m;
-        if (!std::regex_match(url, m, re)) {
-            throw std::invalid_argument("Invalid URL");
-        }
-        res.scheme   = m[1].str();
-        res.user     = m[2].str();
-        res.password = m[3].str();
-        res.host     = m[4].str();
-        res.port     = m[5].str();
-        res.path     = m[6].str();
-        res.query    = m[7].str();
-        res.fragment = m[8].str();
-
-        return res;
-    }
-
-    static const Server& searchBestMatchedServers(std::vector<Server>& servers, const std::string& hostHeader) {
-        // Extract hostname (strip port if present)
-        std::string hostname = hostHeader;
-        size_t colonPos = hostHeader.find(':');
-        if (colonPos != std::string::npos) {
-            hostname = hostHeader.substr(0, colonPos); // ignore port in Host format "host:port"
-        }
-
-        for (Server& server : servers) {
-            if (server.hasServerName(hostname)) {
-                Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
-                    "Found matching server for Host: " + hostname +
-                    " on port " + std::to_string(server.getPort()));
-                return server;
-            }
-        }
-
-        Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
-            "No specific match found, returning default server for Host: " +
-            servers[0].getHost() + " on port " + std::to_string(servers[0].getPort()));
-        return servers[0]; // fallback
-    }
-// namespace
+    return true;
 }
+
+/** Validates that a normalized path neither escapes “/” nor has repeated “//”. */
+static bool isValidPath(const std::string& rawPath) {
+    fs::path    p(rawPath);
+    std::string s = p.string();
+    if (s == "/")
+        return true;
+    if (s.empty() || s.front() != '/')
+        return false;
+    /*     if (s.find("//") != std::string::npos)
+            return false; */
+    if (s == "/.." || s.find("/../") != std::string::npos || s.ends_with("/.."))
+        return false;
+    return true;
+}
+
+/** Parses a full URL (scheme, host, port, path, etc.) or throws. */
+static Url parseUrlHttpVersion1_1(HttpRequest& req, const std::string& url) {
+    if (req.getVersion() == "HTTP/1.1" && req.getHeader("HOST").empty()) {
+        throw std::invalid_argument("Missing HOST header (required in HTTP/1.1)");
+    }
+    Url                     res;
+    static const std::regex re(
+        R"((https?://)?(?:([^:@]+)(?::([^:@]*))?@)?([^:/?#]+)(?::(\d+))?(/[^?#]*)?(?:\?([^#]*))?(?:#(.*))?)");
+    std::smatch m;
+    if (!std::regex_match(url, m, re)) {
+        throw std::invalid_argument("Invalid URL");
+    }
+    res.scheme   = m[1].str();
+    res.user     = m[2].str();
+    res.password = m[3].str();
+    res.host     = m[4].str();
+    res.port     = m[5].str();
+    res.path     = m[6].str();
+    res.query    = m[7].str();
+    res.fragment = m[8].str();
+
+    return res;
+}
+
+static Url parseUrl(const std::string& url) {
+    Url                     res;
+    static const std::regex re(
+        R"((https?://)?(?:([^:@]+)(?::([^:@]*))?@)?([^:/?#]+)(?::(\d+))?(/[^?#]*)?(?:\?([^#]*))?(?:#(.*))?)");
+    std::smatch m;
+    if (!std::regex_match(url, m, re)) {
+        throw std::invalid_argument("Invalid URL");
+    }
+    res.scheme   = m[1].str();
+    res.user     = m[2].str();
+    res.password = m[3].str();
+    res.host     = m[4].str();
+    res.port     = m[5].str();
+    res.path     = m[6].str();
+    res.query    = m[7].str();
+    res.fragment = m[8].str();
+
+    return res;
+}
+
+static const Server& searchBestMatchedServers(std::vector<Server>& servers,
+                                              const std::string&   hostHeader) {
+    // Extract hostname (strip port if present)
+    std::string hostname = hostHeader;
+    size_t      colonPos = hostHeader.find(':');
+    if (colonPos != std::string::npos) {
+        hostname = hostHeader.substr(0, colonPos); // ignore port in Host format "host:port"
+    }
+
+    for (Server& server : servers) {
+        if (server.hasServerName(hostname)) {
+            Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
+                            "Found matching server for Host: " + hostname + " on port " +
+                                std::to_string(server.getPort()));
+            return server;
+        }
+    }
+
+    Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
+                    "No specific match found, returning default server for Host: " +
+                        servers[0].getHost() + " on port " + std::to_string(servers[0].getPort()));
+    return servers[0]; // fallback
+}
+// namespace
+} // namespace
 /**
  * Centralized header validation & insertion.
  * - CONTENT-LENGTH → numeric check (411) + req.setContentLength
@@ -249,7 +250,8 @@ bool insertValidatedHeader(HttpRequest& req, const std::string& key, const std::
     return true;
 }
 
-bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorCode, std::vector<Server> servers, size_t& clientMaxBodySize) {
+bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorCode,
+                    std::vector<Server> servers, size_t& clientMaxBodySize) {
     std::istringstream stream(headerPart);
     std::string        line;
 
@@ -398,11 +400,12 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
     // — Build URL
     std::string hostHeader = req.getHeader("HOST");
     try {
-        Url url;
+        Url           url;
         const Server& foundServer = searchBestMatchedServers(servers, hostHeader);
-        clientMaxBodySize = foundServer.getClientMaxBodySize();
+        clientMaxBodySize         = foundServer.getClientMaxBodySize();
 
-        std::string urlStr = "http://" + (hostHeader.empty() ? foundServer.getHost() : hostHeader) + req.getPath();
+        std::string urlStr =
+            "http://" + (hostHeader.empty() ? foundServer.getHost() : hostHeader) + req.getPath();
 
         if (req.getVersion() == "HTTP/1.1") {
             url = parseUrlHttpVersion1_1(req, urlStr);
@@ -411,10 +414,11 @@ bool parseReqHeader(HttpRequest& req, const std::string& headerPart, int& errorC
         }
 
         req.setUrl(url);
-        
-        // ── Set host explicitly for easier access downstream 
+
+        // ── Set host explicitly for easier access downstream
         std::string& headerAfterParseUrl = url.host;
-        std::transform(headerAfterParseUrl.begin(), headerAfterParseUrl.end(), headerAfterParseUrl.begin(), ::tolower); // normalize
+        std::transform(headerAfterParseUrl.begin(), headerAfterParseUrl.end(),
+                       headerAfterParseUrl.begin(), ::tolower); // normalize
         req.setHost(headerAfterParseUrl);
         Logger::logFrom(LogLevel::INFO, "HttpRequestParser",
                         "Parsed URL: " + urlStr + " with host: " + headerAfterParseUrl);
@@ -679,13 +683,11 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
     consumedBytes          = headerLen;
 
     // 3) Parse request‐line + headers
-     std::size_t clientMaxBodySize;
+    std::size_t clientMaxBodySize;
     if (!parseReqHeader(req, headerPart, errorCode, serversOnPort, clientMaxBodySize)) {
         // parseReqHeader sets errorCode (e.g. 400, 414, 505)
         return false;
     }
-
-
 
     // 4) Validate method, path, and mandatory headers
     if (!validateReq(req, errorCode)) {
@@ -694,7 +696,8 @@ bool HttpRequestParser::parse(HttpRequest& req, const std::string& buffer,
     }
 
     //--------------------------------------------------------
-    // Kha: Temporary commented out the following code. The same logic can be found in parseReqHeader and
+    // Kha: Temporary commented out the following code. The same logic can be found in
+    // parseReqHeader and
     //--------------------------------------------------------
     // std::string hostHeader = req.getHeader("Host");
     // int         bestMatch  = 0;
