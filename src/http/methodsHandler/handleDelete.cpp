@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/09 22:36:29 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 23:30:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ std::string generateDeleteHtml(const std::string& filename) {
 <head>
   <meta charset="UTF-8">
   <title>Deleted: )"
-         << filename << R"(</title>
+         << htmlEscape(filename) << R"(</title>
 </head>
 <body>
   <div class="container">
     <h1>File )"
-         << filename << R"( deleted.</h1>
+         << htmlEscape(filename) << R"( deleted.</h1>
     <p>The requested file has been successfully removed.</p>
   </div>
 </body>
