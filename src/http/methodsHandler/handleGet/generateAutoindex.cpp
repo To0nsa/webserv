@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 09:08:33 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/08 23:22:30 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 22:57:01 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include "http/HttpResponse.hpp"
 #include "http/responseBuilder.hpp"
 #include "utils/Logger.hpp"
+#include "utils/htmlUtils.hpp"
 #include "utils/stringUtils.hpp"
 
 namespace fs = std::filesystem;
@@ -172,8 +173,9 @@ void renderRow(std::ostringstream& body, const DirEntry& entry, const std::strin
     std::string mtime = isParent ? "-" : formatMTimeUTC(entry.mtime);
     std::string size  = (isDir || isParent) ? "-" : std::to_string(entry.size);
 
-    body << "    <tr>" << "<td><a href=\"" << href << "\">" << icon << " " << disp << "</a></td>"
-         << "<td>" << mtime << "</td>" << "<td>" << size << "</td>" << "</tr>\n";
+    body << "    <tr>" << "<td><a href=\"" << htmlEscape(href) << "\">" << icon << " "
+         << htmlEscape(disp) << "</a></td>" << "<td>" << mtime << "</td>" << "<td>" << size
+         << "</td>" << "</tr>\n";
 }
 
 std::string htmlHeader(const std::string& uri) {
@@ -183,11 +185,11 @@ std::string htmlHeader(const std::string& uri) {
 <head>
   <meta charset="UTF-8">
   <title>Index of )"
-       << uri << R"(</title>
+       << htmlEscape(uri) << R"(</title>
 </head>
 <body>
   <h1>Index of )"
-       << uri << R"(</h1>
+       << htmlEscape(uri) << R"(</h1>
   <table>
     <tr><th>Name</th><th>Last Modified (UTC)</th><th>Size</th></tr>
 )";
