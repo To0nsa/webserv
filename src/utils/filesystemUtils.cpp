@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/09 14:21:32 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 22:52:30 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <sstream>
 #include <string>
 #include <sys/stat.h>
+#include <system_error>
 
 namespace fs = std::filesystem;
 
@@ -60,30 +61,6 @@ std::string resolvePhysicalPath(const HttpRequest& req, const Location& loc) {
     // 3) Fallback to the root path (even if it doesn't exist)
     return rootPath;
 }
-
-/* std::string resolvePhysicalPath(const HttpRequest& req, const Location& loc) {
-    std::string requestPath = normalizePath(req.getPath());
-    if (requestPath.empty())
-        return "";
-
-    std::string locPrefix     = normalizePath(loc.getPath());
-    bool        inUploadStore = (req.getMethod() == "POST") && loc.isUploadEnabled() &&
-requestPath.rfind(locPrefix, 0) == 0;
-
-    if (inUploadStore) {
-        std::string relative = requestPath.substr(locPrefix.size());
-        while (!relative.empty() && relative.front() == '/')
-            relative.erase(0, 1);
-
-        std::string uploadRoot = normalizePath(loc.getUploadStore());
-        if (!uploadRoot.empty() && uploadRoot.front() != '/')
-            uploadRoot = joinPath(normalizePath(loc.getRoot()), uploadRoot);
-
-        return joinPath(uploadRoot, relative);
-    }
-
-    return buildFilePath(req, loc);
-} */
 
 bool isFile(const std::string& path) {
     return fs::exists(path) && fs::is_regular_file(path);
@@ -210,8 +187,83 @@ bool mkdirRecursive(const std::string& path) {
 bool isSymlink(const std::string& path) {
     return fs::is_symlink(fs::path(path));
 }
+
 time_t getCurrentTime() {
     return std::chrono::duration_cast<std::chrono::seconds>(
                std::chrono::system_clock::now().time_since_epoch())
         .count();
+}
+
+static std::string makeFallbackName() {
+    auto               now = std::chrono::system_clock::now();
+    auto               t   = std::chrono::system_clock::to_time_t(now);
+    std::ostringstream oss;
+    oss << "upload_" << std::put_time(std::gmtime(&t), "%Y%m%d%H%M%S");
+    return oss.str();
+}
+
+std::string sanitizeFilename(const std::string& raw) {
+    namespace fs = std::filesystem;
+    // 1) Drop any leading path components
+    fs::path    p(raw);
+    std::string name = p.filename().string();
+
+    // 2) Remove path separators and control chars, keep everything else (including Unicode bytes)
+    name.erase(
+        std::remove_if(name.begin(), name.end(),
+                       [](unsigned char c) { return c == '/' || c == '\\' || std::iscntrl(c); }),
+        name.end());
+
+    // 3) If that produced empty or “.”/“..”, fallback
+    if (name.empty() || name == "." || name == "..") {
+        name = makeFallbackName();
+    }
+
+    return name;
+}
+
+// Returns empty on any error or if the resolved path would leave uploadRoot.
+std::string makeSafeUploadPath(const std::string& uploadRoot, const std::string& rawRelativePath) {
+    namespace fs = std::filesystem;
+    std::error_code ec;
+
+    // 1) Canonicalize uploadRoot
+    fs::path root(uploadRoot);
+    fs::path canonRoot = fs::weakly_canonical(root, ec);
+    if (ec) {
+        // bad uploadRoot
+        return {};
+    }
+
+    // 2) Split the rawRelativePath on “/” and sanitize each segment
+    fs::path          candidate = root;
+    std::stringstream ss(rawRelativePath);
+    std::string       segment;
+    while (std::getline(ss, segment, '/')) {
+        if (segment.empty())
+            continue;
+        std::string safeSeg = sanitizeFilename(segment);
+        candidate /= safeSeg;
+    }
+
+    // 3) For a non‐existent leaf, weakly_canonical will strip it off,
+    //    so canonicalize the parent then re‐append the leaf.
+    fs::path leaf        = candidate.filename();
+    fs::path canonParent = fs::weakly_canonical(candidate.parent_path(), ec);
+    if (ec) {
+        // parent doesn’t exist or broken symlink
+        return {};
+    }
+    fs::path canonCandidate = canonParent / leaf;
+
+    // 4) Bound‐check: ensure canonCandidate is inside canonRoot
+    auto rootStr = canonRoot.generic_string();
+    auto candStr = canonCandidate.generic_string();
+    if (candStr.size() < rootStr.size() || candStr.compare(0, rootStr.size(), rootStr) != 0 ||
+        (candStr.size() > rootStr.size() && candStr[rootStr.size()] != '/')) {
+        // outside of uploadRoot
+        return {};
+    }
+
+    return candStr;
 }

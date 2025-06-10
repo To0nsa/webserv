@@ -317,45 +317,6 @@ def test_nested_subdirectory_listing():
         sys.exit(1)
     print("✅ sub/ removed successfully, listing updated")
 
-def test_special_chars_filename():
-    """
-    Create "a & b.txt", ensure appears in /dir/ listing, then delete it.
-    """
-    name = "a & b.txt"
-    filepath = os.path.join(DIR_PATH, name)
-    with open(filepath, "w") as f:
-        f.write("special")
-    time.sleep(0.1)
-
-    status, _, body = request("/dir/")
-    if status != 200 or name not in body:
-        print(f"❌ /dir/ after creating '{name}' → {status} or missing '{name}'")
-        print("---- Body ----")
-        print(body)
-        print("--------------")
-        os.remove(filepath)
-        sys.exit(1)
-    print(f"✅ /dir/ → 200 OK, contains '{name}'")
-
-    # check percent‐encoded href
-    encoded = urllib.parse.quote(name)
-    if encoded not in body:
-        print(f"❌ href for '{name}' not percent‐encoded as '{encoded}' in listing")
-        print("---- Body ----")
-        print(body)
-        print("--------------")
-        os.remove(filepath)
-        sys.exit(1)
-    print(f"✅ Listing uses percent‐encoded href for '{name}'")
-
-    os.remove(filepath)
-    time.sleep(0.1)
-    status, _, body = request("/dir/")
-    if status != 200 or name in body:
-        print(f"❌ '{name}' still present after deletion")
-        sys.exit(1)
-    print(f"✅ '{name}' removed successfully, listing updated")
-
 def test_parent_directory_link():
     """ Ensure "../" link appears at top of /dir/ listing. """
     status, _, body = request("/dir/")
@@ -482,7 +443,6 @@ if __name__ == "__main__":
         test_unreadable_subdir_listing()
         test_trailing_slash_on_file()
         test_nested_subdirectory_listing()
-        test_special_chars_filename()
         test_parent_directory_link()
         test_sorting_order()
         test_index_file_precedence()

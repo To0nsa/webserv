@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/09 22:43:04 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 22:54:45 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include <sstream>
 #include <string>
 #include <sys/stat.h>
+#include <system_error>
 #include <unistd.h>
 
 namespace {
@@ -92,10 +93,6 @@ static HttpResponse handleRawBody(const HttpRequest& request, const Server& serv
         "text/html", request);
 }
 
-/* static std::string generateFilename() {
-    return "upload_" + std::to_string(std::time(nullptr));
-} */
-
 static std::atomic<uint64_t> uploadCounter{0};
 
 static std::string generateFilename() {
@@ -138,24 +135,21 @@ validatePostRequest(HttpRequest const& request, Server const& server, Location c
     return std::nullopt;
 }
 
+namespace fs = std::filesystem;
 static std::optional<HttpResponse>
 preparePostTargetPath(HttpRequest const& request, Server const& server, Location const& location,
-                      std::filesystem::path& outTargetPath, std::string& outTargetDirectory,
+                      fs::path& outTargetPath, std::string& outTargetDirectory,
                       std::string& outTargetFilename) {
-    // NGINX: any POST to "/file.ext/" MUST be 404 if "file.ext" exists in the root.
+    namespace fs = std::filesystem;
 
-    // normalize URI and location prefix
+    // 1) NGINX style: POST "/file.ext/" → 404 if file.ext exists
     std::string reqPath = normalizePath(request.getPath());
     std::string locPref = normalizePath(location.getPath());
-    // only if URI ends with '/'
     if (!reqPath.empty() && reqPath.back() == '/' && reqPath.rfind(locPref, 0) == 0) {
-        // compute the root-based file path (ignore upload_store)
         std::string rel = reqPath.substr(locPref.size());
         while (!rel.empty() && rel.front() == '/')
             rel.erase(0, 1);
-        std::string rootBase = normalizePath(location.getRoot());
-        std::string rootFull = joinPath(rootBase, rel);
-        // strip trailing slash if any
+        std::string rootFull = joinPath(normalizePath(location.getRoot()), rel);
         if (!rootFull.empty() && rootFull.back() == '/')
             rootFull.pop_back();
         if (isFile(rootFull)) {
@@ -165,55 +159,75 @@ preparePostTargetPath(HttpRequest const& request, Server const& server, Location
             return ResponseBuilder::generateError(404, server, request);
         }
     }
-    std::string physicalPath = resolvePhysicalPath(request, location);
 
-    if (physicalPath.empty()) {
+    // 2) Compute the client‐side relative path under the upload_store
+    std::string rawRel = reqPath.substr(locPref.size());
+    while (!rawRel.empty() && rawRel.front() == '/')
+        rawRel.erase(0, 1);
+
+    // 3) Percent‐decode any “%20”, etc.
+    std::string decodedRel = decodePercentEncoding(rawRel);
+
+    // 4) Build the candidate path under the uploadStore
+    fs::path uploadRoot(location.getUploadStore());
+    fs::path candidate = uploadRoot / fs::path(decodedRel);
+
+    // 5) If they POST to a directory (or included a trailing slash), append a generated filename
+    bool endsWithSlash = !reqPath.empty() && reqPath.back() == '/';
+    if (endsWithSlash || (fs::exists(candidate) && fs::is_directory(candidate))) {
+        candidate /= generateFilename();
+    }
+
+    // 6) Canonicalize & bound‐check (reuse your makeSafeUploadPath taking a relative path)
+    //    First compute the path _relative_ to uploadRoot:
+    fs::path    relCand    = candidate.lexically_relative(uploadRoot);
+    std::string relCandStr = relCand.generic_string();
+
+    std::string safeFull = makeSafeUploadPath(location.getUploadStore(), relCandStr);
+    if (safeFull.empty()) {
         Logger::logFrom(LogLevel::WARN, "Post Handler",
-                        "Path empty → rejecting POST for URI: " + request.getPath());
+                        "Unsafe upload path → rejecting POST for URI: " + request.getPath() +
+                            " rel: " + relCandStr);
         return ResponseBuilder::generateError(403, server, request);
     }
 
-    std::filesystem::path candidatePath(physicalPath);
-
-    // If it’s a directory (or ends with '/'), generate a filename
-    if (std::filesystem::is_directory(candidatePath) || physicalPath.back() == '/') {
-        std::string generatedFilename = generateFilename();
-        candidatePath /= generatedFilename;
+    // 7) Symlink-forbid: reject if any component under uploadRoot is a symlink
+    fs::path root = uploadRoot;
+    fs::path target(outTargetPath = safeFull);
+    fs::path relRooted = target.lexically_relative(root);
+    fs::path acc       = root;
+    for (auto const& comp : relRooted) {
+        acc /= comp;
+        std::error_code ec;
+        if (fs::is_symlink(acc, ec) && !ec) {
+            Logger::logFrom(LogLevel::WARN, "Post Handler",
+                            "Symlink in upload path → rejecting POST for URI: " +
+                                request.getPath() + " component: " + acc.string());
+            return ResponseBuilder::generateError(403, server, request);
+        }
     }
 
-    std::filesystem::path directoryPath = candidatePath.parent_path();
-    outTargetDirectory                  = directoryPath.string();
-    outTargetFilename                   = candidatePath.filename().string();
-
-    if (outTargetFilename.find("..") != std::string::npos) {
-        Logger::logFrom(LogLevel::WARN, "Post Handler",
-                        "Path traversal detected in filename → rejecting POST for URI: " +
-                            request.getPath() + " filename: " + outTargetFilename);
-        return ResponseBuilder::generateError(400, server, request);
-    }
-
-    if (isSymlink(candidatePath.string())) {
-        Logger::logFrom(LogLevel::WARN, "Post Handler",
-                        "Target is a symlink → rejecting POST for URI: " + request.getPath() +
-                            " path: " + candidatePath.string());
-        return ResponseBuilder::generateError(403, server, request);
-    }
+    // 8) Populate outputs and ensure directory exists
+    outTargetPath      = fs::path(safeFull);
+    outTargetDirectory = outTargetPath.parent_path().generic_string();
+    outTargetFilename  = outTargetPath.filename().string();
 
     if (!mkdirRecursive(outTargetDirectory)) {
-        Logger::logFrom(LogLevel::WARN, "Post Handler",
+        Logger::logFrom(LogLevel::ERROR, "Post Handler",
                         "Failed to create directory: " + outTargetDirectory +
                             " → rejecting POST for URI: " + request.getPath());
         return ResponseBuilder::generateError(500, server, request);
     }
 
-    if (isFile(candidatePath.string())) {
+    // 9) Reject if file already exists
+    if (isFile(outTargetPath.string())) {
         Logger::logFrom(LogLevel::WARN, "Post Handler",
                         "File already exists → rejecting POST for URI: " + request.getPath() +
-                            " path: " + candidatePath.string());
+                            " path: " + outTargetPath.string());
         return ResponseBuilder::generateError(400, server, request);
     }
 
-    outTargetPath = candidatePath;
+    // 10) All clear
     return std::nullopt;
 }
 

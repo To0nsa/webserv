@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 21:44:51 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/09 22:42:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 21:48:10 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,35 +69,6 @@ bool parseHeadersAndData(const std::string& part, std::string& headersBlock,
     headersBlock = part.substr(0, headerEnd);
     dataBlock    = part.substr(headerEnd + 4); // skip past "\r\n\r\n"
     return true;
-}
-
-// Fallback generator (same as before)
-static std::string makeFallbackName() {
-    auto               now = std::chrono::system_clock::now();
-    auto               t   = std::chrono::system_clock::to_time_t(now);
-    std::ostringstream oss;
-    oss << "upload_" << std::put_time(std::gmtime(&t), "%Y%m%d%H%M%S");
-    return oss.str();
-}
-
-static std::string sanitizeFilename(const std::string& raw) {
-    namespace fs = std::filesystem;
-    // 1) Drop any leading path components
-    fs::path    p(raw);
-    std::string name = p.filename().string();
-
-    // 2) Remove path separators and control chars, keep everything else (including Unicode bytes)
-    name.erase(
-        std::remove_if(name.begin(), name.end(),
-                       [](unsigned char c) { return c == '/' || c == '\\' || std::iscntrl(c); }),
-        name.end());
-
-    // 3) If that produced empty or “.”/“..”, fallback
-    if (name.empty() || name == "." || name == "..") {
-        name = makeFallbackName();
-    }
-
-    return name;
 }
 
 /**
