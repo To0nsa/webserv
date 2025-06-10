@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/10 21:23:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 22:36:21 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,42 @@
 #include <optional>
 #include <set>
 #include <string>
+#include <sys/stat.h>
 
 namespace {
-// 1) Redirect “/foo” → “/foo/” when GET
-std::optional<HttpResponse> redirectOnDirectorySlash(const HttpRequest& request,
-                                                     const Server& server, const std::string& uri) {
+std::optional<HttpResponse> redirectOnDirectorySlash(const HttpRequest& req, const Server& server,
+                                                     const std::string& uri) {
+    // If there's already a trailing slash in the request path, nothing to do.
+    if (!req.getPath().empty() && req.getPath().back() == '/')
+        return std::nullopt;
 
+    // Try each configured Location block
     for (const Location& loc : server.getLocations()) {
         std::string locPath = normalizePath(loc.getPath());
+        // We only care about locations defined with a trailing slash
         if (locPath.size() > 1 && locPath.back() == '/') {
-            std::string withoutSlash = locPath.substr(0, locPath.size() - 1);
-            if (uri == withoutSlash) {
+            // Does the request URI match this location prefix (sans slash)?
+            std::string prefix = locPath.substr(0, locPath.size() - 1);
+            if (uri.rfind(prefix, 0) != 0)
+                continue;
+
+            // Resolve the physical FS path under this Location
+            std::string fsPath = resolvePhysicalPath(req, loc);
+            if (fsPath.empty())
+                continue;
+
+            struct stat st;
+            if (stat(fsPath.c_str(), &st) == 0 && S_ISDIR(st.st_mode)) {
+                // Found a real directory (or symlink-to-dir) — redirect any method
+                std::string target = req.getPath() + "/";
                 Logger::logFrom(LogLevel::INFO, "Router",
-                                "Directory-slash redirect: \"" + uri + "\" → \"" + locPath + "\"");
-                return ResponseBuilder::generateRedirect(301, locPath, request);
+                                "Directory-slash redirect: \"" + uri + "\" → \"" + target + "\"");
+                return ResponseBuilder::generateRedirect(301, target, req);
             }
         }
     }
+
+    // No matching directory to slash-redirect
     return std::nullopt;
 }
 
