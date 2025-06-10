@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/05 11:06:41 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 22:36:21 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,207 +16,151 @@
 #include "http/handleCgi.hpp"
 #include "http/methodsHandler.hpp"
 #include "http/responseBuilder.hpp"
+#include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
 
 #include <fstream>
 #include <iostream>
+#include <optional>
 #include <set>
 #include <string>
+#include <sys/stat.h>
 
-/* HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
-    const std::string& method = request.getMethod();
-    const std::string& path   = request.getPath();
+namespace {
+std::optional<HttpResponse> redirectOnDirectorySlash(const HttpRequest& req, const Server& server,
+                                                     const std::string& uri) {
+    // If there's already a trailing slash in the request path, nothing to do.
+    if (!req.getPath().empty() && req.getPath().back() == '/')
+        return std::nullopt;
 
-    std::cout << "[Router] Incoming request path (raw): " << path
-          << "   normalizePath(path) => " << normalizePath(path) << std::endl;
-
-
-    // Only redirect GET from "/foo" → "/foo/".
-    if (method == "GET") {
-        for (const Location& loc : server.getLocations()) {
-            const std::string& locPath = normalizePath(loc.getPath());
-            if (locPath.length() > 1 && locPath.back() == '/' &&
-                path == locPath.substr(0, locPath.size() - 1)) {
-                std::cout << "[Router] 📍 Path matches redirect rule: " << path << " → " << locPath
-                          << std::endl;
-                return ResponseBuilder::generateRedirect(301, locPath, request);
-            }
-        }
-    }
-
-    // Try to find an EXACT match on loc.getPath() first ──
-    const Location* matched = nullptr;
-    std::string     uri     = request.getPath();
+    // Try each configured Location block
     for (const Location& loc : server.getLocations()) {
-        if (uri == loc.getPath()) {
-            matched = &loc;
-            break;
-        }
-    }
+        std::string locPath = normalizePath(loc.getPath());
+        // We only care about locations defined with a trailing slash
+        if (locPath.size() > 1 && locPath.back() == '/') {
+            // Does the request URI match this location prefix (sans slash)?
+            std::string prefix = locPath.substr(0, locPath.size() - 1);
+            if (uri.rfind(prefix, 0) != 0)
+                continue;
 
-    // If no exact match, do longest‐prefix ONLY for locations ending in '/' ──
-    if (!matched) {
-        size_t maxMatchLen = 0;
-        for (const Location& loc : server.getLocations()) {
-            const std::string& locPath = loc.getPath();
-            // Only consider prefix if the location’s path ends with '/'
-            if (!locPath.empty() && locPath.back() == '/') {
-                if (uri.rfind(locPath, 0) == 0 && locPath.size() > maxMatchLen) {
-                    matched     = &loc;
-                    maxMatchLen = locPath.size();
-                }
+            // Resolve the physical FS path under this Location
+            std::string fsPath = resolvePhysicalPath(req, loc);
+            if (fsPath.empty())
+                continue;
+
+            struct stat st;
+            if (stat(fsPath.c_str(), &st) == 0 && S_ISDIR(st.st_mode)) {
+                // Found a real directory (or symlink-to-dir) — redirect any method
+                std::string target = req.getPath() + "/";
+                Logger::logFrom(LogLevel::INFO, "Router",
+                                "Directory-slash redirect: \"" + uri + "\" → \"" + target + "\"");
+                return ResponseBuilder::generateRedirect(301, target, req);
             }
         }
     }
 
-    if (!matched) {
-        std::cerr << "[Router] ❌ No matching location for path: " << uri << std::endl;
-        return ResponseBuilder::generateError(404, server, request);
-    }
+    // No matching directory to slash-redirect
+    return std::nullopt;
+}
 
-    const Location& location = *matched;
-    std::cout << "[Router] ✅ Matched location: " << location.getPath() << std::endl;
-
-    // Only perform a “return …” redirect if the client is GET (or HEAD).
-    // A DELETE should not trigger this redirect; it must fall through to handleDelete().
-    if (method == "GET" && location.hasRedirect()) {
-        std::cout << "[Router] ↪️ Redirect configured: " << location.getRedirect() << " (code "
-                  << location.getReturnCode() << ")" << std::endl;
-        return ResponseBuilder::generateRedirect(location.getReturnCode(), location.getRedirect(),
-                                                 request);
-    }
-
-    static const std::set<std::string> implemented = {"GET", "POST", "DELETE"};
-    if (implemented.find(method) == implemented.end()) {
-        std::cerr << "[Router] ❌ Method not implemented: " << method << std::endl;
-        return ResponseBuilder::generateError(501, server, request);
-    }
-
-    if (!location.isMethodAllowed(method)) {
-        std::cerr << "[Router] ❌ Method " << method << " not allowed for this location.\n";
-        return ResponseBuilder::generateError(405, server, request);
-    }
-
-    std::cout << "[Router] 🧭 Dispatching to handler for method: " << method << std::endl;
-
-    if (method == "GET") {
-        return handleGet(request, server, location);
-    } else if (method == "POST") {
-        return handlePost(request, server, location);
-    } else if (method == "DELETE") {
-        return handleDelete(request, server, location);
-    }
-
-    std::cerr << "[Router] ❌ Unknown failure dispatching method: " << method << std::endl;
-    return ResponseBuilder::generateError(500, server, request);
-} */
-
-HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
-    const std::string& method = request.getMethod();
-    const std::string& rawUri = request.getPath();
-    std::string        uri    = normalizePath(rawUri);
-
-    std::cout << "[Router] Entering handleRequest()\n";
-    std::cout << "[Router]   Method: \"" << method << "\"\n";
-    std::cout << "[Router]   Raw path: \"" << rawUri << "\"   normalizePath(path): \"" << uri
-              << "\"\n\n";
-
-    // 1) Early “directory‐no‐slash” redirect
-    if (method == "GET") {
-        for (const Location& loc : server.getLocations()) {
-            std::string locPath = normalizePath(loc.getPath());
-            // only consider locations that *end* in '/'
-            if (locPath.size() > 1 && locPath.back() == '/') {
-                // compare "/foo" against "/foo/"
-                std::string withoutSlash = locPath.substr(0, locPath.size() - 1);
-                if (uri == withoutSlash) {
-                    // (optionally: check on disk if this really is a directory under that loc)
-                    return ResponseBuilder::generateRedirect(301, locPath, request);
-                }
-            }
-        }
-    }
-
-    // 2) Find an EXACT‐match location first (i.e. uri == loc.getPath()).
-    const Location* matched = nullptr;
+// 2) Find exact‐match or longest‐prefix location
+const Location* findLocation(const std::string& uri, const Server& server) {
+    // Exact match
     for (const Location& loc : server.getLocations()) {
         std::string locPath = normalizePath(loc.getPath());
         if (uri == locPath) {
-            matched = &loc;
-            std::cout << "[Router]   Exact‐match found for location: \"" << locPath << "\"\n\n";
-            break;
+            return &loc;
         }
     }
-
-    // ─────────────────────────────────────────────────────────────────
-    // 3) If no exact‐match, do a “longest‐prefix” match on *all* locations.
-    //    (NGINX does not require the location to end in “/” to act as a prefix.)
-    if (!matched) {
-        size_t bestLen = 0;
-        for (const Location& loc : server.getLocations()) {
-            std::string locPath = normalizePath(loc.getPath());
-            if (locPath.empty())
-                continue;
-
-            // Does “uri” begin with “locPath”?  (Either “/forbidden” or “/forbidden/…”)
-            if (uri.rfind(locPath, 0) == 0) {
-                // If this is the longest so far, pick it.
-                if (locPath.size() > bestLen) {
-                    matched = &loc;
-                    bestLen = locPath.size();
-                }
-            }
+    // Longest‐prefix
+    const Location* best    = nullptr;
+    std::size_t     bestLen = 0;
+    for (const Location& loc : server.getLocations()) {
+        std::string locPath = normalizePath(loc.getPath());
+        if (locPath.empty()) {
+            continue;
         }
-        if (matched) {
-            std::cout << "[Router]   Longest‐prefix location chosen: \""
-                      << normalizePath(matched->getPath()) << "\"\n\n";
+        if (uri.rfind(locPath, 0) == 0 && locPath.size() > bestLen) {
+            best    = &loc;
+            bestLen = locPath.size();
         }
     }
+    return best;
+}
 
-    // ─────────────────────────────────────────────────────────────────
-    // 4) If STILL no match, return 404:
-    if (!matched) {
-        std::cerr << "[Router] ❌ No matching location for path: \"" << uri << "\"\n\n";
-        return ResponseBuilder::generateError(404, server, request);
+// 3) Handle configured “return” redirects on GET
+std::optional<HttpResponse> redirectOnConfigured(const HttpRequest& request, const Location& loc) {
+    if (loc.hasRedirect()) {
+        Logger::logFrom(LogLevel::INFO, "Router",
+                        "Configured redirect for URI \"" + request.getPath() + "\" to \"" +
+                            loc.getRedirect() + "\"");
+        return ResponseBuilder::generateRedirect(loc.getReturnCode(), loc.getRedirect(), request);
     }
+    return std::nullopt;
+}
 
-    // ─────────────────────────────────────────────────────────────────
-    // 5) We have “matched” now.  Proceed to handle GET/POST/DELETE.
-    const Location& location = *matched;
-    std::string     locPath  = normalizePath(location.getPath());
-    std::cout << "[Router] ✅ Matched location: \"" << locPath << "\"\n";
+// 4) Check for un-implemented / not-allowed methods
+std::optional<HttpResponse> validateRequestMethod(const HttpRequest& request, const Location& loc,
+                                                  const Server& server) {
+    static const std::set<std::string> supported = {"GET", "POST", "DELETE"};
+    const std::string&                 method    = request.getMethod();
 
-    // 6) If there is an explicit “return” (redirect) configured in this location,
-    //    only do it on GET (or HEAD).  (DELETE/POST must not be turned into a redirect.)
-    if (method == "GET" && location.hasRedirect()) {
-        std::cout << "[Router]   ↪️ Redirect configured: “" << location.getRedirect() << "” (code "
-                  << location.getReturnCode() << ")\n\n";
-        return ResponseBuilder::generateRedirect(location.getReturnCode(), location.getRedirect(),
-                                                 request);
-    }
-
-    // 7) Reject un‐implemented methods:
-    static const std::set<std::string> implemented = {"GET", "POST", "DELETE"};
-    if (!implemented.count(method)) {
-        std::cerr << "[Router] ❌ Method not implemented: \"" << method << "\"\n\n";
+    if (supported.count(method) == 0) {
+        Logger::logFrom(LogLevel::WARN, "Router",
+                        "Method \"" + method + "\" not implemented for URI \"" + request.getPath() +
+                            "\"");
         return ResponseBuilder::generateError(501, server, request);
     }
 
-    // 8) Reject “method not allowed on this location”:
-    if (!location.isMethodAllowed(method)) {
-        std::cerr << "[Router] ❌ Method \"" << method << "\" not allowed for location \""
-                  << locPath << "\".\n\n";
+    if (!loc.isMethodAllowed(method)) {
+        Logger::logFrom(LogLevel::WARN, "Router",
+                        "Method \"" + method + "\" not allowed on location \"" + loc.getPath() +
+                            "\"");
         return ResponseBuilder::generateError(405, server, request);
     }
 
-    std::cout << "[Router] 🧭 Dispatching to handler for method: \"" << method << "\"\n\n";
+    return std::nullopt;
+}
+
+// 5) Dispatch to the specific handler
+HttpResponse dispatchByMethod(const HttpRequest& request, const Server& server,
+                              const Location& loc) {
+    const std::string& method = request.getMethod();
     if (method == "GET") {
-        return handleGet(request, server,
-                         location); // will itself 301 if a directory is missing “/”
+        return handleGet(request, server, loc);
     }
     if (method == "POST") {
-        return handlePost(request, server, location);
+        return handlePost(request, server, loc);
     }
-    // DELETE
-    return handleDelete(request, server, location);
+    // Only DELETE remains
+    return handleDelete(request, server, loc);
+}
+} // anonymous namespace
+
+HttpResponse handleRequest(const HttpRequest& request, const Server& server) {
+    std::string uri = normalizePath(request.getPath());
+
+    std::optional<HttpResponse> redirectResponse = redirectOnDirectorySlash(request, server, uri);
+    if (redirectResponse.has_value()) {
+        return redirectResponse.value();
+    }
+
+    const Location* loc = findLocation(uri, server);
+    if (loc == nullptr) {
+        Logger::logFrom(LogLevel::WARN, "Router",
+                        "No matching location for URI \"" + uri + "\" → 404");
+        return ResponseBuilder::generateError(404, server, request);
+    }
+
+    std::optional<HttpResponse> configuredRedirect = redirectOnConfigured(request, *loc);
+    if (configuredRedirect.has_value()) {
+        return configuredRedirect.value();
+    }
+
+    std::optional<HttpResponse> validationError = validateRequestMethod(request, *loc, server);
+    if (validationError.has_value()) {
+        return validationError.value();
+    }
+
+    return dispatchByMethod(request, server, *loc);
 }

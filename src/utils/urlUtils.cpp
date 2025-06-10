@@ -6,11 +6,12 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 13:22:39 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 13:25:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/06 21:53:06 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cctype>
+#include <regex>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -76,4 +77,36 @@ std::unordered_map<std::string, std::string> parseFormUrlEncoded(const std::stri
     }
 
     return form;
+}
+
+std::string extractFilenameFromUri(const std::string& uri) {
+    std::string filename;
+
+    // Extract last segment
+    std::size_t pos = uri.find_last_of('/');
+    if (pos != std::string::npos)
+        filename = uri.substr(pos + 1);
+    else
+        filename = uri;
+
+    // Decode percent-encoding
+    try {
+        filename = decodePercentEncoding(filename);
+    } catch (...) {
+        return ""; // invalid encoding
+    }
+
+    // Reject suspicious filenames
+    if (filename.empty() || filename.size() > 256 || filename.find('/') != std::string::npos)
+        return "";
+
+    if (filename == "." || filename == ".." || filename[0] == '.' || filename[0] == '-')
+        return "";
+
+    // Optional: enforce strict pattern
+    static const std::regex safePattern(R"(^[a-zA-Z0-9._-]+$)");
+    if (!std::regex_match(filename, safePattern))
+        return "";
+
+    return filename;
 }

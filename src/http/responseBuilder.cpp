@@ -6,13 +6,15 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 11:06:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 21:23:05 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/responseBuilder.hpp"
 #include "http/HttpResponse.hpp"
 #include "utils/filesystemUtils.hpp"
+#include "utils/htmlUtils.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -28,6 +30,8 @@ std::string getDefaultMessage(int status_code) {
                                                      {201, "Created"},
                                                      {301, "Moved Permanently"},
                                                      {302, "Found"},
+                                                     {307, "Temporary Redirect"},
+                                                     {308, "Permanent Redirect"},
                                                      {400, "Bad Request"},
                                                      {403, "Forbidden"},
                                                      {404, "Not Found"},
@@ -156,7 +160,8 @@ HttpResponse generateError(int status_code, const Server& server, const HttpRequ
     // Fallback default page
     if (body.empty()) {
         std::ostringstream ss;
-        ss << "<html><body><h1>" << status_code << " " << message << "</h1></body></html>";
+        ss << "<html><body><h1>" << status_code << " " << htmlEscape(message)
+           << "</h1></body></html>";
         body = ss.str();
     }
 

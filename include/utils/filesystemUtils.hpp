@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:38:32 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 18:29:11 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 21:47:36 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,5 @@ std::string decodePercentEncoding(const std::string& encoded);
 bool        isSymlink(const std::string& path);
 time_t      getCurrentTime();
 std::string resolvePhysicalPath(const HttpRequest& req, const Location& loc);
-std::string extractFileName(const std::string& uri);
+std::string makeSafeUploadPath(const std::string& uploadRoot, const std::string& rawFilename);
+std::string sanitizeFilename(const std::string& raw);

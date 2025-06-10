@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 21:30:10 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/10 23:30:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include "http/responseBuilder.hpp"
 #include "utils/Logger.hpp"
 #include "utils/filesystemUtils.hpp"
+#include "utils/htmlUtils.hpp"
+#include "utils/urlUtils.hpp"
 
 #include <sstream>
 #include <string.h>
@@ -75,45 +77,12 @@ std::string generateDeleteHtml(const std::string& filename) {
 <head>
   <meta charset="UTF-8">
   <title>Deleted: )"
-         << filename << R"(</title>
-  <style>
-    body {
-      background: #1e1e1e;
-      color: #dcdcdc;
-      font-family: "Segoe UI", sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .container {
-      text-align: center;
-    }
-    h1 {
-      color: #e57373;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1rem;
-      color: #b0bec5;
-    }
-    a {
-      color: #81d4fa;
-      text-decoration: none;
-      margin-top: 1rem;
-      display: inline-block;
-      font-size: 0.9rem;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+         << htmlEscape(filename) << R"(</title>
 </head>
 <body>
   <div class="container">
     <h1>File )"
-         << filename << R"( deleted.</h1>
+         << htmlEscape(filename) << R"( deleted.</h1>
     <p>The requested file has been successfully removed.</p>
   </div>
 </body>
@@ -149,9 +118,10 @@ HttpResponse handleDelete(const HttpRequest& req, const Server& server, const Lo
         return errResp;
     }
 
-    std::string fileName = extractFileName(req.getPath());
-    std::string body     = generateDeleteHtml(fileName);
+    std::string rawName  = extractFilenameFromUri(req.getPath());
+    std::string safeName = htmlEscape(rawName);
+    std::string body     = generateDeleteHtml(safeName);
     Logger::logFrom(LogLevel::INFO, "Delete Handler",
-                    "Successfully deleted “" + fileName + "” → sending HTML confirmation");
+                    "Successfully deleted “" + safeName + "” → sending HTML confirmation");
     return ResponseBuilder::generateSuccess(200, body, "text/html", req);
 }

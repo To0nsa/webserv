@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManagerRequest.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 14:53:38 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 18:58:40 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/06/09 00:47:10 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ void SocketManager::processPendingRequests(int client_fd) {
     while (!client.pendingRequests.empty() && !client.isCgiProcessRunning) {
         HttpRequest   nextReq = client.pendingRequests.front();
         const Server& server  = client.serversOnPort[nextReq.getMatchedServerIndex()];
+
+        // nextReq.printRequest();
 
         int code = nextReq.getParseErrorCode();
         if (code != 0) {

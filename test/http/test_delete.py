@@ -299,7 +299,7 @@ def test_delete_percent_encoded_nested_path():
     
 def test_delete_symlink_to_directory():
     """
-    If there’s a symlink “/upload_store/symlink_dir” → points at some directory 
+    If there's a symlink “/upload_store/symlink_dir” → points at some directory 
     (e.g., test/data/dir), then DELETE on “/upload_store/symlink_dir” should be 403 
     and the directory behind it must remain untouched.
     """
@@ -311,7 +311,7 @@ def test_delete_symlink_to_directory():
             f.write("This is a file inside /dir/")
 
     # Clean up any leftover symlink
-    test_link = "/upload_store/symlink_dir"
+    test_link = "/upload_store/symlink_dir/"
     link_path_local = os.path.join(os.getenv("UPLOAD_DIR", "./test/data/upload_store"), "symlink_dir")
     if os.path.islink(link_path_local):
         os.unlink(link_path_local)

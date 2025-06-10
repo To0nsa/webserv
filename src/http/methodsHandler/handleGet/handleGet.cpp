@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 12:06:30 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/09 22:22:38 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,16 @@ static std::string detectMimeType(const std::string& file_path) {
 }
 
 static HttpResponse serveFile(const std::string& file_path, const HttpRequest& request,
-                              std::string content_type) {
+                              const Server& server, std::string content_type) {
     if (!isFile(file_path)) {
         Logger::logFrom(LogLevel::WARN, "Get Handler", "File not found: " + file_path);
-        return ResponseBuilder::generateError(404, Server(), request);
+        return ResponseBuilder::generateError(404, server, request);
     }
 
     std::ifstream file(file_path, std::ios::binary | std::ios::ate);
     if (!file.is_open()) {
         Logger::logFrom(LogLevel::WARN, "Get Handler", "Cannot open file: " + file_path);
-        return ResponseBuilder::generateError(403, Server(), request);
+        return ResponseBuilder::generateError(403, server, request);
     }
 
     std::streamsize size = file.tellg();
@@ -113,13 +113,10 @@ static HttpResponse processDirectory(const std::string& dirPath, const std::stri
     if (!indexName.empty()) {
         std::string indexFullPath = joinPath(dirPath, indexName);
         if (isFile(indexFullPath)) {
-            Logger::logFrom(LogLevel::INFO, "Get Handler", "Serving index file: " + indexFullPath);
-            return serveFile(indexFullPath, request, "");
+            return serveFile(indexFullPath, request, server, "");
         }
 
         if (loc.isAutoindexEnabled()) {
-            Logger::logFrom(LogLevel::INFO, "Get Handler",
-                            "Index not found; autoindex enabled for: " + dirPath);
             return generateAutoindex(dirPath, uri, request, server);
         }
 
@@ -129,8 +126,6 @@ static HttpResponse processDirectory(const std::string& dirPath, const std::stri
     }
 
     if (loc.isAutoindexEnabled()) {
-        Logger::logFrom(LogLevel::INFO, "Get Handler",
-                        "No index configured; autoindex enabled for: " + dirPath);
         return generateAutoindex(dirPath, uri, request, server);
     }
 
@@ -144,6 +139,20 @@ static HttpResponse processDirectory(const std::string& dirPath, const std::stri
 HttpResponse handleGet(const HttpRequest& request, const Server& server, const Location& loc) {
     std::string filepath = resolvePhysicalPath(request, loc);
 
+    // NGINX: any GET ending in '/' is a directory lookup.
+    // If stripping the slash yields an existing file, return 404.
+    const std::string& uri = request.getPath();
+    if (!uri.empty() && uri.back() == '/') {
+        std::string fileNoSlash = filepath;
+        if (!fileNoSlash.empty() && fileNoSlash.back() == '/')
+            fileNoSlash.pop_back();
+        if (isFile(fileNoSlash)) {
+            Logger::logFrom(LogLevel::WARN, "Get Handler",
+                            "Trailing slash on file → returning 404 for URI: " + uri);
+            return ResponseBuilder::generateError(404, server, request);
+        }
+    }
+
     if (isSymlink(filepath)) {
         Logger::logFrom(LogLevel::WARN, "Get Handler",
                         "Symlink detected, rejecting request for: " + filepath);
@@ -155,14 +164,11 @@ HttpResponse handleGet(const HttpRequest& request, const Server& server, const L
         const std::string& uri = request.getPath();
 
         if (S_ISDIR(fileStat.st_mode)) {
-            Logger::logFrom(LogLevel::INFO, "Get Handler",
-                            "Handling directory request for: " + filepath);
             return processDirectory(filepath, uri, request, server, loc);
         }
 
         if (S_ISREG(fileStat.st_mode)) {
-            Logger::logFrom(LogLevel::INFO, "Get Handler", "Serving file: " + filepath);
-            return serveFile(filepath, request, "");
+            return serveFile(filepath, request, server, "");
         }
     }
 
