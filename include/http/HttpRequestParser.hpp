@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "core/Server.hpp"
 #include "http/HttpRequest.hpp"
 #include "utils/stringUtils.hpp"
 #include <string>
