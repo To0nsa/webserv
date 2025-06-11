@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/10 21:23:05 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/11 08:49:29 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void initializeResponse(HttpResponse& response, int status_code, const std::stri
     const std::string& version = request.getVersion();
 
     // These status codes indicate the server should always close the connection
-    static const std::set<int> force_close_codes = {400, 408, 413, 500};
+    static const std::set<int> force_close_codes = {400, 408, 411, 413, 414, 500, 501, 502, 503, 504, 505};
 
     // Determine if we should keep the connection alive based on protocol rules and status
     bool keep_alive = shouldKeepAlive(version, conn) && !force_close_codes.count(status_code);
