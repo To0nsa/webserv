@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:17:47 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 21:36:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/11 09:12:31 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ class Tokenizer {
     bool looksLikeIpAddress() const;
     void dispatchToken();
 
-    ////////////////////////////////////
+    //////////////////////
     // --- Token Creation
     Token makeToken(TokenType type, const std::string& value) const;
 
