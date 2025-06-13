@@ -26,12 +26,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: webserv
-          path: .
+          path: ./bin
 
       - name: Start webserv in background
         run: |
-          chmod +x ./webserv
-          ./webserv test/config/git.conf > server_output.log 2>&1 &
+          chmod +x ./bin/webserv
+          ./bin/webserv test/config/git.conf > server_output.log 2>&1 &
           echo $! > webserv.pid
           sleep 2
 
