@@ -26,11 +26,8 @@ jobs:
           sudo apt-get install -y python3 python3-pip
           pip3 install -r requirements.txt || true
 
-      - name: Download built webserv
-        uses: actions/download-artifact@v4
-        with:
-          name: webserv
-          path: ./bin
+      - name: Build webserv
+        run: make
 
       - name: Start webserv in background
         run: |
