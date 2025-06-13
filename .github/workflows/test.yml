@@ -1,0 +1,51 @@
+name: Test
+
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types:
+      - completed
+
+jobs:
+  run-tests:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip
+          pip3 install -r requirements.txt || true
+
+      - name: Download built webserv
+        uses: actions/download-artifact@v3
+        with:
+          name: webserv
+          path: .
+
+      - name: Start webserv in background
+        run: |
+          chmod +x ./webserv
+          ./webserv test/config/git.conf > server_output.log 2>&1 &
+          echo $! > webserv.pid
+          sleep 2
+
+      - name: Run Python tests
+        run: python3 run_test.py
+
+      - name: Stop webserv
+        run: kill $(cat webserv.pid) || true
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: server-logs
+          path: |
+            server_output.log
+            tester_result.txt
