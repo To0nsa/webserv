@@ -5,8 +5,9 @@ on:
     workflows: ["Build"]
     types:
       - completed
-
   push:
+    branches: [main, dev]
+  pull_request:
     branches: [main, dev]
 
 jobs:
