@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   directive_handler_table.cpp                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/24 14:57:11 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/06/14 10:27:30 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@
 #include <unistd.h>
 
 namespace directive {
+
+static std::string resolveToAbsolute(const std::string& rawPath) {
+	std::filesystem::path abs = std::filesystem::absolute(rawPath);
+	return abs.lexically_normal().string();
+}
 
 static void requireArgCount(const std::vector<std::string>& args, std::size_t expected,
                             const std::string& directive, int line, int column,
@@ -148,7 +153,7 @@ const std::unordered_map<std::string, LocationHandler>& locationHandlers() {
         {"root",
          [](Location& loc, const auto& v, int line, int column, const std::string& ctx) {
              requireArgCount(v, 1, "root", line, column, ctx);
-             loc.setRoot(v[0]);
+             loc.setRoot(resolveToAbsolute(v[0]));
          }},
         {"index",
          [](Location& loc, const auto& args, int line, int column, const std::string& ctx) {
@@ -197,7 +202,7 @@ const std::unordered_map<std::string, LocationHandler>& locationHandlers() {
         {"upload_store",
          [](Location& loc, const auto& v, int line, int column, const std::string& ctx) {
              requireArgCount(v, 1, "upload_store", line, column, ctx);
-             loc.setUploadStore(v[0]);
+             loc.setUploadStore(resolveToAbsolute(v[0]));
          }},
         {"cgi_extension",
          [](Location& loc, const auto& args, int line, int column, const std::string& ctx) {
