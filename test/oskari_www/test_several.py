@@ -198,7 +198,7 @@ def test_file_upload_and_check():
     time.sleep(0.5)
     
     # Determine the expected path to the uploaded file.
-    upload_path = Path(__file__).parent.parent.parent / "www/images" / filename
+    upload_path = Path(__file__).parent.parent.parent / "test/oskari_www/www/images" / filename
     
     # Verify that the file now exists.
     print(upload_path)
