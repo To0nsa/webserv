@@ -38,6 +38,13 @@ jobs:
           echo $! > webserv.pid
           sleep 2
 
+      - name: Prepare test directories
+        run: |
+          mkdir -p serverfiles/html/newDir
+          mkdir -p serverfiles/html/images
+          mkdir -p serverfiles/uploads
+          touch serverfiles/html/newDir/index.html
+
       - name: Run Python tests
         run: python3 run_test.py
 
