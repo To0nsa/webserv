@@ -1,4 +1,4 @@
-% ./ubuntu_tester http://localhost:8001     
+% ./ubuntu_tester http://localhost:8080     
 Welcome in this little webserver tester.
 Passing the test here is the minimum before going to an evaluation.
 
@@ -33,7 +33,7 @@ Before starting please verify that the server is launched
 press enter to continue
 
 
-Test GET http://localhost:8001/
+Test GET http://localhost:8080/
 content returned: <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,47 +48,47 @@ content returned: <!DOCTYPE html>
 </html>
 
 
-Test POST http://localhost:8001/ with a size of 0
+Test POST http://localhost:8080/ with a size of 0
 
-Test HEAD http://localhost:8001/
+Test HEAD http://localhost:8080/
 2025/05/23 10:50:15 Unsolicited response received on idle HTTP channel starting with "<html><body><h1>405 Method Not Allowed</h1></body></html>"; err=<nil>
 
-Test GET http://localhost:8001/directory
+Test GET http://localhost:8080/directory
 content returned: 
 
-Test GET http://localhost:8001/directory/youpi.bad_extension
+Test GET http://localhost:8080/directory/youpi.bad_extension
 content returned: 
 
-Test GET http://localhost:8001/directory/youpi.bla
+Test GET http://localhost:8080/directory/youpi.bla
 content returned: 
 
-Test GET Expected 404 on http://localhost:8001/directory/oulalala
+Test GET Expected 404 on http://localhost:8080/directory/oulalala
 content returned: <html><body><h1>404 Not Found</h1></body></html>
 
-Test GET http://localhost:8001/directory/nop
+Test GET http://localhost:8080/directory/nop
 content returned: 
 
-Test GET http://localhost:8001/directory/nop/
+Test GET http://localhost:8080/directory/nop/
 content returned: 
 
-Test GET http://localhost:8001/directory/nop/other.pouic
+Test GET http://localhost:8080/directory/nop/other.pouic
 content returned: 
 
-Test GET Expected 404 on http://localhost:8001/directory/nop/other.pouac
+Test GET Expected 404 on http://localhost:8080/directory/nop/other.pouac
 content returned: <html><body><h1>404 Not Found</h1></body></html>
 
-Test GET Expected 404 on http://localhost:8001/directory/Yeah
+Test GET Expected 404 on http://localhost:8080/directory/Yeah
 content returned: <html><body><h1>404 Not Found</h1></body></html>
 
-Test GET http://localhost:8001/directory/Yeah/not_happy.bad_extension
+Test GET http://localhost:8080/directory/Yeah/not_happy.bad_extension
 content returned: 
 
-Test POST http://localhost:8001/directory/youpi.bla with a size of 100000000
+Test POST http://localhost:8080/directory/youpi.bla with a size of 100000000
 FATAL ERROR ON LAST TEST: bad status code
 
 
  % ./bin/webserv ./configs/ubuntu_tester.conf
-Server 1: 127.0.0.1:8001
+Server 1: 127.0.0.1:8080
   server_name: example.com
   error_page 403: /error.html
   error_page 404: /error.html
@@ -123,7 +123,7 @@ Server 1: 127.0.0.1:8001
       index: youpi.bad_extension
       autoindex: off
     methods: GET POST 
-Listening on 127.0.0.1:8001
+Listening on 127.0.0.1:8080
 
 Accepted client on fd: 5
 we didn't find end of header
@@ -153,7 +153,7 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
+HOST: {localhost:8080}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -249,7 +249,7 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
+HOST: {localhost:8080}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -292,8 +292,8 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
-REFERER: {http://localhost:8001/directory}
+HOST: {localhost:8080}
+REFERER: {http://localhost:8080/directory}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -325,7 +325,7 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
+HOST: {localhost:8080}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -361,7 +361,7 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
+HOST: {localhost:8080}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -397,7 +397,7 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
+HOST: {localhost:8080}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -429,7 +429,7 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
+HOST: {localhost:8080}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -466,8 +466,8 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
-REFERER: {http://localhost:8001/directory/nop}
+HOST: {localhost:8080}
+REFERER: {http://localhost:8080/directory/nop}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -499,7 +499,7 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
+HOST: {localhost:8080}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -529,7 +529,7 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
+HOST: {localhost:8080}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -563,7 +563,7 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
+HOST: {localhost:8080}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -597,7 +597,7 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
+HOST: {localhost:8080}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -630,8 +630,8 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
-REFERER: {http://localhost:8001/directory/Yeah}
+HOST: {localhost:8080}
+REFERER: {http://localhost:8080/directory/Yeah}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
@@ -659,7 +659,7 @@ Query: {}
 Version: {HTTP/1.1}
 ------------- Headers -------------
 ACCEPT-ENCODING: {gzip}
-HOST: {localhost:8001}
+HOST: {localhost:8080}
 USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}

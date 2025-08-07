@@ -1,7 +1,7 @@
 import http.client
 from time import sleep
 
-conn = http.client.HTTPConnection("127.0.0.1", 8001)
+conn = http.client.HTTPConnection("127.0.0.1", 8080)
 conn.putrequest("POST", "/uploads")
 conn.putheader("Transfer-Encoding", "chunked")
 conn.putheader("Content-Type", "text/plain")

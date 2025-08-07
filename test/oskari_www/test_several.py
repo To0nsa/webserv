@@ -4,14 +4,14 @@ import requests
 
 def test_get_root():
     """Test that GET /index.html returns 200."""
-    response = requests.get("http://127.0.0.2:8004/index.html")
+    response = requests.get("http://127.0.0.1:8080/index.html")
     assert response.status_code == 200
 
 def test_oldDir_redirect():
     """
     Test that a GET request to /oldDir/ results in a 301 redirect to /newDir/.
     """
-    response = requests.get("http://127.0.0.2:8004/oldDir/", allow_redirects=False)
+    response = requests.get("http://127.0.0.1:8080/oldDir/", allow_redirects=False)
     # Expect a redirection status code (307) and a Location header pointing to /newDir/
     assert response.status_code == 301
     location = response.headers.get("Location", "")
@@ -23,7 +23,7 @@ def test_newDir_directory_listing():
     Test that GET /newDir/ returns 200.
     The configuration enables directory listing in /newDir/ so we expect a listing.
     """
-    response = requests.get("http://127.0.0.2:8004/newDir/")
+    response = requests.get("http://127.0.0.1:8080/newDir/")
     assert response.status_code == 200
     # Optionally, check for a marker (like an HTML tag) that indicates a directory listing.
     # For example, many servers include <title>Directory listing</title> in the response.
@@ -36,12 +36,12 @@ def test_images_get():
     Test that GET /images/ (an endpoint allowing GET, POST, DELETE)
     returns 200 and contains (possibly) a directory listing.
     """
-    response = requests.get("http://127.0.0.2:8004/images/")
+    response = requests.get("http://127.0.0.1:8080/images/")
     assert response.status_code == 200
 
 def test_images_post():    
     files = {'file': ('filename.txt', b"dummy data\n")}
-    response = requests.post("http://127.0.0.2:8004/images/", files=files)
+    response = requests.post("http://127.0.0.1:8080/images/", files=files)
     assert response.status_code in (200, 201)
 
 def test_images_delete():
@@ -56,7 +56,7 @@ def test_images_delete():
     test_file.write_text("Temporary file content.")
 
     # Run DELETE request
-    response = requests.delete("http://127.0.0.2:8004/images/random.file")
+    response = requests.delete("http://127.0.0.1:8080/images/random.file")
 
     # Check the response status code
     assert response.status_code in (200, 202, 204)
@@ -71,7 +71,7 @@ def test_imagesREDIR():
     """
     Test that GET /imagesREDIR/ returns a 307 redirect to /images/.
     """
-    response = requests.get("http://127.0.0.2:8004/imagesREDIR/", allow_redirects=False)
+    response = requests.get("http://127.0.0.1:8080/imagesREDIR/", allow_redirects=False)
     assert response.status_code == 307
     location = response.headers.get("Location", "")
     assert "/images/" in location
@@ -80,7 +80,7 @@ def test_cgi_empty_redirect():
     """
     Test that GET /cgi/empty/ returns a 307 redirect to https://www.google.com.
     """
-    response = requests.get("http://127.0.0.2:8004/cgi/empty/", allow_redirects=False)
+    response = requests.get("http://127.0.0.1:8080/cgi/empty/", allow_redirects=False)
     assert response.status_code == 307
     location = response.headers.get("Location", "")
     assert "https://www.google.com" in location
@@ -95,14 +95,14 @@ def test_bad_http_request():
     """
     import socket
     
-    # Connect to the local server at 127.0.0.2:8004
-    with socket.create_connection(("127.0.0.2", 8004), timeout=5) as sock:
+    # Connect to the local server at 127.0.0.1:8080
+    with socket.create_connection(("127.0.0.1", 8080), timeout=5) as sock:
         # Craft a malformed HTTP request:
         # - Valid request line and Host header
         # - A header line without a colon (malformed)
         bad_request = (
             "GET /index.html HTTP/1.1\r\n"
-            "Host: http://127.0.0.2\r\n"
+            "Host: http://127.0.0.1\r\n"
             "BadHeaderWithoutColon\r\n"  # This header is invalid (missing ':' separator)
             "\r\n"
         )
@@ -126,11 +126,11 @@ def test_good_http_request():
     import socket
     
     # Establish a connection to the server.
-    with socket.create_connection(("127.0.0.2", 8004), timeout=5) as sock:
+    with socket.create_connection(("127.0.0.1", 8080), timeout=5) as sock:
         # Construct a valid HTTP GET request for /index.html.
         good_request = (
             "GET /index.html HTTP/1.1\r\n"
-            "Host: 127.0.0.2\r\n"
+            "Host: 127.0.0.1\r\n"
             "Connection: close\r\n"  # Ensure the connection is closed after the response.
             "\r\n"
         )
@@ -151,7 +151,7 @@ def test_not_found_error():
     Test that a GET request for a non-existent resource returns a 404 error,
     which should trigger the custom error page.
     """
-    response = requests.get("http://127.0.0.2:8004/nonexistent.html")
+    response = requests.get("http://127.0.0.1:8080/nonexistent.html")
     # Depending on your implementation, the server should send a 404 and may serve the custom error page.
     assert response.status_code == 404
     # Optionally, check that the response content contains something indicative of the error page.
@@ -167,7 +167,7 @@ def test_client_body_size_exceeded():
     # Construct a payload larger than 5,000,000 bytes, e.g. 6,000,000 bytes.
     payload = b"x" * 6000000
     try:
-        response = requests.post("http://127.0.0.2:8004/images/", data=payload)
+        response = requests.post("http://127.0.0.1:8080/images/", data=payload)
         # Adjust the expected status code as needed; 413 is common for payload too large.
         assert response.status_code in (413, 400, 500), f"Unexpected status: {response.status_code}"
     except Exception as e:
@@ -191,7 +191,7 @@ def test_file_upload_and_check():
     files = {'file': (filename, file_content)}
     
     # Send a POST request to the /images/ endpoint.
-    response = requests.post("http://127.0.0.2:8004/images/", files=files)
+    response = requests.post("http://127.0.0.1:8080/images/", files=files)
     assert response.status_code in (200, 201), f"Upload failed with status {response.status_code}"
     
     # Optionally, wait a short time to let any asynchronous file writing complete.
@@ -230,7 +230,7 @@ async def test_repeated_requests():
     This test simulates load. Adjust num_requests as appropriate.
     """
     num_requests = 1000
-    url = "http://127.0.0.2:8004/index.html"
+    url = "http://127.0.0.1:8080/index.html"
 
     # Rajoita samanaikaisten pyyntöjen määrä
     sem = asyncio.Semaphore(num_requests)  # Vain 10 yhtäaikaista pyyntöä – säädä tarpeen mukaan
@@ -261,8 +261,8 @@ async def test_concurrent_get_and_post():
     """
     num_get = 1000   # Number of GET requests to send
     num_post = 1000  # Number of POST requests to send
-    get_url = "http://127.0.0.2:8004/index.html"
-    post_url = "http://127.0.0.2:8004/images/"
+    get_url = "http://127.0.0.1:8080/index.html"
+    post_url = "http://127.0.0.1:8080/images/"
 
     sem = asyncio.Semaphore(1000)  # Rajoita samanaikaiset pyynnöt esim. 25:een
 
@@ -326,7 +326,7 @@ async def test_concurrent_get_and_post():
 
 @pytest.mark.asyncio
 async def test_single_post_upload():
-    post_url = "http://127.0.0.2:8004/uploads/"
+    post_url = "http://127.0.0.1:8080/uploads/"
     filename = "testfile.txt"
     content = b"Test content\n"
 
@@ -343,7 +343,7 @@ async def test_single_post_upload():
 
 @pytest.mark.asyncio
 async def test_repeated_identical_post_upload():
-    post_url = "http://127.0.0.2:8004/uploads/"
+    post_url = "http://127.0.0.1:8080/uploads/"
     filename = "testfile.txt"
     content = b"Test content for repeated upload\n"
 
@@ -369,7 +369,7 @@ async def test_repeated_identical_post_upload():
 
 @pytest.mark.asyncio
 async def test_repeated_post_requests_from_multiple_clients():
-    post_url = "http://127.0.0.2:8004/cgi/test.py"
+    post_url = "http://127.0.0.1:8080/cgi/test.py"
     data = "Test content\n"
 
     sem = asyncio.Semaphore(10000)  # Maksimi 10 samanaikaista pyyntöä
@@ -411,12 +411,12 @@ def test_keep_alive_connection():
     import socket
     request = (
         "GET /index.html HTTP/1.1\r\n"
-        "Host: 127.0.0.2\r\n"
+        "Host: 127.0.0.1\r\n"
         "Connection: keep-alive\r\n"
         "\r\n"
     )
 
-    with socket.create_connection(("127.0.0.2", 8004)) as sock:
+    with socket.create_connection(("127.0.0.1", 8080)) as sock:
         sock.sendall(request.encode())
         response1 = read_http_response(sock)
         sock.sendall(request.encode())
@@ -425,7 +425,7 @@ def test_keep_alive_connection():
     assert b"200 OK" in response1 and b"200 OK" in response2
 
 def test_path_traversal_attack():
-    response = requests.get("http://127.0.0.2:8004/../../etc/passwd")
+    response = requests.get("http://127.0.0.1:8080/../../etc/passwd")
     assert response.status_code in (403, 400, 404), "Path traversal should be blocked"
 
 def test_extra_headers():
@@ -434,11 +434,11 @@ def test_extra_headers():
         "User-Agent": "pytest",
         "Accept": "*/*",
     }
-    response = requests.get("http://127.0.0.2:8004/index.html", headers=headers)
+    response = requests.get("http://127.0.0.1:8080/index.html", headers=headers)
     assert response.status_code == 200
 
 def test_unsupported_method():
-    response = requests.request("PATCH", "http://127.0.0.2:8004/index.html")
+    response = requests.request("PATCH", "http://127.0.0.1:8080/index.html")
     assert response.status_code in (405, 501), f"Unexpected status: {response.status_code}"
 
 def test_dos_simulation():
@@ -446,7 +446,7 @@ def test_dos_simulation():
     sockets = []
     try:
         for _ in range(100):
-            sock = socket.create_connection(("127.0.0.2", 8004), timeout=1)
+            sock = socket.create_connection(("127.0.0.1", 8080), timeout=1)
             sockets.append(sock)
         assert True  # Jos serveri selviää yhteyksistä ilman kaatumista
     finally:
@@ -454,7 +454,7 @@ def test_dos_simulation():
             sock.close()
 
 def test_cgi_script():
-    url = "http://127.0.0.2:8004/cgi/test.py"
+    url = "http://127.0.0.1:8080/cgi/test.py"
     response = requests.get(url)
 
     assert response.status_code == 200
@@ -469,7 +469,7 @@ def test_cgi_script():
     assert headers["Content-Type"] == "text/plain"
 
 def test_cgi_get_query():
-    url = "http://127.0.0.2:8004/cgi/test.py?foo=bar"
+    url = "http://127.0.0.1:8080/cgi/test.py?foo=bar"
     response = requests.get(url)
 
     assert response.status_code == 200
@@ -488,7 +488,7 @@ def test_cgi_get_query():
     assert "foo=bar" in body
 
 def test_cgi_post_body():
-    url = "http://127.0.0.2:8004/cgi/test.py"
+    url = "http://127.0.0.1:8080/cgi/test.py"
     payload = "name=ChatGPT&lang=fi"
     headers = {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -515,7 +515,7 @@ import time
 def send_chunked_request():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.settimeout(5)  # timeout 5 sekuntia
-    client_socket.connect(('127.0.0.2', 8004))
+    client_socket.connect(('127.0.0.1', 8080))
 
     headers = (
         "POST /directory/test.py HTTP/1.1\r\n"

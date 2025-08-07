@@ -6,7 +6,7 @@ RED = "\033[91m"
 GREEN = "\033[92m"
 RESET = "\033[0m"
 
-def send_request(request: str, host='127.0.0.1', port=8001):
+def send_request(request: str, host='127.0.0.1', port=8080):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.connect((host, port))
         sock.sendall(request.encode())

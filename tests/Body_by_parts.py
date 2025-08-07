@@ -2,7 +2,7 @@ import socket
 import time
 
 HOST = 'localhost'    # or '127.0.0.1'
-PORT = 8001           # adjust to your server's port
+PORT = 8080           # adjust to your server's port
 PATH = '/uploads/test.txt'  # adjust route
 
 BODY = "This is line one.\nThis is line two.\nAnd some more content.\n"
