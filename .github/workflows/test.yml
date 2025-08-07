@@ -40,10 +40,7 @@ jobs:
 
       - name: Prepare test directories
         run: |
-          mkdir -p serverfiles/html/newDir
-          mkdir -p serverfiles/html/images
-          mkdir -p serverfiles/uploads
-          touch serverfiles/html/newDir/index.html
+          mkdir -p /www/images
 
       - name: Run Python tests
         run: python3 run_test.py
