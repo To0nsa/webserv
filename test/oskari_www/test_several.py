@@ -40,9 +40,9 @@ def test_images_get():
     assert response.status_code == 200
 
 def test_images_post():    
-	files = {'file': ('filename.txt', b"dummy data\n")}
-	response = requests.post("http://127.0.0.2:8004/images/", files=files)
-	assert response.status_code in (200, 201)
+    files = {'file': ('filename.txt', b"dummy data\n")}
+    response = requests.post("http://127.0.0.2:8004/images/", files=files)
+    assert response.status_code in (200, 201)
 
 def test_images_delete():
     """
@@ -321,6 +321,9 @@ async def test_concurrent_get_and_post():
             )
         await resp.release()
 
+    uploaded_file = Path("/home/irychkov/Desktop/webserv_team/test/oskari_www/www/images/filename.txt")
+    uploaded_file.unlink(missing_ok=True)
+
 @pytest.mark.asyncio
 async def test_single_post_upload():
     post_url = "http://127.0.0.2:8004/uploads/"
@@ -334,6 +337,9 @@ async def test_single_post_upload():
             assert resp.status in (200, 201)
             text = await resp.text()
             print(text)  # Tulosta vastaus debuggausta varten
+
+        uploaded_file = Path("/home/irychkov/Desktop/webserv_team/test/oskari_www/www/testfile.txt")
+        uploaded_file.unlink(missing_ok=True)
 
 @pytest.mark.asyncio
 async def test_repeated_identical_post_upload():
@@ -357,6 +363,9 @@ async def test_repeated_identical_post_upload():
     results = await asyncio.gather(*tasks)
     for res in results:
         print(res)
+
+    uploaded_file = Path("/home/irychkov/Desktop/webserv_team/test/oskari_www/www/testfile.txt")
+    uploaded_file.unlink(missing_ok=True)
 
 @pytest.mark.asyncio
 async def test_repeated_post_requests_from_multiple_clients():
