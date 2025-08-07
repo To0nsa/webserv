@@ -40,7 +40,7 @@ jobs:
 
       - name: Prepare test directories
         run: |
-          mkdir -p /www/images
+          mkdir -p ./www/images
 
       - name: Run Python tests
         run: python3 run_test.py
