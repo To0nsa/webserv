@@ -7,8 +7,7 @@ from urllib.parse import urlparse
 
 SERVER = os.getenv("WEBSERV_URL", "http://localhost:8080")
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_PATH = os.getenv("UPLOAD_DIR", os.path.join(SCRIPT_DIR, "../tester/data/upload_store"))
-print(f"Upload path: {UPLOAD_PATH}")
+UPLOAD_PATH = os.getenv("UPLOAD_DIR", os.path.normpath(os.path.join(SCRIPT_DIR, "../data/upload_store")))
 
 def request(method, path, expected_status, body=None, headers=None):
     parsed = urlparse(SERVER)
@@ -38,9 +37,11 @@ def setup_symlinks():
     for name in ["link_get.txt", "link_post.txt", "link_delete.txt"]:
         link_path = os.path.join(UPLOAD_PATH, name)
         try:
+            if os.path.lexists(link_path):  # remove existing symlink or file
+                os.unlink(link_path)
             os.symlink(real_path, link_path)
-        except FileExistsError:
-            pass  # already exists
+        except OSError as e:
+            print(f"Failed to create symlink {link_path} → {real_path}: {e}")
 
 def cleanup():
     for name in ["real.txt", "link_get.txt", "link_post.txt", "link_delete.txt"]:
