@@ -58,7 +58,7 @@ echo -ne 'POST /upload_store/hello.txt HTTP/1.1\r\nHost: localhost\r\nContent-Le
 
 echo -ne 'POST /upload_store/hello.txt HTTP/1.1\r\nHost: localhost\r\nContent-Length: 20\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n'| nc 127.0.0.1 8080
 
-irychkov@irychkov42:~/Desktop/webserv/serverfiles/cgi-bin$ SCRIPT_NAME=/directory/fake.bla \
+irychkov@irychkov42:~/Desktop/webserv/test_webserv/serverfiles/cgi-bin$ SCRIPT_NAME=/directory/fake.bla \
 PATH_INFO=/directory/fake.bla \
 REQUEST_METHOD=GET \
 QUERY_STRING= \
@@ -67,14 +67,14 @@ CONTENT_TYPE=text/plain \
 SERVER_PROTOCOL=HTTP/1.1 \
 GATEWAY_INTERFACE=CGI/1.1 \
 SERVER_SOFTWARE=webserv/1.0 \
-DOCUMENT_ROOT=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane \
+DOCUMENT_ROOT=/home/irychkov/Desktop/webserv/test_webserv/serverfiles/html/YoupiBanane \
 SERVER_NAME=localhost \
 SERVER_PORT=8080 \
-PATH_TRANSLATED=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane/fake.bla \
+PATH_TRANSLATED=/home/irychkov/Desktop/webserv/test_webserv/serverfiles/html/YoupiBanane/fake.bla \
 REMOTE_ADDR=127.0.0.1 \
 REQUEST_URI=/directory/fake.bla \
-SCRIPT_FILENAME=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane/fake.bla \
-/home/irychkov/Desktop/webserv/serverfiles/cgi-bin/ubuntu_cgi_tester < /dev/null
+SCRIPT_FILENAME=/home/irychkov/Desktop/webserv/test_webserv/serverfiles/html/YoupiBanane/fake.bla \
+/home/irychkov/Desktop/webserv/test_webserv/serverfiles/cgi-bin/ubuntu_cgi_tester < /dev/null
 
 
 echo -n "name=test&value=123" | \
@@ -87,15 +87,15 @@ CONTENT_TYPE=application/x-www-form-urlencoded \
 SERVER_PROTOCOL=HTTP/1.1 \
 GATEWAY_INTERFACE=CGI/1.1 \
 SERVER_SOFTWARE=webserv/1.0 \
-DOCUMENT_ROOT=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane \
+DOCUMENT_ROOT=/home/irychkov/Desktop/webserv/test_webserv/serverfiles/html/YoupiBanane \
 SERVER_NAME=localhost \
 SERVER_PORT=8080 \
-PATH_TRANSLATED=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane/fake.bla \
+PATH_TRANSLATED=/home/irychkov/Desktop/webserv/test_webserv/serverfiles/html/YoupiBanane/fake.bla \
 REMOTE_ADDR=127.0.0.1 \
 REQUEST_URI=/directory/fake.bla \
-SCRIPT_FILENAME=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane/fake.bla \
+SCRIPT_FILENAME=/home/irychkov/Desktop/webserv/test_webserv/serverfiles/html/YoupiBanane/fake.bla \
 REDIRECT_STATUS=200 \
-/home/irychkov/Desktop/webserv/serverfiles/cgi-bin/ubuntu_cgi_tester
+/home/irychkov/Desktop/webserv/test_webserv/serverfiles/cgi-bin/ubuntu_cgi_tester
 
 ab -n 1000 -c 100 http://localhost:8080/index.html
 This is ApacheBench, Version 2.3 <$Revision: 1903618 $>

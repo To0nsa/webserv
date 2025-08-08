@@ -96,7 +96,7 @@ Server 1: 127.0.0.1:8080
   error_page 502: /error.html
   client_max_body_size: 10.00 MiB
   location /:
-      root: /home/irychkov/Desktop/webserv_team/serverfiles/html
+      root: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html
       index: index.html
       autoindex: on
     methods: GET 
@@ -105,9 +105,9 @@ Server 1: 127.0.0.1:8080
       index: index.html
       autoindex: off
     methods: POST 
-    upload_store: /home/irychkov/Desktop/webserv_team/serverfiles/uploads
+    upload_store: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/uploads
   location /cgi-bin:
-      root: /home/irychkov/Desktop/webserv_team/serverfiles/cgi-bin
+      root: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/cgi-bin
       index: index.html
       autoindex: off
     methods: GET POST 
@@ -117,9 +117,9 @@ Server 1: 127.0.0.1:8080
       index: index.html
       autoindex: off
     methods: POST 
-    upload_store: /home/irychkov/Desktop/webserv_team/serverfiles/uploads
+    upload_store: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/uploads
   location /directory/:
-      root: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane
+      root: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane
       index: youpi.bad_extension
       autoindex: off
     methods: GET POST 
@@ -158,7 +158,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 200 OK
 Connection: keep-alive
@@ -254,7 +254,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 301 Moved Permanently
 Connection: keep-alive
@@ -298,7 +298,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 200 OK
 Connection: keep-alive
@@ -330,7 +330,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/youpi.bad_extension
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/youpi.bad_extension
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 200 OK
 Connection: keep-alive
@@ -366,7 +366,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/youpi.bla
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/youpi.bla
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 200 OK
 Connection: keep-alive
@@ -402,7 +402,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/oulalala
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/oulalala
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 404 Not Found
 Connection: keep-alive
@@ -434,7 +434,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/nop
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/nop
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 301 Moved Permanently
 Connection: keep-alive
@@ -472,7 +472,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/nop
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/nop
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 200 OK
 Connection: keep-alive
@@ -504,7 +504,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/nop
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/nop
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 200 OK
 Connection: keep-alive
@@ -534,7 +534,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/nop/other.pouic
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/nop/other.pouic
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 200 OK
 Connection: keep-alive
@@ -568,7 +568,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/nop/other.pouac
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/nop/other.pouac
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 404 Not Found
 Connection: keep-alive
@@ -602,7 +602,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/Yeah
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/Yeah
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 301 Moved Permanently
 Connection: keep-alive
@@ -636,7 +636,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/Yeah
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/Yeah
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 404 Not Found
 Connection: keep-alive
@@ -664,7 +664,7 @@ USER-AGENT: {Go-http-client/1.1}
 -------------- Body ---------------
 Body: {(empty)}
 ===================================
-Resolved file path: /home/irychkov/Desktop/webserv_team/serverfiles/html/YoupiBanane/Yeah/not_happy.bad_extension
+Resolved file path: /home/irychkov/Desktop/webserv_team/test_webserv/serverfiles/html/YoupiBanane/Yeah/not_happy.bad_extension
 [✅DONE] We sent RESPONSE to fd:5
 HTTP/1.1 200 OK
 Connection: keep-alive
