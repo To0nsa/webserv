@@ -9,7 +9,7 @@ To make your server more robust:
 Example startup log:
 
 ```
-[WARNING] Root directory /home/nlouis/webserv/serverfiles/html/YoupiBanane does not exist.
+[WARNING] Root directory /home/nlouis/webserv/test_webserv/serverfiles/html/YoupiBanane does not exist.
 [ERROR] Server configuration invalid – refusing to start.
 ```
 

@@ -1,1 +1,0 @@
-./test/data/upload_store/real_target.txt

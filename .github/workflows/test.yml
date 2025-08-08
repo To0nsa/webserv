@@ -34,17 +34,17 @@ jobs:
 
       - name: Prepare test directories
         run: |
-          mkdir -p test/oskari_www/www/images
+          mkdir -p test_webserv/tester/tester_oskari/www/images
 
       - name: Debug folder structure
         run: |
-          ls -R test/
-          ls -R test/oskari_www/
+          ls -R test_webserv/tester/
+          ls -R test_webserv/tester/tester_oskari/
 
       - name: Start webserv in background
         run: |
           chmod +x ./bin/webserv
-          ./bin/webserv test/config/git.conf > server_output.log 2>&1 &
+          ./bin/webserv test_webserv/tester/config/git.conf > server_output.log 2>&1 &
           echo $! > webserv.pid
           sleep 2
 
