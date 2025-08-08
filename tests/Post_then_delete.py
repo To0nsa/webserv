@@ -2,7 +2,7 @@ import http.client
 import time
 
 HOST = "localhost"
-PORT = 8001
+PORT = 8080
 PATH = "/uploads/test_delete.txt"
 BODY = "This file will be deleted in 10 seconds."
 CONTENT_TYPE = "text/plain"

@@ -30,12 +30,12 @@ echo -ne 'GET / HTTP/1.1\r\n\r\n' | nc 127.0.0.1 8080
 echo -ne 'GET / HTTP/1.0\r\n\r\n' | nc 127.0.0.1 8080
 
 
-curl -X POST http://localhost:8001/uploads/ACTIONPLAN.md \
+curl -X POST http://localhost:8080/uploads/ACTIONPLAN.md \
      --data-binary "@/home/irychkov/Desktop/webserv_team/ACTIONPLAN.md"
 
-echo -ne 'GET / HTTP/1.1\r\nHost: localhost\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc 127.0.0.1 8001
+echo -ne 'GET / HTTP/1.1\r\nHost: localhost\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc 127.0.0.1 8080
 
-echo -ne 'GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' | nc 127.0.0.1 8001
+echo -ne 'GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' | nc 127.0.0.1 8080
 
 
 
@@ -43,20 +43,20 @@ echo -ne 'GET / HTTP/1.1\r\nHost: localhost\r\n\r\nGET / HTTP/1.1\r\nHost: local
 
 echo -ne 'GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' | nc 127.0.0.1 8080
 
-echo -ne 'GET /cgi-bin/hang.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n' | nc 127.0.0.1 8001
+echo -ne 'GET /cgi-bin/hang.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n' | nc 127.0.0.1 8080
 
-echo -ne 'GET /cgi-bin/hang.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n' | nc 127.0.0.1 8001
+echo -ne 'GET /cgi-bin/hang.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n' | nc 127.0.0.1 8080
 
-echo -ne 'GET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n' | nc 127.0.0.1 8001
-
-
-echo -ne 'GET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nPOST /upload_store/hello.txt HTTP/1.1\r\nHost: localhost\r\nContent-Length: 20\r\nConnection: keep-alive\r\n\r\nHELLO'| nc 127.0.0.1 8001
+echo -ne 'GET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n' | nc 127.0.0.1 8080
 
 
-echo -ne 'POST /upload_store/hello.txt HTTP/1.1\r\nHost: localhost\r\nContent-Length: 20\r\nContent-Type: text/plain\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n'| nc 127.0.0.1 8001
+echo -ne 'GET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nPOST /upload_store/hello.txt HTTP/1.1\r\nHost: localhost\r\nContent-Length: 20\r\nConnection: keep-alive\r\n\r\nHELLO'| nc 127.0.0.1 8080
 
 
-echo -ne 'POST /upload_store/hello.txt HTTP/1.1\r\nHost: localhost\r\nContent-Length: 20\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n'| nc 127.0.0.1 8001
+echo -ne 'POST /upload_store/hello.txt HTTP/1.1\r\nHost: localhost\r\nContent-Length: 20\r\nContent-Type: text/plain\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n'| nc 127.0.0.1 8080
+
+
+echo -ne 'POST /upload_store/hello.txt HTTP/1.1\r\nHost: localhost\r\nContent-Length: 20\r\nConnection: keep-alive\r\n\r\nGET /cgi-bin/hello.py HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\nGET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n'| nc 127.0.0.1 8080
 
 irychkov@irychkov42:~/Desktop/webserv/serverfiles/cgi-bin$ SCRIPT_NAME=/directory/fake.bla \
 PATH_INFO=/directory/fake.bla \
@@ -97,7 +97,7 @@ SCRIPT_FILENAME=/home/irychkov/Desktop/webserv/serverfiles/html/YoupiBanane/fake
 REDIRECT_STATUS=200 \
 /home/irychkov/Desktop/webserv/serverfiles/cgi-bin/ubuntu_cgi_tester
 
-ab -n 1000 -c 100 http://localhost:8001/index.html
+ab -n 1000 -c 100 http://localhost:8080/index.html
 This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
@@ -118,7 +118,7 @@ Finished 1000 requests
 
 Server Software:        
 Server Hostname:        localhost
-Server Port:            8001
+Server Port:            8080
 
 Document Path:          /index.html
 Document Length:        244 bytes
@@ -153,7 +153,7 @@ Percentage of the requests served within a certain time (ms)
  100%     61 (longest request)
 
 
-ab -n 10000 -c 200 http://localhost:8001/index.html
+ab -n 10000 -c 200 http://localhost:8080/index.html
 This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
@@ -174,7 +174,7 @@ Finished 10000 requests
 
 Server Software:        
 Server Hostname:        localhost
-Server Port:            8001
+Server Port:            8080
 
 Document Path:          /index.html
 Document Length:        244 bytes

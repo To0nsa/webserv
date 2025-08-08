@@ -18,29 +18,30 @@ def main():
     failed_tests = []
 
     tests = [
-        ("test/bootstrap_test_data.py", "bootstrap_test_data.py"),
-        ("test/http/test_get.py", "test_get.py"),
-        ("test/http/test_http_header_parser.py", "test_http_header_parser.py"),
-        ("test/http/test_slow_loris.py", "test_slow_loris.py"),
-        ("test/http/test_delete.py", "test_delete.py"),
-        ("test/http/test_post.py", "test_post.py"),
-        ("test/http/test_redirect.py", "test_redirect.py"),
-        ("test/http/test_file_resolution.py", "test_file_resolution.py"),
-        ("test/http/test_symlinks_forbidden.py", "test_symlinks_forbidden.py"),
-        ("test/http/test_directory_listing.py", "test_directory_listing.py"),
-        ("test/http/test_mime_static.py", "test_mime_static.py"),
-        ("test/http/stress_test.py", "stress_test.py"),
-        ("test/http/stress_cgi.py", "stress_cgi.py"),
-        ("test/http/stress_chunked.py", "stress_chunked.py"),
-        ("test/http/stress_pipeline.py", "stress_pipeline.py"),
-        ("test/http/test_slash_behavior.py", "test_slash_behavior.py"),
-        ("test/http/test_connection.py", "test_connection.py"),
-        ("test/http/test_cgi.py", "test_cgi.py"),
-        # ("test/http/ultra_stress_test.py", "ultra_stress_test.py")
+        (["python3", os.path.join(root, "test/bootstrap_test_data.py")], "bootstrap_test_data.py"),
+        (["python3", os.path.join(root, "test/http/test_get.py")], "test_get.py"),
+        (["python3", os.path.join(root, "test/http/test_http_header_parser.py")], "test_http_header_parser.py"),
+        (["python3", os.path.join(root, "test/http/test_slow_loris.py")], "test_slow_loris.py"),
+        (["python3", os.path.join(root, "test/http/test_delete.py")], "test_delete.py"),
+        (["python3", os.path.join(root, "test/http/test_post.py")], "test_post.py"),
+        (["python3", os.path.join(root, "test/http/test_redirect.py")], "test_redirect.py"),
+        (["python3", os.path.join(root, "test/http/test_file_resolution.py")], "test_file_resolution.py"),
+        (["python3", os.path.join(root, "test/http/test_symlinks_forbidden.py")], "test_symlinks_forbidden.py"),
+        (["python3", os.path.join(root, "test/http/test_directory_listing.py")], "test_directory_listing.py"),
+        (["python3", os.path.join(root, "test/http/test_mime_static.py")], "test_mime_static.py"),
+        (["python3", os.path.join(root, "test/http/stress_test.py")], "stress_test.py"),
+        (["python3", os.path.join(root, "test/http/stress_cgi.py")], "stress_cgi.py"),
+        (["python3", os.path.join(root, "test/http/stress_chunked.py")], "stress_chunked.py"),
+        (["python3", os.path.join(root, "test/http/stress_pipeline.py")], "stress_pipeline.py"),
+        (["python3", os.path.join(root, "test/http/test_slash_behavior.py")], "test_slash_behavior.py"),
+        (["python3", os.path.join(root, "test/http/test_connection.py")], "test_connection.py"),
+        (["python3", os.path.join(root, "test/http/test_cgi.py")], "test_cgi.py"),
+        (["pytest", os.path.join(root, "test/oskari_www/test_several.py")], "pytest test_several.py"),
+        # (["python3", os.path.join(root, "test/http/ultra_stress_test.py")], "ultra_stress_test.py")
     ]
 
-    for rel_path, name in tests:
-        run(["python3", os.path.join(root, rel_path)], name, failed_tests)
+    for cmd, name in tests:
+        run(cmd, name, failed_tests)
 
     if failed_tests:
         print("\n❌ Some tests failed:")

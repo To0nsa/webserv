@@ -7,7 +7,7 @@ import string
 from urllib.parse import urlparse
 import http.client
 
-SERVER = os.getenv("WEBSERV_URL", "http://localhost:8001")
+SERVER = os.getenv("WEBSERV_URL", "http://localhost:8080")
 ENDPOINT = "/upload_store/pipe"
 PIPELINE_DEPTH = 10
 PIPELINE_COUNT = 50

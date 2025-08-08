@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <h1 style="text-align:center; font-family:courier; font-size:300%; background-color:powderblue;">Welcome to Webserv</h1>
+  <style>
+    .round-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #333;
+      margin: 10px;
+    }
+    .image-row{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    body {
+        text-align: center;
+    }
+  </style>
+</head>
+<body>
+    <h1 style="text-align:center;">Creators</h1>
+    <a href="="
+    <div>
+        <img src="./images/j.jpeg" alt="j" class="round-image">
+        <img src="./images/o.jpeg" alt="o" class="round-image">
+        <img src="./images/n.jpeg" alt="n" class="round-image">
+    </div>
+
+    <h2>Upload a File</h2>
+    <form action="/images/uploads/" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <br><br>
+      <button type="submit">Upload</button>
+    </form>
+</body>
+</html>

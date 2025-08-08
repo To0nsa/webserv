@@ -1,6 +1,7 @@
 name: Test
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Build"]
     types:
@@ -30,6 +31,15 @@ jobs:
 
       - name: Build webserv
         run: make
+
+      - name: Prepare test directories
+        run: |
+          mkdir -p test/oskari_www/www/images
+
+      - name: Debug folder structure
+        run: |
+          ls -R test/
+          ls -R test/oskari_www/
 
       - name: Start webserv in background
         run: |
