@@ -3,7 +3,7 @@ docker pull nginx
 docker run --name my-nginx \
   -p 8080:8080 \
   -v /home/nlouis/webserv/test_webserv/serverfiles/html:/usr/share/nginx/html \
-  -v /home/nlouis/webserv/configs/get_index.conf:/etc/nginx/conf.d/default.conf \
+  -v /home/nlouis/webserv/test_webserv/configs/get_index.conf:/etc/nginx/conf.d/default.conf \
   -d nginx
 
 
@@ -22,5 +22,5 @@ docker ps -a
 docker run --name my-nginx \
   -p 8080:8080 \
   -v /home/irychkov/Desktop/webserv/test_webserv/serverfiles/html:/usr/share/nginx/html \
-  -v /home/irychkov/Desktop/webserv/configs/get_index.conf:/etc/nginx/conf.d/default.conf \
+  -v /home/irychkov/Desktop/webserv/test_webserv/configs/get_index.conf:/etc/nginx/conf.d/default.conf \
   -d nginx

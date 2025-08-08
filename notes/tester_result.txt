@@ -87,7 +87,7 @@ Test POST http://localhost:8080/directory/youpi.bla with a size of 100000000
 FATAL ERROR ON LAST TEST: bad status code
 
 
- % ./bin/webserv ./configs/ubuntu_tester.conf
+ % ./bin/webserv ./test_webserv/configs/ubuntu_tester.conf
 Server 1: 127.0.0.1:8080
   server_name: example.com
   error_page 403: /error.html
