@@ -41,27 +41,25 @@ def assert_redirect(path, expected_location):
 def cleanup_test_files():
     """
     Remove any files or directories this test created under:
-      - test_webserv/tester/data/dir
+      - test_webserv/tester/data/dir (including original file.txt and file.unknown)
       - test_webserv/tester/data/secret/index.html
-    Leave original test_webserv/tester/data/dir/file.txt and file.unknown intact.
     """
-    # Clean up test_webserv/tester/data/dir except original files
+    # Clean up test_webserv/tester/data/dir completely
     try:
         for fname in os.listdir(DIR_PATH):
-            if fname not in ("file.txt", "file.unknown"):
-                full = os.path.join(DIR_PATH, fname)
-                if os.path.isfile(full) or os.path.islink(full):
-                    os.remove(full)
-                elif os.path.isdir(full):
-                    os.chmod(full, stat.S_IRWXU)
-                    for sub in os.listdir(full):
-                        subpath = os.path.join(full, sub)
-                        if os.path.isfile(subpath) or os.path.islink(subpath):
-                            os.remove(subpath)
-                        elif os.path.isdir(subpath):
-                            os.chmod(subpath, stat.S_IRWXU)
-                            os.rmdir(subpath)
-                    os.rmdir(full)
+            full = os.path.join(DIR_PATH, fname)
+            if os.path.isfile(full) or os.path.islink(full):
+                os.remove(full)
+            elif os.path.isdir(full):
+                os.chmod(full, stat.S_IRWXU)
+                for sub in os.listdir(full):
+                    subpath = os.path.join(full, sub)
+                    if os.path.isfile(subpath) or os.path.islink(subpath):
+                        os.remove(subpath)
+                    elif os.path.isdir(subpath):
+                        os.chmod(subpath, stat.S_IRWXU)
+                        os.rmdir(subpath)
+                os.rmdir(full)
     except FileNotFoundError:
         pass
 
