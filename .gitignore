@@ -1,15 +1,15 @@
-# .gitignore - Webserv project
+# =========================
+# Webserv Project .gitignore
+# =========================
 
-# Ignore build system artifacts
+# --- Build artifacts ---
+/objs/
+/deps/
+/bin/
+/bin/tests/
 compile_commands.json
 
-# Ignore Makefile outputs
-objs/
-deps/
-bin/
-bin/tests/
-
-# Ignore common compiled files
+# --- Common compiled files ---
 *.o
 *.obj
 *.lo
@@ -21,22 +21,33 @@ bin/tests/
 *.exe
 *.out
 
-# Ignore precompiled headers
+# --- Precompiled headers ---
 *.gch
 *.pch
 
-# Ignore IDE/editor files
+# --- Python cache ---
+__pycache__/
+*.pyc
+*.pyo
+
+# --- Virtual environments ---
+.venv/
+
+# --- IDE / editor settings ---
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# Ignore OS system files
+# --- OS-specific metadata ---
 .DS_Store
 Thumbs.db
 
-# Ignore logs (if any)
+# --- Logs ---
 *.log
 
-.venv
+# --- Test temporary files ---
+test_webserv/**/__pycache__/
+test_webserv/**/*.pyc
+test_webserv/**/*.pyo
