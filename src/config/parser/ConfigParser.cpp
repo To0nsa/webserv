@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 08:46:22 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/24 14:30:58 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/09 12:11:52 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include "utils/errorUtils.hpp"
 #include "utils/stringUtils.hpp"
 
+#include <algorithm>
+#include <array>
 #include <charconv>
 #include <functional>
 #include <memory>
@@ -27,6 +29,7 @@
 #include <sstream>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 namespace {
 

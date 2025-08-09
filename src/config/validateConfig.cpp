@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 23:23:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/10 21:26:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/09 12:06:25 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,12 @@
 #include "utils/errorUtils.hpp"
 #include "utils/filesystemUtils.hpp"
 
+#include <algorithm>
+#include <array>
 #include <filesystem>
 #include <iostream>
+#include <map>
+#include <set>
 #include <string>
 #include <unordered_set>
 
