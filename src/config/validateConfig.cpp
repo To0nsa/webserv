@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 23:23:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/09 12:06:25 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/09 22:17:01 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@
 #include <string>
 #include <unordered_set>
 
+namespace {
 namespace fs = std::filesystem;
 
-namespace {
 void validateHasLocation(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
         if (servers[serverIndex].getLocations().empty()) {
@@ -430,45 +430,73 @@ void validateCgiInterpreters(const std::vector<Server>& servers) {
     }
 }
 
-/* void validateFilesystem(const std::vector<Server>& servers) {
+void validateRootsExist(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
         const Server& server = servers[serverIndex];
 
         for (const Location& loc : server.getLocations()) {
-            const std::string& locationPath = loc.getPath();
+            // If location is a redirect, root is not required for serving
+            if (loc.hasRedirect())
+                continue;
 
-            // --- Root
-            const std::string& rootStr = loc.getRoot();
-            if (!rootStr.empty()) {
-                if (!fs::exists(rootStr)) {
-                    throw ValidationError("Root path '" + rootStr +
-                                          "' does not exist in location '" + locationPath +
-                                          "' of server #" + std::to_string(serverIndex + 1));
-                }
-                if (!fs::is_directory(rootStr)) {
-                    throw ValidationError("Root path '" + rootStr +
-                                          "' is not a directory in location '" + locationPath +
-                                          "' of server #" + std::to_string(serverIndex + 1));
-                }
+            const std::string& root = loc.getRoot();
+            if (root.empty()) {
+                // Should already be prevented by validateLocationDefaults, but double-guard
+                throw ValidationError("Location '" + loc.getPath() + "' in server #" +
+                                      std::to_string(serverIndex + 1) +
+                                      " is missing a 'root' (required when no 'return' is set)");
             }
 
-            // --- Upload Store
-            if (loc.isUploadEnabled()) {
-                const std::string& uploadStr = loc.getUploadStore();
-                if (!fs::exists(uploadStr)) {
-                    throw ValidationError("Upload store '" + uploadStr +
-                                          "' does not exist in location '" + locationPath +
-                                          "' of server #" + std::to_string(serverIndex + 1));
-                }
-                if (!fs::is_directory(uploadStr)) {
-                    throw ValidationError("Upload store '" + uploadStr +
-                                          "' is not a directory in location '" + locationPath +
-                                          "' of server #" + std::to_string(serverIndex + 1));
-                }
+            std::error_code       ec;
+            const fs::file_status st = fs::status(root, ec);
+            if (ec || !fs::exists(st)) {
+                throw ValidationError("Root path '" + root + "' does not exist for location '" +
+                                      loc.getPath() + "' in server #" +
+                                      std::to_string(serverIndex + 1) +
+                                      "\n→ Create the directory or update the 'root' path.");
+            }
+            if (!fs::is_directory(st)) {
+                throw ValidationError("Root path '" + root + "' is not a directory for location '" +
+                                      loc.getPath() + "' in server #" +
+                                      std::to_string(serverIndex + 1) +
+                                      "\n→ Point 'root' to an existing directory.");
             }
         }
     }
-} */
+}
+
+void validateUploadStores(const std::vector<Server>& servers) {
+    namespace fs = std::filesystem;
+
+    for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
+        const Server& server = servers[serverIndex];
+
+        for (const Location& loc : server.getLocations()) {
+            if (!loc.isUploadEnabled())
+                continue;
+
+            const std::string& uploadStr    = loc.getUploadStore();
+            const std::string& locationPath = loc.getPath();
+
+            std::error_code ec;
+            fs::file_status st = fs::status(uploadStr, ec);
+
+            if (ec || !fs::exists(st)) {
+                throw ValidationError("Upload store '" + uploadStr +
+                                      "' does not exist in location '" + locationPath +
+                                      "' of server #" + std::to_string(serverIndex + 1) +
+                                      "\n→ Create the directory or update your configuration");
+            }
+
+            if (!fs::is_directory(st)) {
+                throw ValidationError("Upload store '" + uploadStr +
+                                      "' is not a directory in location '" + locationPath +
+                                      "' of server #" + std::to_string(serverIndex + 1) +
+                                      "\n→ Ensure it points to a valid directory");
+            }
+        }
+    }
+}
 
 } // namespace
 
@@ -488,5 +516,6 @@ void validateConfig(const Config& config) {
     validateIndexFiles(servers);
     // validateAbsolutePaths(servers);
     validateCgiInterpreters(servers);
-    // validateFilesystem(servers);
+    validateUploadStores(servers);
+    validateRootsExist(servers);
 }
