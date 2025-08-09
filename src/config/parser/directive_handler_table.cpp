@@ -25,8 +25,8 @@
 namespace directive {
 
 static std::string resolveToAbsolute(const std::string& rawPath) {
-	std::filesystem::path abs = std::filesystem::absolute(rawPath);
-	return abs.lexically_normal().string();
+    std::filesystem::path abs = std::filesystem::absolute(rawPath);
+    return abs.lexically_normal().string();
 }
 
 static void requireArgCount(const std::vector<std::string>& args, std::size_t expected,
