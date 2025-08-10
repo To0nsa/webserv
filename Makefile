@@ -5,42 +5,22 @@
 #                                                     +:+ +:+         +:+      #
 #    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/04/26 16:00:00 by nlouis            #+#    #+#              #
-#    Updated: 2025/05/16 19:08:31 by nlouis           ###   ########.fr        #
+#    Created: 2025/08/09 20:53:27 by nlouis            #+#    #+#              #
+#    Updated: 2025/08/09 20:59:47 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Compiler settings
 CXX        := c++
-CXXFLAGS   := -Wall -Wextra -Werror -I include
-CXXFLAGS   += -std=c++20
-DEBUGFLAGS := -g3 -O0 -DDEBUG
-OPTFLAGS   := -O3
-
-# Sanitizer flags
-ASAN_FLAGS := -fsanitize=address,undefined -fno-omit-frame-pointer
-UBSAN_FLAGS:= -fsanitize=undefined -fno-omit-frame-pointer
+CXXFLAGS   := -Wall -Wextra -Werror -I include -std=c++20 -O3
 
 # Executable output
 NAME       := webserv
 BINDIR     := bin
 TARGET     := $(BINDIR)/$(NAME)
 
-# Source, object, and dependency files
-SRCDIR     := src
+# Object dir (deps live next to objects: .o + .d)
 OBJDIR     := objs
-DEPDIR     := deps
-
-SRCS       := $(shell find $(SRCDIR) -name "*.cpp")
-OBJS       := $(patsubst $(SRCDIR)/%.cpp,$(OBJDIR)/%.o,$(SRCS))
-DEPS       := $(patsubst $(SRCDIR)/%.cpp,$(DEPDIR)/%.d,$(SRCS))
-
-# Tests
-TESTDIR    := tests
-TESTSRCS   := $(shell find $(TESTDIR) -name "*.cpp" 2>/dev/null)
-TESTBINS   := $(patsubst $(TESTDIR)/%.cpp,$(BINDIR)/tests/%, $(TESTSRCS))
-TESTOBJS   := $(patsubst $(TESTDIR)/%.cpp,$(OBJDIR)/tests/%.o,$(TESTSRCS))
-TESTDEPS   := $(patsubst $(TESTDIR)/%.cpp,$(DEPDIR)/tests/%.d,$(TESTSRCS))
 
 # Colors
 GREEN      := \033[0;32m
@@ -49,163 +29,176 @@ YELLOW     := \033[1;33m
 RED        := \033[0;31m
 RESET      := \033[0m
 
-# Default goal
 .DEFAULT_GOAL := all
 
-# Mode control
-MODE ?= release
-SAN ?= none
+SRCS_CONFIG := \
+  src/config/Config.cpp \
+  src/config/normalizeConfig.cpp \
+  src/config/validateConfig.cpp
 
-ifeq ($(MODE),debug)
-	CXXFLAGS += $(DEBUGFLAGS)
-	ifeq ($(SAN),asan)
-		CXXFLAGS += $(ASAN_FLAGS)
-	endif
-	ifeq ($(SAN),tsan)
-		CXXFLAGS += $(TSAN_FLAGS)
-	endif
-	ifeq ($(SAN),ubsan)
-		CXXFLAGS += $(UBSAN_FLAGS)
-	endif
-else
-	CXXFLAGS += $(OPTFLAGS)
-endif
+SRCS_CONFIG_PARSER := \
+  src/config/parser/ConfigParseError.cpp \
+  src/config/parser/ConfigParser.cpp \
+  src/config/parser/directive_handler_table.cpp
 
-# Prepare necessary directories
-prepare_dirs:
-	@mkdir -p $(BINDIR) $(BINDIR)/tests $(OBJDIR) $(DEPDIR)
+SRCS_CONFIG_TOKENIZER := \
+  src/config/tokenizer/Tokenizer.cpp \
+  src/config/tokenizer/token.cpp
 
-# Build rules
-all: prepare_dirs $(TARGET)
+SRCS_CORE := \
+  src/core/Location.cpp \
+  src/core/Server.cpp \
+  src/core/main.cpp \
+  src/core/server_utils.cpp \
+  src/core/webserv.cpp
+
+SRCS_HTTP := \
+  src/http/HttpRequest.cpp \
+  src/http/HttpRequestParser.cpp \
+  src/http/HttpResponse.cpp \
+  src/http/handleCgi.cpp \
+  src/http/methodsHandler/handleDelete.cpp \
+  src/http/methodsHandler/handleGet/generateAutoindex.cpp \
+  src/http/methodsHandler/handleGet/handleGet.cpp \
+  src/http/methodsHandler/handlePost/handleMultipartForm.cpp \
+  src/http/methodsHandler/handlePost/handlePost.cpp \
+  src/http/requestRouter.cpp \
+  src/http/responseBuilder.cpp
+
+SRCS_NETWORK := \
+  src/network/SocketManager.cpp \
+  src/network/SocketManagerRequest.cpp \
+  src/network/SocketManagerResponse.cpp \
+  src/network/SocketManagerTimeouts.cpp \
+  src/network/SocketManagerUtils.cpp
+
+SRCS_UTILS := \
+  src/utils/Logger.cpp \
+  src/utils/errorUtils.cpp \
+  src/utils/filesystemUtils.cpp \
+  src/utils/htmlUtils.cpp \
+  src/utils/printInfo.cpp \
+  src/utils/stringUtils.cpp \
+  src/utils/urlUtils.cpp
+
+SRCS := \
+  $(SRCS_CONFIG) \
+  $(SRCS_CONFIG_PARSER) \
+  $(SRCS_CONFIG_TOKENIZER) \
+  $(SRCS_CORE) \
+  $(SRCS_HTTP) \
+  $(SRCS_NETWORK) \
+  $(SRCS_UTILS)
+
+HEADERS := \
+  include/config/Config.hpp \
+  include/config/normalizeConfig.hpp \
+  include/config/parser/ConfigParseError.hpp \
+  include/config/parser/ConfigParser.hpp \
+  include/config/parser/directive_handler_table.hpp \
+  include/config/tokenizer/Tokenizer.hpp \
+  include/config/tokenizer/token.hpp \
+  include/config/validateConfig.hpp \
+  include/core/Location.hpp \
+  include/core/Server.hpp \
+  include/core/server_utils.hpp \
+  include/core/webserv.hpp \
+  include/http/HttpRequest.hpp \
+  include/http/HttpRequestParser.hpp \
+  include/http/HttpResponse.hpp \
+  include/http/Url.hpp \
+  include/http/handleCgi.hpp \
+  include/http/methodsHandler.hpp \
+  include/http/requestRouter.hpp \
+  include/http/responseBuilder.hpp \
+  include/network/SocketManager.hpp \
+  include/utils/Logger.hpp \
+  include/utils/errorUtils.hpp \
+  include/utils/filesystemUtils.hpp \
+  include/utils/htmlUtils.hpp \
+  include/utils/printInfo.hpp \
+  include/utils/stringUtils.hpp \
+  include/utils/urlUtils.hpp
+
+# ---- Derived files -----------------------------------------------------------
+
+# Map each .cpp in $(SRCS) to its corresponding .o in $(OBJDIR).
+# Note: patsubst here does NOT perform any filesystem wildcard expansion
+# it just does a string substitution on the fixed list in $(SRCS).
+# This is safe and deterministic, unlike $(wildcard) or $(shell find ...).
+OBJS := $(patsubst src/%.cpp,$(OBJDIR)/%.o,$(SRCS))
+DEPS := $(OBJS:.o=.d)
+
+# ---- Rules ------------------------------------------------------------------
+
+all: $(TARGET)
 
 $(TARGET): $(OBJS)
+	@mkdir -p $(BINDIR)
 	@$(CXX) $(CXXFLAGS) $^ -o $@
 	@echo "$(CYAN)🚀 Built executable:$(RESET) $(TARGET)"
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
-	@mkdir -p $(dir $@) $(DEPDIR)/$(dir $(patsubst $(OBJDIR)/%,%,$@))
-	@if [ "$(FAST)" = "1" ]; then \
-		$(CXX) $(CXXFLAGS) -c $< -o $@; \
-	else \
-		$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@; \
-	fi
+$(OBJDIR)/%.o: src/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
 	@echo "$(GREEN)🛠️  Compiled:$(RESET) $<"
-
-OBJS_NO_MAIN := $(filter-out %/main.o, $(OBJS))
-$(BINDIR)/tests/%: $(TESTDIR)/%.cpp
-	@mkdir -p $(dir $@)
-	@$(CXX) $(CXXFLAGS) $< $(OBJS_NO_MAIN) -o $@
-	@echo "$(GREEN)🛠️  Built test executable:$(RESET) $@"
-
-$(BINDIR)/tests/slow_%: $(TESTDIR)/slow_%.cpp
-	@mkdir -p $(dir $@)
-	@$(CXX) $(CXXFLAGS) $< -o $@
-	@echo "$(GREEN)🛠️  Built standalone test:$(RESET) $@"
 
 # Cleaning
 clean:
-	@rm -rf $(OBJDIR) $(DEPDIR)
+	@rm -rf $(OBJDIR)
 	@echo "$(YELLOW)🧹 Cleaned object and dependency files.$(RESET)"
 
 fclean: clean
 	@rm -rf $(TARGET) $(BINDIR) build
-	@echo "$(YELLOW)🗑️  Completely removed executables, binaries, build/, and tests.$(RESET)"
+	@echo "$(YELLOW)🗑️  Completely removed executables, binaries, build/.$(RESET)"
 
 re: fclean all
 
-# Modes
-debug:
-	@$(MAKE) MODE=debug
+# Python test dependencies
+install_test_deps:
+	@echo "$(CYAN)📦 Installing Python test dependencies...$(RESET)"
+	@python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements-test.txt
 
-debug_asan:
-	@$(MAKE) MODE=debug SAN=asan
-
-debug_ubsan:
-	@$(MAKE) MODE=debug SAN=ubsan
-
-release:
-	@$(MAKE) MODE=release
-
-fast:
-	@$(MAKE) FAST=1
-
-# Run shortcut
-run: all
-	@./$(TARGET)
-
-# Test shortcut
-test: prepare_dirs $(TARGET) $(TESTBINS)
+# Tests
+test: all install_test_deps
 	@echo "$(CYAN)🧪 Launching web server in background...$(RESET)"
-	@./$(TARGET) & echo $$! > .webserv_test.pid
-
-	@sleep 1  # give the server a second to bind to port
-
-	@echo "$(CYAN)🧪 Running all tests...$(RESET)"
-	@if [ -z "$(TESTBINS)" ]; then \
-		echo "$(YELLOW)⚠️  No test files found. Skipping tests.$(RESET)"; \
-	else \
-		FAILED=0; \
-		for test_bin in $(TESTBINS); do \
-			echo "$(CYAN)➡️  Running $$test_bin$(RESET)"; \
-			./$$test_bin || { echo "$(RED)❌ Test failed: $$test_bin$(RESET)"; FAILED=1; }; \
-		done; \
-		if [ $$FAILED -eq 0 ]; then \
-			echo "$(GREEN)🏆 All tests passed successfully!$(RESET)"; \
-		else \
-			echo "$(RED)❌ Some tests failed.$(RESET)"; \
-			kill `cat .webserv_test.pid` >/dev/null 2>&1 || true; \
-			rm -f .webserv_test.pid; \
-			exit 1; \
-		fi \
-	fi
-
-	@echo "$(CYAN)🧹 Shutting down test server...$(RESET)"
-	@kill `cat .webserv_test.pid` >/dev/null 2>&1 || true
-	@rm -f .webserv_test.pid
-
-	@echo "$(CYAN)🧪 Running Python CGI tests...$(RESET)"
-	@python3 tests/test_cgi.py || { \
-		echo "$(RED)❌ Python CGI tests failed.$(RESET)"; \
+	@./$(TARGET) ./test_webserv/tester/config/tester.conf & echo $$! > .webserv_test.pid
+	@sleep 1
+	@echo "$(CYAN)🧪 Running Python test suite...$(RESET)"
+	@. .venv/bin/activate && python3 run_test.py || { \
+		echo "$(RED)❌ Tests failed.$(RESET)"; \
 		kill `cat .webserv_test.pid` >/dev/null 2>&1 || true; \
 		rm -f .webserv_test.pid; \
 		exit 1; \
 	}
+	@echo "$(CYAN)🧹 Shutting down test server...$(RESET)"
+	@kill `cat .webserv_test.pid` >/dev/null 2>&1 || true
+	@rm -f .webserv_test.pid
+	@echo "$(GREEN)🏆 All tests passed successfully!$(RESET)"
 
-# Code Quality Targets
+# Formatting (explicit file lists; no find/globs)
 format:
 	@echo "$(CYAN)🎨 Formatting source files...$(RESET)"
-	@find src include tests -name '*.cpp' -o -name '*.hpp' | xargs clang-format -i
+	@clang-format -i $(SRCS) $(HEADERS)
 
+# Help
 help:
 	@echo "$(CYAN)📦 Build Targets:$(RESET)"
-	@echo "  $(GREEN)make$(RESET)                → Build in release mode (optimized) 🚀"
-	@echo "  $(GREEN)make release$(RESET)        → Force build in release mode 🏎️"
-	@echo "  $(GREEN)make debug$(RESET)          → Build in debug mode (-g, no optimization) 🐞"
-	@echo "  $(GREEN)make debug_asan$(RESET)     → Debug with AddressSanitizer 🛡️"
-	@echo "  $(GREEN)make debug_tsan$(RESET)     → Debug with ThreadSanitizer 🔥"
-	@echo "  $(GREEN)make debug_ubsan$(RESET)    → Debug with UndefinedBehaviorSanitizer 🚨"
-	@echo "  $(GREEN)make fast$(RESET)           → Fast build without dependency scanning ⚡"
+	@echo "  $(GREEN)make$(RESET)       → Build the project 🚀"
+	@echo "  $(GREEN)make re$(RESET)    → Clean and rebuild everything 🔁"
 	@echo ""
-	@echo "$(CYAN)🚀 Run Targets:$(RESET)"
-	@echo "  $(GREEN)make run$(RESET)            → Build and run the web server 🚀"
-	@echo "  $(GREEN)make test$(RESET)           → Build and run all tests in tests/ 🧪"
-	@echo "  $(GREEN)make sanitize$(RESET)       → Build and short-run under sanitizers 🔬"
-	@echo ""
-	@echo "$(CYAN)🧹 Code Quality Targets:$(RESET)"
-	@echo "  $(GREEN)make format$(RESET)         → Format all source files 🎨"
-	@echo "  $(GREEN)make tidy$(RESET)           → Run clang-tidy static analysis 🔍"
+	@echo "$(CYAN)🧪 Test Targets:$(RESET)"
+	@echo "  $(GREEN)make test$(RESET)  → Build, install Python deps, run server + Python tests 🧪"
 	@echo ""
 	@echo "$(CYAN)🧹 Cleaning Targets:$(RESET)"
-	@echo "  $(GREEN)make clean$(RESET)          → Remove object and dependency files 🧹"
-	@echo "  $(GREEN)make fclean$(RESET)         → Remove everything (objs, deps, executables, build/) 🗑️"
-	@echo "  $(GREEN)make re$(RESET)             → Clean and rebuild everything 🔁"
+	@echo "  $(GREEN)make clean$(RESET) → Remove object and dependency files 🧹"
+	@echo "  $(GREEN)make fclean$(RESET)→ Remove everything including binaries and build dirs 🗑️"
+	@echo ""
+	@echo "$(CYAN)🧹 Code Quality Targets:$(RESET)"
+	@echo "  $(GREEN)make format$(RESET)→ Format all source files 🎨"
 	@echo ""
 	@echo "$(CYAN)📚 Other:$(RESET)"
-	@echo "  $(GREEN)make help$(RESET)           → Show this help message 📚"
+	@echo "  $(GREEN)make help$(RESET)  → Show this help message 📚"
 
-.PHONY: all clean fclean re debug debug_asan debug_tsan debug_ubsan release run test sanitize fast help prepare_dirs
-
-# Include dependency files unless FAST
-ifeq ($(FAST),)
--include $(DEPS) $(TESTDEPS)
-endif
+.PHONY: all clean fclean re test format help install_test_deps
+-include $(DEPS)
