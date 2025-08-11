@@ -1,0 +1,25 @@
+<map id="include/http/handleCgi.hpp" name="include/http/handleCgi.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="805,5,1001,31"/>
+<area shape="rect" id="Node000002" href="$SocketManager_8hpp.html" title=" " alt="" coords="557,79,814,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="856,37,721,81,720,76,854,32"/>
+<area shape="rect" id="Node000005" href="$SocketManagerRequest_8cpp.html" title=" " alt="" coords="5,152,208,192"/>
+<area shape="poly" id="edge10_Node000001_Node000005" title=" " alt="" coords="816,35,544,81,191,155,190,149,544,76,815,30"/>
+<area shape="rect" id="Node000006" href="$SocketManagerResponse_8cpp.html" title=" " alt="" coords="668,152,871,192"/>
+<area shape="poly" id="edge11_Node000001_Node000006" title=" " alt="" coords="886,43,788,154,784,150,882,39"/>
+<area shape="rect" id="Node000007" href="$SocketManagerTimeouts_8cpp.html" title=" " alt="" coords="895,152,1097,192"/>
+<area shape="poly" id="edge12_Node000001_Node000007" title=" " alt="" coords="912,43,922,72,937,103,956,128,977,150,973,154,952,132,932,105,917,75,907,45"/>
+<area shape="rect" id="Node000008" href="$SocketManagerUtils_8cpp.html" title=" " alt="" coords="1121,152,1324,192"/>
+<area shape="poly" id="edge13_Node000001_Node000008" title=" " alt="" coords="920,41,947,73,981,102,1008,114,1046,126,1136,149,1134,155,1045,132,1006,119,979,106,943,76,916,44"/>
+<area shape="rect" id="Node000009" href="$handleCgi_8cpp.html" title=" " alt="" coords="991,79,1158,104"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="944,33,1048,76,1046,81,942,38"/>
+<area shape="rect" id="Node000010" href="$requestRouter_8cpp.html" title=" " alt="" coords="1182,79,1375,104"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="977,31,1218,76,1217,81,976,36"/>
+<area shape="rect" id="Node000003" href="$webserv_8cpp.html" title=" " alt="" coords="233,159,391,185"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="618,109,367,162,366,157,617,104"/>
+<area shape="rect" id="Node000004" href="$SocketManager_8cpp.html" title=" " alt="" coords="415,159,643,185"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="652,112,553,162,551,157,649,108"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="575,108,220,155,209,156,208,151,220,149,574,103"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="709,111,751,150,747,154,706,115"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="745,105,922,149,921,155,743,110"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="785,103,1110,149,1121,151,1120,156,1109,155,784,108"/>
+</map>

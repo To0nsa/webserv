@@ -1,0 +1,16 @@
+<map id="CGI::errorOnCgi" name="CGI::errorOnCgi">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,29,128,55"/>
+<area shape="rect" id="Node000002" href="$classLogger.html#a23f092a06cc63628beb87a1a54f9ea59" title=" " alt="" coords="401,29,528,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,39,387,39,387,45,128,45"/>
+<area shape="rect" id="Node000006" href="$namespaceCGI.html#a7a269366ca367b3f85014b4742c0d16c" title=" " alt="" coords="176,55,353,80"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="129,47,162,52,162,57,128,52"/>
+<area shape="rect" id="Node000003" href="$Logger_8cpp.html#a2c56a9a25fc1f2a14162f4df7ce936ff" title=" " alt="" coords="728,5,816,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="510,27,576,14,623,12,671,14,714,14,714,20,671,19,623,17,576,19,511,32"/>
+<area shape="rect" id="Node000004" href="$Logger_8cpp.html#afc799b96df6ffe84b57bcce18820bc43" title=" " alt="" coords="719,55,825,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="511,52,576,65,642,69,705,68,705,74,642,74,576,70,510,57"/>
+<area shape="rect" id="Node000005" href="$classLogger.html#a3d3f0801eeaf39b33a906ea8569c19b2" title=" " alt="" coords="576,29,671,55"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="528,39,563,39,563,45,528,45"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="670,32,714,25,715,30,671,37"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="671,47,705,53,704,59,670,53"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="353,53,388,49,388,54,354,59"/>
+</map>

@@ -1,0 +1,17 @@
+<map id="normalizeConfig" name="normalizeConfig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,133,105"/>
+<area shape="rect" id="Node000002" href="$classConfig.html#a5697534b5368231a973acc26e2379872" title=" " alt="" coords="181,55,323,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,81,168,76,168,82,134,86"/>
+<area shape="rect" id="Node000003" href="$normalizeConfig_8cpp.html#a6d073a523d9b1121fb6e86eeb2a0f00f" title=" " alt="" coords="187,104,317,129"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="134,98,174,104,173,109,133,104"/>
+<area shape="rect" id="Node000004" href="$classServer.html#a7ad9b923d766c82b58bcca01146cb375" title="Returns the maximum allowed size for the request body." alt="" coords="371,5,589,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="296,102,321,89,335,77,344,64,354,52,369,40,383,33,386,38,372,44,357,56,348,68,339,80,324,94,298,106"/>
+<area shape="rect" id="Node000005" href="$classServer.html#a53fb46a6288fcdc4270ad5900f50736e" title="Returns the mapping of HTTP error codes to custom error pages." alt="" coords="399,55,561,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="311,101,407,80,408,86,312,107"/>
+<area shape="rect" id="Node000006" href="$classServer.html#a06b6c9af45443180a65bcc145e1b2f1e" title="Returns the list of location blocks defined for this server." alt="" coords="403,104,557,129"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="317,114,389,114,389,119,317,119"/>
+<area shape="rect" id="Node000007" href="$classServer.html#a5ec81ad981e500a3869fbc7270af7e2f" title="Sets the maximum allowed size for the HTTP request body." alt="" coords="371,153,589,179"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="312,127,408,148,407,153,311,132"/>
+<area shape="rect" id="Node000008" href="$classServer.html#aa6e0b664d8f6090d8a216fda35198271" title="Sets a custom error page for a specific HTTP status code." alt="" coords="403,203,557,228"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="271,127,315,158,372,188,396,196,395,201,370,192,313,162,268,132"/>
+</map>

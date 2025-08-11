@@ -1,0 +1,28 @@
+var classServer =
+[
+    [ "Server", "classServer.html#ad5ec9462b520e59f7ea831e157ee5e59", null ],
+    [ "~Server", "classServer.html#ac0c2f1f04de64bd49ef343ca283e71ed", null ],
+    [ "Server", "classServer.html#a9f34310e26d1a9e9fc318753080eeae7", null ],
+    [ "addLocation", "classServer.html#a7f3979615443d3f55181eb64a0a7390f", null ],
+    [ "addServerName", "classServer.html#a59037324b2ce6cad4c0d729e70553a8b", null ],
+    [ "getClientMaxBodySize", "classServer.html#a7ad9b923d766c82b58bcca01146cb375", null ],
+    [ "getDefaultServerName", "classServer.html#afdf9faf4d055bfc0cf6fb255c6fcf57d", null ],
+    [ "getErrorPages", "classServer.html#a53fb46a6288fcdc4270ad5900f50736e", null ],
+    [ "getHost", "classServer.html#adf710c8edb72e8e72e6a684329592335", null ],
+    [ "getLocations", "classServer.html#a06b6c9af45443180a65bcc145e1b2f1e", null ],
+    [ "getLocations", "classServer.html#a2b9861433261eb57f8e3839da3e10ca9", null ],
+    [ "getPort", "classServer.html#a69d6c7fb2d3f04cfc62779b26c455259", null ],
+    [ "getServerNames", "classServer.html#a84bf08659470d466bf953403a4894dc7", null ],
+    [ "hasServerName", "classServer.html#a403e24360b5af1b6884a19c855bf1b49", null ],
+    [ "operator=", "classServer.html#a5d6e48f45121562897b6bebf0df61c1b", null ],
+    [ "setClientMaxBodySize", "classServer.html#a5ec81ad981e500a3869fbc7270af7e2f", null ],
+    [ "setErrorPage", "classServer.html#aa6e0b664d8f6090d8a216fda35198271", null ],
+    [ "setHost", "classServer.html#a9a242408ad4e657d3c45f01cac95038f", null ],
+    [ "setPort", "classServer.html#ab8f844a7115f52734803c2c9290d6e25", null ],
+    [ "_client_max_body_size", "classServer.html#aa3c5137e685089f6458c68f7821da479", null ],
+    [ "_error_pages", "classServer.html#a1bb4b3cd6d02530520696d170f81de9e", null ],
+    [ "_host", "classServer.html#a6a978ed7c622b7333c7905eec938ad85", null ],
+    [ "_locations", "classServer.html#a4b96e70283125a7895223b6fafecd7d4", null ],
+    [ "_port", "classServer.html#a5728cddcbae1978b78724329060f9fa2", null ],
+    [ "_server_names", "classServer.html#a582b3bab835894d6cf947c1f807301a2", null ]
+];

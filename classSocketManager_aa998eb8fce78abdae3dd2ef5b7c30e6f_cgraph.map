@@ -1,0 +1,21 @@
+<map id="SocketManager::handleRequestErrorIfAny" name="SocketManager::handleRequestErrorIfAny">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,193,232,233"/>
+<area shape="rect" id="Node000002" href="$namespaceResponseBuilder.html#a1f8eaecab62a277ca49584495da022fc" title=" " alt="" coords="284,161,481,201"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,197,270,192,271,198,233,202"/>
+<area shape="rect" id="Node000010" href="$classHttpResponse.html#a622a98042411daa38dca0d97f92ab832" title="Determines whether the connection should be closed after the response." alt="" coords="280,225,485,265"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="233,224,267,229,266,234,232,230"/>
+<area shape="rect" id="Node000003" href="$namespaceMessageHandler.html#a064a5d8be8de9234f362e73d9bb68b6b" title=" " alt="" coords="533,5,741,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="401,159,457,108,493,80,532,55,546,48,548,53,535,60,496,84,460,112,405,163"/>
+<area shape="rect" id="Node000004" href="$classServer.html#a53fb46a6288fcdc4270ad5900f50736e" title="Returns the mapping of HTTP error codes to custom error pages." alt="" coords="556,70,719,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="417,159,471,131,532,104,557,96,559,101,534,109,473,136,420,163"/>
+<area shape="rect" id="Node000005" href="$classServer.html#a06b6c9af45443180a65bcc145e1b2f1e" title="Returns the list of location blocks defined for this server." alt="" coords="560,119,715,145"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="481,160,557,145,558,150,482,165"/>
+<area shape="rect" id="Node000006" href="$htmlUtils_8cpp.html#af5ddafc8d1e304df95c0aee1984b2682" title=" " alt="" coords="588,169,687,194"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="481,179,574,179,574,184,481,184"/>
+<area shape="rect" id="Node000007" href="$filesystemUtils_8cpp.html#a60cb34db186e7da050316400c820c815" title=" " alt="" coords="600,218,675,243"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="482,198,587,218,586,224,481,203"/>
+<area shape="rect" id="Node000008" href="$classHttpResponse.html#a3e83ff074d5f7a6de514a4edcb02ab4d" title=" " alt="" coords="550,267,725,293"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="461,199,487,211,501,222,511,233,520,243,535,252,554,261,551,265,532,257,517,247,507,236,498,226,484,216,458,204"/>
+<area shape="rect" id="Node000009" href="$classHttpResponse.html#a7efa3ab17ead358609d80b55db164867" title=" " alt="" coords="543,317,731,342"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="469,199,487,211,505,235,511,259,518,282,535,303,542,308,539,312,532,307,513,284,506,261,500,237,484,215,466,204"/>
+</map>

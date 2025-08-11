@@ -1,0 +1,13 @@
+<map id="HttpResponse::getHeaders" name="HttpResponse::getHeaders">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1020,5,1216,31"/>
+<area shape="rect" id="Node000002" href="$classSocketManager.html#acc75e54c492ae3ff25b07cbbd171cd21" title=" " alt="" coords="725,5,972,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1006,21,972,21,972,15,1006,15"/>
+<area shape="rect" id="Node000003" href="$classSocketManager.html#a24e0386dc1b8a919fc52b3c89d6e9588" title=" " alt="" coords="453,5,677,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="712,21,678,21,678,15,712,15"/>
+<area shape="rect" id="Node000004" href="$classSocketManager.html#a6dd1b927ab5d7d761cae7044c6fcea37" title=" " alt="" coords="255,5,405,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="439,21,405,21,405,15,439,15"/>
+<area shape="rect" id="Node000005" href="$webserv_8cpp.html#a6e58dbe6eab2d4b12d65b7b0e7297be8" title=" " alt="" coords="108,5,207,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="241,21,207,21,207,15,241,15"/>
+<area shape="rect" id="Node000006" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

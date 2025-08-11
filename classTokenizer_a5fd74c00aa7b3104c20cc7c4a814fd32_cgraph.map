@@ -1,0 +1,19 @@
+<map id="Tokenizer::parseStringLiteral" name="Tokenizer::parseStringLiteral">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,171,212,196"/>
+<area shape="rect" id="Node000002" href="$classTokenizer.html#ac2386c92405b58ea06660287d2146b84" title=" " alt="" coords="296,5,443,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,169,175,111,215,77,259,48,294,32,296,37,261,52,218,81,178,115,123,173"/>
+<area shape="rect" id="Node000003" href="$classTokenizer.html#aa7daa721fdeeb87cd3da853c2886dd96" title=" " alt="" coords="527,85,691,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="123,168,180,128,218,107,259,91,326,79,395,74,460,76,519,81,518,86,460,81,395,80,327,84,261,97,221,112,183,132,126,173"/>
+<area shape="rect" id="Node000004" href="$group__ErrorUtils.html#ga3a83368b4a479591239a5a9c8740a587" title="Formats an error message with line and column information." alt="" coords="560,213,657,239"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="122,194,144,220,176,251,216,282,261,305,320,322,369,327,417,321,478,305,507,294,535,278,581,246,584,250,538,283,509,298,479,310,418,326,369,332,319,328,259,310,213,286,173,255,140,223,118,198"/>
+<area shape="rect" id="Node000005" href="$classTokenizer.html#a0eb3b50597e00c5b298a0928e4cc683e" title=" " alt="" coords="299,171,439,196"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="212,181,286,181,286,186,212,186"/>
+<area shape="rect" id="Node000006" href="$classTokenizer.html#a507c90c0e852845bb26142c482864e25" title=" " alt="" coords="287,220,451,245"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="177,193,288,215,287,220,176,199"/>
+<area shape="rect" id="Node000007" href="$classTokenizer.html#a1f0151fc9f4abe60041f7ace3fd6dc45" title=" " alt="" coords="308,269,431,295"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="133,194,190,224,261,254,296,265,294,270,259,259,188,229,131,199"/>
+<area shape="rect" id="Node000008" href="$classTokenizer.html#a85e938ec2eba987c83bed60c6340cc40" title=" " alt="" coords="260,106,479,146"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="167,168,264,146,265,152,168,173"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="479,111,513,107,513,112,479,116"/>
+<area shape="poly" id="edge9_Node000008_Node000004" title=" " alt="" coords="447,144,480,156,531,179,576,204,573,209,529,184,478,160,445,149"/>
+</map>

@@ -1,0 +1,22 @@
+<map id="Server::setErrorPage" name="Server::setErrorPage">
+<area shape="rect" id="Node000001" title="Sets a custom error page for a specific HTTP status code." alt="" coords="1448,35,1603,60"/>
+<area shape="rect" id="Node000002" href="$normalizeConfig_8cpp.html#a6d073a523d9b1121fb6e86eeb2a0f00f" title=" " alt="" coords="1242,8,1371,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1434,39,1371,31,1372,26,1434,34"/>
+<area shape="rect" id="Node000006" href="$namespacedirective.html#a3338d7904396548486d9d2dce2367c06" title=" " alt="" coords="1213,59,1400,84"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1435,60,1400,64,1400,58,1434,55"/>
+<area shape="rect" id="Node000003" href="$normalizeConfig_8cpp.html#a424745e39c183e79968502e3070343fa" title=" " alt="" coords="769,5,897,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1228,23,897,21,898,16,1228,18"/>
+<area shape="rect" id="Node000004" href="$webserv_8cpp.html#a6e58dbe6eab2d4b12d65b7b0e7297be8" title=" " alt="" coords="108,35,207,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="756,24,207,48,207,43,756,19"/>
+<area shape="rect" id="Node000005" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,35,60,60"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,50,60,50,60,45,94,45"/>
+<area shape="rect" id="Node000007" href="$classConfigParser.html#a65dee8490851a65fb3d80ab1677c4a5d" title=" " alt="" coords="976,55,1165,95"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1200,76,1166,76,1165,71,1200,70"/>
+<area shape="rect" id="Node000008" href="$classConfigParser.html#aec05768b15f77f3908738fba4237d2a8" title=" " alt="" coords="739,63,928,88"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="963,78,928,78,928,73,963,73"/>
+<area shape="rect" id="Node000009" href="$classConfigParser.html#a3b983e072038482de7698c091f5c8a99" title=" " alt="" coords="503,63,691,88"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="725,78,691,78,691,73,725,73"/>
+<area shape="rect" id="Node000010" href="$namespaceanonymous__namespace_02webserv_8cpp_03.html#aae8f81a4da2ba25012d48ca194e14b64" title=" " alt="" coords="255,55,455,95"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="489,78,455,78,455,73,489,73"/>
+<area shape="poly" id="edge10_Node000010_Node000004" title=" " alt="" coords="240,62,206,57,207,52,241,57"/>
+</map>

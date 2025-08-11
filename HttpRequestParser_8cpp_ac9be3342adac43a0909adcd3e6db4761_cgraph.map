@@ -1,0 +1,31 @@
+<map id="insertValidatedHeader" name="insertValidatedHeader">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,205,172,231"/>
+<area shape="rect" id="Node000002" href="$classHttpRequest.html#aab7f5c99d28da1cd9ce9f2ce48a9b716" title=" " alt="" coords="220,5,447,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,204,110,170,137,125,173,79,218,40,229,34,232,38,222,44,177,82,141,128,115,173,98,206"/>
+<area shape="rect" id="Node000003" href="$classHttpRequest.html#ab537cb11b054734695ee4889d88aec6d" title=" " alt="" coords="244,55,423,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="98,203,147,152,181,122,219,97,255,82,257,86,221,102,184,127,150,156,102,207"/>
+<area shape="rect" id="Node000004" href="$group__StringUtils.html#ga8c2a03f0e678a0bfd4a479acc1e3d6e7" title=" " alt="" coords="505,105,579,131"/>
+<area shape="poly" id="edge16_Node000001_Node000004" title=" " alt="" coords="105,203,154,171,186,154,219,141,292,124,366,115,435,112,491,113,491,118,435,117,366,120,293,129,221,146,188,159,157,175,108,207"/>
+<area shape="rect" id="Node000005" href="$classHttpRequest.html#a937646b8d0ee3301b119d3f50ca0a50a" title=" " alt="" coords="243,156,424,181"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="152,203,255,182,257,187,153,208"/>
+<area shape="rect" id="Node000006" href="$classHttpRequest.html#a007c4ce756bc2d46f9b4b6587578a67e" title=" " alt="" coords="243,205,424,231"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="172,215,229,215,229,221,172,221"/>
+<area shape="rect" id="Node000007" href="$classLogger.html#a23f092a06cc63628beb87a1a54f9ea59" title=" " alt="" coords="270,353,397,379"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="102,229,149,283,183,313,221,338,257,352,255,357,219,343,180,317,145,286,98,232"/>
+<area shape="rect" id="Node000011" href="$classHttpRequest.html#a77615498e989da59c5786c3fd169c031" title=" " alt="" coords="220,304,447,329"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="110,228,159,259,221,289,249,298,247,303,219,294,156,263,107,233"/>
+<area shape="rect" id="Node000012" href="$classHttpRequest.html#a9bec6cffc16a92a06a02be126003b48a" title=" " alt="" coords="244,255,423,280"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="153,228,257,249,255,254,152,233"/>
+<area shape="rect" id="Node000013" href="$group__StringUtils.html#ga5930346e5253c53724c9306433a485ea" title="Converts a string to lowercase." alt="" coords="296,403,371,428"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="98,230,115,263,141,306,177,351,221,389,251,403,283,410,281,415,249,408,219,394,173,355,137,309,110,265,93,232"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="387,78,492,103,490,108,386,83"/>
+<area shape="rect" id="Node000008" href="$Logger_8cpp.html#a2c56a9a25fc1f2a14162f4df7ce936ff" title=" " alt="" coords="647,379,735,404"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="397,376,495,389,567,392,633,391,633,396,566,397,494,394,396,381"/>
+<area shape="rect" id="Node000009" href="$Logger_8cpp.html#afc799b96df6ffe84b57bcce18820bc43" title=" " alt="" coords="637,329,744,355"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="396,351,494,338,542,337,589,338,623,338,623,344,589,343,542,342,495,343,397,356"/>
+<area shape="rect" id="Node000010" href="$classLogger.html#a3d3f0801eeaf39b33a906ea8569c19b2" title=" " alt="" coords="495,353,589,379"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="397,363,481,363,481,369,397,369"/>
+<area shape="poly" id="edge10_Node000010_Node000008" title=" " alt="" coords="590,371,633,379,633,384,589,377"/>
+<area shape="poly" id="edge11_Node000010_Node000009" title=" " alt="" coords="589,356,623,350,624,355,590,361"/>
+<area shape="poly" id="edge14_Node000012_Node000004" title=" " alt="" coords="419,252,445,240,472,218,494,192,526,142,531,144,498,196,475,222,448,244,422,257"/>
+</map>

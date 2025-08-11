@@ -1,0 +1,17 @@
+<map id="Server::addServerName" name="Server::addServerName">
+<area shape="rect" id="Node000001" title="Adds a server name alias for this virtual host." alt="" coords="1448,13,1625,38"/>
+<area shape="rect" id="Node000002" href="$namespacedirective.html#a3338d7904396548486d9d2dce2367c06" title=" " alt="" coords="1213,13,1400,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1434,28,1400,28,1400,23,1434,23"/>
+<area shape="rect" id="Node000003" href="$classConfigParser.html#a65dee8490851a65fb3d80ab1677c4a5d" title=" " alt="" coords="976,5,1165,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1200,28,1165,28,1165,23,1200,23"/>
+<area shape="rect" id="Node000004" href="$classConfigParser.html#aec05768b15f77f3908738fba4237d2a8" title=" " alt="" coords="739,13,928,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="963,28,928,28,928,23,963,23"/>
+<area shape="rect" id="Node000005" href="$classConfigParser.html#a3b983e072038482de7698c091f5c8a99" title=" " alt="" coords="503,13,691,38"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="725,28,691,28,691,23,725,23"/>
+<area shape="rect" id="Node000006" href="$namespaceanonymous__namespace_02webserv_8cpp_03.html#aae8f81a4da2ba25012d48ca194e14b64" title=" " alt="" coords="255,5,455,45"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="489,28,455,28,455,23,489,23"/>
+<area shape="rect" id="Node000007" href="$webserv_8cpp.html#a6e58dbe6eab2d4b12d65b7b0e7297be8" title=" " alt="" coords="108,13,207,38"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="241,28,207,28,207,23,241,23"/>
+<area shape="rect" id="Node000008" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

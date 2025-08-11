@@ -1,0 +1,13 @@
+<map id="Tokenizer::scanOptionalUnitSuffix" name="Tokenizer::scanOptionalUnitSuffix">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,97,208,137"/>
+<area shape="rect" id="Node000002" href="$classTokenizer.html#ac2386c92405b58ea06660287d2146b84" title=" " alt="" coords="265,5,411,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,94,195,67,255,40,275,32,277,37,257,44,197,71,145,99"/>
+<area shape="rect" id="Node000003" href="$classTokenizer.html#aa7daa721fdeeb87cd3da853c2886dd96" title=" " alt="" coords="256,55,420,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,94,264,80,265,86,202,99"/>
+<area shape="rect" id="Node000004" href="$group__ErrorUtils.html#ga3a83368b4a479591239a5a9c8740a587" title="Formats an error message with line and column information." alt="" coords="289,104,387,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="208,114,275,114,275,119,208,119"/>
+<area shape="rect" id="Node000005" href="$classTokenizer.html#a0eb3b50597e00c5b298a0928e4cc683e" title=" " alt="" coords="268,153,408,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="202,134,265,148,264,153,200,139"/>
+<area shape="rect" id="Node000006" href="$classTokenizer.html#a1f0151fc9f4abe60041f7ace3fd6dc45" title=" " alt="" coords="277,203,399,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="146,134,198,161,257,188,280,196,278,201,255,192,195,166,143,139"/>
+</map>

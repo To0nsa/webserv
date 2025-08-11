@@ -1,0 +1,5 @@
+<map id="parseInt" name="parseInt">
+<area shape="rect" id="Node000001" title="Parses an integer with detailed error context." alt="" coords="5,5,80,31"/>
+<area shape="rect" id="Node000002" href="$group__ErrorUtils.html#ga3a83368b4a479591239a5a9c8740a587" title="Formats an error message with line and column information." alt="" coords="128,5,225,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,15,114,15,114,21,80,21"/>
+</map>
