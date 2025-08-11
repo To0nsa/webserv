@@ -1,6 +1,7 @@
 name: Docs
 
 on:
+  workflow_dispatch: # Manual trigger for the workflow
   push:
     branches: [ main, dev ]
   pull_request:
