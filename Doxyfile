@@ -1,11 +1,11 @@
 # --- Project Information ---
 
 PROJECT_NAME           = Webserv
-PROJECT_BRIEF          = Lightweight HTTP/1.1 server written in modern C++
+PROJECT_BRIEF          = "Lightweight HTTP/1.1 server written in modern C++"
 OUTPUT_DIRECTORY       = docs
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
-_inputENCODING         = UTF-8
+INPUT_ENCODING         = UTF-8
 
 # --- Input Files ---
 
@@ -13,7 +13,7 @@ INPUT                  = include/ src/ tests/ README.md
 RECURSIVE              = YES
 FILE_PATTERNS          = *.cpp *.hpp *.tpp *.md
 USE_MDFILE_AS_MAINPAGE = README.md
-EXCLUDE_PATTERNS       = /.git/ /build/
+EXCLUDE_PATTERNS       = **/.git/** **/build/**
 
 # --- Source Code Parsing ---
 
@@ -30,7 +30,7 @@ EXTRACT_PRIVATE        = YES
 EXTRACT_STATIC         = YES
 EXTRACT_LOCAL_METHODS  = YES
 EXTRACT_ANON_NSPACES   = YES
-IN_lineINHERITED_MEMB  = YES
+INLINE_INHERITED_MEMB  = YES
 
 # --- Output Format ---
 
@@ -38,20 +38,26 @@ GENERATE_HTML          = YES
 HTML_OUTPUT            = html
 HTML_FILE_EXTENSION    = .html
 GENERATE_TREEVIEW      = YES
-HTML_DYNAMIC_SECTIONS = YES
+HTML_DYNAMIC_SECTIONS  = YES
 DISABLE_INDEX          = NO
 FULL_PATH_NAMES        = YES
+
+# Shorten displayed paths in HTML and include graphs
+STRIP_FROM_PATH        = .
+STRIP_FROM_INC_PATH    = include
 
 # --- Markdown and Style ---
 
 MARKDOWN_SUPPORT       = YES
 AUTOLINK_SUPPORT       = YES
+JAVADOC_AUTOBRIEF      = NO
+MULTILINE_CPP_IS_BRIEF = YES
 
 # --- Documentation Layout ---
 
 SHOW_INCLUDE_FILES     = YES
 SOURCE_BROWSER         = YES
-IN_lineSOURCES         = NO
+INLINE_SOURCES         = NO
 VERBATIM_HEADERS       = YES
 STRIP_CODE_COMMENTS    = NO
 REFERENCED_BY_RELATION = YES
@@ -84,15 +90,16 @@ SORT_BY_SCOPE_NAME     = YES
 
 # --- Aliases ---
 
-ALIASES += "ingroup=\ingroup "
-ALIASES += "defgroup=\defgroup "
-ALIASES += "internal=\internal "
+ALIASES                += "ingroup=\ingroup "
+ALIASES                += "defgroup=\defgroup "
+ALIASES                += "internal=\internal "
 
 # --- Warnings ---
 
 WARN_IF_UNDOCUMENTED   = YES
 WARN_IF_DOC_ERROR      = YES
 WARN_NO_PARAMDOC       = YES
+WARN_LOGFILE           = docs/doxygen.warnings
 
 # --- Misc ---
 
@@ -101,4 +108,3 @@ GENERATE_LATEX         = NO
 GENERATE_MAN           = NO
 GENERATE_RTF           = NO
 GENERATE_XML           = NO
-MULTI_lineCPP_IS_BRIEF = YES
