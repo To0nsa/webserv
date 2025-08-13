@@ -39,11 +39,3 @@
  * @details Provides abstractions over system calls for listening sockets,
  *          client connections, and readiness-based multiplexing using poll/kqueue/epoll.
  */
-
-/**
- * @defgroup utils Utilities & Helpers
- * @brief Shared helper functions and utility classes.
- *
- * @details Common helpers for string manipulation, filesystem handling,
- *          logging, and error reporting used across all modules.
- */
