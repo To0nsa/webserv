@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/10 22:52:30 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/13 22:21:38 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ std::string resolvePhysicalPath(const HttpRequest& req, const Location& loc) {
 
     // 1) Try resolving against the real root
     std::string rootPath = buildFilePath(req, loc);
-    // If this isn't a POST *and* the file actually exists under root, use it
+    // If this isn't a POST and the file actually exists under root, use it
     if (req.getMethod() != "POST" && !rootPath.empty() && fs::exists(rootPath)) {
         return rootPath;
     }

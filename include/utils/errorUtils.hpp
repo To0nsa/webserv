@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:59:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/06 19:59:14 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/13 22:16:13 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
  * @brief Error formatting utilities.
  *
  * @details
- * Provides helper functions to standardize how error messages are formatted,
- * especially with line and column information, to improve diagnostics.
+ * Provides helper functions to standardize how error messages are formatted in
+ * during the parsing of the configuration file especially with line and column
+ * information, to improve diagnostics.
  */
 
 /**
- * @defgroup ErrorUtils Error message formatting
- * @brief Helpers for formatting human-readable error messages.
+ * @defgroup ParsingErrorUtils Error message formatting
+ * @brief Helpers for formatting human-readable error messages during parsing.
  *
  * @details
  * These utilities generate consistent and contextual error messages for use
