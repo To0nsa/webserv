@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:51:19 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/13 09:31:08 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/13 22:18:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,8 @@
 // --- Constructor
 
 Server::Server()
-    : _port(80)         // Default HTTP port
-      ,
-      _host("0.0.0.0")  // Default bind address
-      ,
+    : _port(80),                             // Default HTTP port
+      _host("0.0.0.0"),                      // Default bind address
       _client_max_body_size(1 * 1024 * 1024) // 1 MiB
 {
 }
