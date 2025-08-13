@@ -3,13 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 22:47:01 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/20 22:47:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/13 09:23:40 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
+/**
+ * @copydoc runWebserv(int,char**)
+ */
 int runWebserv(int argc, char** argv);
