@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:37:06 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/16 08:03:09 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/13 09:35:27 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  *          error pages, configure body size limits, and contain multiple location
  *          blocks with their own routing rules and behavior.
  *
- * @ingroup config
+ * @ingroup core
  */
 
 #pragma once
@@ -28,6 +28,8 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <string_view>
+#include <cstddef>
 
 /**
  * @brief Represents a virtual server block.
@@ -38,7 +40,7 @@
  *          `server` block in the configuration file and participates in request
  *          routing based on host and port matching.
  *
- * @ingroup config
+ * @ingroup core
  */
 class Server {
   private:
@@ -46,8 +48,8 @@ class Server {
     std::string                _host;         ///< IP address to bind (e.g., "0.0.0.0").
     std::vector<std::string>   _server_names; ///< List of server name aliases (Host-based routing).
     std::map<int, std::string> _error_pages;  ///< Maps HTTP error codes to custom error page paths.
-    size_t                _client_max_body_size; ///< Maximum allowed body size per request (bytes).
-    std::vector<Location> _locations; ///< Set of location blocks defined for this server.
+    std::size_t                _client_max_body_size; ///< Maximum allowed body size per request (bytes).
+    std::vector<Location> _locations;            ///< Set of location blocks defined for this server.
 
   public:
     ///////////////////
@@ -59,7 +61,7 @@ class Server {
      *          client max body size (`1 MiB`), and empty location/error blocks.
      *          Intended to be populated via configuration parsing.
      *
-     * @ingroup config
+     * @ingroup core
      */
     Server();
     ~Server()                              = default;
@@ -76,9 +78,10 @@ class Server {
      *          the `listen` directive in the configuration file. Validation is done before calling.
      *
      * @param port The TCP port number to bind to.
-     * @ingroup config
+     * @ingroup core
      */
     void setPort(int port) noexcept;
+    
     /**
      * @brief Sets the IP address to bind this server to.
      *
@@ -87,9 +90,10 @@ class Server {
      *          via the `host` directive in the configuration file. No validation is done here.
      *
      * @param host The IP address to bind (e.g., "127.0.0.1" or "0.0.0.0").
-     * @ingroup config
+     * @ingroup core
      */
     void setHost(std::string_view host) noexcept;
+    
     /**
      * @brief Adds a server name alias for this virtual host.
      *
@@ -98,9 +102,10 @@ class Server {
      *          This method appends without deduplication.
      *
      * @param name The server name to add (e.g., "example.com").
-     * @ingroup config
+     * @ingroup core
      */
     void addServerName(std::string_view name);
+    
     /**
      * @brief Sets a custom error page for a specific HTTP status code.
      *
@@ -110,9 +115,10 @@ class Server {
      *
      * @param code The HTTP error status code to override.
      * @param path The file path to serve as the custom error page.
-     * @ingroup config
+     * @ingroup core
      */
     void setErrorPage(int code, const std::string& path);
+    
     /**
      * @brief Sets the maximum allowed size for the HTTP request body.
      *
@@ -121,9 +127,10 @@ class Server {
      *          should reject it with a 413 Payload Too Large response.
      *
      * @param size Maximum body size in bytes.
-     * @ingroup config
+     * @ingroup core
      */
-    void setClientMaxBodySize(size_t size) noexcept;
+    void setClientMaxBodySize(std::size_t size) noexcept;
+    
     /**
      * @brief Adds a location block to this server.
      *
@@ -132,24 +139,23 @@ class Server {
      *          for specific URI prefixes under this server.
      *
      * @param location The `Location` instance to add.
-     * @ingroup config
+     * @ingroup core
      */
     void addLocation(const Location& location);
 
     ///////////////
     // --- Getters
     /**
-     * @brief Sets the port number for this server.
-     *
-     * @details This defines which TCP port the server should bind to for incoming
-     *          connections. The value must be in the valid range [0, 65535], and
-     *          is typically configured via the `listen` directive in the config file.
-     *          Validation is performed before this function is called.
-     *
-     * @param port The TCP port to bind to.
-     * @ingroup config
-     */
+      * @brief Returns the port number this server listens on.
+      *
+      * @details Reflects the `listen` directive from the configuration. Value is in
+      *          the valid TCP range [0, 65535].
+      *
+      * @return The configured TCP port.
+      * @ingroup core
+      */
     int getPort() const noexcept;
+    
     /**
      * @brief Returns the configured host IP address for this server.
      *
@@ -158,9 +164,10 @@ class Server {
      *          Typically set via the `host` directive in the configuration file.
      *
      * @return Reference to the host IP address string.
-     * @ingroup config
+     * @ingroup core
      */
     const std::string& getHost() const noexcept;
+    
     /**
      * @brief Returns the list of server name aliases for this virtual host.
      *
@@ -169,10 +176,24 @@ class Server {
      *          Configured via the `server_name` directive.
      *
      * @return Reference to the list of server names.
-     * @ingroup config
+     * @ingroup core
      */
     const std::vector<std::string>& getServerNames() const noexcept;
+
+    /**
+     * @brief Returns the default server name for this virtual host.
+     *
+     * @details If no server names have been configured for this instance, the method
+     *          returns `"localhost"`. Otherwise, it returns the first declared name
+     *          from the configured list of server names. This value is used as the
+     *          fallback when no explicit name match is found during host-based
+     *          request routing.
+     *
+     * @return The default server name string.
+     * @ingroup core
+     */
     const std::string               getDefaultServerName() const;
+    
     /**
      * @brief Returns the mapping of HTTP error codes to custom error pages.
      *
@@ -181,7 +202,7 @@ class Server {
      *          Configured via the `error_page` directive.
      *
      * @return Reference to the map of error codes to file paths.
-     * @ingroup config
+     * @ingroup core
      */
     const std::map<int, std::string>& getErrorPages() const noexcept;
     /**
@@ -192,9 +213,10 @@ class Server {
      *          a 413 Payload Too Large error. Configured via the `client_max_body_size` directive.
      *
      * @return The maximum request body size in bytes.
-     * @ingroup config
+     * @ingroup core
      */
-    size_t getClientMaxBodySize() const noexcept;
+    std::size_t getClientMaxBodySize() const noexcept;
+    
     /**
      * @brief Returns the list of location blocks defined for this server.
      *
@@ -203,9 +225,10 @@ class Server {
      *          server selects the best-matching location based on the URI.
      *
      * @return Reference to the list of `Location` objects.
-     * @ingroup config
+     * @ingroup core
      */
     const std::vector<Location>& getLocations() const noexcept;
+    
     /**
      * @brief Returns a mutable reference to the server's location blocks.
      *
@@ -214,9 +237,10 @@ class Server {
      *          Use with care to avoid breaking routing logic.
      *
      * @return Reference to the list of `Location` objects.
-     * @ingroup config
+     * @ingroup core
      */
     std::vector<Location>& getLocations() noexcept;
+    
     /**
      * @brief Checks whether the server matches the given server name.
      *
@@ -226,7 +250,7 @@ class Server {
      *
      * @param name The server name to check (case-sensitive).
      * @return `true` if the name matches one of the configured server names.
-     * @ingroup config
+     * @ingroup core
      */
     bool hasServerName(std::string_view name) const noexcept;
 };

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:51:19 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/16 08:03:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/13 09:31:08 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  *          error pages, body size limits, and associated location blocks.
  *          It is part of the configuration system and supports parsing and runtime use.
  *
- * @ingroup config
+ * @ingroup core
  */
 
 #include "core/Server.hpp"
@@ -31,9 +31,9 @@
 // --- Constructor
 
 Server::Server()
-    : _port(80) // Default HTTP port
+    : _port(80)         // Default HTTP port
       ,
-      _host("0.0.0.0") // Default bind address
+      _host("0.0.0.0")  // Default bind address
       ,
       _client_max_body_size(1 * 1024 * 1024) // 1 MiB
 {
