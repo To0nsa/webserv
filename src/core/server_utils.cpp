@@ -6,9 +6,20 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:30:41 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/02 22:10:11 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/13 22:39:40 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file    server_utils.cpp
+ * @brief   Implements server selection utilities for virtual host resolution.
+ *
+ * @details Provides helper function for matching an incoming connection
+ *          to the appropriate `Server` instance based on the listening port
+ *          and the HTTP `Host` header. This util is part of the
+ *          core request-routing mechanism in Webserv.
+ * @ingroup core
+ */
 
 #include "core/server_utils.hpp"
 #include <stdexcept>
@@ -43,7 +54,7 @@ const Server& findMatchingServer(const std::vector<Server>& servers, int port,
         }
     }
 
-    // Pass 2: No name match — fall back to the first server that listens on the same port
+    // Pass 2: No name match, fall back to the first server that listens on the same port
     for (const Server& server : servers) {
         if (server.getPort() == port) {
             return server; // Fallback default server
