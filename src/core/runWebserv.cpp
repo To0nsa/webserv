@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   webserv.cpp                                        :+:      :+:    :+:   */
+/*   runWebserv.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 21:57:56 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/13 09:41:11 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/14 15:22:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
- * @file    webserv.cpp
+ * @file    runWebserv.cpp
  * @brief   Webserv bootstrap and runtime orchestration.
  *
  * @details Resolves the configuration path, loads and parses the configuration file,
  *          applies normalization and validation, prints the effective config, and
  *          starts the socket event loop. Helper functions for argument handling and
  *          file I/O are kept internal to this translation unit.
- * @ingroup core
+ * @ingroup entrypoint
  */
 
 #include "config/Config.hpp"
@@ -28,13 +28,24 @@
 #include "network/SocketManager.hpp"
 #include "utils/printInfo.hpp"
 
-#include <fstream>
-#include <sstream>
-#include <stdexcept>
-#include <string>
-#include <string_view>
+#include <fstream>      // std::ifstream for reading the configuration file
+#include <sstream>      // std::ostringstream for buffering file content
+#include <stdexcept>    // std::runtime_error for error reporting
+#include <string>       // std::string for configuration paths and file content
+#include <string_view>  // std::string_view for DEFAULT_CONFIG_PATH constant
 
-namespace {
+/**
+ * @namespace bootstrap
+ * @brief    Internal startup helpers for Webserv.
+ *
+ * @details  Provides functions for resolving the configuration file path,
+ *           reading configuration content, and parsing it into a `Config`
+ *           object. These helpers are used exclusively during application
+ *           initialization by `runWebserv()`.
+ * @ingroup entrypoint
+ * @internal
+ */
+namespace bootstrap {
 
 /**
  * @brief Default configuration file path used when no CLI argument is provided.
@@ -114,11 +125,13 @@ Config loadConfig(const std::string& fileContent) {
  * @throws std::runtime_error If CLI arguments are invalid or the config file cannot be opened.
  * @throws ConfigParseError   If the configuration cannot be tokenized/parsed.
  * @throws ValidationError    If the resulting configuration fails validation rules.
+ * 
+ * @ingroup entrypoint
  */
 int runWebserv(int argc, char** argv) {
-    std::string configPath  = resolveConfigPath(argc, argv);
-    std::string fileContent = extractFileContent(configPath);
-    Config      config      = loadConfig(fileContent);
+    std::string configPath  = bootstrap::resolveConfigPath(argc, argv);
+    std::string fileContent = bootstrap::extractFileContent(configPath);
+    Config      config      = bootstrap::loadConfig(fileContent);
     normalizeConfig(config);
     validateConfig(config);
     printConfig(config);

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:29:58 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/13 22:40:47 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/14 15:14:24 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  *
  * @details Contains function declaration for selecting the appropriate
  *          `Server` instance based on listening port and HTTP `Host` header.
- * @ingroup core
+ * @ingroup server
  */
 
 #pragma once

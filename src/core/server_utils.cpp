@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:30:41 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/13 22:39:40 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/14 15:09:44 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  *          to the appropriate `Server` instance based on the listening port
  *          and the HTTP `Host` header. This util is part of the
  *          core request-routing mechanism in Webserv.
- * @ingroup core
+ * @ingroup server
  */
 
 #include "core/server_utils.hpp"

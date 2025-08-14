@@ -6,7 +6,7 @@
 #    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/09 20:53:27 by nlouis            #+#    #+#              #
-#    Updated: 2025/08/09 20:59:47 by nlouis           ###   ########.fr        #
+#    Updated: 2025/08/14 14:43:24 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ SRCS_CORE := \
   src/core/Server.cpp \
   src/core/main.cpp \
   src/core/server_utils.cpp \
-  src/core/webserv.cpp
+  src/core/runWebserv.cpp
 
 SRCS_HTTP := \
   src/http/HttpRequest.cpp \
@@ -102,7 +102,7 @@ HEADERS := \
   include/core/Location.hpp \
   include/core/Server.hpp \
   include/core/server_utils.hpp \
-  include/core/webserv.hpp \
+  include/core/runWebserv.hpp \
   include/http/HttpRequest.hpp \
   include/http/HttpRequestParser.hpp \
   include/http/HttpResponse.hpp \

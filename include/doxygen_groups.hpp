@@ -17,11 +17,38 @@
  */
 
 /**
- * @defgroup core Core Server Logic
- * @brief Main server control flow and application entry point.
+ * @defgroup core Core Components
+ * @brief Main server components, control flow, and application entry point.
  *
  * @details Contains the event loop, server initialization, and runtime orchestration.
  *          Ties together configuration, networking, and HTTP processing.
+ */
+
+/**
+ * @defgroup server Server Component
+ * @ingroup core
+ * @brief Main Server class and its implementation.
+ *
+ * @details Contains the `Server` class, which represents a single
+ *          virtual server block in Webserv.
+ *
+ *          Files:
+ *          - `core/Server.hpp` — class declaration.
+ *          - `core/Server.cpp` — method implementations.
+ *          - `core/server_utils.hpp` — findMatchingServer()
+ *          - `core/server_utils.cpp` — findMatchingServer()
+ */
+
+/**
+ * @defgroup entrypoint Application Entrypoint
+ * @ingroup core
+ * @brief Program entry and top-level orchestration.
+ *
+ * @details Contains the `main()` function and the high-level startup/shutdown
+ *          logic for Webserv, including:
+ *          - `runWebserv.hpp` — high-level declarations.
+ *          - `runWebserv.cpp` — main orchestration functions.
+ *          - `main.cpp` — program entry point.
  */
 
 /**

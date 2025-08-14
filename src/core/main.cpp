@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:11:30 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/10 00:07:50 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/14 15:25:54 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
  *
  * @details Initializes and runs the Webserv HTTP server.
  *          Delegates execution to `runWebserv`, handling all uncaught exceptions.
- * @ingroup core
+ * @ingroup entrypoint
  */
 
-#include "core/webserv.hpp"
+#include "core/runWebserv.hpp"
 
 #include <cstdlib>
 #include <iostream>
@@ -36,6 +36,8 @@
  * @return `EXIT_SUCCESS` on successful shutdown, `EXIT_FAILURE` on error.
  *
  * @throws std::runtime_error If an unrecoverable error occurs during startup.
+ *
+ * @ingroup entrypoint
  */
 int main(int argc, char** argv) try {
     return runWebserv(argc, argv);
