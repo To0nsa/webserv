@@ -6,9 +6,26 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 14:01:22 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/24 15:07:38 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/15 22:58:13 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file    printInfo.cpp
+ * @brief   Human-readable printing helpers for Webserv configuration and servers.
+ *
+ * @details Implements utilities to format and print usage instructions and a
+ *          structured, readable summary of the loaded configuration:
+ *            - `printUsage()` prints CLI usage hints.
+ *            - `printServerHeader()` prints a banner line for each server block.
+ *            - `printConfig()` renders effective server/location settings
+ *              (limits, methods, error pages, CGI, upload store, etc.).
+ *
+ *          These helpers are intended for diagnostics during startup and for
+ *          developer/operator visibility of the parsed configuration.
+ *
+ * @ingroup utils
+ */
 
 #include "utils/printInfo.hpp"
 #include "utils/stringUtils.hpp"

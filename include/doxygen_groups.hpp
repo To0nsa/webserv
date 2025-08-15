@@ -66,3 +66,71 @@
  * @details Provides abstractions over system calls for listening sockets,
  *          client connections, and readiness-based multiplexing using poll/kqueue/epoll.
  */
+
+/**
+ * @defgroup utils Utility Functions
+ * @brief Shared helper routines for common operations.
+ *
+ * @details Provides generic helper functions reused across modules, including
+ *          string manipulation, date/time handling, and filesystem operations.
+ */
+
+/**
+ * @defgroup filesystem_utils Filesystem Utilities
+ * @ingroup utils
+ * @brief Path manipulation, safe file handling, and directory management.
+ *
+ * @details Contains helpers for:
+ *          - Normalizing and joining paths.
+ *          - Mapping URIs to filesystem paths.
+ *          - Sanitizing filenames for uploads.
+ *          - Creating directories recursively.
+ *          - Enforcing upload root boundaries.
+ *          These utilities are designed to prevent directory traversal,
+ *          enforce security constraints, and support Webserv’s upload and
+ *          static file-serving features.
+ */
+
+/**
+ * @defgroup html_utils HTML Utilities
+ * @ingroup utils
+ * @brief Safe HTML encoding and related helpers.
+ *
+ * @details Functions for escaping or manipulating HTML content so that
+ *          untrusted input can be embedded safely in a page without being
+ *          interpreted as markup. Prevents common injection vulnerabilities
+ *          like cross-site scripting (XSS) by replacing reserved characters
+ *          with their corresponding HTML entities.
+ */
+
+/**
+ * @defgroup string_utils String Utilities
+ * @ingroup utils
+ * @brief String manipulation, parsing, and formatting helpers.
+ *
+ * @details Provides reusable string-related routines including:
+ *          - Case conversion (uppercase/lowercase).
+ *          - Whitespace trimming.
+ *          - Delimited join operations.
+ *          - Size parsing with suffix multipliers (e.g., KiB, MiB).
+ *          - Human-readable byte formatting.
+ *          - Integer parsing with detailed error reporting.
+ *          These utilities are used throughout Webserv for configuration
+ *          parsing, logging, and data presentation.
+ */
+
+/**
+ * @defgroup url_utils URL Utilities
+ * @ingroup utils
+ * @brief Helpers for percent-decoding, form decoding, and safe filename extraction.
+ *
+ * @details Provides functions for:
+ *          - Decoding percent-encoded sequences in URIs.
+ *          - Handling `application/x-www-form-urlencoded` form data.
+ *          - Parsing key/value pairs from form bodies.
+ *          - Extracting and validating safe filenames from URI segments.
+ *
+ *          These functions are typically used during HTTP request parsing,
+ *          particularly for processing query strings, form submissions,
+ *          and safe handling of uploaded filenames.
+ */
