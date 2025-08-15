@@ -25,7 +25,7 @@
  */
 
 /**
- * @defgroup server Server Component
+ * @defgroup server_component Server Component
  * @ingroup core
  * @brief Main Server class and its implementation.
  *
@@ -37,6 +37,26 @@
  *          - `core/Server.cpp` — method implementations.
  *          - `core/server_utils.hpp` — findMatchingServer()
  *          - `core/server_utils.cpp` — findMatchingServer()
+ */
+
+/**
+ * @defgroup location_component Location Component
+ * @ingroup core
+ * @brief Path-specific routing and configuration within a server.
+ *
+ * @details Contains the `Location` class, representing a configuration
+ *          block bound to a specific URI path inside a server.
+ *          Each location can define:
+ *          - A document root.
+ *          - Allowed HTTP methods.
+ *          - Index files and autoindexing.
+ *          - Redirection rules.
+ *          - CGI execution settings.
+ *          - Upload directory configuration.
+ *
+ *          Files:
+ *          - `core/Location.hpp` — class declaration.
+ *          - `core/Location.cpp` — method implementations.
  */
 
 /**

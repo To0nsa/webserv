@@ -1,26 +1,4 @@
 warning: source 'tests' is not a readable file or directory... skipping.
-/home/toonsa/myProjects/webserv/include/core/Location.hpp:82: warning: unbalanced grouping commands
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:41: warning: argument 'value' from the argument list of parseInt has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:41: warning: argument 'field' from the argument list of parseInt has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:41: warning: argument 'line' from the argument list of parseInt has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:41: warning: argument 'column' from the argument list of parseInt has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:41: warning: argument 'context_provider' from the argument list of parseInt has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:60: warning: argument 'value' from the argument list of parseByteSize has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:60: warning: argument 'field' from the argument list of parseByteSize has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:60: warning: argument 'line' from the argument list of parseByteSize has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:60: warning: argument 'column' from the argument list of parseByteSize has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:60: warning: argument 'context_provider' from the argument list of parseByteSize has multiple @param documentation sections
 error: md5 hash does not match for two different runs of /home/toonsa/myProjects/webserv/docs/html/group__url__utils_gabf2641feed820a4fcaf2699a86d1a4f7_gabf2641feed820a4fcaf2699a86d1a4f7_icgraph.dot !
-error: md5 hash does not match for two different runs of /home/toonsa/myProjects/webserv/docs/html/group__url__utils_gabf2641feed820a4fcaf2699a86d1a4f7_gabf2641feed820a4fcaf2699a86d1a4f7_icgraph.dot !
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:41: warning: argument 'value' from the argument list of parseInt has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:41: warning: argument 'field' from the argument list of parseInt has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:41: warning: argument 'line' from the argument list of parseInt has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:41: warning: argument 'column' from the argument list of parseInt has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:41: warning: argument 'context_provider' from the argument list of parseInt has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:60: warning: argument 'value' from the argument list of parseByteSize has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:60: warning: argument 'field' from the argument list of parseByteSize has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:60: warning: argument 'line' from the argument list of parseByteSize has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:60: warning: argument 'column' from the argument list of parseByteSize has multiple @param documentation sections
-/home/toonsa/myProjects/webserv/include/utils/stringUtils.hpp:60: warning: argument 'context_provider' from the argument list of parseByteSize has multiple @param documentation sections
 error: md5 hash does not match for two different runs of /home/toonsa/myProjects/webserv/docs/html/group__url__utils_gabf2641feed820a4fcaf2699a86d1a4f7_gabf2641feed820a4fcaf2699a86d1a4f7_icgraph.dot !
 /home/toonsa/myProjects/webserv/README.md:103: warning: unable to resolve reference to '/home/toonsa/myProjects/webserv/CONTRIBUTING.md' for \ref command

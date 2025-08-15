@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:37:06 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/14 14:31:55 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/15 23:07:10 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  *          error pages, configure body size limits, and contain multiple location
  *          blocks with their own routing rules and behavior.
  *
- * @ingroup server
+ * @ingroup server_component
  */
 
 #pragma once
@@ -41,7 +41,7 @@
  *          `server` block in the configuration file and participates in request
  *          routing based on host and port matching.
  *
- * @ingroup server
+ * @ingroup server_component
  */
 class Server {
   private:

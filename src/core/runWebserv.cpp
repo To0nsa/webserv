@@ -28,11 +28,11 @@
 #include "network/SocketManager.hpp"
 #include "utils/printInfo.hpp"
 
-#include <fstream>      // std::ifstream for reading the configuration file
-#include <sstream>      // std::ostringstream for buffering file content
-#include <stdexcept>    // std::runtime_error for error reporting
-#include <string>       // std::string for configuration paths and file content
-#include <string_view>  // std::string_view for DEFAULT_CONFIG_PATH constant
+#include <fstream>     // std::ifstream for reading the configuration file
+#include <sstream>     // std::ostringstream for buffering file content
+#include <stdexcept>   // std::runtime_error for error reporting
+#include <string>      // std::string for configuration paths and file content
+#include <string_view> // std::string_view for DEFAULT_CONFIG_PATH constant
 
 /**
  * @namespace bootstrap
@@ -110,7 +110,7 @@ Config loadConfig(const std::string& fileContent) {
     return parser.parseConfig();
 }
 
-} // namespace
+} // namespace bootstrap
 
 /**
  * @brief Runs the Webserv server.
@@ -125,7 +125,7 @@ Config loadConfig(const std::string& fileContent) {
  * @throws std::runtime_error If CLI arguments are invalid or the config file cannot be opened.
  * @throws ConfigParseError   If the configuration cannot be tokenized/parsed.
  * @throws ValidationError    If the resulting configuration fails validation rules.
- * 
+ *
  * @ingroup entrypoint
  */
 int runWebserv(int argc, char** argv) {

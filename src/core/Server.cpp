@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:51:19 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/14 14:34:04 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/15 23:08:18 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  *          error pages, body size limits, and associated location blocks.
  *          It is part of the configuration system and supports parsing and runtime use.
  *
- * @ingroup server
+ * @ingroup server_component
  */
 
 #include "core/Server.hpp"       // Server class declaration
@@ -40,7 +40,7 @@
  *          client max body size (`1 MiB`), and empty location/error blocks.
  *          Intended to be populated via configuration parsing.
  *
- * @ingroup server
+ * @ingroup server_component
  */
 Server::Server()
     : _port(80),                             // Default HTTP port
@@ -58,7 +58,7 @@ Server::Server()
  *          the `listen` directive in the configuration file. Validation is done before calling.
  *
  * @param port The TCP port number to bind to.
- * @ingroup server
+ * @ingroup server_component
  */
 void Server::setPort(int port) noexcept {
     _port = port;
@@ -72,7 +72,7 @@ void Server::setPort(int port) noexcept {
  *          via the `host` directive in the configuration file. No validation is done here.
  *
  * @param host The IP address to bind (e.g., "127.0.0.1" or "0.0.0.0").
- * @ingroup server
+ * @ingroup server_component
  */
 void Server::setHost(std::string_view host) noexcept {
     _host = host;
@@ -86,7 +86,7 @@ void Server::setHost(std::string_view host) noexcept {
  *          This method appends without deduplication.
  *
  * @param name The server name to add (e.g., "example.com").
- * @ingroup server
+ * @ingroup server_component
  */
 void Server::addServerName(std::string_view name) {
     // Append the given server name to the list of aliases.
@@ -102,7 +102,7 @@ void Server::addServerName(std::string_view name) {
  *
  * @param code The HTTP error status code to override.
  * @param path The file path to serve as the custom error page.
- * @ingroup server
+ * @ingroup server_component
  */
 void Server::setErrorPage(int code, const std::string& path) {
     // Map the given HTTP status code to a custom error page path.
@@ -117,7 +117,7 @@ void Server::setErrorPage(int code, const std::string& path) {
  *          should reject it with a 413 Payload Too Large response.
  *
  * @param size Maximum body size in bytes.
- * @ingroup server
+ * @ingroup server_component
  */
 void Server::setClientMaxBodySize(std::size_t size) noexcept {
     _client_max_body_size = size;
@@ -131,7 +131,7 @@ void Server::setClientMaxBodySize(std::size_t size) noexcept {
  *          for specific URI prefixes under this server.
  *
  * @param location The `Location` instance to add.
- * @ingroup server
+ * @ingroup server_component
  */
 void Server::addLocation(const Location& location) {
     // Add a new location block to the server's routing table.
@@ -147,7 +147,7 @@ void Server::addLocation(const Location& location) {
  *          the valid TCP range [0, 65535].
  *
  * @return The configured TCP port.
- * @ingroup server
+ * @ingroup server_component
  */
 int Server::getPort() const noexcept {
     return _port;
@@ -161,7 +161,7 @@ int Server::getPort() const noexcept {
  *          Typically set via the `host` directive in the configuration file.
  *
  * @return Reference to the host IP address string.
- * @ingroup server
+ * @ingroup server_component
  */
 const std::string& Server::getHost() const noexcept {
     return _host;
@@ -175,7 +175,7 @@ const std::string& Server::getHost() const noexcept {
  *          Configured via the `server_name` directive.
  *
  * @return Reference to the list of server names.
- * @ingroup server
+ * @ingroup server_component
  */
 const std::vector<std::string>& Server::getServerNames() const noexcept {
     return _server_names;
@@ -191,7 +191,7 @@ const std::vector<std::string>& Server::getServerNames() const noexcept {
  *          request routing.
  *
  * @return The default server name string.
- * @ingroup server
+ * @ingroup server_component
  */
 const std::string Server::getDefaultServerName() const {
     return _server_names.empty() ? "localhost" : _server_names.front();
@@ -205,7 +205,7 @@ const std::string Server::getDefaultServerName() const {
  *          Configured via the `error_page` directive.
  *
  * @return Reference to the map of error codes to file paths.
- * @ingroup server
+ * @ingroup server_component
  */
 const std::map<int, std::string>& Server::getErrorPages() const noexcept {
     return _error_pages;
@@ -219,7 +219,7 @@ const std::map<int, std::string>& Server::getErrorPages() const noexcept {
  *          a 413 Payload Too Large error. Configured via the `client_max_body_size` directive.
  *
  * @return The maximum request body size in bytes.
- * @ingroup server
+ * @ingroup server_component
  */
 std::size_t Server::getClientMaxBodySize() const noexcept {
     return _client_max_body_size;
@@ -233,7 +233,7 @@ std::size_t Server::getClientMaxBodySize() const noexcept {
  *          server selects the best-matching location based on the URI.
  *
  * @return Reference to the list of `Location` objects.
- * @ingroup server
+ * @ingroup server_component
  */
 const std::vector<Location>& Server::getLocations() const noexcept {
     return _locations;
@@ -247,7 +247,7 @@ const std::vector<Location>& Server::getLocations() const noexcept {
  *          Use with care to avoid breaking routing logic.
  *
  * @return Reference to the list of `Location` objects.
- * @ingroup server
+ * @ingroup server_component
  */
 std::vector<Location>& Server::getLocations() noexcept {
     return _locations;
@@ -263,7 +263,7 @@ std::vector<Location>& Server::getLocations() noexcept {
  *
  * @param name The server name to check (case-sensitive).
  * @return `true` if the name matches one of the configured server names.
- * @ingroup server
+ * @ingroup server_component
  */
 bool Server::hasServerName(std::string_view name) const noexcept {
     // Check if the given name matches any of the configured server names.
