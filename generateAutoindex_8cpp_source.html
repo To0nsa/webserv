@@ -103,16 +103,16 @@ $(document).ready(function(){initNavTree('generateAutoindex_8cpp_source.html',''
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">/*                                                        :::      ::::::::   */</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">/*   generateAutoindex.cpp                              :+:      :+:    :+:   */</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">/*                                                    +:+ +:+         +:+     */</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">/*   By: nlouis &lt;nlouis@student.hive.fi&gt;            +#+  +:+       +#+        */</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">/*   By: irychkov &lt;irychkov@student.hive.fi&gt;        +#+  +:+       +#+        */</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">/*                                                +#+#+#+#+#+   +#+           */</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">/*   Created: 2025/06/06 09:08:33 by nlouis            #+#    #+#             */</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">/*   Updated: 2025/06/09 22:57:01 by nlouis           ###   ########.fr       */</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">/*   Updated: 2025/08/17 11:56:38 by irychkov         ###   ########.fr       */</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">/*                                                                            */</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">/* ************************************************************************** */</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;chrono&gt;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;ctime&gt;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;filesystem&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;filesystem&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;format&gt;</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;iomanip&gt;</span></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;sstream&gt;</span></div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;string&gt;</span></div>
@@ -251,13 +251,13 @@ $(document).ready(function(){initNavTree('generateAutoindex_8cpp_source.html',''
 <div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
 <div class="foldopen" id="foldopen00145" data-start="{" data-end="}">
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno"><a class="line" href="namespaceanonymous__namespace_02generateAutoindex_8cpp_03.html#a098eeee42fbe96f8a9b748efd4f61ed5">  145</a></span>std::string <a class="code hl_function" href="namespaceanonymous__namespace_02generateAutoindex_8cpp_03.html#a098eeee42fbe96f8a9b748efd4f61ed5">formatMTimeUTC</a>(std::time_t t) {</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    std::tm* gmPtr = std::gmtime(&amp;t);</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="keywordflow">if</span> (!gmPtr) {</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        <span class="keywordflow">return</span> {};</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    }</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    std::ostringstream ss;</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    ss &lt;&lt; std::put_time(gmPtr, <span class="stringliteral">&quot;%d-%b-%Y %H:%M&quot;</span>);</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="keywordflow">return</span> ss.str();</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <span class="comment">// Convert time_t → chrono::sys_time</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    std::chrono::sys_time&lt;std::chrono::seconds&gt; tp{std::chrono::seconds{t}};</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <span class="comment">// Round to minutes to match &quot;%d-%b-%Y %H:%M&quot;</span></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keyword">auto</span> tp_minutes = std::chrono::floor&lt;std::chrono::minutes&gt;(tp);</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="keywordflow">return</span> std::format(<span class="stringliteral">&quot;{:%d-%b-%Y %H:%M}&quot;</span>, tp_minutes);</div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>}</div>
 </div>
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
