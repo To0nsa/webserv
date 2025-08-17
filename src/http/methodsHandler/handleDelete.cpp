@@ -48,12 +48,13 @@ bool unlinkFile(const std::string& filepath, const HttpRequest& req, const Serve
         outError = ResponseBuilder::generateError(403, server, req);
         return false;
     }
-    
+
     std::error_code ec;
     if (!std::filesystem::remove(filepath, ec)) {
         if (ec.value() == EACCES || ec.value() == EPERM) {
             Logger::logFrom(LogLevel::WARN, "Delete Handler",
-                            "Permission denied when deleting: " + filepath + " (" + ec.message() + ")");
+                            "Permission denied when deleting: " + filepath + " (" + ec.message() +
+                                ")");
             outError = ResponseBuilder::generateError(403, server, req);
         } else if (ec.value() == ENOENT) {
             Logger::logFrom(LogLevel::WARN, "Delete Handler",
@@ -61,7 +62,8 @@ bool unlinkFile(const std::string& filepath, const HttpRequest& req, const Serve
             outError = ResponseBuilder::generateError(404, server, req);
         } else {
             Logger::logFrom(LogLevel::WARN, "Delete Handler",
-                            "Unexpected error deleting file: " + filepath + " (" + ec.message() + ")");
+                            "Unexpected error deleting file: " + filepath + " (" + ec.message() +
+                                ")");
             outError = ResponseBuilder::generateError(500, server, req);
         }
         return false;

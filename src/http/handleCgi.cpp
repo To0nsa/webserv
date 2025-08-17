@@ -251,7 +251,9 @@ void unlinkWithErrorLog(const std::string& path, const std::string& context) {
     if (!path.empty()) {
         std::error_code ec;
         if (!std::filesystem::remove(path, ec)) {
-            Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to delete " + context + ": " + path + " (" + ec.message() + ")");
+            Logger::logFrom(LogLevel::ERROR, "CGI",
+                            "Failed to delete " + context + ": " + path + " (" + ec.message() +
+                                ")");
         }
     }
 }
