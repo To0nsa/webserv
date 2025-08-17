@@ -6,21 +6,22 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/14 10:27:30 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/17 12:10:57 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config/parser/directive_handler_table.hpp"
-#include "config/parser/ConfigParseError.hpp"
-#include "core/Location.hpp"
-#include "core/Server.hpp"
-#include "utils/errorUtils.hpp"
-#include "utils/stringUtils.hpp"
-
-#include <filesystem>
-#include <set>
-#include <sstream>
-#include <unistd.h>
+#include "config/parser/ConfigParseError.hpp" // for SyntaxError
+#include "core/Location.hpp"                  // for Location
+#include "core/Server.hpp"                    // for Server
+#include "utils/errorUtils.hpp"               // for formatError
+#include "utils/stringUtils.hpp"              // for parseInt, parseByteSize
+#include <cctype>                             // for isalnum
+#include <cstddef>                            // for size_t
+#include <filesystem>                         // for path, is_regular_file
+#include <set>                                // for set
+#include <sstream>                            // for basic_istream, basic_i...
+#include <unistd.h>                           // for size_t, access, X_OK
 
 namespace directive {
 

@@ -6,24 +6,25 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/17 11:25:09 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/17 12:22:25 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "core/Location.hpp"
-#include "core/Server.hpp"
-#include "http/HttpRequest.hpp"
-#include "http/HttpResponse.hpp"
-#include "http/responseBuilder.hpp"
-#include "utils/Logger.hpp"
-#include "utils/filesystemUtils.hpp"
-#include "utils/htmlUtils.hpp"
-#include "utils/urlUtils.hpp"
-
-#include <filesystem>
-#include <sstream>
-#include <string>
-#include <sys/stat.h>
+#include "http/HttpRequest.hpp"      // for HttpRequest
+#include "http/HttpResponse.hpp"     // for HttpResponse
+#include "http/responseBuilder.hpp"  // for generateError, generateSuccess
+#include "utils/Logger.hpp"          // for LogLevel, Logger
+#include "utils/filesystemUtils.hpp" // for isSymlink, resolvePhysicalPath
+#include "utils/htmlUtils.hpp"       // for htmlEscape
+#include "utils/urlUtils.hpp"        // for extractFilenameFromUri
+#include <errno.h>                   // for EACCES, ENOENT, EPERM
+#include <filesystem>                // for remove, path
+#include <sstream>                   // for basic_ostream, operator<<, basi...
+#include <string>                    // for allocator, operator+, char_traits
+#include <sys/stat.h>                // for stat, S_ISDIR, S_ISREG
+#include <system_error>              // for error_code
+class Location;
+class Server;
 
 namespace {
 

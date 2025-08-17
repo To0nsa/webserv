@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorUtils.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 21:08:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/06 20:14:01 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:30:16 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,14 @@
  * @ingroup ErrorUtils
  */
 
-#include "utils/errorUtils.hpp"
+#include <cctype>        // for isxdigit
+#include <cstddef>       // for size_t
+#include <regex>         // for regex_match, regex
+#include <sstream>       // for basic_ostream, basic_ostringstream, operator<<
+#include <stdexcept>     // for invalid_argument
+#include <string>        // for allocator, char_traits, string, basic_string
+#include <unordered_map> // for unordered_map
+#include <utility>       // for move
 
 std::string formatError(const std::string& msg, int line, int column) {
     // Builds a standardized error message with line and column context

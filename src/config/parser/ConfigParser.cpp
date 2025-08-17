@@ -3,33 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigParser.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 08:46:22 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/09 12:11:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:10:21 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config/parser/ConfigParser.hpp"
-#include "config/Config.hpp"
-#include "config/parser/ConfigParseError.hpp"
-#include "config/parser/directive_handler_table.hpp"
-#include "config/tokenizer/Tokenizer.hpp"
-#include "core/Location.hpp"
-#include "core/Server.hpp"
-#include "utils/errorUtils.hpp"
-#include "utils/stringUtils.hpp"
-
-#include <algorithm>
-#include <array>
-#include <charconv>
-#include <functional>
-#include <memory>
-#include <span>
-#include <sstream>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
+#include "config/Config.hpp"                         // for Config
+#include "config/parser/ConfigParseError.hpp"        // for SyntaxError
+#include "config/parser/directive_handler_table.hpp" // for locationHandlers
+#include "config/tokenizer/Tokenizer.hpp"            // for Tokenizer
+#include "core/Location.hpp"                         // for Location
+#include "core/Server.hpp"                           // for Server
+#include "utils/errorUtils.hpp"                      // for formatError
+#include <algorithm>                                 // for find
+#include <array>                                     // for array
+#include <span>                                      // for span
+#include <sstream>                                   // for basic_ostream
+#include <unordered_map>                             // for unordered_map
+#include <unordered_set>                             // for unordered_set
+#include <utility>                                   // for move, pair
+#include <vector>                                    // for vector
 
 namespace {
 

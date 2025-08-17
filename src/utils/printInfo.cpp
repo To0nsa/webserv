@@ -3,17 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   printInfo.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 14:01:22 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/24 15:07:38 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:32:55 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/printInfo.hpp"
-#include "utils/stringUtils.hpp"
-
-#include <sstream>
+#include "config/Config.hpp"     // for Config
+#include "core/Location.hpp"     // for Location
+#include "core/Server.hpp"       // for Server
+#include "utils/stringUtils.hpp" // for formatBytes
+#include <iostream>              // for basic_ostream, operator<<, char_traits
+#include <map>                   // for _Rb_tree_const_iterator, map, opera...
+#include <set>                   // for set
+#include <sstream>               // for basic_ostringstream
+#include <stddef.h>              // for size_t
+#include <utility>               // for pair
+#include <vector>                // for vector
 
 std::string printUsage() {
     std::ostringstream oss;

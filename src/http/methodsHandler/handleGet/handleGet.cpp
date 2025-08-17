@@ -3,30 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   handleGet.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:39:41 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/09 22:22:38 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:24:33 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <algorithm>
-#include <cctype>
-#include <filesystem>
-#include <fstream>
-#include <map>
-#include <sstream>
-#include <string>
-#include <sys/stat.h>
-
-#include "core/Server.hpp"
-#include "http/HttpRequest.hpp"
-#include "http/HttpResponse.hpp"
-#include "http/methodsHandler.hpp"
-#include "http/responseBuilder.hpp"
-#include "utils/Logger.hpp"
-#include "utils/filesystemUtils.hpp"
-#include "utils/stringUtils.hpp"
+#include "core/Location.hpp"         // for Location
+#include "http/HttpRequest.hpp"      // for HttpRequest
+#include "http/HttpResponse.hpp"     // for HttpResponse
+#include "http/methodsHandler.hpp"   // for generateAutoindex, handleGet
+#include "http/responseBuilder.hpp"  // for generateError, generateRedirect
+#include "utils/Logger.hpp"          // for LogLevel, Logger
+#include "utils/filesystemUtils.hpp" // for isFile, isSymlink, joinPath
+#include <algorithm>                 // for transform
+#include <cctype>                    // for tolower
+#include <filesystem>                // for path
+#include <fstream>                   // for basic_ifstream, basic_ios, ios
+#include <map>                       // for map, operator==, _Rb_tree_const...
+#include <sstream>                   // for basic_ostringstream
+#include <string>                    // for allocator, operator+, char_traits
+#include <sys/stat.h>                // for stat, S_ISDIR, S_ISREG
+#include <utility>                   // for pair
+class Server;
 
 namespace {
 

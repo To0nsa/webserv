@@ -3,28 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   requestRouter.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 23:13:23 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/10 22:36:21 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:17:33 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "core/Location.hpp"
-#include "core/Server.hpp"
-#include "http/HttpRequest.hpp"
-#include "http/handleCgi.hpp"
-#include "http/methodsHandler.hpp"
-#include "http/responseBuilder.hpp"
-#include "utils/Logger.hpp"
-#include "utils/filesystemUtils.hpp"
-
-#include <fstream>
-#include <iostream>
-#include <optional>
-#include <set>
-#include <string>
-#include <sys/stat.h>
+#include "core/Location.hpp"         // for Location
+#include "core/Server.hpp"           // for Server
+#include "http/HttpRequest.hpp"      // for HttpRequest
+#include "http/HttpResponse.hpp"     // for HttpResponse
+#include "http/methodsHandler.hpp"   // for handleDelete, handleGet, handle...
+#include "http/responseBuilder.hpp"  // for generateError, generateRedirect
+#include "utils/Logger.hpp"          // for LogLevel, Logger
+#include "utils/filesystemUtils.hpp" // for normalizePath, resolvePhysicalPath
+#include <cstddef>                   // for size_t
+#include <optional>                  // for optional, nullopt
+#include <set>                       // for set
+#include <string>                    // for allocator, operator+, char_traits
+#include <sys/stat.h>                // for stat, S_ISDIR
+#include <vector>                    // for vector
 
 namespace {
 std::optional<HttpResponse> redirectOnDirectorySlash(const HttpRequest& req, const Server& server,

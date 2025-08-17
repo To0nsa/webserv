@@ -3,23 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   Tokenizer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 01:06:09 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/23 10:14:39 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:14:38 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config/tokenizer/Tokenizer.hpp"
-#include "config/parser/ConfigParseError.hpp"
-#include "utils/errorUtils.hpp"
-#include "utils/stringUtils.hpp"
-
-#include <cctype>
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
-#include <unordered_map>
+#include "config/parser/ConfigParseError.hpp" // for TokenizerError
+#include "config/tokenizer/token.hpp"         // for Token, TokenType
+#include "utils/errorUtils.hpp"               // for formatError
+#include <cctype>                             // for isdigit, isalpha, isalnum
+#include <string_view>                        // for string_view
+#include <unordered_map>                      // for unordered_map, operator==
+#include <utility>                            // for move, pair
 
 ////////////////////////////////
 // --- Constructors

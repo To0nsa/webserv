@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:37:06 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/16 08:03:09 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:27:56 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,12 @@
 
 #pragma once
 
-#include "core/Location.hpp"
-#include <map>
-#include <string>
-#include <vector>
+#include "core/Location.hpp" // for Location
+#include <map>               // for map
+#include <stddef.h>          // for size_t
+#include <string>            // for string
+#include <string_view>       // for string_view
+#include <vector>            // for vector
 
 /**
  * @brief Represents a virtual server block.

@@ -6,13 +6,15 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:56:54 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/03 02:13:45 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/17 12:20:30 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/HttpResponse.hpp"
-#include <algorithm>
-#include <sstream>
+#include <algorithm> // for transform
+#include <ctype.h>   // for tolower
+#include <sstream>   // for basic_ostream, operator<<, basic_stringstream
+#include <utility>   // for pair
 
 HttpResponse ::HttpResponse(void) {
     _status_code    = 200;

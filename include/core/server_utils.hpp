@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server_utils.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:29:58 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/02 22:03:05 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:26:54 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include "Server.hpp"
-#include <string>
-#include <vector>
+#include <string> // for string
+#include <vector> // for vector
+class Server;
 
 /**
  * @brief Selects the best matching server for a given port and Host header.

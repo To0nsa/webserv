@@ -10,7 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "config/normalizeConfig.hpp"
+#include "config/Config.hpp" // for Config
+#include "core/Location.hpp" // for Location
+#include "core/Server.hpp"   // for Server
+#include <map>               // for map
+#include <stddef.h>          // for size_t
+#include <string>            // for allocator, string, basic_string, operat...
+#include <vector>            // for vector
 
 constexpr size_t               DEFAULT_CLIENT_MAX_BODY_SIZE = 1 * 1024 * 1024;
 const std::string              DEFAULT_ERROR_PAGE_PATH      = "/error.html";

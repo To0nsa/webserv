@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Logger.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 12:09:58 by ktieu             #+#    #+#             */
-/*   Updated: 2025/06/04 09:48:22 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:30:59 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include <iostream>
-#include <string>
+#include <string> // for string
 
 enum class LogLevel { kDEBUG, INFO, WARN, ERROR };
 

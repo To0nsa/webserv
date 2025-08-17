@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:11:30 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/06 10:15:30 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:27:32 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "core/webserv.hpp"
-
-#include <cstdlib>
-#include <iostream>
-#include <stdexcept>
+#include "core/webserv.hpp" // for runWebserv
+#include <cstdlib>          // for EXIT_FAILURE
+#include <exception>        // for exception
+#include <iostream>         // for char_traits, basic_ostream, operator<<
 
 int main(int argc, char** argv) try {
     return runWebserv(argc, argv);

@@ -1,10 +1,11 @@
 
 #pragma once
 
-#include "core/Server.hpp"
-#include "http/HttpRequest.hpp"
-#include "utils/stringUtils.hpp"
-#include <string>
+#include <cstddef> // for size_t
+#include <string>  // for string
+#include <vector>  // for vector
+class HttpRequest;
+class Server;
 
 class HttpRequestParser {
   public:

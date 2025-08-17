@@ -6,26 +6,22 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 21:44:51 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/17 11:43:31 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/17 12:25:35 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "core/Server.hpp"
-#include "http/HttpRequest.hpp"
-#include "http/responseBuilder.hpp"
-#include "utils/Logger.hpp"
-#include "utils/filesystemUtils.hpp"
-#include "utils/htmlUtils.hpp"
-
-#include <algorithm>
-#include <cctype>
-#include <chrono>
-#include <filesystem>
-#include <fstream>
-#include <iomanip>
-#include <regex>
-#include <sstream>
-#include <string>
+#include "core/Server.hpp"           // for Server
+#include "http/HttpRequest.hpp"      // for HttpRequest
+#include "http/HttpResponse.hpp"     // for HttpResponse
+#include "http/responseBuilder.hpp"  // for generateError, generateSuccess
+#include "utils/Logger.hpp"          // for LogLevel, Logger
+#include "utils/filesystemUtils.hpp" // for getCurrentTime, joinPath, sanit...
+#include "utils/htmlUtils.hpp"       // for htmlEscape
+#include <algorithm>                 // for min
+#include <fstream>                   // for basic_ofstream, basic_ostream
+#include <stddef.h>                  // for size_t
+#include <string>                    // for allocator, string, operator+
+#include <utility>                   // for move
 
 namespace {
 
