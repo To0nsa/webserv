@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleMultipartForm.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 21:44:51 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/10 23:08:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 11:43:31 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include <algorithm>
 #include <cctype>
 #include <chrono>
-#include <ctime>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -213,7 +212,7 @@ HttpResponse handleMultipartForm(const HttpRequest& request, const Server& serve
     }
 
     if (extractedFilename.empty()) {
-        extractedFilename = "upload_" + std::to_string(std::time(nullptr));
+        extractedFilename = "upload_" + std::to_string(getCurrentTime());
     }
 
     std::string fullpath = joinPath(fullDirPath, extractedFilename);
