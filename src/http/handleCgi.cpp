@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleCgi.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 21:26:20 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 11:15:55 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,8 +248,11 @@ void setupAndRunCgiChild(const CgiProcess& cgi, int body_fd, int output_fd, cons
 namespace CGI {
 
 void unlinkWithErrorLog(const std::string& path, const std::string& context) {
-    if (!path.empty() && unlink(path.c_str()) != 0) {
-        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to delete " + context + ": " + path);
+    if (!path.empty()) {
+        std::error_code ec;
+        if (!std::filesystem::remove(path, ec)) {
+            Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to delete " + context + ": " + path + " (" + ec.message() + ")");
+        }
     }
 }
 
