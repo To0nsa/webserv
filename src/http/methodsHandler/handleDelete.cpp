@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleDelete.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/10 23:30:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 11:25:09 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,10 @@
 #include "utils/htmlUtils.hpp"
 #include "utils/urlUtils.hpp"
 
+#include <filesystem>
 #include <sstream>
-#include <string.h>
 #include <string>
 #include <sys/stat.h>
-#include <unistd.h>
 
 namespace {
 
@@ -49,19 +48,20 @@ bool unlinkFile(const std::string& filepath, const HttpRequest& req, const Serve
         outError = ResponseBuilder::generateError(403, server, req);
         return false;
     }
-    if (unlink(filepath.c_str()) != 0) {
-        std::string err = strerror(errno);
-        if (errno == EACCES || errno == EPERM) {
+    
+    std::error_code ec;
+    if (!std::filesystem::remove(filepath, ec)) {
+        if (ec.value() == EACCES || ec.value() == EPERM) {
             Logger::logFrom(LogLevel::WARN, "Delete Handler",
-                            "Permission denied when deleting: " + filepath + " (" + err + ")");
+                            "Permission denied when deleting: " + filepath + " (" + ec.message() + ")");
             outError = ResponseBuilder::generateError(403, server, req);
-        } else if (errno == ENOENT) {
+        } else if (ec.value() == ENOENT) {
             Logger::logFrom(LogLevel::WARN, "Delete Handler",
                             "File disappeared before deletion: " + filepath);
             outError = ResponseBuilder::generateError(404, server, req);
         } else {
             Logger::logFrom(LogLevel::WARN, "Delete Handler",
-                            "Unexpected error deleting file: " + filepath + " (" + err + ")");
+                            "Unexpected error deleting file: " + filepath + " (" + ec.message() + ")");
             outError = ResponseBuilder::generateError(500, server, req);
         }
         return false;
