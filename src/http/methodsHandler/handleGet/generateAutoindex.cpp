@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 09:08:33 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/17 12:23:31 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/17 21:05:16 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 #include <filesystem>               // for path, directory_iterator, exists
 #include <format>                   // for format, format_string
 #include <iomanip>                  // for operator<<, setfill, setw
-#include <ratio>                    // for ratio
 #include <sstream>                  // for basic_ostream, operator<<, basic...
 #include <string>                   // for char_traits, allocator, operator+
 #include <system_error>             // for error_code

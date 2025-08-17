@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 21:08:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/17 12:30:16 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/17 21:06:47 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,7 @@
  * @ingroup ErrorUtils
  */
 
-#include <cctype>        // for isxdigit
-#include <cstddef>       // for size_t
-#include <regex>         // for regex_match, regex
-#include <sstream>       // for basic_ostream, basic_ostringstream, operator<<
-#include <stdexcept>     // for invalid_argument
-#include <string>        // for allocator, char_traits, string, basic_string
-#include <unordered_map> // for unordered_map
-#include <utility>       // for move
+#include <string> // for allocator, char_traits, operator+, to_string, string
 
 std::string formatError(const std::string& msg, int line, int column) {
     // Builds a standardized error message with line and column context

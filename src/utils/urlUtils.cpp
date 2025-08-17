@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   urlUtils.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 13:22:39 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 21:53:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 21:06:11 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cctype>
-#include <regex>
-#include <sstream>
-#include <stdexcept>
-#include <string>
-#include <unordered_map>
+#include <cctype>        // for isxdigit
+#include <cstddef>       // for size_t
+#include <regex>         // for regex_match, regex
+#include <sstream>       // for basic_ostream, basic_ostringstream, operator<<
+#include <stdexcept>     // for invalid_argument
+#include <string>        // for allocator, char_traits, string, basic_string
+#include <unordered_map> // for unordered_map
+#include <utility>       // for move
 
 std::string decodePercentEncoding(const std::string& encoded) {
     std::ostringstream result;
