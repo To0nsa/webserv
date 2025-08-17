@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   generateAutoindex.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 09:08:33 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/09 22:57:01 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 11:56:38 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <chrono>
-#include <ctime>
+#include <format>
 #include <filesystem>
 #include <iomanip>
 #include <sstream>
@@ -143,13 +143,13 @@ std::string escapeUriComponent(const std::string& s) {
 }
 
 std::string formatMTimeUTC(std::time_t t) {
-    std::tm* gmPtr = std::gmtime(&t);
-    if (!gmPtr) {
-        return {};
-    }
-    std::ostringstream ss;
-    ss << std::put_time(gmPtr, "%d-%b-%Y %H:%M");
-    return ss.str();
+    // Convert time_t → chrono::sys_time
+    std::chrono::sys_time<std::chrono::seconds> tp{std::chrono::seconds{t}};
+
+    // Round to minutes to match "%d-%b-%Y %H:%M"
+    auto tp_minutes = std::chrono::floor<std::chrono::minutes>(tp);
+
+    return std::format("{:%d-%b-%Y %H:%M}", tp_minutes);
 }
 
 void renderRow(std::ostringstream& body, const DirEntry& entry, const std::string& baseUri) {
