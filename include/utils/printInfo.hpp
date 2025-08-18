@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   printInfo.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 14:01:52 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/20 21:45:14 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:32:28 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include "config/Config.hpp"
-#include "core/Location.hpp"
-#include "core/Server.hpp"
-#include <iostream>
+#include <string> // for string
+class Config;
 
 std::string printUsage(void);
 void        printConfig(Config& config);

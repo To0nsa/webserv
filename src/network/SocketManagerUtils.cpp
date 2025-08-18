@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 14:58:17 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/08 18:59:28 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/17 21:04:16 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "http/responseBuilder.hpp"  // for generateError
 #include "network/SocketManager.hpp" // for ClientInfo, SocketManager
 #include "utils/Logger.hpp"          // for LogLevel, Logger
-#include <algorithm>                 // for copy
 #include <fstream>                   // for basic_ifstream, basic_ios, basi...
 #include <map>                       // for map, operator==, _Rb_tree_iterator
 #include <optional>                  // for optional

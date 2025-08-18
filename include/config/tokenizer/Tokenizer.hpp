@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Tokenizer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:17:47 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 21:36:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:13:55 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "token.hpp"
-#include <string>
-#include <vector>
+#include "token.hpp" // for Token, TokenType
+#include <cstddef>   // for size_t
+#include <string>    // for string
+#include <vector>    // for vector
 
 class Tokenizer {
   public:

@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HttpResponseBuilder.hpp                            :+:      :+:    :+:   */
+/*   responseBuilder.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:02:21 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/02 17:33:23 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/17 12:18:09 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "core/Server.hpp"
-#include "http/HttpRequest.hpp"
-#include "http/HttpResponse.hpp"
-#include <string>
+#include "http/HttpResponse.hpp" // for HttpResponse
+#include <iosfwd>                // for streamsize
+#include <string>                // for string
+class HttpRequest;
+class Server;
 
 namespace MessageHandler {
 std::string getDefaultMessage(int status_code);

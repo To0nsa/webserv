@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:36:29 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/21 14:59:06 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:16:36 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config/Config.hpp"
-#include "config/parser/ConfigParseError.hpp"
 
 //////////////////
 // --- Public API

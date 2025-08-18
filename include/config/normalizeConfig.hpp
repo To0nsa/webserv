@@ -12,6 +12,6 @@
 
 #pragma once
 
-#include "config/Config.hpp"
+class Config;
 
 void normalizeConfig(Config& config);

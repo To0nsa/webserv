@@ -3,24 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   ConfigParser.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:06:31 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/22 21:03:44 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:09:36 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "config/Config.hpp"
-#include "config/parser/ConfigParseError.hpp"
-#include "config/tokenizer/Tokenizer.hpp"
-#include "config/tokenizer/token.hpp"
-
-#include <set>
-#include <span>
-#include <string>
-#include <vector>
+#include "config/Config.hpp"              // for Config
+#include "config/tokenizer/Tokenizer.hpp" // for Tokenizer
+#include "config/tokenizer/token.hpp"     // for Token, TokenType (ptr only)
+#include "core/Location.hpp"              // for Location
+#include "core/Server.hpp"                // for Server
+#include <cstddef>                        // for size_t
+#include <initializer_list>               // for initializer_list
+#include <span>                           // for span
+#include <string>                         // for string
+#include <vector>                         // for vector
 
 class ConfigParser {
   public:

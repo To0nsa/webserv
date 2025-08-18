@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:51:19 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/16 08:03:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:28:16 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@
  */
 
 #include "core/Server.hpp"
-#include "utils/stringUtils.hpp"
-#include <algorithm>
-#include <string_view>
+#include "utils/stringUtils.hpp" // for toLower
+#include <algorithm>             // for any_of
+#include <cstddef>               // for size_t
+#include <string_view>           // for string_view, operator==, basic_stri...
 
 ///////////////////
 // --- Constructor

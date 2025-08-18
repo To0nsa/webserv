@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   stringUtils.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/09 12:13:42 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:33:14 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/stringUtils.hpp"
-#include "config/parser/ConfigParseError.hpp"
-#include "utils/errorUtils.hpp"
-
-#include <algorithm>
-#include <charconv>
-#include <sstream>
-#include <stdexcept>
-#include <vector>
+#include "config/parser/ConfigParseError.hpp" // for ConfigParseError
+#include "utils/errorUtils.hpp"               // for formatError
+#include <algorithm>                          // for transform
+#include <cctype>                             // for tolower, toupper
+#include <charconv>                           // for from_chars, from_chars...
+#include <sstream>                            // for basic_ostream, basic_o...
+#include <system_error>                       // for errc
+#include <vector>                             // for vector
 
 int parseInt(const std::string& value, const std::string& field, int line, int column,
              const std::function<std::string()>& context_provider) {

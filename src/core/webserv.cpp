@@ -3,23 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 21:57:56 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/24 23:25:23 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:25:57 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "config/Config.hpp"
-#include "config/normalizeConfig.hpp"
-#include "config/parser/ConfigParser.hpp"
-#include "config/validateConfig.hpp"
-#include "network/SocketManager.hpp"
-#include "utils/printInfo.hpp"
-
-#include <fstream>
-#include <sstream>
-#include <stdexcept>
+#include "config/Config.hpp"              // for Config
+#include "config/normalizeConfig.hpp"     // for normalizeConfig
+#include "config/parser/ConfigParser.hpp" // for ConfigParser
+#include "config/validateConfig.hpp"      // for validateConfig
+#include "network/SocketManager.hpp"      // for SocketManager
+#include "utils/printInfo.hpp"            // for printConfig, printUsage
+#include <fstream>                        // for char_traits, basic_ifstream
+#include <sstream>                        // for basic_ostringstream
+#include <stdexcept>                      // for runtime_error
+#include <stdlib.h>                       // for EXIT_SUCCESS
+#include <string>                         // for string, allocator, operator+
+#include <string_view>                    // for string_view
 
 namespace {
 inline constexpr std::string_view DEFAULT_CONFIG_PATH{"./configs/default.conf"};

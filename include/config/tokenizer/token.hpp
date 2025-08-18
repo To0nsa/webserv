@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   token.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 00:55:06 by nlouis            #+#    #+#             */
-/*   Updated: 2025/05/21 21:36:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:15:00 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <string>
+#include <cstddef> // for size_t
+#include <string>  // for string
 
 enum class TokenType {
     IDENTIFIER,  ///< A generic identifier (directive name or argument)

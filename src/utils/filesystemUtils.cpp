@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   filesystemUtils.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/10 22:52:30 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:29:59 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils/filesystemUtils.hpp"
-#include "http/responseBuilder.hpp"
-
-#include <algorithm>
-#include <chrono>
-#include <filesystem>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <map>
-#include <regex>
-#include <sstream>
-#include <string>
-#include <sys/stat.h>
-#include <system_error>
+#include "core/Location.hpp"    // for Location
+#include "http/HttpRequest.hpp" // for HttpRequest
+#include <algorithm>            // for remove_if
+#include <bits/chrono.h>        // for duration_cast, duration, system_clock
+#include <cctype>               // for iscntrl
+#include <ctime>                // for gmtime, size_t
+#include <errno.h>              // for EEXIST, errno
+#include <filesystem>           // for path, exists, operator/, weakly_cano...
+#include <iomanip>              // for operator<<, put_time
+#include <sstream>              // for basic_istream, basic_ostream, operat...
+#include <string>               // for string, allocator, char_traits, basi...
+#include <sys/stat.h>           // for mkdir
+#include <system_error>         // for error_code
+#include <vector>               // for vector
 
 namespace fs = std::filesystem;
 

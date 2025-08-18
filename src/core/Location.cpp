@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/05/31 14:49:34 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:26:32 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "core/Location.hpp"
-#include "utils/filesystemUtils.hpp"
-#include "utils/stringUtils.hpp"
-#include <algorithm>
-#include <filesystem>
-#include <map>
-#include <vector>
+#include "utils/filesystemUtils.hpp" // for normalizePath, joinPath
+#include "utils/stringUtils.hpp"     // for toLower
+#include <algorithm>                 // for find
+#include <filesystem>                // for path
+#include <map>                       // for map, operator==, _Rb_tree_const...
+#include <utility>                   // for pair
+#include <vector>                    // for vector
 
 ///////////////////////
 // --- Constructor ---
