@@ -6,13 +6,16 @@
 #    By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/09 20:53:27 by nlouis            #+#    #+#              #
-#    Updated: 2025/08/18 12:43:36 by irychkov         ###   ########.fr        #
+#    Updated: 2025/08/18 13:03:13 by irychkov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Compiler settings
 CXX        := c++
-CXXFLAGS   := -Wall -Wextra -Werror -I include -std=c++20 -O3
+CXXFLAGS   := -Wall -Wextra -Werror -I include -std=c++20 \
+  -O3 -DNDEBUG -flto -march=native
+# We use -flto (link time optimization) for better performance.
+# -O3 is for optimization, -DNDEBUG disables debug assertions.
 
 # Executable output
 NAME       := webserv
