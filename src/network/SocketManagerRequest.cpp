@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 14:53:38 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/18 22:51:58 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 23:09:00 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
  * It forms the **read-path of the event loop**, turning client bytes into
  * application-level requests and responses.
  *
- * @ingroup socker_mananager
+ * @ingroup socket_manager
  */
 
 #include "core/Location.hpp"          // for Location

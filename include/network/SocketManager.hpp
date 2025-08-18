@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:47 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/18 22:51:45 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 23:24:39 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
  *          - accurate HTTP status codes and default error pages,
  *          - resilient behavior under stress and strict timeouts.
  *
- * @ingroup socker_mananager
+ * @ingroup socket_manager
  */
 
 #pragma once
@@ -90,7 +90,6 @@
  *          All fields are mutated only by the owning SocketManager on the
  *          poll thread.
  *
- * @ingroup network
  */
 struct ClientInfo {
     //=== Core identifiers and timing ========================================
@@ -144,37 +143,41 @@ struct ClientInfo {
  *    and cleanly close when required.
  *  - Protect the loop with wide catch blocks—FDs are closed on failure paths.
  *
- * @ingroup network
+ * @ingroup socket_manager
  */
 class SocketManager {
 
   public:
     //=== Ctors / Dtor / Special members =====================================
+    /** @name Construction & lifetime */ ///@{
     SocketManager(void) = delete;
     SocketManager(const std::vector<Server>& servers);
     ~SocketManager(void);
-    SocketManager(const SocketManager& other)            = delete;
-    SocketManager& operator=(const SocketManager& other) = delete;
+    SocketManager(const SocketManager&)            = delete;
+    SocketManager& operator=(const SocketManager&) = delete;
+    ///@}
 
     //=== Main loop ===========================================================
+    /** @name Main loop */ ///@{
     void run();
+    ///@}
 
-    /**
-     * @brief Exception type for socket-level setup/runtime failures.
-     */
+    /** @name Errors */ ///@{
     class SocketError : public std::exception {
       private:
         std::string _msg;
 
       public:
         explicit SocketError(const std::string& msg);
-        virtual const char* what() const throw();
+        const char* what() const throw() override;
     };
+    ///@}
 
   private:
     //=== Poll & indices ======================================================
 
-    std::vector<pollfd> _poll_fds; ///< Monitored file descriptors for poll().
+    /** @name Poll sets & indices */ ///@{
+    std::vector<pollfd> _poll_fds;   ///< Monitored file descriptors for poll().
 
     /**
      * @brief Listen FD → vhost set.
@@ -198,49 +201,66 @@ class SocketManager {
      *          main poll loop.
      */
     std::map<int, int> _fd_to_cgi;
+    ///@}
 
     //=== Setup & connection ==================================================
+    /** @name Setup & accept */ ///@{
     void setupSockets(const std::vector<Server>& servers);
     void handleNewConnection(int listen_fd);
+    ///@}
 
     //=== Event handling ======================================================
+    /** @name Event handling */ ///@{
     bool handleClientData(int client_fd, size_t index);
     void handleCgiPollEvents();
     void sendResponse(int client_fd, size_t index);
     void handlePollError(int fd, size_t index, short revents);
+    ///@}
 
     //=== Response helpers ====================================================
+    /** @name Response helpers */ ///@{
     void logResponseStatus(int status, int fd);
     bool sendFileResponse(int fd, size_t index, HttpResponse& response);
     bool sendRawResponse(int fd, size_t index, HttpResponse& response);
+    ///@}
 
     //=== Client lifecycle ====================================================
+    /** @name Client lifecycle */ ///@{
     void initializeClientInfo(int client_fd, int listen_fd);
     void cleanupClientConnectionClose(int client_fd, size_t index);
     void removePollFd(size_t index);
     void cleanupClientState(int client_fd);
     void cleanupCgiForClient(int client_fd);
     void resetRequestState(int client_fd);
+    ///@}
 
     //=== Request processing ==================================================
+    /** @name Request processing */ ///@{
     bool receiveFromClient(int fd, size_t index);
     bool checkRequestLimits(int fd);
     bool parseAndQueueRequests(int client_fd);
     void processPendingRequests(int client_fd);
+    ///@}
 
     //=== Timeout checks ======================================================
+    /** @name Timeout checks */ ///@{
     bool checkClientTimeouts(int client_fd, size_t index);
     bool isHeaderTimeout(int fd, time_t now);
     bool isBodyTimeout(int fd, time_t now);
     bool isSendTimeout(int fd, time_t now);
     bool isIdleTimeout(int fd, time_t now);
+    ///@}
 
     //=== Request routing and CGI ============================================
+    /** @name CGI & routing */ ///@{
     bool handleCgiRequest(int client_fd, const HttpRequest& request, const Server& server,
                           const Location& location);
     bool handleRequestErrorIfAny(int fd, int code, HttpRequest& req, const Server& server);
     bool shouldSpawnCgi(const HttpRequest& req, const Location& location);
+    ///@}
 
     //=== Error utility =======================================================
+    /** @name Error utility */ ///@{
     void respondError(int fd, int status_code);
+    ///@}
 };

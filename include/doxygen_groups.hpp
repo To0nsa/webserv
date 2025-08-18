@@ -125,7 +125,7 @@
  */
 
 /**
- * @defgroup socker_mananager Network & Socket Abstraction
+ * @defgroup socket_manager Network & Socket Abstraction
  * @brief Non-blocking I/O, socket management, and connection handling.
  *
  * @details Provides abstractions over system calls for listening sockets,

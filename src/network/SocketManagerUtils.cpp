@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 14:58:17 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/18 22:52:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 23:09:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
  * handling methods to enforce robustness, prevent resource leaks, and
  * handle exceptional conditions.
  *
- * @ingroup socker_mananager
+ * @ingroup socket_manager
  */
 
 #include "core/Server.hpp"           // for Server

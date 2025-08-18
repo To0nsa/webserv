@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 15:00:54 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/18 22:52:05 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 23:09:04 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
  * This file implements the **write-path** of the event loop,
  * complementing @ref SocketManagerRequest.cpp which handles the read-path.
  *
- * @ingroup socker_mananager
+ * @ingroup socket_manager
  */
 
 #include "http/HttpResponse.hpp"     // for HttpResponse

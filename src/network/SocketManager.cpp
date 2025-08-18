@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:51:20 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/18 22:51:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 23:11:01 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
  * it ties together sockets, HTTP parsing, response building, CGI execution,
  * and cleanup into a single poll-driven loop.
  *
- * @ingroup socker_mananager
+ * @ingroup socket_manager
  */
 
 #include "network/SocketManager.hpp"
@@ -43,9 +43,6 @@
 #include <unistd.h>                  // for close
 #include <utility>                   // for pair, make_pair
 
-/// @internal
-/// @brief Global flag controlling the server loop.
-/// @details Set to `0` when SIGINT is received, causing the main loop to exit.
 static volatile sig_atomic_t running = 1;
 
 /**

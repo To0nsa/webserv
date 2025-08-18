@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 15:03:19 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/18 22:52:11 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 23:09:08 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
  * These functions are invoked from the main event loop to keep the server
  * responsive, fair, and resilient under slowloris-style behavior or network stalls.
  *
- * @ingroup socker_mananager
+ * @ingroup socket_manager
  */
 
 #include "http/HttpResponse.hpp"     // for HttpResponse
