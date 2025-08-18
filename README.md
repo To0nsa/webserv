@@ -152,38 +152,38 @@ flowchart TD
   subgraph Boot[Startup]
     A[Load servers from config]
     B[Create SocketManager]
-    C[setupSockets: bind, listen, register FDs]
+    C[setupSockets: bind listen register FDs]
     A --> B --> C
   end
 
   %% =========================
   %% Main loop
   %% =========================
-  C --> D{run: poll}
-  D -->|EINTR| Z[Graceful shutdown] --> ZZ[Log "Shutting down server"]
+  C --> D{run poll}
+  D -->|EINTR| Z[Graceful shutdown] --> ZZ[Log shutting down server]
 
   %% Loop tick
   D --> E[handleCgiPollEvents]
-  E --> F{for each pfd (reverse)}
+  E --> F{for each pfd reverse}
 
   %% Skip CGI pipe FDs
-  F --> G{CGI pipe FD?}
+  F --> G{CGI pipe FD}
   G -- yes --> F
 
   %% Timeouts (per FD)
   G -- no --> T{checkClientTimeouts}
-  T -- idle/send --> Close[cleanupClientConnectionClose] --> F
-  T -- header/body --> Halt[disable POLLIN; queue 408] --> H{ERR/HUP/NVAL?}
+  T -- idle or send --> Close[cleanupClientConnectionClose] --> F
+  T -- header or body --> Halt[disable POLLIN then queue 408] --> H{ERR HUP NVAL}
   T -- none --> H
 
   %% Socket errors
-  H -- yes --> H1[handlePollError; close] --> F
+  H -- yes --> H1[handlePollError then close] --> F
 
   %% Reads
-  H -- no --> I{POLLIN?}
-  I -- no --> O{POLLOUT && responses?}
+  H -- no --> I{POLLIN}
+  I -- no --> O{POLLOUT and responses queued}
 
-  I -- yes --> J{listen FD?}
+  I -- yes --> J{listen FD}
   J -- yes --> J1[handleNewConnection] --> F
 
   J -- no --> Rcv[handleClientData]
@@ -194,16 +194,15 @@ flowchart TD
   O -- yes --> S[sendResponse]
   S -->|file| SF[sendFileResponse]
   S -->|raw| SR[sendRawResponse]
-  SF --> EndSend{response done?}
+  SF --> EndSend{response done}
   SR --> EndSend
 
-  EndSend -- yes & close --> Close
-  EndSend -- yes & keep-alive --> KA[disable POLLOUT] --> F
+  EndSend -- yes and close --> Close
+  EndSend -- yes and keep alive --> KA[disable POLLOUT] --> F
   EndSend -- not yet --> F
 
   %% Next tick
   F --> D
-
 ```
 
 </details>
