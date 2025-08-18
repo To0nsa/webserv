@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:56:54 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/17 12:20:30 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/18 12:05:43 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <ctype.h>   // for tolower
 #include <sstream>   // for basic_ostream, operator<<, basic_stringstream
 #include <utility>   // for pair
+#include <set>       // for set
 
 HttpResponse ::HttpResponse(void) {
     _status_code    = 200;
@@ -72,15 +73,34 @@ void HttpResponse::setRequestMeta(const std::string& version, const std::string&
  * @return `true` if the connection should be closed, `false` to keep it alive.
  */
 bool HttpResponse::isConnectionClose() const {
+    // 1) If the response explicitly sets Connection, honor it.
+    std::map<std::string, std::string>::const_iterator hit = _headers.find("Connection");
+    if (hit != _headers.end()) {
+        std::string v = hit->second;
+        std::transform(v.begin(), v.end(), v.begin(), ::tolower);
+        return v == "close";
+    }
+
+    // 2) Certain status codes must close (RFC-friendly behavior).
+    static const std::set<int> force_close_codes = {400, 408, 413, 500};
+    if (force_close_codes.count(_status_code))
+        return true;
+
+    // 3) Fall back to protocol semantics using the request metadata.
     std::string conn = _connection_header;
     std::transform(conn.begin(), conn.end(), conn.begin(), ::tolower);
 
-    if (_http_version == "HTTP/1.1")
-        return conn == "close"; // Keep-alive by default
-    if (_http_version == "HTTP/1.0")
-        return conn != "keep-alive"; // Close by default
+    if (_http_version == "HTTP/1.1") {
+        // Keep-alive by default unless client asked to close
+        return conn == "close";
+    }
+    if (_http_version == "HTTP/1.0") {
+        // Close by default unless client asked to keep-alive
+        return conn != "keep-alive";
+    }
 
-    return true; // Unknown version Close by default
+    // Unknown version: safest is to close.
+    return true;
 }
 
 std::string HttpResponse ::toHttpString(void) const {
