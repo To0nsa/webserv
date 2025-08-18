@@ -12,6 +12,103 @@
 
 ___
 
+## Configuration Parsing Flow
+
+This section describes how the configuration parsing logic of **Webserv** works, including the step‑by‑step pipeline and the rules applied during parsing and validation.
+
+<details>
+<summary><strong>See Details</strong></summary>
+
+### 1. Tokenization
+
+* **Component:** `Tokenizer`
+* **Goal:** Convert raw configuration text into a structured list of tokens.
+* **Steps:**
+
+  * Skip UTF‑8 BOM if present.
+  * Ignore whitespace, line breaks, and comments (`# ...`).
+  * Classify tokens into categories:
+
+    * **Keywords:** `server`, `location`, `listen`, `host`, `root`, `index`, `autoindex`, `methods`, `upload_store`, `return`, `error_page`, `client_max_body_size`, `cgi_extension`.
+    * **Identifiers:** Alphanumeric strings with `-`, `.`, `/`, `:` allowed.
+    * **Numbers & Units:** Digits with optional single‑letter suffix (`k`, `m`, `g`).
+    * **Strings:** Quoted values (single `'` or double `"`).
+    * **Symbols:** `{`, `}`, `;`, `,`.
+  * Detect and reject invalid characters, control characters, or malformed identifiers.
+
+### 2. Parsing
+
+* **Component:** `ConfigParser`
+* **Goal:** Transform token stream into structured objects (`Config`, `Server`, `Location`).
+* **Rules:**
+
+  * **Block structure:** Curly braces `{ ... }` delimit `server` and `location` blocks.
+  * **Directives:** Each directive must end with `;` unless it opens a block.
+  * **Directive placement:** Certain directives are only valid at specific levels:
+
+    * Server level: `listen`, `host`, `server_name`, `error_page`, `client_max_body_size`.
+    * Location level: `root`, `index`, `autoindex`, `methods`, `upload_store`, `return`, `cgi_extension`, `cgi_interpreter`.
+  * **Nesting:** Locations may not contain other `server` blocks.
+
+### 3. Configuration Objects
+
+* **Server:** Represents a virtual host.
+
+  * Holds host, port, server names, error pages, body size limits, and `Location` blocks.
+* **Location:** Defines behavior for a URI path prefix.
+
+  * Includes root directory, index file(s), autoindex flag, allowed methods, redirects, CGI settings, and upload store.
+
+### 4. Normalization
+
+* After parsing, the configuration is **normalized** to ensure consistency and defaults:
+
+  * Missing `client_max_body_size` → default = **1 MB**.
+  * Missing `error_page` → add defaults for common errors (403, 404, 500, 502 → `/error.html`).
+  * Missing `methods` → defaults to **GET, POST, DELETE**.
+  * Locations without `root` → fallback to `/var/www` (unless redirected).
+  * Root location (`/`) without `index` → defaults to **index.html**.
+* Normalization guarantees that later validation and runtime logic operate on a **complete and uniform** model.
+
+### 5. Validation
+
+* **Component:** `validateConfig`
+* **Goal:** Enforce semantic correctness beyond syntax.
+* **Checks applied:**
+
+  * **Presence checks:** At least one `location` per `server`.
+  * **Path rules:** Location paths must start with `/` and not contain segments beginning with `.`.
+  * **Defaults:** Each location must define either a `root` or `return` (but not both with CGI).
+  * **Server names:** Must be unique per host\:port, valid per RFC 1035 (no spaces, no control chars, no empty labels).
+  * **Ports:** Only one unnamed default server per host\:port pair.
+  * **Error pages:** Codes restricted to 400–599.
+  * **Redirects:** Only 301, 302, 303, 307, 308 allowed.
+  * **Methods:** Only `GET`, `POST`, `DELETE` permitted.
+  * **Client body size:** Must be > 0.
+  * **CGI:** Extensions must start with a dot, interpreters must map 1‑to‑1 with declared extensions.
+  * **Roots & Upload stores:** Must exist and be directories.
+  * **Index:** Requires a valid `root`.
+
+### 6. Error Handling
+
+* **Tokenizer:** Throws `TokenizerError` with line/column context when encountering invalid tokens.
+* **Parser:** Throws `ConfigParseError` on invalid structure or misplaced directives.
+* **Validator:** Throws `ValidationError` with descriptive guidance on fixing invalid configurations.
+
+</details>
+
+### Flow Overview
+
+1. **Tokenizer** → breaks input into tokens.
+2. **ConfigParser** → builds in‑memory `Config` with `Server` & `Location` objects.
+3. **normalizeConfig** → fills missing defaults (sizes, error pages, roots, index, methods).
+4. **validateConfig** → applies semantic checks.
+5. **Runtime** → validated configuration is passed to the server for request routing.
+
+The configuration pipeline guarantees that only syntactically valid, normalized, and semantically correct configurations are accepted. This ensures the server runs with predictable defaults, strong validation, and developer-friendly diagnostics.
+
+___
+
 ## Build & Test Instructions
 
 ### Build with Makefile
@@ -65,41 +162,70 @@ ___
 
 ## Continuous Integration & Documentation
 
-> This project uses **GitHub Actions** to automate building, testing, and documentation deployment.
+This project leverages **GitHub Actions** to ensure code quality, stability, and up-to-date documentation.
 
-### ✅ CI Pipeline
+<details>
+<summary><strong>See Details</strong></summary>
 
-On each push or pull request to `main` or `dev`, the following jobs are run automatically:
+### CI Pipeline
 
-| Job                             | Purpose                                                        |
-|---|---|
-| 🧪 Build (Release)               | Builds the project using the provided `Makefile`.             |
-| 📄 Doxygen Docs                  | Generates and deploys Doxygen documentation to GitHub Pages.  |
+* Runs automatically on pushes and pull requests to `main` and `dev`.
+* Includes manual triggers (`workflow_dispatch`) and dependency checks after successful builds.
 
-All configurations rely on the project `Makefile` and follow the project's coding style.
+**Jobs Overview:**
 
-### 📚 Documentation
+| Job          | Description                                                                                      |
+| ------------ | ------------------------------------------------------------------------------------------------ |
+| 🔨 **Build** | Compiles the project using the provided `Makefile` to ensure successful builds.                  |
+| 🧪 **Test**  | Builds the server, runs Python test suite against a live instance, and captures logs on failure. |
+| 📚 **Docs**  | Generates Doxygen documentation (with Graphviz diagrams) and deploys it to **GitHub Pages**.     |
 
-- Doxygen generates HTML docs from source code and Markdown (`README.md` is the main page)
-- Graphviz is enabled for call graphs, class diagrams, and source browser
-- Documentation is deployed automatically via GitHub Pages from the `docs/html` directory
+</details>
+
+Every code change is built, tested, and documented automatically, ensuring a robust development workflow and always-available reference docs.
 
 ___
 
-## Contributing
+## Documentation
 
-Contribution guidelines and workflow standards are detailed in the dedicated document:
+This section describes how project documentation is generated, structured, and published.
 
-- [📚 View Contributing Guide](CONTRIBUTING.md)
+<details>
+<summary><strong>See Details</strong></summary>
 
-This document explains:
+### 1. Doxygen-Powered
 
-- The coding style
-- The branching strategy (main, dev, feature branches)
-- The commit message conventions (module: short description)
-- How to structure pull requests properly
-- The review and merge process
-- Cleanup and quality rules before pushing code
+* Documentation is generated automatically from **source code comments** and **Markdown files**.
+* `README.md` serves as the **entry point**, offering an overview and links to modules.
+
+### 2. Graphical Support
+
+* **Graphviz** integration produces:
+
+  * **Class diagrams** to illustrate object hierarchies.
+  * **Call graphs** to visualize execution flow.
+  * **Dependency graphs** to map relationships between modules.
+* These visuals improve comprehension of the server’s architecture.
+
+### 3. Navigation & Browsing
+
+* The source browser cross-references **functions, classes, and files**.
+* Each documented entity links directly to its definition in the codebase.
+* Groups (`@defgroup`, `@ingroup`) provide thematic navigation across modules (e.g., `config`, `core`, `http`).
+
+### 4. Deployment
+
+* Documentation is built in **CI/CD pipelines**.
+* Published automatically via **GitHub Pages** from the `docs/html` directory.
+* Ensures the latest version is always available for contributors and maintainers.
+
+### 5. Best Practices
+
+* Consistent **Doxygen-style headers** across `.hpp` and `.cpp` files.
+* Markdown files complement code documentation with **high-level design notes** and **workflow explanations**.
+* Together, these guarantee both **low-level API reference** and **high-level architectural guidance**.
+
+</details>
 
 ___
 
@@ -116,8 +242,6 @@ webserv
 ├── 📁 tests/                  # Unit tests for various modules
 ├── 📁 configs/                # Test configuration files for parser/tokenizer
 ├── 📁 docs/                   # Markdown documentation (DOCS.md, guides, etc.)
-├── 📁 scripts/                # Helper scripts to run tests and sanitizer builds
-├── .asanignore                 # Suppression rules for AddressSanitizer (e.g. libc++ internals)
 ├── .clang-format               # Enforces formatting rules (4-space indent, K&R braces, etc.)
 ├── .editorconfig               # Shared IDE/editor config for consistent style
 ├── .gitattributes              # Defines merge/diff rules for Git (e.g. binary files)
