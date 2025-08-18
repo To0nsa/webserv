@@ -235,12 +235,13 @@ The heart of Webserv’s I/O: a single &lt;tt&gt;poll()&lt;/tt&gt; loop multiple
 
 @icode{mermaid} 
 flowchart TD
-  %% High-level: setup → poll loop → per-FD handling
-  subgraph Boot["Startup"]
+  %% Setup
+  subgraph Boot[Startup]
     A[Load servers] --&gt; B[SocketManager(servers)]
     B --&gt; C[setupSockets()]
   end
 
+  %% Main loop
   C --&gt; D{run(): poll()}
   D --&gt;|EINTR| Z[Graceful shutdown]
   D --&gt;|timeout| D
@@ -249,25 +250,25 @@ flowchart TD
   D --&gt; E[handleCgiPollEvents()]
 
   %% Iterate FDs
-  E --&gt; F{for each pfd in _poll_fds (rev)}
+  E --&gt; F{for each pfd in _poll_fds (reverse)}
   F --&gt; G{is CGI pipe fd?}
   G --&gt;|yes| F
   G --&gt;|no| H{revents has ERR/HUP/NVAL?}
   H --&gt;|yes| H1[handlePollError()] --&gt; F
 
   H --&gt;|no| I{revents has POLLIN?}
-  I --&gt;|yes| J{listen fd?}
+  I --&gt;|yes| J{is listen fd?}
   J --&gt;|yes| J1[handleNewConnection()] --&gt; F
   J --&gt;|no| J2[handleClientData()] --&gt; J3{queued response?}
   J3 --&gt;|yes| K[enable POLLOUT] --&gt; F
   J3 --&gt;|no| F
 
-  I --&gt;|no| L{revents has POLLOUT &amp;&amp; responses not empty?}
+  I --&gt;|no| L{revents has POLLOUT and responses not empty?}
   L --&gt;|yes| L1[sendResponse()] --&gt; F
   L --&gt;|no| F
 
   F --&gt; D
-  Z --&gt; ZZ[Logger: "Shutting down server"]
+  Z --&gt; ZZ[Logger: Shutting down server]
 @endicode 
 
 &lt;/details&gt;
