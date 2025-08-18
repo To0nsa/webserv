@@ -109,57 +109,6 @@ The configuration pipeline guarantees that only syntactically valid, normalized,
 
 ___
 
-## Build & Test Instructions
-
-### Build with Makefile
-
-```bash
-make
-./bin/webserv configs/default.conf
-```
-
-Available Makefile targets:
-
-### Build Modes
-
-| Command           | Description                                           |
-|----|----|
-| `make`            | Build in release mode (optimized)                     |
-| `make debug`      | Build in debug mode (with `-g` and no optimizations)   |
-| `make debug_asan` | Build in debug mode with AddressSanitizer            |
-| `make debug_ubsan`| Build in debug mode with UndefinedBehaviorSanitizer  |
-| `make fast`       | Fast build without dependency tracking (development only) |
-
-### Code quality
-
-| Command      | Description                                     |
-|-----|----|
-| `make format`   | Format all `.cpp` and `.hpp` files using `clang-format` |
-
-### Run and Test
-
-| Command      | Description                                     |
-|-----|----|
-| `make run`   | Build and run the web server                    |
-| `make test`  | Build and run all test binaries from `tests/` folder |
-| `make sanitize` | Build and run under all sanitizers (ASAN, TSAN, UBSAN) |
-
-### Cleaning
-
-| Command      | Description                    |
-|-----|----|
-| `make clean` | Remove all object files and dependency files |
-| `make fclean`| Remove everything: binaries, builds, tests |
-| `make re`    | Full clean and rebuild          |
-
-### Help
-
-| Command      | Description                    |
-|-----|---|
-| `make help` | Displays a categorized list of all available `Makefile` targets |
-
-___
-
 ## Continuous Integration & Documentation
 
 This project leverages **GitHub Actions** to ensure code quality, stability, and up-to-date documentation.
@@ -255,6 +204,39 @@ webserv
 ├── STYLEGUIDE.md               # Coding conventions for naming, layout, formatting
 ├── webserv.subject.pdf         # Original subject specification for the project
 ```
+
+___
+
+## Build & Test Instructions
+
+### Build with Makefile
+
+```bash
+make
+./bin/webserv <path-to-config.conf>
+```
+
+> The default goal is `all`. The binary is produced at `bin/webserv`.
+
+### Available Makefile Targets
+
+| Command                  | Description                                                                                                                     |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| `make`                   | Build the project in release mode (C++20, `-O3 -flto -DNDEBUG -march=native`).                                                  |
+| `make re`                | Clean everything and rebuild from scratch.                                                                                      |
+| `make clean`             | Remove object files and dependency files in `objs/`.                                                                            |
+| `make fclean`            | Remove the executable, `bin/`, and all build artifacts (also runs `clean`).                                                     |
+| `make install_test_deps` | Create a local Python venv in `.venv/` and install `requirements-test.txt`.                                                     |
+| `make test`              | Build, start the server in background with `./test_webserv/tester/config/tester.conf`, run `run_test.py`, then stop the server. |
+| `make format`            | Run `clang-format -i` on all listed sources and headers.                                                                        |
+| `make help`              | Print a categorized list of available targets.                                                                                  |
+
+### Notes
+
+* Objects and auto-generated deps are stored under `objs/` (built via `-MMD -MP`).
+* The build uses explicit source lists (no wildcards) for deterministic builds.
+* The test rule writes the PID to `.webserv_test.pid` and cleans it up on success/failure.
+* Ensure `python3-venv` and `clang-format` are installed on your system.
 
 ___
 

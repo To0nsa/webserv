@@ -29,6 +29,7 @@ compile_commands.json
 __pycache__/
 *.pyc
 *.pyo
+.pytest_cache/
 
 # --- Virtual environments ---
 .venv/
@@ -56,3 +57,6 @@ test_webserv/**/*.pyo
 
 /docs/html/
 /docs/doxygen.warnings
+
+# --- Makefile for To0nsa config ---
+Makefile
