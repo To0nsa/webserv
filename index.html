@@ -241,65 +241,58 @@ flowchart TD
   subgraph Boot[Startup]
     A[Load servers from config]
     B[Create SocketManager]
-    C[setupSockets: bind + listen + register FDs]
+    C[setupSockets: bind, listen, register FDs]
     A --&gt; B --&gt; C
   end
 
   %% =========================
   %% Main loop
   %% =========================
-  C --&gt; D{run(): poll(...)}
-
-  %% Signals / EINTR
-  D --&gt;|EINTR| Z[Graceful shutdown]
-  Z --&gt; ZZ[Logger: "Shutting down server"]
+  C --&gt; D{run: poll}
+  D --&gt;|EINTR| Z[Graceful shutdown] --&gt; ZZ[Log "Shutting down server"]
 
   %% Loop tick
   D --&gt; E[handleCgiPollEvents]
-  E --&gt; F{for each pfd in _poll_fds (reverse)}
+  E --&gt; F{for each pfd (reverse)}
 
-  %% Skip CGI pipe FDs entirely
-  F --&gt; G{is CGI pipe FD?}
+  %% Skip CGI pipe FDs
+  F --&gt; G{CGI pipe FD?}
   G -- yes --&gt; F
 
-  %% Timeouts (checked per-FD)
+  %% Timeouts (per FD)
   G -- no --&gt; T{checkClientTimeouts}
-  T -- idle/send -&gt; closed --&gt; F
-  T -- header/body -&gt; 408 queued --&gt; H{revents has ERR/HUP/NVAL?}
+  T -- idle/send --&gt; Close[cleanupClientConnectionClose] --&gt; F
+  T -- header/body --&gt; Halt[disable POLLIN; queue 408] --&gt; H{ERR/HUP/NVAL?}
   T -- none --&gt; H
 
   %% Socket errors
-  H -- yes --&gt; H1[handlePollError + close] --&gt; F
+  H -- yes --&gt; H1[handlePollError; close] --&gt; F
 
   %% Reads
-  H -- no --&gt; I{revents has POLLIN?}
-  I -- no --&gt; O{revents has POLLOUT and responses not empty?}
+  H -- no --&gt; I{POLLIN?}
+  I -- no --&gt; O{POLLOUT &amp;&amp; responses?}
 
-  I -- yes --&gt; J{is listen FD?}
+  I -- yes --&gt; J{listen FD?}
   J -- yes --&gt; J1[handleNewConnection] --&gt; F
 
   J -- no --&gt; Rcv[handleClientData]
-  Rcv --&gt;|recv ok| Parse{parseAndQueueRequests}
-  Parse -- incomplete --&gt; F
-  Parse -- queued --&gt; Proc[processPendingRequests]
-  Proc --&gt;|shouldSpawnCgi| CGI[handleCgiRequest + mark running] --&gt; F
-  Proc --&gt;|static/regular| Q[response queued]
-  Q --&gt; K[enable POLLOUT] --&gt; F
+  Rcv -- queued --&gt; K[enable POLLOUT] --&gt; F
+  Rcv -- incomplete --&gt; F
 
   %% Writes
   O -- yes --&gt; S[sendResponse]
-  S --&gt;|file response| SF[sendFileResponse]
-  S --&gt;|raw response| SR[sendRawResponse]
-
-  %% Keep-alive / close after send
+  S --&gt;|file| SF[sendFileResponse]
+  S --&gt;|raw| SR[sendRawResponse]
   SF --&gt; EndSend{response done?}
   SR --&gt; EndSend
-  EndSend -- yes &amp; Connection: close --&gt; Close[cleanupClientConnectionClose] --&gt; F
+
+  EndSend -- yes &amp; close --&gt; Close
   EndSend -- yes &amp; keep-alive --&gt; KA[disable POLLOUT] --&gt; F
   EndSend -- not yet --&gt; F
 
-  %% Poll again
+  %% Next tick
   F --&gt; D
+
 @endicode 
 
 &lt;/details&gt;
