@@ -146,35 +146,71 @@ ___
 
 ```mermaid
 flowchart TD
-  subgraph Boot [Startup]
-    A[Load servers] --> B[Create SocketManager]
-    B --> C[Setup sockets]
+  %% =========================
+  %% Setup
+  %% =========================
+  subgraph Boot[Startup]
+    A[Load servers from config]
+    B[Create SocketManager]
+    C[setupSockets: bind + listen + register FDs]
+    A --> B --> C
   end
 
-  C --> D{Run poll loop}
-  D --> E[Handle CGI events]
+  %% =========================
+  %% Main loop
+  %% =========================
+  C --> D{run(): poll(...)}
 
-  subgraph Loop [Per FD handling]
-    E --> F{For each pfd}
-    F --> G{Is CGI pipe fd}
-    G -- yes --> F
-    G -- no --> H{ERR or HUP or NVAL}
-    H -- yes --> H1[handlePollError] --> F
+  %% Signals / EINTR
+  D -->|EINTR| Z[Graceful shutdown]
+  Z --> ZZ[Logger: "Shutting down server"]
 
-    H -- no --> I{Has POLLIN}
-    I -- yes --> J{Is listen fd}
-    J -- yes --> J1[handleNewConnection] --> F
-    J -- no --> J2[handleClientData] --> J3{Queued response}
-    J3 -- yes --> K[Enable POLLOUT] --> F
-    J3 -- no --> F
+  %% Loop tick
+  D --> E[handleCgiPollEvents]
+  E --> F{for each pfd in _poll_fds (reverse)}
 
-    I -- no --> L{Has POLLOUT and responses not empty}
-    L -- yes --> L1[sendResponse] --> F
-    L -- no --> F
-  end
+  %% Skip CGI pipe FDs entirely
+  F --> G{is CGI pipe FD?}
+  G -- yes --> F
 
+  %% Timeouts (checked per-FD)
+  G -- no --> T{checkClientTimeouts}
+  T -- idle/send -> closed --> F
+  T -- header/body -> 408 queued --> H{revents has ERR/HUP/NVAL?}
+  T -- none --> H
+
+  %% Socket errors
+  H -- yes --> H1[handlePollError + close] --> F
+
+  %% Reads
+  H -- no --> I{revents has POLLIN?}
+  I -- no --> O{revents has POLLOUT and responses not empty?}
+
+  I -- yes --> J{is listen FD?}
+  J -- yes --> J1[handleNewConnection] --> F
+
+  J -- no --> Rcv[handleClientData]
+  Rcv -->|recv ok| Parse{parseAndQueueRequests}
+  Parse -- incomplete --> F
+  Parse -- queued --> Proc[processPendingRequests]
+  Proc -->|shouldSpawnCgi| CGI[handleCgiRequest + mark running] --> F
+  Proc -->|static/regular| Q[response queued]
+  Q --> K[enable POLLOUT] --> F
+
+  %% Writes
+  O -- yes --> S[sendResponse]
+  S -->|file response| SF[sendFileResponse]
+  S -->|raw response| SR[sendRawResponse]
+
+  %% Keep-alive / close after send
+  SF --> EndSend{response done?}
+  SR --> EndSend
+  EndSend -- yes & Connection: close --> Close[cleanupClientConnectionClose] --> F
+  EndSend -- yes & keep-alive --> KA[disable POLLOUT] --> F
+  EndSend -- not yet --> F
+
+  %% Poll again
   F --> D
-  D --> Z[Shutdown on signal]
 ```
 
 </details>
