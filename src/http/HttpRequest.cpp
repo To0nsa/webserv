@@ -3,22 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:58 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/09 00:04:41 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:21:51 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/HttpRequest.hpp"
-#include "utils/stringUtils.hpp"
-
-#include <algorithm>
-#include <cctype>
-#include <iomanip>
-#include <iostream>
-#include <set>
-#include <sstream>
+#include "utils/stringUtils.hpp" // for toUpper
+#include <algorithm>             // for all_of, min
+#include <cctype>                // for isprint
+#include <iomanip>               // for operator<<, setw
+#include <iostream>              // for basic_ostream, operator<<, cout, left
+#include <utility>               // for pair
 
 HttpRequest::HttpRequest(void) {
     _matchedServerIndex = 0; // Default to the first server

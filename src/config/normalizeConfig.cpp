@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 13:12:00 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/18 13:26:53 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:48:41 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,13 @@
  * @ingroup config_normalizing
  */
 
-#include "config/normalizeConfig.hpp"
+#include "config/Config.hpp" // for Config
+#include "core/Location.hpp" // for Location
+#include "core/Server.hpp"   // for Server
+#include <map>               // for map
+#include <stddef.h>          // for size_t
+#include <string>            // for allocator, string, basic_string, operat...
+#include <vector>            // for vector
 
 /// 1 MiB default for request body limit.
 constexpr std::size_t DEFAULT_CLIENT_MAX_BODY_SIZE = 1 * 1024 * 1024;

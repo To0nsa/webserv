@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 22:56:08 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/15 22:56:09 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:41:13 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,14 @@
  * @ingroup url_utils
  */
 
-#include <cctype>
-#include <regex>
-#include <sstream>
-#include <stdexcept>
-#include <string>
-#include <unordered_map>
+#include <cctype>        // for isxdigit
+#include <cstddef>       // for size_t
+#include <regex>         // for regex_match, regex
+#include <sstream>       // for basic_ostream, basic_ostringstream, operator<<
+#include <stdexcept>     // for invalid_argument
+#include <string>        // for allocator, char_traits, string, basic_string
+#include <unordered_map> // for unordered_map
+#include <utility>       // for move
 
 /**
  * @brief Decodes percent-encoded octets in a string.

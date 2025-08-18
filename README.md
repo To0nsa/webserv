@@ -1,6 +1,6 @@
 # webserv
 
-[![Build Status](https://github.com/to0nsa/webserv/actions/workflows/ci.yml/badge.svg)](https://github.com/to0nsa/webserv/actions/workflows/ci.yml)
+[![Build Status](https://github.com/to0nsa/webserv/actions/workflows/build.yml/badge.svg)](https://github.com/to0nsa/webserv/actions/workflows/build.yml)
 [![Docs Status](https://github.com/to0nsa/webserv/actions/workflows/docs.yml/badge.svg?branch=main)](https://to0nsa.github.io/webserv/)
 [![License](https://img.shields.io/github/license/to0nsa/webserv.svg)](LICENSE)
 [![GitHub Pages](https://img.shields.io/badge/docs-online-blue.svg)](https://to0nsa.github.io/webserv/)

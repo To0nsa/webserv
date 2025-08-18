@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 13:11:30 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/14 15:25:54 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:52:08 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,10 @@
  * @ingroup entrypoint
  */
 
-#include "core/runWebserv.hpp"
-
-#include <cstdlib>
-#include <iostream>
-#include <stdexcept>
+#include "core/runWebserv.hpp" // for runWebserv
+#include <cstdlib>             // for EXIT_FAILURE
+#include <exception>           // for exception
+#include <iostream>            // for char_traits, basic_ostream, operator<<
 
 /**
  * @brief Program entry point.

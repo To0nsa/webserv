@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:37:06 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/15 23:07:10 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:47:28 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,12 @@
 
 #pragma once
 
-#include "core/Location.hpp"
-
-#include <cstddef>     // std::size_t for body size type
-#include <map>         // std::map for _error_pages (HTTP code → error page path)
-#include <string>      // std::string for host, server names, error page paths
-#include <string_view> // std::string_view for lightweight parameter passing
-#include <vector>      // std::vector for _server_names and _locations
+#include "core/Location.hpp" // for Location
+#include <map>               // for map
+#include <stddef.h>          // for size_t
+#include <string>            // for string
+#include <string_view>       // for string_view
+#include <vector>            // for vector
 
 /**
  * @brief Represents a virtual server block.

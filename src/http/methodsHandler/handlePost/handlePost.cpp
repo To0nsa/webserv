@@ -3,33 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   handlePost.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 10:19:13 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/10 22:54:45 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:25:19 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "http/methodsHandler.hpp"
-#include "http/responseBuilder.hpp"
-#include "utils/Logger.hpp"
-#include "utils/filesystemUtils.hpp"
-#include "utils/htmlUtils.hpp"
-#include "utils/urlUtils.hpp"
-
-#include <atomic>
-#include <chrono>
-#include <ctime>
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <optional>
-#include <sstream>
-#include <string>
-#include <sys/stat.h>
-#include <system_error>
-#include <unistd.h>
+#include "core/Location.hpp"         // for Location
+#include "core/Server.hpp"           // for Server
+#include "http/HttpRequest.hpp"      // for HttpRequest
+#include "http/HttpResponse.hpp"     // for HttpResponse
+#include "http/methodsHandler.hpp"   // for handleMultipartForm, handlePost
+#include "http/responseBuilder.hpp"  // for generateError, generateSuccess
+#include "utils/Logger.hpp"          // for LogLevel, Logger
+#include "utils/filesystemUtils.hpp" // for normalizePath, isFile, joinPath
+#include "utils/htmlUtils.hpp"       // for htmlEscape
+#include "utils/urlUtils.hpp"        // for decodePercentEncoding, parseFor...
+#include <atomic>                    // for atomic, memory_order_relaxed
+#include <bits/chrono.h>             // for duration_cast, duration, nanose...
+#include <filesystem>                // for path, exists, is_directory, is_...
+#include <fstream>                   // for basic_ofstream, basic_ostream
+#include <optional>                  // for optional, nullopt
+#include <sstream>                   // for basic_ostringstream
+#include <stdint.h>                  // for uint64_t
+#include <string>                    // for operator+, allocator, char_traits
+#include <system_error>              // for error_code
+#include <unordered_map>             // for unordered_map, operator==, _Nod...
+#include <utility>                   // for pair
 
 namespace {
 

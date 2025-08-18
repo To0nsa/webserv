@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 22:54:33 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/15 22:55:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:55:37 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,7 @@
 
 #include "utils/Logger.hpp"
 
-#include <chrono>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
+#include <iostream> // for basic_ostream, operator<<, endl, cerr, cout
 
 // ANSI color codes
 #define COLOR_RESET "\033[0m"

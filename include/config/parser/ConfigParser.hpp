@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:06:31 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/18 12:10:47 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:43:48 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,16 @@
 
 #pragma once
 
-#include "config/Config.hpp"
-#include "config/parser/ConfigParseError.hpp"
-#include "config/tokenizer/Tokenizer.hpp"
-#include "config/tokenizer/token.hpp"
-
-#include <set>
-#include <span>
-#include <string>
-#include <vector>
+#include "config/Config.hpp"              // for Config
+#include "config/tokenizer/Tokenizer.hpp" // for Tokenizer
+#include "config/tokenizer/token.hpp"     // for Token, TokenType (ptr only)
+#include "core/Location.hpp"              // for Location
+#include "core/Server.hpp"                // for Server
+#include <cstddef>                        // for size_t
+#include <initializer_list>               // for initializer_list
+#include <span>                           // for span
+#include <string>                         // for string
+#include <vector>                         // for vector
 
 /**
  * @brief Syntactic parser for the webserv configuration language.

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 13:17:47 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/18 11:45:36 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:46:40 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@
 
 #pragma once
 
-#include "token.hpp" // Token, TokenType
-#include <string>
-#include <vector>
+#include "token.hpp" // for Token, TokenType
+#include <cstddef>   // for size_t
+#include <string>    // for string
+#include <vector>    // for vector
 
 /**
  * @brief Stateful lexer for the configuration language.

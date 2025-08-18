@@ -3,19 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   filesystemUtils.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:38:32 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/10 21:47:36 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:29:20 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "http/HttpResponse.hpp" // for HttpResponse
-#include <string>                // for string, allocator
-#include <time.h>                // for time_t
-
+#include <string> // for string
+#include <time.h> // for time_t
 class HttpRequest;
 class Location;
 

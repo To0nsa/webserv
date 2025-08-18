@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:45:32 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/15 23:14:13 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:51:27 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@
  * @ingroup location_component
  */
 
-#include "core/Location.hpp"         // Class declaration
-#include "utils/filesystemUtils.hpp" // normalizePath(), joinPath()
-#include "utils/stringUtils.hpp"     // toLower()
-#include <algorithm>                 // std::find
-#include <filesystem>                // std::filesystem::path
-#include <map>
-#include <vector>
+#include "core/Location.hpp"
+#include "utils/filesystemUtils.hpp" // for normalizePath, joinPath
+#include "utils/stringUtils.hpp"     // for toLower
+#include <algorithm>                 // for find
+#include <filesystem>                // for path
+#include <map>                       // for map, operator==, _Rb_tree_const...
+#include <utility>                   // for pair
+#include <vector>                    // for vector
 
 //=== Construction & Special Members =====================================
 

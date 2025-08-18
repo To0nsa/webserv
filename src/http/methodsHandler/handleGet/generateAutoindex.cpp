@@ -3,29 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   generateAutoindex.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 09:08:33 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/09 22:57:01 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 11:06:54 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <chrono>
-#include <ctime>
-#include <filesystem>
-#include <iomanip>
-#include <sstream>
-#include <string>
-#include <system_error>
-#include <vector>
-
-#include "core/Server.hpp"
-#include "http/HttpRequest.hpp"
-#include "http/HttpResponse.hpp"
-#include "http/responseBuilder.hpp"
-#include "utils/Logger.hpp"
-#include "utils/htmlUtils.hpp"
-#include "utils/stringUtils.hpp"
+#include "http/HttpRequest.hpp"     // for HttpRequest
+#include "http/HttpResponse.hpp"    // for HttpResponse
+#include "http/responseBuilder.hpp" // for generateError, generateSuccess
+#include "utils/Logger.hpp"         // for LogLevel, Logger
+#include "utils/htmlUtils.hpp"      // for htmlEscape
+#include <algorithm>                // for max, sort
+#include <bits/chrono.h>            // for duration, operator-, floor, oper...
+#include <cctype>                   // for isalnum
+#include <chrono>                   // for operator/
+#include <compare>                  // for operator<
+#include <cstdint>                  // for uintmax_t
+#include <ctime>                    // for time_t
+#include <filesystem>               // for path, directory_iterator, exists
+#include <iomanip>                  // for operator<<, setfill, setw
+#include <sstream>                  // for basic_ostream, operator<<, basic...
+#include <string>                   // for char_traits, allocator, operator+
+#include <system_error>             // for error_code
+#include <vector>                   // for vector
+class Server;
 
 namespace fs = std::filesystem;
 

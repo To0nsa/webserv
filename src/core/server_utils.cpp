@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:30:41 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/14 15:09:44 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:52:16 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
  */
 
 #include "core/server_utils.hpp"
-#include <stdexcept>
+#include "core/Server.hpp" // for Server
+#include <stdexcept>       // for runtime_error
 
 /**
  * @brief Selects the best matching Server for a given port and Host header.

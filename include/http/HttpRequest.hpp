@@ -6,18 +6,16 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:31:10 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/07 14:58:39 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/17 12:21:30 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "core/Server.hpp" // for Server
-#include "http/Url.hpp"
-#include "utils/stringUtils.hpp"
-#include <map>
-#include <string>
-#include <vector>
+#include "http/Url.hpp" // for Url
+#include <cstddef>      // for size_t
+#include <map>          // for map
+#include <string>       // for string
 
 class HttpRequest {
 

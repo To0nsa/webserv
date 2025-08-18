@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleCgi.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/06/06 21:26:20 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:19:24 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 #include "core/Location.hpp"         // for Location
 #include "core/Server.hpp"           // for Server
 #include "http/HttpRequest.hpp"      // for HttpRequest
-#include "http/responseBuilder.hpp"  // for generateError, generateSucce...
+#include "http/responseBuilder.hpp"  // for generateError, generateSuccessFile
 #include "utils/Logger.hpp"          // for LogLevel, Logger
 #include "utils/filesystemUtils.hpp" // for getCurrentTime, make_temp_name
 #include "utils/stringUtils.hpp"     // for trim, toUpper
 #include <algorithm>                 // for replace
 #include <errno.h>                   // for errno
 #include <fcntl.h>                   // for open, O_CREAT, O_RDONLY, O_RDWR
-#include <filesystem>                // for path, absolute
+#include <filesystem>                // for path, absolute, remove
 #include <fstream>                   // for basic_ifstream, basic_istream
-#include <map>                       // for map, operator==, _Rb_tree_co...
+#include <map>                       // for map, operator==, _Rb_tree_const...
 #include <optional>                  // for optional, nullopt
 #include <poll.h>                    // for pollfd
 #include <signal.h>                  // for kill, SIGKILL
@@ -31,7 +31,8 @@
 #include <stdlib.h>                  // for exit
 #include <string.h>                  // for strerror
 #include <sys/wait.h>                // for waitpid, WNOHANG
-#include <unistd.h>                  // for close, size_t, dup2, STDIN_F...
+#include <system_error>              // for error_code
+#include <unistd.h>                  // for close, dup2, STDIN_FILENO, STDO...
 #include <utility>                   // for pair
 #include <vector>                    // for vector
 
@@ -248,8 +249,13 @@ void setupAndRunCgiChild(const CgiProcess& cgi, int body_fd, int output_fd, cons
 namespace CGI {
 
 void unlinkWithErrorLog(const std::string& path, const std::string& context) {
-    if (!path.empty() && unlink(path.c_str()) != 0) {
-        Logger::logFrom(LogLevel::ERROR, "CGI", "Failed to delete " + context + ": " + path);
+    if (!path.empty()) {
+        std::error_code ec;
+        if (!std::filesystem::remove(path, ec)) {
+            Logger::logFrom(LogLevel::ERROR, "CGI",
+                            "Failed to delete " + context + ": " + path + " (" + ec.message() +
+                                ")");
+        }
     }
 }
 

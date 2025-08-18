@@ -23,7 +23,6 @@
 
 #pragma once
 
-#include "config/Config.hpp"
-#include <vector>
+class Config;
 
 void validateConfig(const Config& config);

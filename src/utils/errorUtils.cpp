@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 21:08:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/13 22:16:59 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:54:49 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  * @ingroup ErrorUtils
  */
 
-#include "utils/errorUtils.hpp"
+#include <string> // for allocator, char_traits, operator+, to_string, string
 
 std::string formatError(const std::string& msg, int line, int column) {
     // Builds a standardized error message with line and column context

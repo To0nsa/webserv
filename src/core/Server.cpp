@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:51:19 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/15 23:08:18 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:53:25 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,10 @@
  */
 
 #include "core/Server.hpp"       // Server class declaration
-#include "utils/stringUtils.hpp" // toLower() for case‐insensitive server names
-
-#include <algorithm>   // std::any_of
-#include <cstddef>     // std::size_t (body size)
-#include <map>         // std::map (used in setErrorPage, getErrorPages)
-#include <string>      // std::string (host, names, paths)
-#include <string_view> // std::string_view parameters
-#include <vector>      // std::vector (server names, locations)
+#include "utils/stringUtils.hpp" // for toLower
+#include <algorithm>             // for any_of
+#include <cstddef>               // for size_t
+#include <string_view>           // for string_view, operator==, basic_stri...
 
 //=== Construction & Special Members =====================================
 /**

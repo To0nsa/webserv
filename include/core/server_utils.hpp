@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:29:58 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/14 15:14:24 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:47:04 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 
 #pragma once
 
-#include "Server.hpp"
-#include <string>
-#include <vector>
+#include <string> // for string
+#include <vector> // for vector
+class Server;
 
 const Server&
 findMatchingServer(const std::vector<Server>& servers, int port,

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 23:23:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/18 16:31:16 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:49:12 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,22 @@
  */
 
 #include "config/validateConfig.hpp"
-#include "config/parser/ConfigParseError.hpp"
-#include "utils/errorUtils.hpp"
-#include "utils/filesystemUtils.hpp"
-
-#include <algorithm>
-#include <array>
-#include <filesystem>
-#include <iostream>
-#include <map>
-#include <set>
-#include <string>
-#include <unordered_set>
+#include "config/Config.hpp"                  // for Config
+#include "config/parser/ConfigParseError.hpp" // for ValidationError
+#include "core/Location.hpp"                  // for Location
+#include "core/Server.hpp"                    // for Server
+#include <algorithm>                          // for find
+#include <array>                              // for array
+#include <cctype>                             // for isalnum, isprint
+#include <cstddef>                            // for size_t
+#include <filesystem>                         // for path, exists, is_direc...
+#include <map>                                // for map, operator==, _Rb_t...
+#include <set>                                // for set
+#include <string>                             // for operator+, char_traits
+#include <system_error>                       // for error_code
+#include <unordered_set>                      // for unordered_set
+#include <utility>                            // for pair, make_pair
+#include <vector>                             // for vector, allocator
 
 namespace {
 namespace fs = std::filesystem;

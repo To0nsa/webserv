@@ -3,27 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequestParser.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/06/10 23:36:49 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:21:10 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/HttpRequestParser.hpp"
-#include "utils/Logger.hpp"
-#include "utils/filesystemUtils.hpp"
-#include "utils/urlUtils.hpp"
-#include <algorithm>
-#include <array>
-#include <cctype>
-#include <exception>
-#include <filesystem>
-#include <regex>
-#include <set>
-#include <sstream>
-#include <string>
-#include <string_view>
+#include "core/Server.hpp"           // for Server
+#include "http/HttpRequest.hpp"      // for HttpRequest
+#include "http/Url.hpp"              // for Url
+#include "utils/Logger.hpp"          // for LogLevel, Logger
+#include "utils/filesystemUtils.hpp" // for normalizePath
+#include "utils/stringUtils.hpp"     // for toLower, toUpper, trim
+#include "utils/urlUtils.hpp"        // for decodePercentEncoding
+#include <algorithm>                 // for all_of, any_of, transform
+#include <array>                     // for array
+#include <cctype>                    // for isalnum, iscntrl, isdigit, tolower
+#include <exception>                 // for exception
+#include <filesystem>                // for path
+#include <regex>                     // for match_results, regex_match, regex
+#include <set>                       // for set, operator==, _Rb_tree_const...
+#include <sstream>                   // for basic_istream, basic_istringstream
+#include <stdexcept>                 // for invalid_argument
+#include <string>                    // for allocator, operator+, basic_string
+#include <string_view>               // for basic_string_view, operator==
 
 namespace fs = std::filesystem;
 

@@ -3,22 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   responseBuilder.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:14:23 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/10 21:23:05 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:18:46 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http/responseBuilder.hpp"
-#include "http/HttpResponse.hpp"
-#include "utils/filesystemUtils.hpp"
-#include "utils/htmlUtils.hpp"
-
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <sstream>
+#include "core/Location.hpp"         // for Location
+#include "core/Server.hpp"           // for Server
+#include "http/HttpRequest.hpp"      // for HttpRequest
+#include "http/HttpResponse.hpp"     // for HttpResponse
+#include "utils/filesystemUtils.hpp" // for joinPath
+#include "utils/htmlUtils.hpp"       // for htmlEscape
+#include <fstream>                   // for basic_ostream, operator<<, basi...
+#include <iterator>                  // for istreambuf_iterator, operator==
+#include <map>                       // for operator==, map, _Rb_tree_const...
+#include <set>                       // for set
+#include <sstream>                   // for basic_ostringstream
+#include <utility>                   // for pair
+#include <vector>                    // for vector
 
 namespace MessageHandler {
 

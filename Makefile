@@ -6,13 +6,16 @@
 #    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/09 20:53:27 by nlouis            #+#    #+#              #
-#    Updated: 2025/08/14 14:43:24 by nlouis           ###   ########.fr        #
+#    Updated: 2025/08/18 19:43:01 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Compiler settings
 CXX        := c++
-CXXFLAGS   := -Wall -Wextra -Werror -I include -std=c++20 -O3
+CXXFLAGS   := -Wall -Wextra -Werror -I include -std=c++20 \
+  -O3 -DNDEBUG -flto -march=native
+# We use -flto (link time optimization) for better performance.
+# -O3 is for optimization, -DNDEBUG disables debug assertions.
 
 # Executable output
 NAME       := webserv
@@ -157,7 +160,10 @@ re: fclean all
 # Python test dependencies
 install_test_deps:
 	@echo "$(CYAN)📦 Installing Python test dependencies...$(RESET)"
-	@python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements-test.txt
+	@python3 -m pip install --user --upgrade virtualenv
+	@python3 -m virtualenv .venv
+	@.venv/bin/pip install --upgrade pip
+	@.venv/bin/pip install -r requirements-test.txt
 
 # Tests
 test: all install_test_deps
@@ -165,7 +171,7 @@ test: all install_test_deps
 	@./$(TARGET) ./test_webserv/tester/config/tester.conf & echo $$! > .webserv_test.pid
 	@sleep 1
 	@echo "$(CYAN)🧪 Running Python test suite...$(RESET)"
-	@. .venv/bin/activate && python3 run_test.py || { \
+	@.venv/bin/python run_test.py || { \
 		echo "$(RED)❌ Tests failed.$(RESET)"; \
 		kill `cat .webserv_test.pid` >/dev/null 2>&1 || true; \
 		rm -f .webserv_test.pid; \

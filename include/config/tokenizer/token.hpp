@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 00:55:06 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/18 11:58:30 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:46:18 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 
 #pragma once
 
-#include <string>
+#include <cstddef> // for size_t
+#include <string>  // for string
 
 /**
  * @brief Token categories recognized by the configuration lexer.

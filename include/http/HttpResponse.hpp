@@ -3,22 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:37 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/05 12:16:38 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:20:00 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "core/Server.hpp"
-#include "http/HttpRequest.hpp"
-#include "http/HttpResponse.hpp"
-
-#include <map>
-#include <string>
-#include <unistd.h>
+#include <iosfwd> // for streamsize
+#include <map>    // for map
+#include <string> // for string
 
 class HttpResponse {
   private:

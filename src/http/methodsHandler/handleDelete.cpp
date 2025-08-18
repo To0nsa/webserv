@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   handleDelete.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 15:06:07 by irychkov          #+#    #+#             */
-/*   Updated: 2025/06/10 23:30:35 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/17 12:22:25 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "core/Location.hpp"
-#include "core/Server.hpp"
-#include "http/HttpRequest.hpp"
-#include "http/HttpResponse.hpp"
-#include "http/responseBuilder.hpp"
-#include "utils/Logger.hpp"
-#include "utils/filesystemUtils.hpp"
-#include "utils/htmlUtils.hpp"
-#include "utils/urlUtils.hpp"
-
-#include <sstream>
-#include <string.h>
-#include <string>
-#include <sys/stat.h>
-#include <unistd.h>
+#include "http/HttpRequest.hpp"      // for HttpRequest
+#include "http/HttpResponse.hpp"     // for HttpResponse
+#include "http/responseBuilder.hpp"  // for generateError, generateSuccess
+#include "utils/Logger.hpp"          // for LogLevel, Logger
+#include "utils/filesystemUtils.hpp" // for isSymlink, resolvePhysicalPath
+#include "utils/htmlUtils.hpp"       // for htmlEscape
+#include "utils/urlUtils.hpp"        // for extractFilenameFromUri
+#include <errno.h>                   // for EACCES, ENOENT, EPERM
+#include <filesystem>                // for remove, path
+#include <sstream>                   // for basic_ostream, operator<<, basi...
+#include <string>                    // for allocator, operator+, char_traits
+#include <sys/stat.h>                // for stat, S_ISDIR, S_ISREG
+#include <system_error>              // for error_code
+class Location;
+class Server;
 
 namespace {
 
@@ -49,19 +49,22 @@ bool unlinkFile(const std::string& filepath, const HttpRequest& req, const Serve
         outError = ResponseBuilder::generateError(403, server, req);
         return false;
     }
-    if (unlink(filepath.c_str()) != 0) {
-        std::string err = strerror(errno);
-        if (errno == EACCES || errno == EPERM) {
+
+    std::error_code ec;
+    if (!std::filesystem::remove(filepath, ec)) {
+        if (ec.value() == EACCES || ec.value() == EPERM) {
             Logger::logFrom(LogLevel::WARN, "Delete Handler",
-                            "Permission denied when deleting: " + filepath + " (" + err + ")");
+                            "Permission denied when deleting: " + filepath + " (" + ec.message() +
+                                ")");
             outError = ResponseBuilder::generateError(403, server, req);
-        } else if (errno == ENOENT) {
+        } else if (ec.value() == ENOENT) {
             Logger::logFrom(LogLevel::WARN, "Delete Handler",
                             "File disappeared before deletion: " + filepath);
             outError = ResponseBuilder::generateError(404, server, req);
         } else {
             Logger::logFrom(LogLevel::WARN, "Delete Handler",
-                            "Unexpected error deleting file: " + filepath + " (" + err + ")");
+                            "Unexpected error deleting file: " + filepath + " (" + ec.message() +
+                                ")");
             outError = ResponseBuilder::generateError(500, server, req);
         }
         return false;
