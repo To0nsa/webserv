@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 01:06:09 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/18 12:32:37 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 16:28:41 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -448,7 +448,7 @@ Token Tokenizer::parseStringLiteral() {
 //=== Whitespace & Comment Helpers =======================================
 
 /**
- * @brief Skips a carriage return (`'\r'`).
+ * @brief Skips a carriage return (`'\\r'`).
  * @ingroup config_tokenizing
  */
 void Tokenizer::skipCR() {

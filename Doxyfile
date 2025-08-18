@@ -9,7 +9,7 @@ INPUT_ENCODING         = UTF-8
 
 # --- Input Files ---
 
-INPUT                  = include/ src/ tests/ README.md
+INPUT                  = include/ src/ README.md
 RECURSIVE              = YES
 FILE_PATTERNS          = *.cpp *.hpp *.tpp *.md
 USE_MDFILE_AS_MAINPAGE = README.md
@@ -71,10 +71,11 @@ HIDE_UNDOC_CLASSES     = YES
 # --- Graphs and Diagrams ---
 
 HAVE_DOT               = YES
-DOT_NUM_THREADS        = 4
+DOT_NUM_THREADS        = 1
 CALL_GRAPH             = YES
 CALLER_GRAPH           = YES
-DOT_MULTI_TARGETS      = YES
+DOT_MULTI_TARGETS      = NO
+DOT_GRAPH_MAX_NODES    = 100
 CLASS_DIAGRAMS         = YES
 DOT_IMAGE_FORMAT       = svg
 INTERACTIVE_SVG        = YES

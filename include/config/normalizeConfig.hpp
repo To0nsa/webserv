@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 21:02:21 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/18 13:26:36 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 15:58:50 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,4 @@
 
 #include "config/Config.hpp"
 
-/**
- * @brief Applies in-place normalization to a parsed configuration.
- *
- * @details Iterates over all servers/locations and fills defaults for:
- *          - client_max_body_size
- *          - error_page mappings
- *          - location root and index files
- *          - allowed HTTP methods
- *
- * @param config Parsed configuration to normalize (modified in place).
- *
- * @ingroup config_normalizing
- */
 void normalizeConfig(Config& config);

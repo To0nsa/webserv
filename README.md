@@ -247,7 +247,6 @@ webserv
 ├── .gitattributes              # Defines merge/diff rules for Git (e.g. binary files)
 ├── .gitignore                  # Files and folders ignored by Git (e.g. build/, *.o)
 ├── ACTIONPLAN.md               # Project-level planning or roadmap
-├── CONTRIBUTING.md             # Guidelines for contributing to the project
 ├── DOXYGENSTYLEGUIDE.md        # Doxygen conventions for documenting code
 ├── Doxyfile                    # Main config for Doxygen documentation generation
 ├── LICENSE                     # Project license (e.g. MIT, GPL)

@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:14:27 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/18 12:47:33 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 19:35:02 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
  * @brief   Implements directive handler maps for `server` and `location` blocks.
  *
  * @details Defines the concrete handler tables returned by
- *          `directive::serverHandlers()` and `directive::locationHandlers()`.
+ *          directive::serverHandlers and directive::locationHandlers.
  *          Each handler validates its arguments, reports precise diagnostics
  *          (line/column + contextual snippet), and mutates the target
- *          configuration object (@ref Server or @ref Location).
+ *          configuration object (Server or Location).
  *
  *          This file also contains small internal helpers used by handlers:
  *          - `resolveToAbsolute()` — canonicalizes filesystem paths.
@@ -202,17 +202,6 @@ static void validateIPv4Address(const std::string& ip, int line, int column,
  *          - Begin with a dot (`.`).
  *          - Contain only alphanumeric characters after the dot.
  *          - Not be just `"."` with no following characters.
- *
- * Examples of valid extensions:
- * - `.php`
- * - `.py`
- * - `.cgi`
- *
- * Examples of invalid extensions:
- * - `""`       (empty string)
- * - `"."`      (dot only, no extension name)
- * - `"php"`    (missing leading dot)
- * - `.sh!`     (contains invalid character `!`)
  *
  * @param ext               The extension string to validate (e.g., ".php").
  * @param line              Line number in the config file for error reporting.

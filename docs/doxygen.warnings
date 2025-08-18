@@ -1,4 +1,45 @@
-warning: source 'tests' is not a readable file or directory... skipping.
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:262: warning: no matching file member found for 
+const std::unordered_map< std::string, ServerHandler > & directive::serverHandlers
+Possible candidates:
+ 'const std::unordered_map< std::string, ServerHandler > & serverHandlers()' at line 262 of file /home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:361: warning: no matching file member found for 
+const std::unordered_map< std::string, LocationHandler > & directive::locationHandlers
+Possible candidates:
+ 'const std::unordered_map< std::string, LocationHandler > & locationHandlers()' at line 361 of file /home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:246: warning: Unsupported xml/html tag <port> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:248: warning: Unsupported xml/html tag <ip> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:252: warning: Unsupported xml/html tag <size> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:254: warning: Unsupported xml/html tag <uri> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:340: warning: Unsupported xml/html tag <path> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:348: warning: Unsupported xml/html tag <path> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:352: warning: Unsupported xml/html tag <path> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:354: warning: Unsupported xml/html tag <uri> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:354: warning: found </strong> tag while expecting </code>
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:358: warning: end of comment block while expecting command </code>
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:358: warning: end of comment block while expecting command </strong>
+error: md5 hash does not match for two different runs of /home/toonsa/myProjects/webserv/docs/html/group__url__utils_gabf2641feed820a4fcaf2699a86d1a4f7_gabf2641feed820a4fcaf2699a86d1a4f7_icgraph.dot !
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:246: warning: Unsupported xml/html tag <port> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:248: warning: Unsupported xml/html tag <ip> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:252: warning: Unsupported xml/html tag <size> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:254: warning: Unsupported xml/html tag <uri> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:340: warning: Unsupported xml/html tag <path> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:348: warning: Unsupported xml/html tag <path> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:352: warning: Unsupported xml/html tag <path> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:354: warning: Unsupported xml/html tag <uri> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:354: warning: found </strong> tag while expecting </code>
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:358: warning: end of comment block while expecting command </code>
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:358: warning: end of comment block while expecting command </strong>
+/home/toonsa/myProjects/webserv/src/config/validateConfig.cpp:351: warning: unable to resolve reference to 'validateUniquePorts' for \ref command
 error: md5 hash does not match for two different runs of /home/toonsa/myProjects/webserv/docs/html/group__url__utils_gabf2641feed820a4fcaf2699a86d1a4f7_gabf2641feed820a4fcaf2699a86d1a4f7_icgraph.dot !
 error: md5 hash does not match for two different runs of /home/toonsa/myProjects/webserv/docs/html/group__url__utils_gabf2641feed820a4fcaf2699a86d1a4f7_gabf2641feed820a4fcaf2699a86d1a4f7_icgraph.dot !
-/home/toonsa/myProjects/webserv/README.md:103: warning: unable to resolve reference to '/home/toonsa/myProjects/webserv/CONTRIBUTING.md' for \ref command
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:246: warning: Unsupported xml/html tag <port> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:248: warning: Unsupported xml/html tag <ip> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:252: warning: Unsupported xml/html tag <size> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:254: warning: Unsupported xml/html tag <uri> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:340: warning: Unsupported xml/html tag <path> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:348: warning: Unsupported xml/html tag <path> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:352: warning: Unsupported xml/html tag <path> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:354: warning: Unsupported xml/html tag <uri> found
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:354: warning: found </strong> tag while expecting </code>
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:358: warning: end of comment block while expecting command </code>
+/home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:358: warning: end of comment block while expecting command </strong>

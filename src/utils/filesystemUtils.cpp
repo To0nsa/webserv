@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/18 12:05:15 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 15:58:05 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,25 +296,6 @@ std::string buildFilePath(const HttpRequest& request, const Location& loc) {
     return joinPath(loc_root, suffix);
 }
 
-/**
- * @brief Splits a path string into non-empty components.
- *
- * @details Parses the given path by splitting on '/' characters and collects
- *          all non-empty segments into a vector. Consecutive slashes and empty
- *          segments are skipped. The returned parts do not include leading or
- *          trailing separators and preserve the original segment order.
- *
- * @ingroup filesystem_utils
- *
- * @param path Path string to split (can be a URI or filesystem path).
- * @return Vector of non-empty path segments in order of appearance.
- *
- * @note This function does not perform normalization; callers should sanitize
- *       and normalize the path (e.g., via @ref normalizePath) before splitting
- *       to remove `.` or `..` and collapse repeated slashes.
- * @warning Leading or trailing slashes are not included in the result; the
- *          caller must track whether the path was absolute if needed.
- */
 /* static std::vector<std::string> splitPath(const std::string& path) {
     std::vector<std::string> parts;
     std::stringstream        ss(path);

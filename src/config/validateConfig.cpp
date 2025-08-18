@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 23:23:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/18 14:03:41 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 16:31:16 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +241,7 @@ bool isValidLabel(const std::string& label) {
  * @details Enforces RFC 1035-style constraints:
  *  - Name must be non-empty and no longer than 253 characters.
  *  - Cannot contain consecutive dots (`..`), which would create empty labels.
- *  - Each label (between dots) must satisfy @ref isValidLabel.
+ *  - Each label (between dots) must satisfy isValidLabel.
  *
  * @param name Full domain/server name to validate.
  * @return `true` if the name follows domain rules, `false` otherwise.
@@ -274,13 +274,13 @@ bool isServerNameValid(const std::string& name) {
  *  - Non-empty names: Empty strings are not allowed.
  *  - Printable characters only: No control characters (e.g., newlines, tabs).
  *  - No whitespace: Spaces are not valid inside domain names.
- *  - RFC 1035 compliance via @ref isServerNameValid:
+ *  - RFC 1035 compliance via isServerNameValid:
  *      - Maximum length 253 characters.
  *      - No empty labels (e.g. `"example..com"`).
  *      - Labels up to 63 characters, only alphanumeric and `-`.
  *      - No leading or trailing `-` in a label.
  *
- * If any of these conditions are violated, a @ref ValidationError is thrown
+ * If any of these conditions are violated, a ValidationError is thrown
  * with a descriptive message indicating the invalid server name and the server
  * block index where it was found.
  *
@@ -289,10 +289,6 @@ bool isServerNameValid(const std::string& name) {
  * @throws ValidationError if an invalid `server_name` is detected.
  *
  * @ingroup config_validation
- *
- * @see isServerNameValid
- * @see isValidLabel
- * @see splitLabels
  */
 void validateServerNameFormat(const std::vector<Server>& servers) {
     for (std::size_t serverIndex = 0; serverIndex < servers.size(); ++serverIndex) {
@@ -518,7 +514,7 @@ void validateRedirectCodes(const std::vector<Server>& servers) {
  *          **GET, POST, DELETE**.
  *
  *          If any other method (e.g., PUT, PATCH, OPTIONS, HEAD) is specified,
- *          the configuration is considered invalid and a @ref ValidationError is thrown.
+ *          the configuration is considered invalid and a ValidationError is thrown.
  *
  * @param servers Vector of configured Server objects to validate.
  *
