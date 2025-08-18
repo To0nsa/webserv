@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Webserv: webserv</title>
+<title>Webserv: Webserv</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">webserv </div></div>
+  <div class="headertitle"><div class="title">Webserv </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_README"></a> <a href="https://github.com/to0nsa/webserv/actions/workflows/build.yml"><img src="https://github.com/to0nsa/webserv/actions/workflows/build.yml/badge.svg" alt="Build Status" style="pointer-events: none;" class="inline"/></a> <a href="https://to0nsa.github.io/webserv/"><img src="https://github.com/to0nsa/webserv/actions/workflows/docs.yml/badge.svg?branch=main" alt="Docs Status" style="pointer-events: none;" class="inline"/></a> [<img src="https://img.shields.io/github/license/to0nsa/webserv.svg" alt="License" style="pointer-events: none;" class="inline"/>](LICENSE) <a href="https://to0nsa.github.io/webserv/"><img src="https://img.shields.io/badge/docs-online-blue.svg" alt="GitHub Pages" style="pointer-events: none;" class="inline"/></a> <a href="https://clang.llvm.org/extra/clang-tidy/"><img src="https://img.shields.io/badge/clang--tidy-enabled-brightgreen" alt="clang-tidy" class="inline"/></a> <a href="https://clang.llvm.org/docs/ClangFormat.html"><img src="https://img.shields.io/badge/clang--format-automatic-blue" alt="clang-format" class="inline"/></a> <a href="https://editorconfig.org/"><img src="https://img.shields.io/badge/editorconfig-supported-lightgrey" alt="editorconfig" class="inline"/></a></p>
@@ -99,120 +99,254 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </blockquote>
 <hr  />
 <h1><a class="anchor" id="autotoc_md1"></a>
-Build &amp; Test Instructions</h1>
+Core of Webserv</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Component   </th><th class="markdownTableHeadNone">Responsibility    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">**<code><a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a></code>**   </td><td class="markdownTableBodyNone">Represents a virtual host configuration. Manages binding (host + port), server names, error pages, body size limits, and a collection of <code><a class="el" href="classLocation.html">Location</a></code> blocks.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">**<code><a class="el" href="classLocation.html">Location</a></code>**   </td><td class="markdownTableBodyNone">Encapsulates route-specific configuration. Defines path matching, allowed HTTP methods, root directories, index files, redirects, <a class="el" href="namespaceCGI.html">CGI</a> interpreters, and upload stores.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">**<code>runWebserv</code>**   </td><td class="markdownTableBodyNone">Orchestrates the execution of the web server: initializes <code><a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a></code> objects from the parsed configuration, launches sockets, and enters the event loop.   </td></tr>
+</table>
+<hr  />
 <h2><a class="anchor" id="autotoc_md2"></a>
-Build with Makefile</h2>
-<div class="fragment"><div class="line">make</div>
-<div class="line">./bin/webserv configs/default.conf</div>
-</div><!-- fragment --><p>Available Makefile targets:</p>
-<h2><a class="anchor" id="autotoc_md3"></a>
-Build Modes</h2>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Command   </th><th class="markdownTableHeadNone">Description    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>make</code>   </td><td class="markdownTableBodyNone">Build in release mode (optimized)    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>make debug</code>   </td><td class="markdownTableBodyNone">Build in debug mode (with <code>-g</code> and no optimizations)    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>make debug_asan</code>   </td><td class="markdownTableBodyNone">Build in debug mode with AddressSanitizer    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>make debug_ubsan</code>   </td><td class="markdownTableBodyNone">Build in debug mode with UndefinedBehaviorSanitizer    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>make fast</code>   </td><td class="markdownTableBodyNone">Fast build without dependency tracking (development only)   </td></tr>
-</table>
+Program Entrypoint</h2>
+<ol type="1">
+<li>Parse CLI arguments or fallback to default configuration.</li>
+<li>Load and normalize configuration (via config parser).</li>
+<li>Validate <code><a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a></code> and <code><a class="el" href="classLocation.html">Location</a></code> objects.</li>
+<li>Call **<code><a class="el" href="webserv_8hpp.html#a6e58dbe6eab2d4b12d65b7b0e7297be8">runWebserv()</a></code>** to start the server runtime.</li>
+</ol>
+<p>The program is designed so that <b>configuration and validation are complete before runtime begins</b>, ensuring that only consistent and safe server objects are passed to the execution loop.</p>
+<hr  />
+<h1><a class="anchor" id="autotoc_md3"></a>
+Configuration Parsing Flow</h1>
+<p>This section describes how the configuration parsing logic of <b>Webserv</b> works, including the step‑by‑step pipeline and the rules applied during parsing and validation.</p>
+<details >
+<summary >
+<b>See Details</b></summary>
+<p></p>
+<p></p>
+</details>
 <h2><a class="anchor" id="autotoc_md4"></a>
-Code quality</h2>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Command   </th><th class="markdownTableHeadNone">Description    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>make format</code>   </td><td class="markdownTableBodyNone">Format all <code>.cpp</code> and <code>.hpp</code> files using <code>clang-format</code>   </td></tr>
-</table>
-<h2><a class="anchor" id="autotoc_md5"></a>
-Run and Test</h2>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Command   </th><th class="markdownTableHeadNone">Description    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>make run</code>   </td><td class="markdownTableBodyNone">Build and run the web server    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>make test</code>   </td><td class="markdownTableBodyNone">Build and run all test binaries from <code>tests/</code> folder    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>make sanitize</code>   </td><td class="markdownTableBodyNone">Build and run under all sanitizers (ASAN, TSAN, UBSAN)   </td></tr>
-</table>
-<h2><a class="anchor" id="autotoc_md6"></a>
-Cleaning</h2>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Command   </th><th class="markdownTableHeadNone">Description    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>make clean</code>   </td><td class="markdownTableBodyNone">Remove all object files and dependency files    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>make fclean</code>   </td><td class="markdownTableBodyNone">Remove everything: binaries, builds, tests    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>make re</code>   </td><td class="markdownTableBodyNone">Full clean and rebuild   </td></tr>
-</table>
-<h2><a class="anchor" id="autotoc_md7"></a>
-Help</h2>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Command   </th><th class="markdownTableHeadNone">Description    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>make help</code>   </td><td class="markdownTableBodyNone">Displays a categorized list of all available <code>Makefile</code> targets   </td></tr>
-</table>
+1. Tokenization</h2>
+<ul>
+<li><b>Component:</b> <code><a class="el" href="classTokenizer.html">Tokenizer</a></code></li>
+<li><b>Goal:</b> Convert raw configuration text into a structured list of tokens.</li>
+<li><b>Steps:</b><ul>
+<li>Skip UTF‑8 BOM if present.</li>
+<li>Ignore whitespace, line breaks, and comments (<code># ...</code>).</li>
+<li>Classify tokens into categories:<ul>
+<li><b>Keywords:</b> <code>server</code>, <code>location</code>, <code>listen</code>, <code>host</code>, <code>root</code>, <code>index</code>, <code>autoindex</code>, <code>methods</code>, <code>upload_store</code>, <code>return</code>, <code>error_page</code>, <code>client_max_body_size</code>, <code>cgi_extension</code>.</li>
+<li><b>Identifiers:</b> Alphanumeric strings with <code>-</code>, <code>.</code>, <code>/</code>, <code>:</code> allowed.</li>
+<li><b>Numbers &amp; Units:</b> Digits with optional single‑letter suffix (<code>k</code>, <code>m</code>, <code>g</code>).</li>
+<li><b>Strings:</b> Quoted values (single &lsquo;&rsquo;<code>or double</code>"&lt;tt&gt;).
+    * **Symbols:**&lt;/tt&gt;{&lt;tt&gt;,&lt;/tt&gt;}&lt;tt&gt;,&lt;/tt&gt;;&lt;tt&gt;,&lt;/tt&gt;,`.
+  * Detect and reject invalid characters, control characters, or malformed identifiers.
+
+@subsection autotoc_md5 2. Parsing
+
+* &lt;strong&gt;Component:&lt;/strong&gt; &lt;tt&gt;ConfigParser&lt;/tt&gt;
+* &lt;strong&gt;Goal:&lt;/strong&gt; Transform token stream into structured objects (&lt;tt&gt;Config&lt;/tt&gt;, &lt;tt&gt;Server&lt;/tt&gt;, &lt;tt&gt;Location&lt;/tt&gt;).
+* &lt;strong&gt;Rules:&lt;/strong&gt;
+
+  * &lt;strong&gt;Block structure:&lt;/strong&gt; Curly braces &lt;tt&gt;{ ... }&lt;/tt&gt; delimit &lt;tt&gt;server&lt;/tt&gt; and &lt;tt&gt;location&lt;/tt&gt; blocks.
+  * &lt;strong&gt;Directives:&lt;/strong&gt; Each directive must end with &lt;tt&gt;;&lt;/tt&gt; unless it opens a block.
+  * &lt;strong&gt;Directive placement:&lt;/strong&gt; Certain directives are only valid at specific levels:
+
+    * Server level: &lt;tt&gt;listen&lt;/tt&gt;, &lt;tt&gt;host&lt;/tt&gt;, &lt;tt&gt;server_name&lt;/tt&gt;, &lt;tt&gt;error_page&lt;/tt&gt;, &lt;tt&gt;client_max_body_size&lt;/tt&gt;.
+    * Location level: &lt;tt&gt;root&lt;/tt&gt;, &lt;tt&gt;index&lt;/tt&gt;, &lt;tt&gt;autoindex&lt;/tt&gt;, &lt;tt&gt;methods&lt;/tt&gt;, &lt;tt&gt;upload_store&lt;/tt&gt;, &lt;tt&gt;return&lt;/tt&gt;, &lt;tt&gt;cgi_extension&lt;/tt&gt;, &lt;tt&gt;cgi_interpreter&lt;/tt&gt;.
+  * &lt;strong&gt;Nesting:&lt;/strong&gt; Locations may not contain other &lt;tt&gt;server&lt;/tt&gt; blocks.
+
+@subsection autotoc_md6 3. Configuration Objects
+
+* &lt;strong&gt;Server:&lt;/strong&gt; Represents a virtual host.
+
+  * Holds host, port, server names, error pages, body size limits, and &lt;tt&gt;Location&lt;/tt&gt; blocks.
+* &lt;strong&gt;Location:&lt;/strong&gt; Defines behavior for a URI path prefix.
+
+  * Includes root directory, index file(s), autoindex flag, allowed methods, redirects, CGI settings, and upload store.
+
+@subsection autotoc_md7 4. Normalization
+
+* After parsing, the configuration is &lt;strong&gt;normalized&lt;/strong&gt; to ensure consistency and defaults:
+
+  * Missing &lt;tt&gt;client_max_body_size&lt;/tt&gt; → default = &lt;strong&gt;1 MB&lt;/strong&gt;.
+  * Missing &lt;tt&gt;error_page&lt;/tt&gt; → add defaults for common errors (403, 404, 500, 502 → &lt;tt&gt;/error.html&lt;/tt&gt;).
+  * Missing &lt;tt&gt;methods&lt;/tt&gt; → defaults to &lt;strong&gt;GET, POST, DELETE&lt;/strong&gt;.
+  * Locations without &lt;tt&gt;root&lt;/tt&gt; → fallback to &lt;tt&gt;/var/www&lt;/tt&gt; (unless redirected).
+  * Root location (&lt;tt&gt;/&lt;/tt&gt;) without &lt;tt&gt;index&lt;/tt&gt; → defaults to &lt;strong&gt;index.html&lt;/strong&gt;.
+* Normalization guarantees that later validation and runtime logic operate on a &lt;strong&gt;complete and uniform&lt;/strong&gt; model.
+
+@subsection autotoc_md8 5. Validation
+
+* &lt;strong&gt;Component:&lt;/strong&gt; &lt;tt&gt;validateConfig&lt;/tt&gt;
+* &lt;strong&gt;Goal:&lt;/strong&gt; Enforce semantic correctness beyond syntax.
+* &lt;strong&gt;Checks applied:&lt;/strong&gt;
+
+  * &lt;strong&gt;Presence checks:&lt;/strong&gt; At least one &lt;tt&gt;location&lt;/tt&gt; per &lt;tt&gt;server&lt;/tt&gt;.
+  * &lt;strong&gt;Path rules:&lt;/strong&gt; Location paths must start with &lt;tt&gt;/&lt;/tt&gt; and not contain segments beginning with &lt;tt&gt;.&lt;/tt&gt;.
+  * &lt;strong&gt;Defaults:&lt;/strong&gt; Each location must define either a &lt;tt&gt;root&lt;/tt&gt; or &lt;tt&gt;return&lt;/tt&gt; (but not both with CGI).
+  * &lt;strong&gt;Server names:&lt;/strong&gt; Must be unique per host\:port, valid per RFC 1035 (no spaces, no control chars, no empty labels).
+  * &lt;strong&gt;Ports:&lt;/strong&gt; Only one unnamed default server per host\:port pair.
+  * &lt;strong&gt;Error pages:&lt;/strong&gt; Codes restricted to 400–599.
+  * &lt;strong&gt;Redirects:&lt;/strong&gt; Only 301, 302, 303, 307, 308 allowed.
+  * &lt;strong&gt;Methods:&lt;/strong&gt; Only &lt;tt&gt;GET&lt;/tt&gt;, &lt;tt&gt;POST&lt;/tt&gt;, &lt;tt&gt;DELETE&lt;/tt&gt; permitted.
+  * &lt;strong&gt;Client body size:&lt;/strong&gt; Must be &gt; 0.
+  * &lt;strong&gt;CGI:&lt;/strong&gt; Extensions must start with a dot, interpreters must map 1‑to‑1 with declared extensions.
+  * &lt;strong&gt;Roots &amp; Upload stores:&lt;/strong&gt; Must exist and be directories.
+  * &lt;strong&gt;Index:&lt;/strong&gt; Requires a valid &lt;tt&gt;root&lt;/tt&gt;.
+
+@subsection autotoc_md9 6. Error Handling
+
+* &lt;strong&gt;Tokenizer:&lt;/strong&gt; Throws &lt;tt&gt;TokenizerError&lt;/tt&gt; with line/column context when encountering invalid tokens.
+* &lt;strong&gt;Parser:&lt;/strong&gt; Throws &lt;tt&gt;ConfigParseError&lt;/tt&gt; on invalid structure or misplaced directives.
+* &lt;strong&gt;Validator:&lt;/strong&gt; Throws &lt;tt&gt;ValidationError&lt;/tt&gt; with descriptive guidance on fixing invalid configurations.
+
+&lt;/details&gt;
+
+&lt;hr&gt;
+
+@section autotoc_md10 Networking Core — &lt;tt&gt;SocketManager&lt;/tt&gt;
+
+The heart of Webserv’s I/O: a single &lt;tt&gt;poll()&lt;/tt&gt; loop multiplexing &lt;strong&gt;listening sockets&lt;/strong&gt;, &lt;strong&gt;client sockets&lt;/strong&gt;, and &lt;strong&gt;CGI pipes&lt;/strong&gt;, with strict timeouts and robust error recovery.
+
+&lt;details&gt;
+&lt;summary&gt;&lt;strong&gt;See Details&lt;/strong&gt;&lt;/summary&gt;
+
+@subsection autotoc_md11 What it Does
+
+* &lt;strong&gt;Listening sockets&lt;/strong&gt;: set up &lt;tt&gt;bind()&lt;/tt&gt;/&lt;tt&gt;listen()&lt;/tt&gt; for each configured host\:port.
+* &lt;strong&gt;Event loop&lt;/strong&gt;: run non-blocking &lt;tt&gt;poll()&lt;/tt&gt; to monitor all descriptors.
+* &lt;strong&gt;Connections&lt;/strong&gt;:
+
+  * &lt;strong&gt;New connections&lt;/strong&gt; → &lt;tt&gt;accept()&lt;/tt&gt; → initialize per-client state.
+  * &lt;strong&gt;Reads&lt;/strong&gt; → receive → parse (supports pipelining) → route.
+  * &lt;strong&gt;CGI&lt;/strong&gt; → spawn, monitor pipes, enforce timeouts, finalize.
+  * &lt;strong&gt;Writes&lt;/strong&gt; → stream raw or file-backed responses with keep-alive and backpressure.
+* &lt;strong&gt;Timeouts&lt;/strong&gt;: enforce idle, header, body, and send deadlines.
+* &lt;strong&gt;Errors&lt;/strong&gt;: generate accurate HTTP error responses, close cleanly.
+
+&lt;hr&gt;
+
+@subsection autotoc_md12 High-Level Flow
+
+@icode{mermaid} 
+flowchart TD
+    A[Listening Sockets] --&gt;|poll()| B[Accept New Client]
+    B --&gt; C[Initialize ClientInfo]
+    C --&gt; D[Client Socket Ready?]
+    D --&gt;|POLLIN| E[Receive Data]
+    E --&gt; F[Parse Requests]
+    F --&gt; G[Route or CGI]
+    G --&gt;|CGI? yes| H[Spawn &amp; Monitor CGI]
+    G --&gt;|CGI? no| I[Build Response]
+    H --&gt; J[Collect CGI Output]
+    J --&gt; I
+    I --&gt; K[Queue Response]
+    K --&gt;|POLLOUT| L[Send Raw/File Response]
+    L --&gt; M{Keep-Alive?}
+    M --&gt;|Yes| D
+    M --&gt;|No| N[Cleanup + Close FD]
+@endicode 
+
+&lt;/details&gt;
+
+&lt;hr&gt;
+
+@section autotoc_md13 Flow Overview
+
+1. &lt;strong&gt;Tokenizer&lt;/strong&gt; → breaks input into tokens.
+2. &lt;strong&gt;ConfigParser&lt;/strong&gt; → builds in‑memory &lt;tt&gt;Config&lt;/tt&gt; with &lt;tt&gt;Server&lt;/tt&gt; &amp; &lt;tt&gt;Location&lt;/tt&gt; objects.
+3. &lt;strong&gt;normalizeConfig&lt;/strong&gt; → fills missing defaults (sizes, error pages, roots, index, methods).
+4. &lt;strong&gt;validateConfig&lt;/strong&gt; → applies semantic checks.
+5. &lt;strong&gt;Runtime&lt;/strong&gt; → validated configuration is passed to the server for request routing.
+
+The configuration pipeline guarantees that only syntactically valid, normalized, and semantically correct configurations are accepted. This ensures the server runs with predictable defaults, strong validation, and developer-friendly diagnostics.
+
+&lt;hr&gt;
+
+@section autotoc_md14 Continuous Integration &amp; Documentation
+
+This project leverages &lt;strong&gt;GitHub Actions&lt;/strong&gt; to ensure code quality, stability, and up-to-date documentation.
+
+&lt;details&gt;
+&lt;summary&gt;&lt;strong&gt;See Details&lt;/strong&gt;&lt;/summary&gt;
+
+@subsection autotoc_md15 CI Pipeline
+
+* Runs automatically on pushes and pull requests to &lt;tt&gt;main&lt;/tt&gt; and &lt;tt&gt;dev&lt;/tt&gt;.
+* Includes manual triggers (&lt;tt&gt;workflow_dispatch&lt;/tt&gt;) and dependency checks after successful builds.
+
+&lt;strong&gt;Jobs Overview:&lt;/strong&gt;
+
+&lt;table class="markdownTable"&gt;
+  &lt;tr class="markdownTableHead"&gt;    &lt;th class="markdownTableHeadNone"&gt; Job   </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Description    </p>
+<p>🔨 <b>Build</b>   </p>
+<p>Compiles the project using the provided <code>Makefile</code> to ensure successful builds.    </p>
+<p>🧪 <b>Test</b>   </p>
+<p>Builds the server, runs Python test suite against a live instance, and captures logs on failure.    </p>
+<p>📚 <b>Docs</b>   </p>
+<p>Generates Doxygen documentation (with Graphviz diagrams) and deploys it to <b>GitHub Pages</b>.   </p>
+<p>Every code change is built, tested, and documented automatically, ensuring a robust development workflow and always-available reference docs.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md8"></a>
-Continuous Integration &amp; Documentation</h1>
-<blockquote class="doxtable">
-<p>&zwj;This project uses <b>GitHub Actions</b> to automate building, testing, and documentation deployment. </p>
-</blockquote>
-<h2><a class="anchor" id="autotoc_md9"></a>
-✅ CI Pipeline</h2>
-<p>On each push or pull request to <code>main</code> or <code>dev</code>, the following jobs are run automatically:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Job   </th><th class="markdownTableHeadNone">Purpose    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">🧪 Build (Release)   </td><td class="markdownTableBodyNone">Builds the project using the provided <code>Makefile</code>.    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">📄 Doxygen Docs   </td><td class="markdownTableBodyNone">Generates and deploys Doxygen documentation to GitHub Pages.   </td></tr>
-</table>
-<p>All configurations rely on the project <code>Makefile</code> and follow the project's coding style.</p>
-<h2><a class="anchor" id="autotoc_md10"></a>
-🧼 Sanitizer Suppressions</h2>
-<p>To reduce noise in sanitizer reports, the <code>.asanignore</code> file suppresses:</p>
+<h1><a class="anchor" id="autotoc_md16"></a>
+Documentation</h1>
+<p>This section describes how project documentation is generated, structured, and published.</p>
+<details >
+<summary >
+<b>See Details</b></summary>
+<p></p>
+<p></p>
+</details>
+<h2><a class="anchor" id="autotoc_md17"></a>
+1. Doxygen-Powered</h2>
 <ul>
-<li>Known benign leaks from <code>libstdc++</code>, <code>libc</code>, and dynamic allocators</li>
-<li>Internal race conditions in <code>__sanitizer</code> symbols</li>
-<li>Undefined behavior in standard library internals</li>
+<li>Documentation is generated automatically from <b>source code comments</b> and <b>Markdown files</b>.</li>
+<li><code><a class="el" href="README_8md.html">README.md</a></code> serves as the <b>entry point</b>, offering an overview and links to modules.</li>
 </ul>
-<p>These help CI focus on bugs <em>in your code</em>, not external sources.</p>
-<h2><a class="anchor" id="autotoc_md11"></a>
-📚 Documentation</h2>
+<h2><a class="anchor" id="autotoc_md18"></a>
+2. Graphical Support</h2>
 <ul>
-<li>Doxygen generates HTML docs from source code and Markdown (<code><a class="el" href="README_8md.html">README.md</a></code> is the main page)</li>
-<li>Graphviz is enabled for call graphs, class diagrams, and source browser</li>
-<li>Documentation is deployed automatically via GitHub Pages from the <code>docs/html</code> directory</li>
+<li><b>Graphviz</b> integration produces:<ul>
+<li><b>Class diagrams</b> to illustrate object hierarchies.</li>
+<li><b>Call graphs</b> to visualize execution flow.</li>
+<li><b>Dependency graphs</b> to map relationships between modules.</li>
 </ul>
-<hr  />
-<h1><a class="anchor" id="autotoc_md12"></a>
-Contributing</h1>
-<p>Contribution guidelines and workflow standards are detailed in the dedicated document:</p>
-<ul>
-<li>📚 View Contributing Guide</li>
+</li>
+<li>These visuals improve comprehension of the server’s architecture.</li>
 </ul>
-<p>This document explains:</p>
+<h2><a class="anchor" id="autotoc_md19"></a>
+3. Navigation &amp; Browsing</h2>
 <ul>
-<li>The coding style</li>
-<li>The branching strategy (main, dev, feature branches)</li>
-<li>The commit message conventions (module: short description)</li>
-<li>How to structure pull requests properly</li>
-<li>The review and merge process</li>
-<li>Cleanup and quality rules before pushing code</li>
+<li>The source browser cross-references <b>functions, classes, and files</b>.</li>
+<li>Each documented entity links directly to its definition in the codebase.</li>
+<li>Groups (<code>\defgroup</code>, <code>\ingroup</code>) provide thematic navigation across modules (e.g., <code>config</code>, <code>core</code>, <code>http</code>).</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md20"></a>
+4. Deployment</h2>
+<ul>
+<li>Documentation is built in <b>CI/CD pipelines</b>.</li>
+<li>Published automatically via <b>GitHub Pages</b> from the <code>docs/html</code> directory.</li>
+<li>Ensures the latest version is always available for contributors and maintainers.</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md21"></a>
+5. Best Practices</h2>
+<ul>
+<li>Consistent <b>Doxygen-style headers</b> across <code>.hpp</code> and <code>.cpp</code> files.</li>
+<li>Markdown files complement code documentation with <b>high-level design notes</b> and <b>workflow explanations</b>.</li>
+<li>Together, these guarantee both <b>low-level API reference</b> and <b>high-level architectural guidance</b>.</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md13"></a>
+<h1><a class="anchor" id="autotoc_md22"></a>
 Project Structure Overview</h1>
 <div class="fragment"><div class="line">webserv</div>
 <div class="line">├── 📁 .github/               # GitHub Actions CI workflows and PR/issue templates</div>
@@ -221,26 +355,64 @@ Project Structure Overview</h1>
 <div class="line">│       └── docs.yml           # Doxygen documentation generation &amp; GitHub Pages deploy</div>
 <div class="line">├── 📁 include/                # All public project headers, grouped by module (config, http, core, etc.)</div>
 <div class="line">├── 📁 src/                    # Source files, mirrors the include/ structure</div>
-<div class="line">├── 📁 tests/                  # Unit tests for various modules</div>
-<div class="line">├── 📁 configs/                # Test configuration files for parser/tokenizer</div>
-<div class="line">├── 📁 docs/                   # Markdown documentation (DOCS.md, guides, etc.)</div>
-<div class="line">├── 📁 scripts/                # Helper scripts to run tests and sanitizer builds</div>
-<div class="line">├── .asanignore                 # Suppression rules for AddressSanitizer (e.g. libc++ internals)</div>
+<div class="line">├── 📁 test_webserv/           # Unit tests</div>
+<div class="line">├── 📁 configs/                # Default config file</div>
+<div class="line">├── 📁 docs/                   # Documentation generated by doxygen</div>
 <div class="line">├── .clang-format               # Enforces formatting rules (4-space indent, K&amp;R braces, etc.)</div>
 <div class="line">├── .editorconfig               # Shared IDE/editor config for consistent style</div>
 <div class="line">├── .gitattributes              # Defines merge/diff rules for Git (e.g. binary files)</div>
 <div class="line">├── .gitignore                  # Files and folders ignored by Git (e.g. build/, *.o)</div>
-<div class="line">├── ACTIONPLAN.md               # Project-level planning or roadmap</div>
-<div class="line">├── CONTRIBUTING.md             # Guidelines for contributing to the project</div>
+<div class="line">├── ACTIONPLAN.md               # Project-level planning/roadmap</div>
 <div class="line">├── DOXYGENSTYLEGUIDE.md        # Doxygen conventions for documenting code</div>
 <div class="line">├── Doxyfile                    # Main config for Doxygen documentation generation</div>
-<div class="line">├── LICENSE                     # Project license (e.g. MIT, GPL)</div>
-<div class="line">├── Makefile                    # Build system entry point (defines targets like all, clean, fclean)</div>
-<div class="line">├── README.md                   # Main README shown on GitHub (overview, build, usage, etc.)</div>
+<div class="line">├── LICENSE                     # Project license</div>
+<div class="line">├── Makefile                    # Build system entry point</div>
+<div class="line">├── README.md                   # Main README</div>
 <div class="line">├── STYLEGUIDE.md               # Coding conventions for naming, layout, formatting</div>
+<div class="line">├── run_test.py                 # Entrypoint for python tests</div>
 <div class="line">├── webserv.subject.pdf         # Original subject specification for the project</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md14"></a>
+<h1><a class="anchor" id="autotoc_md23"></a>
+Build &amp; Test Instructions</h1>
+<h2><a class="anchor" id="autotoc_md24"></a>
+Build with Makefile</h2>
+<div class="fragment"><div class="line">make</div>
+<div class="line">./bin/webserv &lt;path-to-config.conf&gt;</div>
+</div><!-- fragment --><blockquote class="doxtable">
+<p>&zwj;The default goal is <code>all</code>. The binary is produced at <code>bin/webserv</code>. </p>
+</blockquote>
+<h2><a class="anchor" id="autotoc_md25"></a>
+Available Makefile Targets</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Command   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>make</code>   </td><td class="markdownTableBodyNone">Build the project in release mode (C++20, <code>-O3 -flto -DNDEBUG -march=native</code>).    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>make re</code>   </td><td class="markdownTableBodyNone">Clean everything and rebuild from scratch.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>make clean</code>   </td><td class="markdownTableBodyNone">Remove object files and dependency files in <code>objs/</code>.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>make fclean</code>   </td><td class="markdownTableBodyNone">Remove the executable, <code>bin/</code>, and all build artifacts (also runs <code>clean</code>).    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>make install_test_deps</code>   </td><td class="markdownTableBodyNone">Create a local Python venv in <code>.venv/</code> and install <code>requirements-test.txt</code>.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>make test</code>   </td><td class="markdownTableBodyNone">Build, start the server in background with <code>./test_webserv/tester/config/tester.conf</code>, run <code>run_test.py</code>, then stop the server.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>make format</code>   </td><td class="markdownTableBodyNone">Run <code>clang-format -i</code> on all listed sources and headers.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>make help</code>   </td><td class="markdownTableBodyNone">Print a categorized list of available targets.   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md26"></a>
+Notes</h2>
+<ul>
+<li>Objects and auto-generated deps are stored under <code>objs/</code> (built via <code>-MMD -MP</code>).</li>
+<li>The build uses explicit source lists (no wildcards) for deterministic builds.</li>
+<li>The test rule writes the PID to <code>.webserv_test.pid</code> and cleans it up on success/failure.</li>
+<li>Ensure <code>python3-venv</code> and <code>clang-format</code> are installed on your system.</li>
+</ul>
+<hr  />
+<h1><a class="anchor" id="autotoc_md27"></a>
 License</h1>
 <p>This project is licensed under the terms of the [MIT License](LICENSE).</p>
 <hr  />

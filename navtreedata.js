@@ -25,22 +25,39 @@
 var NAVTREE =
 [
   [ "Webserv", "index.html", [
-    [ "Build & Test Instructions", "index.html#autotoc_md1", [
-      [ "Build with Makefile", "index.html#autotoc_md2", null ],
-      [ "Build Modes", "index.html#autotoc_md3", null ],
-      [ "Code quality", "index.html#autotoc_md4", null ],
-      [ "Run and Test", "index.html#autotoc_md5", null ],
-      [ "Cleaning", "index.html#autotoc_md6", null ],
-      [ "Help", "index.html#autotoc_md7", null ]
+    [ "Core of Webserv", "index.html#autotoc_md1", [
+      [ "Program Entrypoint", "index.html#autotoc_md2", null ]
     ] ],
-    [ "Continuous Integration & Documentation", "index.html#autotoc_md8", [
-      [ "✅ CI Pipeline", "index.html#autotoc_md9", null ],
-      [ "🧼 Sanitizer Suppressions", "index.html#autotoc_md10", null ],
-      [ "📚 Documentation", "index.html#autotoc_md11", null ]
+    [ "Configuration Parsing Flow", "index.html#autotoc_md3", [
+      [ "1. Tokenization", "index.html#autotoc_md4", null ],
+      [ "2. Parsing", "index.html#autotoc_md5", null ],
+      [ "3. Configuration Objects", "index.html#autotoc_md6", null ],
+      [ "4. Normalization", "index.html#autotoc_md7", null ],
+      [ "5. Validation", "index.html#autotoc_md8", null ],
+      [ "6. Error Handling", "index.html#autotoc_md9", null ]
     ] ],
-    [ "Contributing", "index.html#autotoc_md12", null ],
-    [ "Project Structure Overview", "index.html#autotoc_md13", null ],
-    [ "License", "index.html#autotoc_md14", null ],
+    [ "Networking Core — <tt>SocketManager</tt>", "index.html#autotoc_md10", [
+      [ "What it Does", "index.html#autotoc_md11", null ],
+      [ "High-Level Flow", "index.html#autotoc_md12", null ]
+    ] ],
+    [ "Flow Overview", "index.html#autotoc_md13", null ],
+    [ "Continuous Integration & Documentation", "index.html#autotoc_md14", [
+      [ "CI Pipeline", "index.html#autotoc_md15", null ]
+    ] ],
+    [ "Documentation", "index.html#autotoc_md16", [
+      [ "1. Doxygen-Powered", "index.html#autotoc_md17", null ],
+      [ "2. Graphical Support", "index.html#autotoc_md18", null ],
+      [ "3. Navigation & Browsing", "index.html#autotoc_md19", null ],
+      [ "4. Deployment", "index.html#autotoc_md20", null ],
+      [ "5. Best Practices", "index.html#autotoc_md21", null ]
+    ] ],
+    [ "Project Structure Overview", "index.html#autotoc_md22", null ],
+    [ "Build & Test Instructions", "index.html#autotoc_md23", [
+      [ "Build with Makefile", "index.html#autotoc_md24", null ],
+      [ "Available Makefile Targets", "index.html#autotoc_md25", null ],
+      [ "Notes", "index.html#autotoc_md26", null ]
+    ] ],
+    [ "License", "index.html#autotoc_md27", null ],
     [ "Topics", "topics.html", "topics" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -80,7 +97,7 @@ var NAVTREEINDEX =
 "ConfigParseError_8cpp.html",
 "classLocation.html#ad34794ff218bc1e3004eaed2642c98e0",
 "group__StringUtils.html",
-"responseBuilder_8hpp.html#a064a5d8be8de9234f362e73d9bb68b6b"
+"requestRouter_8hpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

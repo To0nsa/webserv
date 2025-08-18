@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['webserv_0',['webserv',['../index.html',1,'']]]
+  ['webserv_0',['Webserv',['../index.html',1,'']]]
 ];
