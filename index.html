@@ -235,21 +235,39 @@ The heart of Webserv’s I/O: a single &lt;tt&gt;poll()&lt;/tt&gt; loop multiple
 
 @icode{mermaid} 
 flowchart TD
-    A[Listening Sockets] --&gt;|poll()| B[Accept New Client]
-    B --&gt; C[Initialize ClientInfo]
-    C --&gt; D[Client Socket Ready?]
-    D --&gt;|POLLIN| E[Receive Data]
-    E --&gt; F[Parse Requests]
-    F --&gt; G[Route or CGI]
-    G --&gt;|CGI? yes| H[Spawn &amp; Monitor CGI]
-    G --&gt;|CGI? no| I[Build Response]
-    H --&gt; J[Collect CGI Output]
-    J --&gt; I
-    I --&gt; K[Queue Response]
-    K --&gt;|POLLOUT| L[Send Raw/File Response]
-    L --&gt; M{Keep-Alive?}
-    M --&gt;|Yes| D
-    M --&gt;|No| N[Cleanup + Close FD]
+  %% High-level: setup → poll loop → per-FD handling
+  subgraph Boot["Startup"]
+    A[Load servers] --&gt; B[SocketManager(servers)]
+    B --&gt; C[setupSockets()]
+  end
+
+  C --&gt; D{run(): poll()}
+  D --&gt;|EINTR| Z[Graceful shutdown]
+  D --&gt;|timeout| D
+
+  %% CGI tick happens each loop before FD events
+  D --&gt; E[handleCgiPollEvents()]
+
+  %% Iterate FDs
+  E --&gt; F{for each pfd in _poll_fds (rev)}
+  F --&gt; G{is CGI pipe fd?}
+  G --&gt;|yes| F
+  G --&gt;|no| H{revents has ERR/HUP/NVAL?}
+  H --&gt;|yes| H1[handlePollError()] --&gt; F
+
+  H --&gt;|no| I{revents has POLLIN?}
+  I --&gt;|yes| J{listen fd?}
+  J --&gt;|yes| J1[handleNewConnection()] --&gt; F
+  J --&gt;|no| J2[handleClientData()] --&gt; J3{queued response?}
+  J3 --&gt;|yes| K[enable POLLOUT] --&gt; F
+  J3 --&gt;|no| F
+
+  I --&gt;|no| L{revents has POLLOUT &amp;&amp; responses not empty?}
+  L --&gt;|yes| L1[sendResponse()] --&gt; F
+  L --&gt;|no| F
+
+  F --&gt; D
+  Z --&gt; ZZ[Logger: "Shutting down server"]
 @endicode 
 
 &lt;/details&gt;
