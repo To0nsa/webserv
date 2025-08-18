@@ -1,4 +1,4 @@
-# webserv
+# Webserv
 
 [![Build Status](https://github.com/to0nsa/webserv/actions/workflows/build.yml/badge.svg)](https://github.com/to0nsa/webserv/actions/workflows/build.yml)
 [![Docs Status](https://github.com/to0nsa/webserv/actions/workflows/docs.yml/badge.svg?branch=main)](https://to0nsa.github.io/webserv/)
@@ -9,6 +9,27 @@
 [![editorconfig](https://img.shields.io/badge/editorconfig-supported-lightgrey)](https://editorconfig.org/)
 
 > A lightweight HTTP/1.1 server written in modern C++20, compliant with the Hive/42 webserv project specifications.
+
+___
+
+## Core of Webserv
+
+| Component          | Responsibility                                                                                                                                                         |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`Server`**       | Represents a virtual host configuration. Manages binding (host + port), server names, error pages, body size limits, and a collection of `Location` blocks.            |
+| **`Location`**     | Encapsulates route-specific configuration. Defines path matching, allowed HTTP methods, root directories, index files, redirects, CGI interpreters, and upload stores. |
+| **`runWebserv`**   | Orchestrates the execution of the web server: initializes `Server` objects from the parsed configuration, launches sockets, and enters the event loop.                 |
+
+___
+
+### Program Entrypoint
+
+  1. Parse CLI arguments or fallback to default configuration.
+  2. Load and normalize configuration (via config parser).
+  3. Validate `Server` and `Location` objects.
+  4. Call **`runWebserv()`** to start the server runtime.
+
+The program is designed so that **configuration and validation are complete before runtime begins**, ensuring that only consistent and safe server objects are passed to the execution loop.
 
 ___
 
@@ -97,7 +118,9 @@ This section describes how the configuration parsing logic of **Webserv** works,
 
 </details>
 
-### Flow Overview
+___
+
+## Flow Overview
 
 1. **Tokenizer** → breaks input into tokens.
 2. **ConfigParser** → builds in‑memory `Config` with `Server` & `Location` objects.
