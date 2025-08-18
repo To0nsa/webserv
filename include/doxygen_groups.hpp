@@ -9,11 +9,56 @@
 
 /**
  * @defgroup config Configuration Parsing
- * @brief Configuration structures, parsing, normalization, and validation.
+ * @brief    Configuration structures, parsing, normalization, and validation.
  *
  * @details Handles reading, tokenizing, and parsing the Webserv configuration file(s),
  *          validating directives, and preparing normalized configuration objects
  *          for use by the core server.
+ */
+
+/**
+ * @defgroup config_tokenizing Tokenizing
+ * @ingroup  config
+ * @brief    Lexical analysis of configuration text into tokens.
+ *
+ * @details Converts raw configuration input into a token stream (types, values, positions)
+ *          consumed by the parser.
+ */
+
+/**
+ * @defgroup config_parsing Parsing
+ * @ingroup  config
+ * @brief    Syntactic parsing and directive dispatch.
+ *
+ * @details Builds in-memory config objects from tokens and applies directive handlers
+ *          to populate `Server`/`Location` structures.
+ */
+
+/**
+ * @defgroup config_parse_error Parsing Errors
+ * @ingroup  config
+ * @brief    Error types and helpers for tokenizer/parser diagnostics.
+ *
+ * @details Structured exceptions carrying human-friendly messages and context snippets
+ *          for syntax/lexing errors.
+ */
+
+/**
+ * @defgroup config_normalizing Normalizing
+ * @ingroup  config
+ * @brief    Post-parse defaulting and canonicalization.
+ *
+ * @details Fills in default values (methods, error pages, indices, sizes) and
+ *          normalizes paths/settings for predictable downstream behavior.
+ */
+
+/**
+ * @defgroup config_validation Validating
+ * @ingroup  config
+ * @brief    Configuration validation passes.
+ *
+ * @details Static checks for structure, duplicates, domain/port uniqueness, allowed methods,
+ *          CGI mappings, and filesystem preconditions (roots, upload stores).
  */
 
 /**

@@ -78,16 +78,6 @@ On each push or pull request to `main` or `dev`, the following jobs are run auto
 
 All configurations rely on the project `Makefile` and follow the project's coding style.
 
-### 🧼 Sanitizer Suppressions
-
-To reduce noise in sanitizer reports, the `.asanignore` file suppresses:
-
-- Known benign leaks from `libstdc++`, `libc`, and dynamic allocators
-- Internal race conditions in `__sanitizer` symbols
-- Undefined behavior in standard library internals
-
-These help CI focus on bugs *in your code*, not external sources.
-
 ### 📚 Documentation
 
 - Doxygen generates HTML docs from source code and Markdown (`README.md` is the main page)

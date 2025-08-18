@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:39:07 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/15 22:40:36 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/18 12:05:15 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,7 +315,7 @@ std::string buildFilePath(const HttpRequest& request, const Location& loc) {
  * @warning Leading or trailing slashes are not included in the result; the
  *          caller must track whether the path was absolute if needed.
  */
-static std::vector<std::string> splitPath(const std::string& path) {
+/* static std::vector<std::string> splitPath(const std::string& path) {
     std::vector<std::string> parts;
     std::stringstream        ss(path);
     std::string              part;
@@ -326,7 +326,7 @@ static std::vector<std::string> splitPath(const std::string& path) {
             parts.push_back(part);
     }
     return parts;
-}
+} */
 
 /* bool mkdirRecursive(const std::string& path) {
     std::vector<std::string> parts   = splitPath(path);
