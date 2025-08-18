@@ -120,6 +120,93 @@ This section describes how the configuration parsing logic of **Webserv** works,
 
 ___
 
+## Networking — `SocketManager`
+
+The heart of Webserv’s I/O: a single `poll()` loop multiplexing **listening sockets**, **client sockets**, and **CGI pipes**, with strict timeouts and robust error recovery.
+
+<details>
+<summary><strong>See Details</strong></summary>
+
+* **Listening sockets**: set up `bind()`/`listen()` for each configured host\:port.
+* **Event loop**: run non-blocking `poll()` to monitor all descriptors.
+* **Connections**:
+
+  * **New connections** → `accept()` → initialize per-client state.
+  * **Reads** → receive → parse (supports pipelining) → route.
+  * **CGI** → spawn, monitor pipes, enforce timeouts, finalize.
+  * **Writes** → stream raw or file-backed responses with keep-alive and backpressure.
+* **Timeouts**: enforce idle, header, body, and send deadlines.
+* **Errors**: generate accurate HTTP error responses, close cleanly.
+
+___
+
+### High-Level Flow
+
+```mermaid
+flowchart TD
+  %% =========================
+  %% Setup
+  %% =========================
+  subgraph Boot[Startup]
+    A[Load servers from config]
+    B[Create SocketManager]
+    C[setupSockets: bind listen register FDs]
+    A --> B --> C
+  end
+
+  %% =========================
+  %% Main loop
+  %% =========================
+  C --> D{run poll}
+  D -->|EINTR| Z[Graceful shutdown] --> ZZ[Log shutting down server]
+
+  %% Loop tick
+  D --> E[handleCgiPollEvents]
+  E --> F{for each pfd reverse}
+
+  %% Skip CGI pipe FDs
+  F --> G{CGI pipe FD}
+  G -- yes --> F
+
+  %% Timeouts (per FD)
+  G -- no --> T{checkClientTimeouts}
+  T -- idle or send --> Close[cleanupClientConnectionClose] --> F
+  T -- header or body --> Halt[disable POLLIN then queue 408] --> H{ERR HUP NVAL}
+  T -- none --> H
+
+  %% Socket errors
+  H -- yes --> H1[handlePollError then close] --> F
+
+  %% Reads
+  H -- no --> I{POLLIN}
+  I -- no --> O{POLLOUT and responses queued}
+
+  I -- yes --> J{listen FD}
+  J -- yes --> J1[handleNewConnection] --> F
+
+  J -- no --> Rcv[handleClientData]
+  Rcv -- queued --> K[enable POLLOUT] --> F
+  Rcv -- incomplete --> F
+
+  %% Writes
+  O -- yes --> S[sendResponse]
+  S -->|file| SF[sendFileResponse]
+  S -->|raw| SR[sendRawResponse]
+  SF --> EndSend{response done}
+  SR --> EndSend
+
+  EndSend -- yes and close --> Close
+  EndSend -- yes and keep alive --> KA[disable POLLOUT] --> F
+  EndSend -- not yet --> F
+
+  %% Next tick
+  F --> D
+```
+
+</details>
+
+___
+
 ## Flow Overview
 
 1. **Tokenizer** → breaks input into tokens.
