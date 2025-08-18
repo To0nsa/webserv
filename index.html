@@ -241,38 +241,38 @@ flowchart TD
   subgraph Boot[Startup]
     A[Load servers from config]
     B[Create SocketManager]
-    C[setupSockets: bind, listen, register FDs]
+    C[setupSockets: bind listen register FDs]
     A --&gt; B --&gt; C
   end
 
   %% =========================
   %% Main loop
   %% =========================
-  C --&gt; D{run: poll}
-  D --&gt;|EINTR| Z[Graceful shutdown] --&gt; ZZ[Log "Shutting down server"]
+  C --&gt; D{run poll}
+  D --&gt;|EINTR| Z[Graceful shutdown] --&gt; ZZ[Log shutting down server]
 
   %% Loop tick
   D --&gt; E[handleCgiPollEvents]
-  E --&gt; F{for each pfd (reverse)}
+  E --&gt; F{for each pfd reverse}
 
   %% Skip CGI pipe FDs
-  F --&gt; G{CGI pipe FD?}
+  F --&gt; G{CGI pipe FD}
   G -- yes --&gt; F
 
   %% Timeouts (per FD)
   G -- no --&gt; T{checkClientTimeouts}
-  T -- idle/send --&gt; Close[cleanupClientConnectionClose] --&gt; F
-  T -- header/body --&gt; Halt[disable POLLIN; queue 408] --&gt; H{ERR/HUP/NVAL?}
+  T -- idle or send --&gt; Close[cleanupClientConnectionClose] --&gt; F
+  T -- header or body --&gt; Halt[disable POLLIN then queue 408] --&gt; H{ERR HUP NVAL}
   T -- none --&gt; H
 
   %% Socket errors
-  H -- yes --&gt; H1[handlePollError; close] --&gt; F
+  H -- yes --&gt; H1[handlePollError then close] --&gt; F
 
   %% Reads
-  H -- no --&gt; I{POLLIN?}
-  I -- no --&gt; O{POLLOUT &amp;&amp; responses?}
+  H -- no --&gt; I{POLLIN}
+  I -- no --&gt; O{POLLOUT and responses queued}
 
-  I -- yes --&gt; J{listen FD?}
+  I -- yes --&gt; J{listen FD}
   J -- yes --&gt; J1[handleNewConnection] --&gt; F
 
   J -- no --&gt; Rcv[handleClientData]
@@ -283,16 +283,15 @@ flowchart TD
   O -- yes --&gt; S[sendResponse]
   S --&gt;|file| SF[sendFileResponse]
   S --&gt;|raw| SR[sendRawResponse]
-  SF --&gt; EndSend{response done?}
+  SF --&gt; EndSend{response done}
   SR --&gt; EndSend
 
-  EndSend -- yes &amp; close --&gt; Close
-  EndSend -- yes &amp; keep-alive --&gt; KA[disable POLLOUT] --&gt; F
+  EndSend -- yes and close --&gt; Close
+  EndSend -- yes and keep alive --&gt; KA[disable POLLOUT] --&gt; F
   EndSend -- not yet --&gt; F
 
   %% Next tick
   F --&gt; D
-
 @endicode 
 
 &lt;/details&gt;
