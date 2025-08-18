@@ -235,40 +235,35 @@ The heart of Webserv’s I/O: a single &lt;tt&gt;poll()&lt;/tt&gt; loop multiple
 
 @icode{mermaid} 
 flowchart TD
-  %% Setup
-  subgraph Boot[Startup]
-    A[Load servers] --&gt; B[SocketManager(servers)]
-    B --&gt; C[setupSockets()]
+  subgraph Boot [Startup]
+    A[Load servers] --&gt; B[Create SocketManager]
+    B --&gt; C[Setup sockets]
   end
 
-  %% Main loop
-  C --&gt; D{run(): poll()}
-  D --&gt;|EINTR| Z[Graceful shutdown]
-  D --&gt;|timeout| D
+  C --&gt; D{Run poll loop}
+  D --&gt; E[Handle CGI events]
 
-  %% CGI tick happens each loop before FD events
-  D --&gt; E[handleCgiPollEvents()]
+  subgraph Loop [Per FD handling]
+    E --&gt; F{For each pfd}
+    F --&gt; G{Is CGI pipe fd}
+    G -- yes --&gt; F
+    G -- no --&gt; H{ERR or HUP or NVAL}
+    H -- yes --&gt; H1[handlePollError] --&gt; F
 
-  %% Iterate FDs
-  E --&gt; F{for each pfd in _poll_fds (reverse)}
-  F --&gt; G{is CGI pipe fd?}
-  G --&gt;|yes| F
-  G --&gt;|no| H{revents has ERR/HUP/NVAL?}
-  H --&gt;|yes| H1[handlePollError()] --&gt; F
+    H -- no --&gt; I{Has POLLIN}
+    I -- yes --&gt; J{Is listen fd}
+    J -- yes --&gt; J1[handleNewConnection] --&gt; F
+    J -- no --&gt; J2[handleClientData] --&gt; J3{Queued response}
+    J3 -- yes --&gt; K[Enable POLLOUT] --&gt; F
+    J3 -- no --&gt; F
 
-  H --&gt;|no| I{revents has POLLIN?}
-  I --&gt;|yes| J{is listen fd?}
-  J --&gt;|yes| J1[handleNewConnection()] --&gt; F
-  J --&gt;|no| J2[handleClientData()] --&gt; J3{queued response?}
-  J3 --&gt;|yes| K[enable POLLOUT] --&gt; F
-  J3 --&gt;|no| F
-
-  I --&gt;|no| L{revents has POLLOUT and responses not empty?}
-  L --&gt;|yes| L1[sendResponse()] --&gt; F
-  L --&gt;|no| F
+    I -- no --&gt; L{Has POLLOUT and responses not empty}
+    L -- yes --&gt; L1[sendResponse] --&gt; F
+    L -- no --&gt; F
+  end
 
   F --&gt; D
-  Z --&gt; ZZ[Logger: Shutting down server]
+  D --&gt; Z[Shutdown on signal]
 @endicode 
 
 &lt;/details&gt;
