@@ -146,40 +146,35 @@ ___
 
 ```mermaid
 flowchart TD
-  %% Setup
-  subgraph Boot[Startup]
-    A[Load servers] --> B[SocketManager(servers)]
-    B --> C[setupSockets()]
+  subgraph Boot [Startup]
+    A[Load servers] --> B[Create SocketManager]
+    B --> C[Setup sockets]
   end
 
-  %% Main loop
-  C --> D{run(): poll()}
-  D -->|EINTR| Z[Graceful shutdown]
-  D -->|timeout| D
+  C --> D{Run poll loop}
+  D --> E[Handle CGI events]
 
-  %% CGI tick happens each loop before FD events
-  D --> E[handleCgiPollEvents()]
+  subgraph Loop [Per FD handling]
+    E --> F{For each pfd}
+    F --> G{Is CGI pipe fd}
+    G -- yes --> F
+    G -- no --> H{ERR or HUP or NVAL}
+    H -- yes --> H1[handlePollError] --> F
 
-  %% Iterate FDs
-  E --> F{for each pfd in _poll_fds (reverse)}
-  F --> G{is CGI pipe fd?}
-  G -->|yes| F
-  G -->|no| H{revents has ERR/HUP/NVAL?}
-  H -->|yes| H1[handlePollError()] --> F
+    H -- no --> I{Has POLLIN}
+    I -- yes --> J{Is listen fd}
+    J -- yes --> J1[handleNewConnection] --> F
+    J -- no --> J2[handleClientData] --> J3{Queued response}
+    J3 -- yes --> K[Enable POLLOUT] --> F
+    J3 -- no --> F
 
-  H -->|no| I{revents has POLLIN?}
-  I -->|yes| J{is listen fd?}
-  J -->|yes| J1[handleNewConnection()] --> F
-  J -->|no| J2[handleClientData()] --> J3{queued response?}
-  J3 -->|yes| K[enable POLLOUT] --> F
-  J3 -->|no| F
-
-  I -->|no| L{revents has POLLOUT and responses not empty?}
-  L -->|yes| L1[sendResponse()] --> F
-  L -->|no| F
+    I -- no --> L{Has POLLOUT and responses not empty}
+    L -- yes --> L1[sendResponse] --> F
+    L -- no --> F
+  end
 
   F --> D
-  Z --> ZZ[Logger: Shutting down server]
+  D --> Z[Shutdown on signal]
 ```
 
 </details>
