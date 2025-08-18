@@ -6,7 +6,7 @@
 /*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 09:08:33 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/17 21:05:16 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/18 11:06:54 by irychkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 #include <cstdint>                  // for uintmax_t
 #include <ctime>                    // for time_t
 #include <filesystem>               // for path, directory_iterator, exists
-#include <format>                   // for format, format_string
 #include <iomanip>                  // for operator<<, setfill, setw
 #include <sstream>                  // for basic_ostream, operator<<, basic...
 #include <string>                   // for char_traits, allocator, operator+
@@ -147,13 +146,13 @@ std::string escapeUriComponent(const std::string& s) {
 }
 
 std::string formatMTimeUTC(std::time_t t) {
-    // Convert time_t → chrono::sys_time
-    std::chrono::sys_time<std::chrono::seconds> tp{std::chrono::seconds{t}};
-
-    // Round to minutes to match "%d-%b-%Y %H:%M"
-    auto tp_minutes = std::chrono::floor<std::chrono::minutes>(tp);
-
-    return std::format("{:%d-%b-%Y %H:%M}", tp_minutes);
+    std::tm* gmPtr = std::gmtime(&t);
+    if (!gmPtr) {
+        return {};
+    }
+    std::ostringstream ss;
+    ss << std::put_time(gmPtr, "%d-%b-%Y %H:%M");
+    return ss.str();
 }
 
 void renderRow(std::ostringstream& body, const DirEntry& entry, const std::string& baseUri) {
