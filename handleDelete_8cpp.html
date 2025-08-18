@@ -96,25 +96,25 @@ $(document).ready(function(){initNavTree('handleDelete_8cpp.html',''); initResiz
   <div class="headertitle"><div class="title">handleDelete.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="Location_8hpp_source.html">core/Location.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="HttpRequest_8hpp_source.html">http/HttpRequest.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="HttpRequest_8hpp_source.html">http/HttpRequest.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="HttpResponse_8hpp_source.html">http/HttpResponse.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="responseBuilder_8hpp_source.html">http/responseBuilder.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Logger_8hpp_source.html">utils/Logger.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="filesystemUtils_8hpp_source.html">utils/filesystemUtils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="htmlUtils_8hpp_source.html">utils/htmlUtils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="urlUtils_8hpp_source.html">utils/urlUtils.hpp</a>&quot;</code><br />
+<code>#include &lt;errno.h&gt;</code><br />
 <code>#include &lt;filesystem&gt;</code><br />
 <code>#include &lt;sstream&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;sys/stat.h&gt;</code><br />
+<code>#include &lt;system_error&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for handleDelete.cpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handleDelete_8cpp__incl.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handleDelete_8cpp__incl.svg" width="100%" height="503"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 </div>
 <p><a href="handleDelete_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -166,11 +166,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="handleDelete_8cpp_source.html#l00097">97</a> of file <a class="el" href="handleDelete_8cpp_source.html">handleDelete.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="handleDelete_8cpp_source.html#l00098">98</a> of file <a class="el" href="handleDelete_8cpp_source.html">handleDelete.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="urlUtils_8cpp_source.html#l00082">extractFilenameFromUri()</a>, <a class="el" href="handleDelete_8cpp_source.html#l00075">anonymous_namespace{handleDelete.cpp}::generateDeleteHtml()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00133">ResponseBuilder::generateError()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00100">ResponseBuilder::generateSuccess()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00080">HttpRequest::getPath()</a>, <a class="el" href="htmlUtils_8cpp_source.html#l00017">htmlEscape()</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">INFO</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00187">isSymlink()</a>, <a class="el" href="Logger_8cpp_source.html#l00054">Logger::logFrom()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00031">resolvePhysicalPath()</a>, <a class="el" href="handleDelete_8cpp_source.html#l00030">anonymous_namespace{handleDelete.cpp}::unlinkFile()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
+<p class="reference">References <a class="el" href="urlUtils_8cpp_source.html#l00084">extractFilenameFromUri()</a>, <a class="el" href="handleDelete_8cpp_source.html#l00076">anonymous_namespace{handleDelete.cpp}::generateDeleteHtml()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00105">ResponseBuilder::generateSuccess()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00078">HttpRequest::getPath()</a>, <a class="el" href="htmlUtils_8cpp_source.html#l00017">htmlEscape()</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">INFO</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00187">isSymlink()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00031">resolvePhysicalPath()</a>, <a class="el" href="handleDelete_8cpp_source.html#l00031">anonymous_namespace{handleDelete.cpp}::unlinkFile()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="requestRouter_8cpp_source.html#l00126">anonymous_namespace{requestRouter.cpp}::dispatchByMethod()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="requestRouter_8cpp_source.html#l00125">anonymous_namespace{requestRouter.cpp}::dispatchByMethod()</a>.</p>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">

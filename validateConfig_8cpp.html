@@ -97,23 +97,28 @@ $(document).ready(function(){initNavTree('validateConfig_8cpp.html',''); initRes
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="validateConfig_8hpp_source.html">config/validateConfig.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Config_8hpp_source.html">config/Config.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ConfigParseError_8hpp_source.html">config/parser/ConfigParseError.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="errorUtils_8hpp_source.html">utils/errorUtils.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="filesystemUtils_8hpp_source.html">utils/filesystemUtils.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Location_8hpp_source.html">core/Location.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;array&gt;</code><br />
+<code>#include &lt;cctype&gt;</code><br />
+<code>#include &lt;cstddef&gt;</code><br />
 <code>#include &lt;filesystem&gt;</code><br />
-<code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;map&gt;</code><br />
 <code>#include &lt;set&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;system_error&gt;</code><br />
 <code>#include &lt;unordered_set&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for validateConfig.cpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="validateConfig_8cpp__incl.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="validateConfig_8cpp__incl.svg" width="100%" height="558"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 </div>
 <p><a href="validateConfig_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -181,11 +186,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="validateConfig_8cpp_source.html#l00503">503</a> of file <a class="el" href="validateConfig_8cpp_source.html">validateConfig.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="validateConfig_8cpp_source.html#l00507">507</a> of file <a class="el" href="validateConfig_8cpp_source.html">validateConfig.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Config_8cpp_source.html#l00027">Config::getServers()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00271">anonymous_namespace{validateConfig.cpp}::validateAllowedMethods()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00305">anonymous_namespace{validateConfig.cpp}::validateCgiExtensions()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00397">anonymous_namespace{validateConfig.cpp}::validateCgiInterpreters()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00291">anonymous_namespace{validateConfig.cpp}::validateClientMaxBodySize()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00234">anonymous_namespace{validateConfig.cpp}::validateErrorPageCodes()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00030">anonymous_namespace{validateConfig.cpp}::validateHasLocation()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00326">anonymous_namespace{validateConfig.cpp}::validateIndexFiles()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00072">anonymous_namespace{validateConfig.cpp}::validateLocationDefaults()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00040">anonymous_namespace{validateConfig.cpp}::validateLocationPaths()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00253">anonymous_namespace{validateConfig.cpp}::validateRedirectCodes()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00433">anonymous_namespace{validateConfig.cpp}::validateRootsExist()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00144">anonymous_namespace{validateConfig.cpp}::validateServerNameFormat()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00201">anonymous_namespace{validateConfig.cpp}::validateUniquePorts()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00186">anonymous_namespace{validateConfig.cpp}::validateUniqueServerNames()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00468">anonymous_namespace{validateConfig.cpp}::validateUploadStores()</a>.</p>
+<p class="reference">References <a class="el" href="Config_8cpp_source.html#l00026">Config::getServers()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00275">anonymous_namespace{validateConfig.cpp}::validateAllowedMethods()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00309">anonymous_namespace{validateConfig.cpp}::validateCgiExtensions()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00401">anonymous_namespace{validateConfig.cpp}::validateCgiInterpreters()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00295">anonymous_namespace{validateConfig.cpp}::validateClientMaxBodySize()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00238">anonymous_namespace{validateConfig.cpp}::validateErrorPageCodes()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00034">anonymous_namespace{validateConfig.cpp}::validateHasLocation()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00330">anonymous_namespace{validateConfig.cpp}::validateIndexFiles()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00076">anonymous_namespace{validateConfig.cpp}::validateLocationDefaults()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00044">anonymous_namespace{validateConfig.cpp}::validateLocationPaths()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00257">anonymous_namespace{validateConfig.cpp}::validateRedirectCodes()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00437">anonymous_namespace{validateConfig.cpp}::validateRootsExist()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00148">anonymous_namespace{validateConfig.cpp}::validateServerNameFormat()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00205">anonymous_namespace{validateConfig.cpp}::validateUniquePorts()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00190">anonymous_namespace{validateConfig.cpp}::validateUniqueServerNames()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00472">anonymous_namespace{validateConfig.cpp}::validateUploadStores()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="webserv_8cpp_source.html#l00056">runWebserv()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="webserv_8cpp_source.html#l00058">runWebserv()</a>.</p>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">

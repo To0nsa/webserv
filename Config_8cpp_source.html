@@ -103,42 +103,40 @@ $(document).ready(function(){initNavTree('Config_8cpp_source.html',''); initResi
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">/*                                                        :::      ::::::::   */</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">/*   Config.cpp                                         :+:      :+:    :+:   */</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">/*                                                    +:+ +:+         +:+     */</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">/*   By: nlouis &lt;nlouis@student.hive.fi&gt;            +#+  +:+       +#+        */</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">/*   By: irychkov &lt;irychkov@student.hive.fi&gt;        +#+  +:+       +#+        */</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">/*                                                +#+#+#+#+#+   +#+           */</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">/*   Created: 2025/04/30 10:36:29 by irychkov          #+#    #+#             */</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">/*   Updated: 2025/05/21 14:59:06 by nlouis           ###   ########.fr       */</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">/*   Updated: 2025/08/17 12:16:36 by irychkov         ###   ########.fr       */</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">/*                                                                            */</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">/* ************************************************************************** */</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="Config_8hpp.html">config/Config.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="ConfigParseError_8hpp.html">config/parser/ConfigParseError.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment"></span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">//////////////////</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment"></span><span class="comment">// --- Public API</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="foldopen" id="foldopen00019" data-start="{" data-end="}">
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="classConfig.html#a10324d5656f2e6407955a653fbfab3d2">   19</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classConfig.html#a10324d5656f2e6407955a653fbfab3d2">Config::addServer</a>(<span class="keyword">const</span> <a class="code hl_class" href="classServer.html">Server</a>&amp; server) {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <a class="code hl_variable" href="classConfig.html#a4a86ebd21b6a1c9f2b573af879e73455">_servers</a>.push_back(server);</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>}</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment"></span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">//////////////////</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment"></span><span class="comment">// --- Public API</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="foldopen" id="foldopen00018" data-start="{" data-end="}">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="classConfig.html#a10324d5656f2e6407955a653fbfab3d2">   18</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classConfig.html#a10324d5656f2e6407955a653fbfab3d2">Config::addServer</a>(<span class="keyword">const</span> <a class="code hl_class" href="classServer.html">Server</a>&amp; server) {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <a class="code hl_variable" href="classConfig.html#a4a86ebd21b6a1c9f2b573af879e73455">_servers</a>.push_back(server);</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>}</div>
 </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="foldopen" id="foldopen00023" data-start="{" data-end="}">
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="classConfig.html#accfc5840ae06368785c04f6ead05cda5">   23</a></span>std::vector&lt;Server&gt;&amp; <a class="code hl_function" href="classConfig.html#a5697534b5368231a973acc26e2379872">Config::getServers</a>() {</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="classConfig.html#a4a86ebd21b6a1c9f2b573af879e73455">_servers</a>;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>}</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="foldopen" id="foldopen00022" data-start="{" data-end="}">
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="classConfig.html#accfc5840ae06368785c04f6ead05cda5">   22</a></span>std::vector&lt;Server&gt;&amp; <a class="code hl_function" href="classConfig.html#a5697534b5368231a973acc26e2379872">Config::getServers</a>() {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="classConfig.html#a4a86ebd21b6a1c9f2b573af879e73455">_servers</a>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>}</div>
 </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="foldopen" id="foldopen00027" data-start="{" data-end="}">
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="classConfig.html#a5697534b5368231a973acc26e2379872">   27</a></span><span class="keyword">const</span> std::vector&lt;Server&gt;&amp; <a class="code hl_function" href="classConfig.html#a5697534b5368231a973acc26e2379872">Config::getServers</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="classConfig.html#a4a86ebd21b6a1c9f2b573af879e73455">_servers</a>;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>}</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="foldopen" id="foldopen00026" data-start="{" data-end="}">
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classConfig.html#a5697534b5368231a973acc26e2379872">   26</a></span><span class="keyword">const</span> std::vector&lt;Server&gt;&amp; <a class="code hl_function" href="classConfig.html#a5697534b5368231a973acc26e2379872">Config::getServers</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="classConfig.html#a4a86ebd21b6a1c9f2b573af879e73455">_servers</a>;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>}</div>
 </div>
-<div class="ttc" id="aConfigParseError_8hpp_html"><div class="ttname"><a href="ConfigParseError_8hpp.html">ConfigParseError.hpp</a></div></div>
 <div class="ttc" id="aConfig_8hpp_html"><div class="ttname"><a href="Config_8hpp.html">Config.hpp</a></div></div>
-<div class="ttc" id="aclassConfig_html_a10324d5656f2e6407955a653fbfab3d2"><div class="ttname"><a href="classConfig.html#a10324d5656f2e6407955a653fbfab3d2">Config::addServer</a></div><div class="ttdeci">void addServer(const Server &amp;server)</div><div class="ttdef"><b>Definition</b> <a href="Config_8cpp_source.html#l00019">Config.cpp:19</a></div></div>
+<div class="ttc" id="aclassConfig_html_a10324d5656f2e6407955a653fbfab3d2"><div class="ttname"><a href="classConfig.html#a10324d5656f2e6407955a653fbfab3d2">Config::addServer</a></div><div class="ttdeci">void addServer(const Server &amp;server)</div><div class="ttdef"><b>Definition</b> <a href="Config_8cpp_source.html#l00018">Config.cpp:18</a></div></div>
 <div class="ttc" id="aclassConfig_html_a4a86ebd21b6a1c9f2b573af879e73455"><div class="ttname"><a href="classConfig.html#a4a86ebd21b6a1c9f2b573af879e73455">Config::_servers</a></div><div class="ttdeci">std::vector&lt; Server &gt; _servers</div><div class="ttdoc">List of all parsed servers.</div><div class="ttdef"><b>Definition</b> <a href="Config_8hpp_source.html#l00036">Config.hpp:36</a></div></div>
-<div class="ttc" id="aclassConfig_html_a5697534b5368231a973acc26e2379872"><div class="ttname"><a href="classConfig.html#a5697534b5368231a973acc26e2379872">Config::getServers</a></div><div class="ttdeci">const std::vector&lt; Server &gt; &amp; getServers() const</div><div class="ttdef"><b>Definition</b> <a href="Config_8cpp_source.html#l00027">Config.cpp:27</a></div></div>
-<div class="ttc" id="aclassServer_html"><div class="ttname"><a href="classServer.html">Server</a></div><div class="ttdoc">Represents a virtual server block.</div><div class="ttdef"><b>Definition</b> <a href="Server_8hpp_source.html#l00043">Server.hpp:43</a></div></div>
+<div class="ttc" id="aclassConfig_html_a5697534b5368231a973acc26e2379872"><div class="ttname"><a href="classConfig.html#a5697534b5368231a973acc26e2379872">Config::getServers</a></div><div class="ttdeci">const std::vector&lt; Server &gt; &amp; getServers() const</div><div class="ttdef"><b>Definition</b> <a href="Config_8cpp_source.html#l00026">Config.cpp:26</a></div></div>
+<div class="ttc" id="aclassServer_html"><div class="ttname"><a href="classServer.html">Server</a></div><div class="ttdoc">Represents a virtual server block.</div><div class="ttdef"><b>Definition</b> <a href="Server_8hpp_source.html#l00045">Server.hpp:45</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

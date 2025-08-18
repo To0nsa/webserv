@@ -191,7 +191,7 @@ Private Attributes</h2></td></tr>
 <div class="textblock"><p>Represents a virtual server block. </p>
 <p>Encapsulates configuration for a single virtual host, including its listening address, server names, error pages, body size limits, and nested location blocks. Each <a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a> instance corresponds to a <code>server</code> block in the configuration file and participates in request routing based on host and port matching. </p>
 
-<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00043">43</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00045">45</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad5ec9462b520e59f7ea831e157ee5e59" name="ad5ec9462b520e59f7ea831e157ee5e59"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad5ec9462b520e59f7ea831e157ee5e59">&#9670;&#160;</a></span>Server() <span class="overload">[1/2]</span></h2>
@@ -211,7 +211,7 @@ Private Attributes</h2></td></tr>
 <p>Constructs a <a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a> instance with default settings. </p>
 <p>Initializes default values for host (<code>"0.0.0.0"</code>), port (<code>80</code>), client max body size (<code>1 MiB</code>), and empty location/error blocks. Intended to be populated via configuration parsing. </p>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00033">33</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00034">34</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
 </div>
 </div>
@@ -292,11 +292,11 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00067">67</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00068">68</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00050">_locations</a>.</p>
+<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00052">_locations</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00109">ConfigParser::parseServer()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00105">ConfigParser::parseServer()</a>.</p>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
@@ -332,11 +332,11 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00053">53</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00054">54</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00047">_server_names</a>, and <a class="el" href="stringUtils_8cpp_source.html#l00083">toLower()</a>.</p>
+<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00049">_server_names</a>, and <a class="el" href="stringUtils_8cpp_source.html#l00083">toLower()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="directive__handler__table_8cpp_source.html#l00103">directive::serverHandlers()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="directive__handler__table_8cpp_source.html#l00104">directive::serverHandlers()</a>.</p>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
@@ -381,11 +381,11 @@ Private Attributes</h2></td></tr>
 <p>This limit applies to the content length of incoming HTTP requests, including POST uploads. If exceeded, the server should return a 413 Payload Too Large error. Configured via the <code>client_max_body_size</code> directive.</p>
 <dl class="section return"><dt>Returns</dt><dd>The maximum request body size in bytes. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00095">95</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00096">96</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00049">_client_max_body_size</a>.</p>
+<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00051">_client_max_body_size</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="handleMultipartForm_8cpp_source.html#l00188">handleMultipartForm()</a>, <a class="el" href="normalizeConfig_8cpp_source.html#l00021">normalizeServer()</a>, <a class="el" href="HttpRequestParser_8cpp_source.html#l00253">parseReqHeader()</a>, <a class="el" href="printInfo_8cpp_source.html#l00038">printConfig()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00291">anonymous_namespace{validateConfig.cpp}::validateClientMaxBodySize()</a>, and <a class="el" href="handlePost_8cpp_source.html#l00112">validatePostRequest()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="handleMultipartForm_8cpp_source.html#l00184">handleMultipartForm()</a>, <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>, <a class="el" href="HttpRequestParser_8cpp_source.html#l00258">parseReqHeader()</a>, <a class="el" href="printInfo_8cpp_source.html#l00046">printConfig()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00295">anonymous_namespace{validateConfig.cpp}::validateClientMaxBodySize()</a>, and <a class="el" href="handlePost_8cpp_source.html#l00113">validatePostRequest()</a>.</p>
 <div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-4-summary" class="dynsummary" style="display:block;">
@@ -411,11 +411,11 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00083">83</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00084">84</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00047">_server_names</a>.</p>
+<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00049">_server_names</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="handleCgi_8cpp_source.html#l00040">anonymous_namespace{handleCgi.cpp}::prepareEnv()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="handleCgi_8cpp_source.html#l00041">anonymous_namespace{handleCgi.cpp}::prepareEnv()</a>.</p>
 <div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-5-summary" class="dynsummary" style="display:block;">
@@ -453,11 +453,11 @@ Private Attributes</h2></td></tr>
 <p>This map associates specific HTTP status codes (e.g., 404, 500) with file paths to serve instead of default error messages. Configured via the <code>error_page</code> directive.</p>
 <dl class="section return"><dt>Returns</dt><dd>Reference to the map of error codes to file paths. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00091">91</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00092">92</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00048">_error_pages</a>.</p>
+<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00050">_error_pages</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="responseBuilder_8cpp_source.html#l00133">ResponseBuilder::generateError()</a>, <a class="el" href="normalizeConfig_8cpp_source.html#l00021">normalizeServer()</a>, <a class="el" href="printInfo_8cpp_source.html#l00038">printConfig()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00234">anonymous_namespace{validateConfig.cpp}::validateErrorPageCodes()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>, <a class="el" href="printInfo_8cpp_source.html#l00046">printConfig()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00238">anonymous_namespace{validateConfig.cpp}::validateErrorPageCodes()</a>.</p>
 <div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-6-summary" class="dynsummary" style="display:block;">
@@ -495,11 +495,11 @@ Private Attributes</h2></td></tr>
 <p>This address determines which local interface(s) the server binds to. A value of <code>"0.0.0.0"</code> means it will accept connections on all interfaces. Typically set via the <code>host</code> directive in the configuration file.</p>
 <dl class="section return"><dt>Returns</dt><dd>Reference to the host IP address string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00079">79</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00080">80</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00046">_host</a>.</p>
+<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00048">_host</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="HttpRequestParser_8cpp_source.html#l00253">parseReqHeader()</a>, <a class="el" href="printInfo_8cpp_source.html#l00026">printServerHeader()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00201">anonymous_namespace{validateConfig.cpp}::validateUniquePorts()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="HttpRequestParser_8cpp_source.html#l00258">parseReqHeader()</a>, <a class="el" href="printInfo_8cpp_source.html#l00034">printServerHeader()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00205">anonymous_namespace{validateConfig.cpp}::validateUniquePorts()</a>.</p>
 <div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-7-summary" class="dynsummary" style="display:block;">
@@ -537,11 +537,11 @@ Private Attributes</h2></td></tr>
 <p>Each location block defines a URI prefix and associated behavior (e.g., root, methods, <a class="el" href="namespaceCGI.html">CGI</a>, redirects). During request handling, the server selects the best-matching location based on the URI.</p>
 <dl class="section return"><dt>Returns</dt><dd>Reference to the list of <code><a class="el" href="classLocation.html">Location</a></code> objects. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00099">99</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00100">100</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00050">_locations</a>.</p>
+<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00052">_locations</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="requestRouter_8cpp_source.html#l00067">anonymous_namespace{requestRouter.cpp}::findLocation()</a>, <a class="el" href="SocketManagerRequest_8cpp_source.html#l00083">findMatchingLocation()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00133">ResponseBuilder::generateError()</a>, <a class="el" href="normalizeConfig_8cpp_source.html#l00021">normalizeServer()</a>, <a class="el" href="printInfo_8cpp_source.html#l00038">printConfig()</a>, <a class="el" href="requestRouter_8cpp_source.html#l00030">anonymous_namespace{requestRouter.cpp}::redirectOnDirectorySlash()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00271">anonymous_namespace{validateConfig.cpp}::validateAllowedMethods()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00305">anonymous_namespace{validateConfig.cpp}::validateCgiExtensions()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00397">anonymous_namespace{validateConfig.cpp}::validateCgiInterpreters()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00326">anonymous_namespace{validateConfig.cpp}::validateIndexFiles()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00072">anonymous_namespace{validateConfig.cpp}::validateLocationDefaults()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00040">anonymous_namespace{validateConfig.cpp}::validateLocationPaths()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00433">anonymous_namespace{validateConfig.cpp}::validateRootsExist()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00468">anonymous_namespace{validateConfig.cpp}::validateUploadStores()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="requestRouter_8cpp_source.html#l00066">anonymous_namespace{requestRouter.cpp}::findLocation()</a>, <a class="el" href="SocketManagerRequest_8cpp_source.html#l00083">findMatchingLocation()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>, <a class="el" href="printInfo_8cpp_source.html#l00046">printConfig()</a>, <a class="el" href="requestRouter_8cpp_source.html#l00029">anonymous_namespace{requestRouter.cpp}::redirectOnDirectorySlash()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00275">anonymous_namespace{validateConfig.cpp}::validateAllowedMethods()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00309">anonymous_namespace{validateConfig.cpp}::validateCgiExtensions()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00401">anonymous_namespace{validateConfig.cpp}::validateCgiInterpreters()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00330">anonymous_namespace{validateConfig.cpp}::validateIndexFiles()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00076">anonymous_namespace{validateConfig.cpp}::validateLocationDefaults()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00044">anonymous_namespace{validateConfig.cpp}::validateLocationPaths()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00437">anonymous_namespace{validateConfig.cpp}::validateRootsExist()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00472">anonymous_namespace{validateConfig.cpp}::validateUploadStores()</a>.</p>
 <div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-8-summary" class="dynsummary" style="display:block;">
@@ -579,9 +579,9 @@ Private Attributes</h2></td></tr>
 <p>Allows in-place modification of the list of <code><a class="el" href="classLocation.html">Location</a></code> objects, typically used during configuration parsing to populate new routes. Use with care to avoid breaking routing logic.</p>
 <dl class="section return"><dt>Returns</dt><dd>Reference to the list of <code><a class="el" href="classLocation.html">Location</a></code> objects. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00103">103</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00104">104</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00050">_locations</a>.</p>
+<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00052">_locations</a>.</p>
 
 </div>
 </div>
@@ -617,11 +617,11 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00075">75</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00076">76</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00045">_port</a>.</p>
+<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00047">_port</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="handleCgi_8cpp_source.html#l00040">anonymous_namespace{handleCgi.cpp}::prepareEnv()</a>, <a class="el" href="printInfo_8cpp_source.html#l00026">printServerHeader()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00201">anonymous_namespace{validateConfig.cpp}::validateUniquePorts()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="handleCgi_8cpp_source.html#l00041">anonymous_namespace{handleCgi.cpp}::prepareEnv()</a>, <a class="el" href="printInfo_8cpp_source.html#l00034">printServerHeader()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00205">anonymous_namespace{validateConfig.cpp}::validateUniquePorts()</a>.</p>
 <div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-9-summary" class="dynsummary" style="display:block;">
@@ -659,11 +659,11 @@ Private Attributes</h2></td></tr>
 <p>These names are used to match the <code>Host</code> header in incoming HTTP requests. If none match, the first declared server for the host:port is used as default. Configured via the <code>server_name</code> directive.</p>
 <dl class="section return"><dt>Returns</dt><dd>Reference to the list of server names. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00087">87</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00088">88</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00047">_server_names</a>.</p>
+<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00049">_server_names</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="printInfo_8cpp_source.html#l00026">printServerHeader()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00201">anonymous_namespace{validateConfig.cpp}::validateUniquePorts()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="printInfo_8cpp_source.html#l00034">printServerHeader()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00205">anonymous_namespace{validateConfig.cpp}::validateUniquePorts()</a>.</p>
 <div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-10-summary" class="dynsummary" style="display:block;">
@@ -708,7 +708,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the name matches one of the configured server names. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00110">110</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00111">111</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
 </div>
 </div>
@@ -771,9 +771,9 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00063">63</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00064">64</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="normalizeConfig_8cpp_source.html#l00021">normalizeServer()</a>, and <a class="el" href="directive__handler__table_8cpp_source.html#l00103">directive::serverHandlers()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>, and <a class="el" href="directive__handler__table_8cpp_source.html#l00104">directive::serverHandlers()</a>.</p>
 <div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-11-summary" class="dynsummary" style="display:block;">
@@ -820,11 +820,11 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00058">58</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00059">59</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00048">_error_pages</a>.</p>
+<p class="reference">References <a class="el" href="Server_8hpp_source.html#l00050">_error_pages</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="normalizeConfig_8cpp_source.html#l00021">normalizeServer()</a>, and <a class="el" href="directive__handler__table_8cpp_source.html#l00103">directive::serverHandlers()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>, and <a class="el" href="directive__handler__table_8cpp_source.html#l00104">directive::serverHandlers()</a>.</p>
 <div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-12-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-12-summary" class="dynsummary" style="display:block;">
@@ -868,9 +868,9 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00049">49</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00050">50</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="directive__handler__table_8cpp_source.html#l00103">directive::serverHandlers()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="directive__handler__table_8cpp_source.html#l00104">directive::serverHandlers()</a>.</p>
 <div id="dynsection-13" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-13-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-13-summary" class="dynsummary" style="display:block;">
@@ -914,9 +914,9 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00045">45</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8cpp_source.html#l00046">46</a> of file <a class="el" href="Server_8cpp_source.html">Server.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="directive__handler__table_8cpp_source.html#l00103">directive::serverHandlers()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="directive__handler__table_8cpp_source.html#l00104">directive::serverHandlers()</a>.</p>
 <div id="dynsection-14" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-14-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-14-summary" class="dynsummary" style="display:block;">
@@ -950,9 +950,9 @@ Private Attributes</h2></td></tr>
 
 <p>Maximum allowed body size per request (bytes). </p>
 
-<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00049">49</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00051">51</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00095">getClientMaxBodySize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00096">getClientMaxBodySize()</a>.</p>
 
 </div>
 </div>
@@ -978,9 +978,9 @@ Private Attributes</h2></td></tr>
 
 <p>Maps HTTP error codes to custom error page paths. </p>
 
-<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00048">48</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00050">50</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00091">getErrorPages()</a>, and <a class="el" href="Server_8cpp_source.html#l00058">setErrorPage()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00092">getErrorPages()</a>, and <a class="el" href="Server_8cpp_source.html#l00059">setErrorPage()</a>.</p>
 
 </div>
 </div>
@@ -1006,9 +1006,9 @@ Private Attributes</h2></td></tr>
 
 <p>IP address to bind (e.g., "0.0.0.0"). </p>
 
-<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00046">46</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00048">48</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00079">getHost()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00080">getHost()</a>.</p>
 
 </div>
 </div>
@@ -1034,9 +1034,9 @@ Private Attributes</h2></td></tr>
 
 <p>Set of location blocks defined for this server. </p>
 
-<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00050">50</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00052">52</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00067">addLocation()</a>, <a class="el" href="Server_8cpp_source.html#l00099">getLocations()</a>, and <a class="el" href="Server_8cpp_source.html#l00103">getLocations()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00068">addLocation()</a>, <a class="el" href="Server_8cpp_source.html#l00100">getLocations()</a>, and <a class="el" href="Server_8cpp_source.html#l00104">getLocations()</a>.</p>
 
 </div>
 </div>
@@ -1062,9 +1062,9 @@ Private Attributes</h2></td></tr>
 
 <p>Port to listen on (0–65535). </p>
 
-<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00045">45</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00047">47</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00075">getPort()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00076">getPort()</a>.</p>
 
 </div>
 </div>
@@ -1090,9 +1090,9 @@ Private Attributes</h2></td></tr>
 
 <p>List of server name aliases (Host-based routing). </p>
 
-<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00047">47</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Server_8hpp_source.html#l00049">49</a> of file <a class="el" href="Server_8hpp_source.html">Server.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00053">addServerName()</a>, <a class="el" href="Server_8cpp_source.html#l00083">getDefaultServerName()</a>, and <a class="el" href="Server_8cpp_source.html#l00087">getServerNames()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="Server_8cpp_source.html#l00054">addServerName()</a>, <a class="el" href="Server_8cpp_source.html#l00084">getDefaultServerName()</a>, and <a class="el" href="Server_8cpp_source.html#l00088">getServerNames()</a>.</p>
 
 </div>
 </div>

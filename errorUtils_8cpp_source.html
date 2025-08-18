@@ -103,10 +103,10 @@ $(document).ready(function(){initNavTree('errorUtils_8cpp_source.html',''); init
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">/*                                                        :::      ::::::::   */</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">/*   errorUtils.cpp                                     :+:      :+:    :+:   */</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">/*                                                    +:+ +:+         +:+     */</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">/*   By: nlouis &lt;nlouis@student.hive.fi&gt;            +#+  +:+       +#+        */</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">/*   By: irychkov &lt;irychkov@student.hive.fi&gt;        +#+  +:+       +#+        */</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">/*                                                +#+#+#+#+#+   +#+           */</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">/*   Created: 2025/05/05 21:08:50 by nlouis            #+#    #+#             */</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">/*   Updated: 2025/05/06 20:14:01 by nlouis           ###   ########.fr       */</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">/*   Updated: 2025/08/17 21:06:47 by irychkov         ###   ########.fr       */</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">/*                                                                            */</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">/* ************************************************************************** */</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"></span> </div>
@@ -120,7 +120,7 @@ $(document).ready(function(){initNavTree('errorUtils_8cpp_source.html',''); init
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> * @ingroup ErrorUtils</span></div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> */</span></div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &quot;<a class="code" href="errorUtils_8hpp.html">utils/errorUtils.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &lt;string&gt;</span> <span class="comment">// for allocator, char_traits, operator+, to_string, string</span></div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
 <div class="foldopen" id="foldopen00025" data-start="{" data-end="}">
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="group__ErrorUtils.html#ga3a83368b4a479591239a5a9c8740a587">   25</a></span>std::string <a class="code hl_function" href="group__ErrorUtils.html#ga3a83368b4a479591239a5a9c8740a587">formatError</a>(<span class="keyword">const</span> std::string&amp; msg, <span class="keywordtype">int</span> line, <span class="keywordtype">int</span> column) {</div>
@@ -128,7 +128,6 @@ $(document).ready(function(){initNavTree('errorUtils_8cpp_source.html',''); init
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordflow">return</span> <span class="stringliteral">&quot;Line &quot;</span> + std::to_string(line) + <span class="stringliteral">&quot;, column &quot;</span> + std::to_string(column) + <span class="stringliteral">&quot;: &quot;</span> + msg;</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>}</div>
 </div>
-<div class="ttc" id="aerrorUtils_8hpp_html"><div class="ttname"><a href="errorUtils_8hpp.html">errorUtils.hpp</a></div><div class="ttdoc">Error formatting utilities.</div></div>
 <div class="ttc" id="agroup__ErrorUtils_html_ga3a83368b4a479591239a5a9c8740a587"><div class="ttname"><a href="group__ErrorUtils.html#ga3a83368b4a479591239a5a9c8740a587">formatError</a></div><div class="ttdeci">std::string formatError(const std::string &amp;msg, int line, int column)</div><div class="ttdoc">Formats an error message with line and column information.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00025">errorUtils.cpp:25</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

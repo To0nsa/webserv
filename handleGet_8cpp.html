@@ -96,7 +96,14 @@ $(document).ready(function(){initNavTree('handleGet_8cpp.html',''); initResizabl
   <div class="headertitle"><div class="title">handleGet.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="Location_8hpp_source.html">core/Location.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="HttpRequest_8hpp_source.html">http/HttpRequest.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="HttpResponse_8hpp_source.html">http/HttpResponse.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="methodsHandler_8hpp_source.html">http/methodsHandler.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="responseBuilder_8hpp_source.html">http/responseBuilder.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Logger_8hpp_source.html">utils/Logger.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="filesystemUtils_8hpp_source.html">utils/filesystemUtils.hpp</a>&quot;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;cctype&gt;</code><br />
 <code>#include &lt;filesystem&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
@@ -104,20 +111,13 @@ $(document).ready(function(){initNavTree('handleGet_8cpp.html',''); initResizabl
 <code>#include &lt;sstream&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;sys/stat.h&gt;</code><br />
-<code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="HttpRequest_8hpp_source.html">http/HttpRequest.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="HttpResponse_8hpp_source.html">http/HttpResponse.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="methodsHandler_8hpp_source.html">http/methodsHandler.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="responseBuilder_8hpp_source.html">http/responseBuilder.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="Logger_8hpp_source.html">utils/Logger.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="filesystemUtils_8hpp_source.html">utils/filesystemUtils.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="stringUtils_8hpp_source.html">utils/stringUtils.hpp</a>&quot;</code><br />
+<code>#include &lt;utility&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for handleGet.cpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handleGet_8cpp__incl.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handleGet_8cpp__incl.svg" width="100%" height="503"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 </div>
 <p><a href="handleGet_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -173,9 +173,9 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="handleGet_8cpp_source.html#l00139">139</a> of file <a class="el" href="handleGet_8cpp_source.html">handleGet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="responseBuilder_8cpp_source.html#l00133">ResponseBuilder::generateError()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00080">HttpRequest::getPath()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00065">isFile()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00187">isSymlink()</a>, <a class="el" href="Logger_8cpp_source.html#l00054">Logger::logFrom()</a>, <a class="el" href="handleGet_8cpp_source.html#l00096">anonymous_namespace{handleGet.cpp}::processDirectory()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00031">resolvePhysicalPath()</a>, <a class="el" href="handleGet_8cpp_source.html#l00059">anonymous_namespace{handleGet.cpp}::serveFile()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
+<p class="reference">References <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00078">HttpRequest::getPath()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00065">isFile()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00187">isSymlink()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="handleGet_8cpp_source.html#l00096">anonymous_namespace{handleGet.cpp}::processDirectory()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00031">resolvePhysicalPath()</a>, <a class="el" href="handleGet_8cpp_source.html#l00059">anonymous_namespace{handleGet.cpp}::serveFile()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="requestRouter_8cpp_source.html#l00126">anonymous_namespace{requestRouter.cpp}::dispatchByMethod()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="requestRouter_8cpp_source.html#l00125">anonymous_namespace{requestRouter.cpp}::dispatchByMethod()</a>.</p>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">

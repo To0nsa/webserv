@@ -1,13 +1,17 @@
 <map id="include/core/Server.hpp" name="include/core/Server.hpp">
-<area shape="rect" id="Node000001" title="Declares the Server class for virtual host configuration." alt="" coords="86,5,261,31"/>
+<area shape="rect" id="Node000001" title="Declares the Server class for virtual host configuration." alt="" coords="165,5,339,31"/>
 <area shape="rect" id="Node000002" href="$Location_8hpp.html" title=" " alt="" coords="51,79,189,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,33,139,69,135,66,162,29"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,33,155,74,152,70,230,28"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="5,152,56,177"/>
-<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="116,33,74,51,56,64,41,80,34,94,30,108,29,138,24,138,25,108,29,92,36,77,53,60,72,46,114,28"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="179,33,96,53,62,66,41,80,33,93,29,108,29,139,23,139,24,108,28,91,37,77,59,61,94,48,178,28"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="163,152,221,177"/>
-<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="183,30,195,52,204,78,206,110,202,139,196,138,201,110,199,79,190,54,178,32"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="250,32,205,140,200,138,245,30"/>
 <area shape="rect" id="Node000006" title=" " alt="" coords="246,152,309,177"/>
-<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="185,29,222,77,265,139,260,142,218,80,181,33"/>
+<area shape="poly" id="edge10_Node000001_Node000006" title=" " alt="" coords="257,31,276,138,270,139,251,32"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="315,79,389,104"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="270,29,326,68,323,73,267,33"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="414,79,511,104"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="287,28,417,72,415,77,285,33"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,106,58,145,54,141,104,102"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="96,152,139,177"/>
 <area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="122,104,121,139,116,138,117,104"/>
