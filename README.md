@@ -146,12 +146,13 @@ ___
 
 ```mermaid
 flowchart TD
-  %% High-level: setup → poll loop → per-FD handling
-  subgraph Boot["Startup"]
+  %% Setup
+  subgraph Boot[Startup]
     A[Load servers] --> B[SocketManager(servers)]
     B --> C[setupSockets()]
   end
 
+  %% Main loop
   C --> D{run(): poll()}
   D -->|EINTR| Z[Graceful shutdown]
   D -->|timeout| D
@@ -160,25 +161,25 @@ flowchart TD
   D --> E[handleCgiPollEvents()]
 
   %% Iterate FDs
-  E --> F{for each pfd in _poll_fds (rev)}
+  E --> F{for each pfd in _poll_fds (reverse)}
   F --> G{is CGI pipe fd?}
   G -->|yes| F
   G -->|no| H{revents has ERR/HUP/NVAL?}
   H -->|yes| H1[handlePollError()] --> F
 
   H -->|no| I{revents has POLLIN?}
-  I -->|yes| J{listen fd?}
+  I -->|yes| J{is listen fd?}
   J -->|yes| J1[handleNewConnection()] --> F
   J -->|no| J2[handleClientData()] --> J3{queued response?}
   J3 -->|yes| K[enable POLLOUT] --> F
   J3 -->|no| F
 
-  I -->|no| L{revents has POLLOUT && responses not empty?}
+  I -->|no| L{revents has POLLOUT and responses not empty?}
   L -->|yes| L1[sendResponse()] --> F
   L -->|no| F
 
   F --> D
-  Z --> ZZ[Logger: "Shutting down server"]
+  Z --> ZZ[Logger: Shutting down server]
 ```
 
 </details>
