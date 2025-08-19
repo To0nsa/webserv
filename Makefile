@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile.hive                                      :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
+#    By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/09 20:53:27 by nlouis            #+#    #+#              #
-#    Updated: 2025/08/18 20:44:34 by nlouis           ###   ########.fr        #
+#    Updated: 2025/08/19 15:24:47 by irychkov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,7 @@ SRCS_CORE := \
   src/core/Server.cpp \
   src/core/main.cpp \
   src/core/server_utils.cpp \
-  src/core/webserv.cpp
+  src/core/runWebserv.cpp
 
 SRCS_HTTP := \
   src/http/HttpRequest.cpp \
