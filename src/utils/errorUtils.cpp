@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   errorUtils.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 21:08:50 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/17 21:06:47 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/18 19:54:49 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
  * @file    errorUtils.cpp
- * @brief   Implements error formatting utilities.
+ * @brief   Implements error formatting utilities for parsing.
  *
  * @details
  * Provides the implementation of `formatError`, a helper function that
- * generates consistent diagnostic messages with line and column info.
+ * generates consistent diagnostic messages with line and column info during
+ * parsing.
  * @ingroup ErrorUtils
  */
 

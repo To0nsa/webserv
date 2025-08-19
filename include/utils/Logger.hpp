@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Logger.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 12:09:58 by ktieu             #+#    #+#             */
-/*   Updated: 2025/08/17 12:30:59 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/18 19:48:00 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ class Logger {
     static void logFrom(LogLevel level, const std::string& from, const std::string& message);
 
   private:
-    Logger()                               = delete; // Prevent instantiation
-    ~Logger()                              = delete; // Prevent instantiation
-    Logger(const Logger& org)              = delete; // Prevent copy
-    Logger& operator=(const Logger& other) = delete; // Prevent assignment
+    Logger()                               = delete;
+    ~Logger()                              = delete;
+    Logger(const Logger& org)              = delete;
+    Logger& operator=(const Logger& other) = delete;
 };

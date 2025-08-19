@@ -3,12 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   Tokenizer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 01:06:09 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/17 12:14:38 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/18 19:51:02 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file    Tokenizer.cpp
+ * @brief   Implements the Tokenizer used for config lexical analysis.
+ *
+ * @details Defines all methods of the Tokenizer, including cursor management,
+ *          classification helpers, high-level parsers (identifiers, numbers,
+ *          strings), comment/whitespace skipping, token dispatch, and token
+ *          creation with accurate source locations.
+ *
+ * @ingroup config_tokenizing
+ */
 
 #include "config/tokenizer/Tokenizer.hpp"
 #include "config/parser/ConfigParseError.hpp" // for TokenizerError
@@ -19,15 +31,32 @@
 #include <unordered_map>                      // for unordered_map, operator==
 #include <utility>                            // for move, pair
 
-////////////////////////////////
-// --- Constructors
+//=== Construction & Special Members =====================================
 
+/**
+ * @brief Constructs a Tokenizer over an input string.
+ *
+ * @details Initializes cursor position and source coordinates to the start of
+ *          the input buffer.
+ *
+ * @param input Raw configuration text to tokenize. Ownership is moved in.
+ * @ingroup config_tokenizing
+ */
 Tokenizer::Tokenizer(std::string input) : _input(std::move(input)), _pos(0), _line(1), _column(1) {
 }
 
-////////////////
-// --- Main API
+//=== Main API ============================================================
 
+/**
+ * @brief Converts the input buffer into a sequence of tokens.
+ *
+ * @details Skips BOM, whitespace, and comments; emits recognized tokens and a
+ *          final END_OF_FILE token. Pre-reserves capacity for fewer reallocs.
+ *
+ * @return Vector of tokens in source order (always ends with END_OF_FILE).
+ * @throws TokenizerError On malformed constructs (e.g., bad strings/suffixes).
+ * @ingroup config_tokenizing
+ */
 std::vector<Token> Tokenizer::tokenize() {
     skipUtf8BOM(); // Skip UTF-8 BOM if present at the beginning
 
@@ -45,14 +74,26 @@ std::vector<Token> Tokenizer::tokenize() {
     return _tokens;
 }
 
-/////////////////////////
-// --- Core Cursor Logic
+//=== Core Cursor Logic ===================================================
 
+/**
+ * @brief Tests if the cursor reached the end of the input.
+ *
+ * @return `true` when no more characters are available.
+ * @ingroup config_tokenizing
+ */
 bool Tokenizer::isAtEnd() const noexcept {
     // True if the cursor has reached or passed end of input
     return _pos >= _input.size();
 }
 
+/**
+ * @brief Consumes a specific character if present.
+ *
+ * @param expected Character to match.
+ * @return `true` if consumed; `false` otherwise.
+ * @ingroup config_tokenizing
+ */
 bool Tokenizer::match(char expected) noexcept {
     // Return false if at end or current char does not match
     if (isAtEnd() || _input[_pos] != expected) {
@@ -64,11 +105,23 @@ bool Tokenizer::match(char expected) noexcept {
     return true;
 }
 
+/**
+ * @brief Peeks the current character without consuming it.
+ *
+ * @return Current character (undefined if at end).
+ * @ingroup config_tokenizing
+ */
 unsigned char Tokenizer::peek() const noexcept {
     // Return current character without consuming it
     return static_cast<unsigned char>(_input[_pos]);
 }
 
+/**
+ * @brief Peeks the next character without consuming it.
+ *
+ * @return Next character, or `'\0'` at end.
+ * @ingroup config_tokenizing
+ */
 unsigned char Tokenizer::peekNext() const noexcept {
     if (isAtEnd()) {
         return '\0';
@@ -76,6 +129,15 @@ unsigned char Tokenizer::peekNext() const noexcept {
     return static_cast<unsigned char>(_input[_pos + 1]);
 }
 
+/**
+ * @brief Advances by one character, updating line/column.
+ *
+ * @details Increments line and resets column on newline; otherwise increments
+ *          column.
+ *
+ * @return The consumed character.
+ * @ingroup config_tokenizing
+ */
 unsigned char Tokenizer::advance() noexcept {
     char c = _input[_pos++]; // Consume current character and move cursor forward
     if (c == '\n') {
@@ -87,24 +149,41 @@ unsigned char Tokenizer::advance() noexcept {
     return c; // Return the consumed character
 }
 
-////////////////////////////
-// --- Classification Logic
+//=== Classification Logic ===============================================
 
+/**
+ * @brief Checks if a byte is a valid identifier start.
+ *
+ * @param c Character to test.
+ * @return `true` if valid start.
+ * @ingroup config_tokenizing
+ */
 inline bool Tokenizer::isIdentifierStart(unsigned char c) const {
     // Valid first char for identifiers
     return std::isalpha(c) || c == '_' || c == '/' || c == '.' || c == '-' || c == ':';
 }
 
+/**
+ * @brief Checks if a byte is a valid identifier continuation.
+ *
+ * @param c Character to test.
+ * @return `true` if valid continuation.
+ * @ingroup config_tokenizing
+ */
 inline bool Tokenizer::isIdentifierChar(unsigned char c) const {
     // Valid body char for identifiers
     return std::isalnum(c) || c == '_' || c == '/' || c == '.' || c == '-' || c == ':';
 }
 
-//////////////////////////
-// --- High-Level Parsers
+//=== High-Level Parsers ==================================================
 
-////////////////////////////////
-// --- Skip BOM
+/**
+ * @brief Skips a UTF-8 Byte Order Mark at input start.
+ *
+ * @details If present, advances cursor past `0xEF 0xBB 0xBF`.
+ *
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::skipUtf8BOM() {
     static const std::string BOM = "\xEF\xBB\xBF"; // UTF-8 Byte Order Mark
     if (_input.compare(0, BOM.size(), BOM) == 0) {
@@ -112,8 +191,14 @@ void Tokenizer::skipUtf8BOM() {
     }
 }
 
-//////////////////////////////////
-// --- Skip Whitespace & Comments
+/**
+ * @brief Skips whitespace and hash (`#`) comments.
+ *
+ * @details Treats CR/LF/newlines and isspace() as whitespace. Hash comments run
+ *          until end-of-line.
+ *
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::skipWhitespaceAndComments() {
     while (!isAtEnd()) {
         unsigned char c = peek();
@@ -131,9 +216,14 @@ void Tokenizer::skipWhitespaceAndComments() {
         }
     }
 }
-///////////////////////////////////
-// ---Identifier & Keyword Parsing
 
+/**
+ * @brief Resolves an identifier to a keyword token type when applicable.
+ *
+ * @param word Candidate identifier (case-insensitive).
+ * @return The keyword's TokenType or IDENTIFIER.
+ * @ingroup config_tokenizing
+ */
 TokenType Tokenizer::resolveKeywordType(const std::string& word) {
     // Static map of all recognized configuration keywords (lowercase only)
     static const std::unordered_map<std::string, TokenType> keywords = {
@@ -168,6 +258,13 @@ TokenType Tokenizer::resolveKeywordType(const std::string& word) {
     return TokenType::IDENTIFIER;
 }
 
+/**
+ * @brief Scans an identifier body after a valid start.
+ *
+ * @details Consumes identifier characters until a non-identifier byte.
+ *
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::scanIdentifier() {
     // Assumes the current character is a valid identifier start (checked beforehand)
     while (!isAtEnd() && isIdentifierChar(peek())) {
@@ -175,6 +272,13 @@ void Tokenizer::scanIdentifier() {
     }
 }
 
+/**
+ * @brief Validates the last scanned identifier.
+ *
+ * @param start Byte offset where the identifier started.
+ * @throws TokenizerError If empty, contains '$', or non-printable chars.
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::validateIdentifier(std::size_t start) {
     // Reject empty identifiers
     if (_pos == start) {
@@ -210,6 +314,12 @@ void Tokenizer::validateIdentifier(std::size_t start) {
     }
 }
 
+/**
+ * @brief Parses an identifier and resolves to keyword when applicable.
+ *
+ * @return Token of type IDENTIFIER or specific KEYWORD_*.
+ * @ingroup config_tokenizing
+ */
 Token Tokenizer::parseIdentifierOrKeyword() {
     std::size_t start = _pos;  // Record start position of the identifier
     scanIdentifier();          // Consume all valid identifier characters
@@ -219,8 +329,13 @@ Token Tokenizer::parseIdentifierOrKeyword() {
     return makeToken(type, word);
 }
 
-/////////////////////////////
-// --- Number & Unit Parsing
+//=== Number & Unit Parsing ==============================================
+
+/**
+ * @brief Consumes consecutive decimal digits.
+ *
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::scanDigits() {
     // Consume characters as long as they are digits (0–9)
     while (!isAtEnd() && std::isdigit(peek())) {
@@ -228,6 +343,15 @@ void Tokenizer::scanDigits() {
     }
 }
 
+/**
+ * @brief Optionally consumes a single-letter size suffix.
+ *
+ * @details Accepts exactly one alphabetic suffix (e.g., k/m/g). Rejects
+ *          multi-letter forms (e.g., "mb", "MiB").
+ *
+ * @throws TokenizerError On multi-letter suffix usage.
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::scanOptionalUnitSuffix() {
     if (isAtEnd())
         return; // Nothing to scan
@@ -246,6 +370,12 @@ void Tokenizer::scanOptionalUnitSuffix() {
     }
 }
 
+/**
+ * @brief Parses a NUMBER token with optional single-letter suffix.
+ *
+ * @return NUMBER token constructed from the scanned span.
+ * @ingroup config_tokenizing
+ */
 Token Tokenizer::parseNumberOrUnit() {
     std::size_t start = _pos; // Record start of numeric token
 
@@ -256,14 +386,31 @@ Token Tokenizer::parseNumberOrUnit() {
     return makeToken(TokenType::NUMBER, _input.substr(start, _pos - start));
 }
 
-//////////////////////
-// --- String Parsing
+//=== String Parsing ======================================================
+
+/**
+ * @brief Throws a formatted unterminated string error.
+ *
+ * @param reason Short explanation (e.g., "unexpected newline").
+ * @throws TokenizerError Always; provides formatted context line.
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::throwUnterminatedString(const std::string& reason) {
     // Throw a TokenizerError with a contextual reason and source line
     throw TokenizerError(formatError("Invalid string literal (" + reason + ")", _line, _column),
                          extractLine(_pos));
 }
 
+/**
+ * @brief Parses a quoted string literal.
+ *
+ * @details Supports both single and double quotes. Enforces a 64 KiB maximum
+ *          payload and forbids embedded newlines.
+ *
+ * @return STRING token containing the unescaped contents.
+ * @throws TokenizerError On newline, overflow, or EOF before closing quote.
+ * @ingroup config_tokenizing
+ */
 Token Tokenizer::parseStringLiteral() {
     static const std::size_t MAX_STRING_LITERAL_LENGTH = 64 * 1024; // 64 KiB
 
@@ -296,24 +443,39 @@ Token Tokenizer::parseStringLiteral() {
     return Token(TokenType::STRING, "", _line, _column, 0); // Unreachable
 }
 
-////////////////////////////////////
-// --- Whitespace & Comment Helpers
+//=== Whitespace & Comment Helpers =======================================
 
+/**
+ * @brief Skips a carriage return (`'\\r'`).
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::skipCR() {
     ++_pos;
 }
 
+/**
+ * @brief Skips a newline and advances line counter.
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::skipNewline() {
     ++_pos;
     ++_line;
     _column = 1;
 }
 
+/**
+ * @brief Skips a single whitespace character (except newline).
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::skipOtherWhitespace() {
     ++_pos;
     ++_column;
 }
 
+/**
+ * @brief Skips a `#`-style comment to the end of the line.
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::skipHashComment() {
     ++_pos;
     ++_column;
@@ -323,8 +485,16 @@ void Tokenizer::skipHashComment() {
     }
 }
 
-//////////////////////
-// --- Token Dispatch
+//=== Token Dispatch ======================================================
+
+/**
+ * @brief Heuristically checks if the remaining slice looks like an IPv4 address.
+ *
+ * @details Counts dots while digits continue; returns true for exactly 3 dots.
+ *
+ * @return `true` if the upcoming token resembles `a.b.c.d`.
+ * @ingroup config_tokenizing
+ */
 bool Tokenizer::looksLikeIpAddress() const {
     std::size_t len = _input.size();
     std::size_t i = _pos, dots = 0;
@@ -342,10 +512,19 @@ bool Tokenizer::looksLikeIpAddress() const {
         }
     }
 
-    // A valid IPv4 address has at least two dots (e.g., 127.0.0.1)
+    // A valid IPv4 address has at least two dots (e.g. 127.0.0.1)
     return dots == 3;
 }
 
+/**
+ * @brief Reads and emits the next token from the input.
+ *
+ * @details Dispatches to number/identifier/string parsers or emits punctuation
+ *          tokens. Raises on unknown characters.
+ *
+ * @throws TokenizerError On illegal bytes or malformed lexemes.
+ * @ingroup config_tokenizing
+ */
 void Tokenizer::dispatchToken() {
     unsigned char c = peek();
 
@@ -354,7 +533,7 @@ void Tokenizer::dispatchToken() {
         unsigned char next = peekNext();
 
         // If it looks like an IPv4 address (e.g. 127.0.0.1), or
-        // if the next character is *not* a digit but *is* a valid identifier char
+        // if the next character is not a digit but is a valid identifier char
         // ("1index.html" or "/api/v2a3"), then parse as an identifier/keyword
         if (looksLikeIpAddress() || (!std::isdigit(next) && isIdentifierChar(next))) {
             _tokens.push_back(parseIdentifierOrKeyword());
@@ -400,8 +579,16 @@ void Tokenizer::dispatchToken() {
     }
 }
 
-////////////////////////////////////
-// --- Token Creation & Source Info
+//=== Token Creation & Source Info =======================================
+
+/**
+ * @brief Creates a token with current source coordinates.
+ *
+ * @param type  Token type to emit.
+ * @param value Token payload (unescaped for strings).
+ * @return Token with line/column and byte offset.
+ * @ingroup config_tokenizing
+ */
 Token Tokenizer::makeToken(TokenType type, const std::string& value) const {
     // Estimate starting column based on current column and token length
     int col = _column - static_cast<int>(value.length());
@@ -413,6 +600,13 @@ Token Tokenizer::makeToken(TokenType type, const std::string& value) const {
     return Token(type, value, _line, col, off);
 }
 
+/**
+ * @brief Extracts the full source line containing a given byte offset.
+ *
+ * @param offset Byte offset into the input buffer.
+ * @return The line text (without trailing newline).
+ * @ingroup config_tokenizing
+ */
 std::string Tokenizer::extractLine(std::size_t offset) const {
     // Find the last newline before (or at) the offset to locate the start of the line
     std::size_t start = _input.rfind('\n', offset);

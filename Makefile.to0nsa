@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+         #
+#    By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/09 20:53:27 by nlouis            #+#    #+#              #
-#    Updated: 2025/08/19 15:24:47 by irychkov         ###   ########.fr        #
+#    Updated: 2025/08/18 20:05:41 by nlouis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -105,7 +105,7 @@ HEADERS := \
   include/core/Location.hpp \
   include/core/Server.hpp \
   include/core/server_utils.hpp \
-  include/core/webserv.hpp \
+  include/core/runWebserv.hpp \
   include/http/HttpRequest.hpp \
   include/http/HttpRequestParser.hpp \
   include/http/HttpResponse.hpp \
@@ -159,10 +159,12 @@ re: fclean all
 
 # Python test dependencies
 install_test_deps:
-	@echo "$(CYAN)📦 Installing Python test dependencies...$(RESET)"
-	@python3 -m pip install --user --upgrade virtualenv
-	@python3 -m virtualenv .venv
-	@.venv/bin/pip install --upgrade pip
+	@echo "$(CYAN)📦 Creating isolated Python venv for tests...$(RESET)"
+	@python3 -m venv .venv || { \
+		echo "$(RED)python3-venv is missing. Install it: sudo apt-get install -y python3-venv$(RESET)"; \
+		exit 1; \
+	}
+	@.venv/bin/python -m pip install --upgrade pip
 	@.venv/bin/pip install -r requirements-test.txt
 
 # Tests

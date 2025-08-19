@@ -3,14 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   Logger.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/17 12:31:34 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/17 12:31:36 by irychkov         ###   ########.fr       */
+/*   Created: 2025/08/15 22:54:33 by nlouis            #+#    #+#             */
+/*   Updated: 2025/08/18 19:55:37 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * @file    Logger.cpp
+ * @brief   Simple color-coded logging utility.
+ *
+ * @details Implements the @ref Logger class methods and related helper
+ *          functions for mapping log levels to human-readable strings
+ *          and ANSI terminal colors. Supports standard log levels
+ *          (`DEBUG`, `INFO`, `WARN`, `ERROR`) and can optionally
+ *          prefix messages with a source identifier.
+ *
+ *          Output is written to `stdout` for non-error messages and
+ *          `stderr` for `ERROR` level messages, ensuring separation
+ *          of normal and error output streams. ANSI escape codes are
+ *          used for color, which may not render correctly in all
+ *          terminals.
+ *
+ * @ingroup utils
+ *
+ * @note This logger is intended for human-readable output during
+ *       development and runtime diagnostics, not structured logging.
+ *       For production environments or log parsing, consider extending
+ *       it to support formats like JSON or syslog.
+ */
+
 #include "utils/Logger.hpp"
+
 #include <iostream> // for basic_ostream, operator<<, endl, cerr, cout
 
 // ANSI color codes

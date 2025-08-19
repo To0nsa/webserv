@@ -29,6 +29,7 @@ compile_commands.json
 __pycache__/
 *.pyc
 *.pyo
+.pytest_cache/
 
 # --- Virtual environments ---
 .venv/
@@ -51,3 +52,8 @@ Thumbs.db
 test_webserv/**/__pycache__/
 test_webserv/**/*.pyc
 test_webserv/**/*.pyo
+
+# --- Doxygen docs ---
+
+/docs/html/
+/docs/doxygen.warnings

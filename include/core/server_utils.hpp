@@ -3,23 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   server_utils.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:29:58 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/17 12:26:54 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/18 19:47:04 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
  * @file    server_utils.hpp
- * @brief   Provides utility functions for selecting the correct Server instance.
+ * @brief   Declares server selection util for virtual host resolution.
  *
- * @details Contains logic for virtual host resolution based on the request's
- * Host header and destination port. These functions are used during HTTP
- * request routing to determine which configured server block should handle
- * the incoming connection.
- *
- * @ingroup config
+ * @details Contains function declaration for selecting the appropriate
+ *          `Server` instance based on listening port and HTTP `Host` header.
+ * @ingroup server
  */
 
 #pragma once
@@ -28,13 +25,6 @@
 #include <vector> // for vector
 class Server;
 
-/**
- * @brief Selects the best matching server for a given port and Host header.
- *
- * @param servers List of all servers loaded from config.
- * @param port The port on which the connection was accepted.
- * @param host_name The Host header value from the request (e.g. "localhost").
- * @return Reference to the selected Server.
- */
-const Server& findMatchingServer(const std::vector<Server>& servers, int port,
-                                 const std::string& host_name);
+const Server&
+findMatchingServer(const std::vector<Server>& servers, int port,
+                   const std::string& host_name); // documented at src/core/server_utils.cpp

@@ -3,12 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   urlUtils.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/06 13:22:39 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/17 21:06:11 by irychkov         ###   ########.fr       */
+/*   Created: 2025/08/15 22:56:08 by nlouis            #+#    #+#             */
+/*   Updated: 2025/08/18 19:41:13 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file    urlUtils.cpp
+ * @brief   URL and form-encoding helpers.
+ *
+ * @details Implements percent-decoding (RFC 3986), `application/x-www-form-urlencoded`
+ *          decoding (treating '+' as space), simple key/value parsing for form bodies,
+ *          and a safe filename extractor from a URI segment. These utilities are used
+ *          during request parsing and upload handling to turn encoded inputs into
+ *          validated, safe strings.
+ *
+ * @ingroup url_utils
+ */
 
 #include <cctype>        // for isxdigit
 #include <cstddef>       // for size_t
@@ -19,6 +32,22 @@
 #include <unordered_map> // for unordered_map
 #include <utility>       // for move
 
+/**
+ * @brief Decodes percent-encoded octets in a string.
+ *
+ * @details Scans the input for sequences of the form `%HH` where `H` is a hex digit,
+ *          converts each pair to a single byte, and returns the decoded result.
+ *          Leaves all non-encoded characters unchanged.
+ *
+ * @ingroup url_utils
+ *
+ * @param encoded Input possibly containing percent-encoded bytes.
+ * @return Decoded string with `%HH` sequences replaced by their byte values.
+ *
+ * @throws std::invalid_argument If a `%` is incomplete at the end of the string or
+ *                               if the two following characters are not hex digits.
+ * @note This function does not perform UTF‑8 validation; it operates on bytes.
+ */
 std::string decodePercentEncoding(const std::string& encoded) {
     std::ostringstream result;
     for (size_t i = 0; i < encoded.length(); ++i) {
@@ -44,6 +73,20 @@ std::string decodePercentEncoding(const std::string& encoded) {
     return result.str();
 }
 
+/**
+ * @brief Decodes `application/x-www-form-urlencoded` field content.
+ *
+ * @details First replaces `+` with a space (per form-url-encoded rules), then applies
+ *          percent-decoding to `%HH` sequences. This is suitable for decoding both
+ *          keys and values extracted from a form body.
+ *
+ * @ingroup url_utils
+ *
+ * @param input Raw form field string (may include `+` and `%HH`).
+ * @return Decoded string.
+ *
+ * @throws std::invalid_argument Propagated from @ref decodePercentEncoding on invalid encodings.
+ */
 std::string percentDecodeForm(const std::string& input) {
     std::string temp;
     temp.reserve(input.size());
@@ -54,6 +97,22 @@ std::string percentDecodeForm(const std::string& input) {
     return decodePercentEncoding(temp);
 }
 
+/**
+ * @brief Parses an `application/x-www-form-urlencoded` body into key/value pairs.
+ *
+ * @details Splits the body on `&`, then splits each pair on the first `=`.
+ *          Both key and value are decoded using @ref percentDecodeForm. Empty pairs
+ *          are ignored; missing `=` results in the pair being skipped.
+ *
+ * @ingroup url_utils
+ *
+ * @param body Full form body string (e.g., `"a=1&b=two+words"`).
+ * @return Map of decoded keys to decoded values. Later duplicates will not overwrite
+ *         earlier ones due to `emplace`; adjust if you want overwrite semantics.
+ *
+ * @throws std::invalid_argument Propagated from @ref percentDecodeForm (invalid `%HH`).
+ * @note If you expect repeated keys, consider using `std::unordered_multimap` instead.
+ */
 std::unordered_map<std::string, std::string> parseFormUrlEncoded(const std::string& body) {
     std::unordered_map<std::string, std::string> form;
     size_t                                       start = 0;
@@ -81,6 +140,23 @@ std::unordered_map<std::string, std::string> parseFormUrlEncoded(const std::stri
     return form;
 }
 
+/**
+ * @brief Extracts a safe filename from the last URI segment.
+ *
+ * @details Takes the substring after the last `/` in @p uri, attempts percent-decoding,
+ *          and validates the result against a conservative allowlist. Rejects empty,
+ *          too-long (>256), or suspicious names (contains `/`, equals `"."` or `".."`,
+ *          starts with `.` or `-`, or fails the regex `^[a-zA-Z0-9._-]+$`).
+ *
+ * @ingroup url_utils
+ *
+ * @param uri Source URI or path-like string.
+ * @return A validated filename; returns an empty string if decoding fails or the
+ *         candidate does not pass validation.
+ *
+ * @note Designed for deriving a download/upload filename from a URI segment without
+ *       risking directory traversal or confusing special names.
+ */
 std::string extractFilenameFromUri(const std::string& uri) {
     std::string filename;
 
@@ -105,7 +181,7 @@ std::string extractFilenameFromUri(const std::string& uri) {
     if (filename == "." || filename == ".." || filename[0] == '.' || filename[0] == '-')
         return "";
 
-    // Optional: enforce strict pattern
+    // Enforce strict pattern
     static const std::regex safePattern(R"(^[a-zA-Z0-9._-]+$)");
     if (!std::regex_match(filename, safePattern))
         return "";

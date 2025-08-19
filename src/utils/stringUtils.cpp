@@ -3,12 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   stringUtils.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:09:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/17 12:33:14 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/18 19:41:44 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file    stringUtils.cpp
+ * @brief   Utility functions for string parsing, formatting, and case conversion.
+ *
+ * @details Implements the @ref string_utils helpers used across Webserv for:
+ *          - Parsing integers and byte sizes from configuration strings with rich error reporting.
+ *          - Converting strings to lowercase or uppercase.
+ *          - Formatting byte counts into human-readable units.
+ *          - Joining lists of strings with a delimiter.
+ *          - Trimming whitespace from strings.
+ *
+ *          These functions are used in configuration parsing, logging, formatting
+ *          HTTP responses, and general-purpose string handling.
+ *
+ * @ingroup string_utils
+ *
+ * @note Parsing helpers (`parseInt`, `parseByteSize`) throw @ref ConfigParseError
+ *       with contextual information for configuration errors.
+ * @warning None of these functions are locale-sensitive beyond standard
+ *          `std::tolower` / `std::toupper` behavior, and they do not perform
+ *          Unicode normalization.
+ */
 
 #include "utils/stringUtils.hpp"
 #include "config/parser/ConfigParseError.hpp" // for ConfigParseError
@@ -20,6 +43,33 @@
 #include <system_error>                       // for errc
 #include <vector>                             // for vector
 
+/**
+ * @ingroup string_utils
+ * @brief Parses a non-negative integer from a string with context-aware error reporting.
+ *
+ * @details Attempts to parse the entire @p value string into a non-negative integer
+ *          using `std::from_chars` for efficient, allocation-free conversion.
+ *          If parsing fails, the string contains extra characters, or the result
+ *          is negative, a @ref ConfigParseError is thrown. The error includes:
+ *            - The field name for context.
+ *            - The offending value.
+ *            - The line and column numbers.
+ *            - Additional context from @p context_provider, such as a snippet of the
+ *              configuration file being parsed.
+ *
+ * @param value             String representation of the integer to parse.
+ * @param field             Name of the configuration field being parsed.
+ * @param line              Line number in the configuration source.
+ * @param column            Column number in the configuration source.
+ * @param context_provider  Callable returning a string snippet or context for diagnostics.
+ * @return Parsed integer value (guaranteed to be non-negative).
+ *
+ * @throws ConfigParseError If parsing fails, if extra characters remain after parsing,
+ *                          or if the parsed value is negative.
+ *
+ * @note This function is typically used when reading numeric configuration values
+ *       (e.g., port numbers, limits) that must be whole, non-negative integers.
+ */
 int parseInt(const std::string& value, const std::string& field, int line, int column,
              const std::function<std::string()>& context_provider) {
     int result = 0;
@@ -38,6 +88,33 @@ int parseInt(const std::string& value, const std::string& field, int line, int c
     return result;
 }
 
+/**
+ * @ingroup string_utils
+ * @brief Parses a human-readable byte size string into a byte count.
+ *
+ * @details Converts a size string (e.g., `"10K"`, `"5M"`, `"2G"`, or raw bytes `"512"`)
+ *          into a `std::size_t` representing the number of bytes.
+ *          The suffix, if present, is case-insensitive and supports:
+ *            - `K` = kibibytes (× 1024)
+ *            - `M` = mebibytes (× 1024²)
+ *            - `G` = gibibytes (× 1024³)
+ *          Throws a @ref ConfigParseError if:
+ *            - The value is empty.
+ *            - Parsing fails or extra non-numeric characters remain.
+ *            - The computed size exceeds the 4 GiB hard limit from the Webserv spec.
+ *
+ * @param value             String containing the size to parse (may include suffix).
+ * @param field             Name of the configuration field being parsed.
+ * @param line              Line number in the configuration source.
+ * @param column            Column number in the configuration source.
+ * @param context_provider  Callable returning a string snippet or context for diagnostics.
+ * @return Parsed size in bytes.
+ *
+ * @throws ConfigParseError If the string is empty, cannot be parsed as a size, contains
+ *                          leftover characters, or exceeds the maximum allowed size.
+ *
+ * @note Used primarily to parse configuration directives like `client_max_body_size`.
+ */
 std::size_t parseByteSize(const std::string& value, const std::string& field, int line, int column,
                           const std::function<std::string()>& context_provider) {
     if (value.empty()) {
