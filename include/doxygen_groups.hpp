@@ -125,6 +125,12 @@
  */
 
 /**
+ * @defgroup request_handler Request Handling
+ * @ingroup http
+ * @brief Functions and utilities for handling HTTP requests.
+ */
+
+/**
  * @defgroup socket_manager Network & Socket Abstraction
  * @brief Non-blocking I/O, socket management, and connection handling.
  *

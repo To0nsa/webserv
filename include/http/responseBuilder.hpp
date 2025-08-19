@@ -3,12 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   responseBuilder.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: irychkov <irychkov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 12:02:21 by irychkov          #+#    #+#             */
-/*   Updated: 2025/08/17 12:18:09 by irychkov         ###   ########.fr       */
+/*   Updated: 2025/08/19 09:32:32 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file    responseBuilder.hpp
+ * @brief   Declarations of helper functions for constructing HTTP responses.
+ *
+ * @details Defines the `ResponseBuilder` namespace, which provides a set of
+ *          high-level factory functions for creating different types of
+ *          @ref HttpResponse objects:
+ *          - @ref generateSuccess : Builds a success response with an inline body.
+ *          - @ref generateSuccessFile : Builds a success response backed by a file on disk.
+ *          - @ref generateError : Builds an error response using a custom error page
+ *            if available, or a default generated HTML fallback.
+ *          - @ref generateRedirect : Builds a redirect response with a `Location` header.
+ *
+ *          Also defines the `MessageHandler` namespace with
+ *          @ref getDefaultMessage, a helper that maps HTTP status codes to
+ *          their standard reason phrases.
+ *
+ *          These functions are typically used by method handlers (GET/POST/DELETE/CGI)
+ *          to generate complete responses ready for serialization and transmission
+ *          by the networking layer.
+ *
+ * @ingroup http
+ */
 
 #pragma once
 
