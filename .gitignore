@@ -57,6 +57,3 @@ test_webserv/**/*.pyo
 
 /docs/html/
 /docs/doxygen.warnings
-
-# --- Makefile for To0nsa config ---
-Makefile
