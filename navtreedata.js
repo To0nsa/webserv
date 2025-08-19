@@ -25,47 +25,7 @@
 var NAVTREE =
 [
   [ "Webserv", "index.html", [
-    [ "Core of Webserv", "index.html#autotoc_md1", [
-      [ "Program Entrypoint", "index.html#autotoc_md2", null ]
-    ] ],
-    [ "Configuration Parsing Flow", "index.html#autotoc_md3", [
-      [ "1. Tokenization", "index.html#autotoc_md4", null ],
-      [ "2. Parsing", "index.html#autotoc_md5", null ],
-      [ "3. Configuration Objects", "index.html#autotoc_md6", null ],
-      [ "4. Normalization", "index.html#autotoc_md7", null ],
-      [ "5. Validation", "index.html#autotoc_md8", null ],
-      [ "6. Error Handling", "index.html#autotoc_md9", null ]
-    ] ],
-    [ "Networking <tt>SocketManager</tt>", "index.html#autotoc_md10", null ],
-    [ "HTTP Handling", "index.html#autotoc_md11", [
-      [ "Request Lifecycle (High‑Level)", "index.html#autotoc_md12", null ],
-      [ "Static Files & Autoindex", "index.html#autotoc_md13", null ],
-      [ "Errors & Edge Cases", "index.html#autotoc_md14", null ]
-    ] ],
-    [ "Request & CGI Handling", "index.html#autotoc_md15", [
-      [ "POST Uploads & Multipart", "index.html#autotoc_md16", null ],
-      [ "CGI Execution Model", "index.html#autotoc_md17", null ],
-      [ "GET/DELETE Semantics", "index.html#autotoc_md18", null ],
-      [ "Response Builder (Recap)", "index.html#autotoc_md19", null ]
-    ] ],
-    [ "Flow Overview - End‑to‑End Runtime", "index.html#autotoc_md20", null ],
-    [ "Continuous Integration & Documentation", "index.html#autotoc_md21", [
-      [ "CI Pipeline", "index.html#autotoc_md22", null ]
-    ] ],
-    [ "Documentation", "index.html#autotoc_md23", [
-      [ "1. Doxygen-Powered", "index.html#autotoc_md24", null ],
-      [ "2. Graphical Support", "index.html#autotoc_md25", null ],
-      [ "3. Navigation & Browsing", "index.html#autotoc_md26", null ],
-      [ "4. Deployment", "index.html#autotoc_md27", null ],
-      [ "5. Best Practices", "index.html#autotoc_md28", null ]
-    ] ],
-    [ "Project Structure Overview", "index.html#autotoc_md29", null ],
-    [ "Build & Test Instructions", "index.html#autotoc_md30", [
-      [ "Build with Makefile", "index.html#autotoc_md31", null ],
-      [ "Available Makefile Targets", "index.html#autotoc_md32", null ],
-      [ "Notes", "index.html#autotoc_md33", null ]
-    ] ],
-    [ "License", "index.html#autotoc_md34", null ],
+    [ "Todo List", "todo.html", null ],
     [ "Topics", "topics.html", "topics" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -79,12 +39,7 @@ var NAVTREE =
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
-      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
-      [ "Class Members", "functions.html", [
-        [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ]
-      ] ]
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ]
     ] ],
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ],
@@ -103,9 +58,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "ConfigParseError_8cpp.html",
-"classLocation.html#ad34794ff218bc1e3004eaed2642c98e0",
-"group__StringUtils.html",
-"requestRouter_8cpp.html#a29cdec36da3c3995a8fd235c8f6b31b9"
+"namespaceanonymous__namespace_02HttpRequestParser_8cpp_03_a43f393da49f2be40bec77b2430a9e517.html#a43f393da49f2be40bec77b2430a9e517"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

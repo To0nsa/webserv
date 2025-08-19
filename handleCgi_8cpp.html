@@ -93,9 +93,12 @@ $(document).ready(function(){initNavTree('handleCgi_8cpp.html',''); initResizabl
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">handleCgi.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">handleCgi.cpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a> &raquo; <a class="el" href="group__request__handler.html">Request Handling</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements <a class="el" href="namespaceCGI.html">CGI</a> (Common Gateway Interface) request handling.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="handleCgi_8hpp_source.html">http/handleCgi.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Location_8hpp_source.html">core/Location.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
@@ -140,36 +143,81 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1c43ca81105ee1c019c6a4de7b1f392d" id="r_a1c43ca81105ee1c019c6a4de7b1f392d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI.html#a1c43ca81105ee1c019c6a4de7b1f392d">CGI::cleanupCgi</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi)</td></tr>
-<tr class="separator:a1c43ca81105ee1c019c6a4de7b1f392d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96e4b50990676c6e74a57b85bba037d3" id="r_a96e4b50990676c6e74a57b85bba037d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI.html#a96e4b50990676c6e74a57b85bba037d3">CGI::errorOnCgi</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi)</td></tr>
-<tr class="separator:a96e4b50990676c6e74a57b85bba037d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a77a182cf042fc558a7af98315c76ce" id="r_a8a77a182cf042fc558a7af98315c76ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI.html#a8a77a182cf042fc558a7af98315c76ce">CGI::finalizeCgi</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
-<tr class="separator:a8a77a182cf042fc558a7af98315c76ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72918fa9565937913d5abb69f98d71ab" id="r_a72918fa9565937913d5abb69f98d71ab"><td class="memItemLeft" align="right" valign="top">std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03.html#a72918fa9565937913d5abb69f98d71ab">anonymous_namespace{handleCgi.cpp}::findHeaderDelimiter</a> (const std::string &amp;data, size_t &amp;delimiterLength)</td></tr>
-<tr class="separator:a72918fa9565937913d5abb69f98d71ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33ea05db8490f9173fe1aa22043df4ed" id="r_a33ea05db8490f9173fe1aa22043df4ed"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI.html#a33ea05db8490f9173fe1aa22043df4ed">CGI::initCgiProcess</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classLocation.html">Location</a> &amp;loc, const std::vector&lt; pollfd &gt; &amp;poll_fds, int &amp;errorCode)</td></tr>
-<tr class="separator:a33ea05db8490f9173fe1aa22043df4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57efdd89a937ab93f768c0427d7c133d" id="r_a57efdd89a937ab93f768c0427d7c133d"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03.html#a57efdd89a937ab93f768c0427d7c133d">anonymous_namespace{handleCgi.cpp}::parseHeaders</a> (const std::string &amp;header)</td></tr>
-<tr class="separator:a57efdd89a937ab93f768c0427d7c133d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac921accef6e91b67f8cff3c14ad78acd" id="r_ac921accef6e91b67f8cff3c14ad78acd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03.html#ac921accef6e91b67f8cff3c14ad78acd">anonymous_namespace{handleCgi.cpp}::prepareCgiTempFiles</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, int &amp;bodyFd, int &amp;outputFd)</td></tr>
-<tr class="separator:ac921accef6e91b67f8cff3c14ad78acd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc44b00f1024c8fa4ed4b410755c9999" id="r_acc44b00f1024c8fa4ed4b410755c9999"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03.html#acc44b00f1024c8fa4ed4b410755c9999">anonymous_namespace{handleCgi.cpp}::prepareEnv</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classLocation.html">Location</a> &amp;loc, const std::string &amp;scriptPath)</td></tr>
-<tr class="separator:acc44b00f1024c8fa4ed4b410755c9999"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20f26ded59767984a30b1bfa43ad512e" id="r_a20f26ded59767984a30b1bfa43ad512e"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::string, std::streamsize &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03.html#a20f26ded59767984a30b1bfa43ad512e">anonymous_namespace{handleCgi.cpp}::readInitialOutput</a> (std::ifstream &amp;file, size_t maxBytes)</td></tr>
-<tr class="separator:a20f26ded59767984a30b1bfa43ad512e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae24ca47ecaef5610e4cdae5c05f8b84b" id="r_ae24ca47ecaef5610e4cdae5c05f8b84b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03.html#ae24ca47ecaef5610e4cdae5c05f8b84b">anonymous_namespace{handleCgi.cpp}::setupAndRunCgiChild</a> (const <a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi, int body_fd, int output_fd, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classLocation.html">Location</a> &amp;loc, const std::vector&lt; pollfd &gt; &amp;poll_fds)</td></tr>
-<tr class="separator:ae24ca47ecaef5610e4cdae5c05f8b84b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44659e51fb8934c51b45f14053af876a" id="r_a44659e51fb8934c51b45f14053af876a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; char * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03.html#a44659e51fb8934c51b45f14053af876a">anonymous_namespace{handleCgi.cpp}::toCharPtrArray</a> (const std::vector&lt; std::string &gt; &amp;vs)</td></tr>
+<tr class="memitem:gacc44b00f1024c8fa4ed4b410755c9999" id="r_gacc44b00f1024c8fa4ed4b410755c9999"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_gacc44b00f1024c8fa4ed4b410755c9999.html#gacc44b00f1024c8fa4ed4b410755c9999">anonymous_namespace{handleCgi.cpp}::prepareEnv</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classLocation.html">Location</a> &amp;loc, const std::string &amp;scriptPath)</td></tr>
+<tr class="memdesc:gacc44b00f1024c8fa4ed4b410755c9999"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build the environment variables required for a <a class="el" href="namespaceCGI.html">CGI</a> script execution.  <br /></td></tr>
+<tr class="separator:gacc44b00f1024c8fa4ed4b410755c9999"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44659e51fb8934c51b45f14053af876a" id="r_a44659e51fb8934c51b45f14053af876a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; char * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03_a44659e51fb8934c51b45f14053af876a.html#a44659e51fb8934c51b45f14053af876a">anonymous_namespace{handleCgi.cpp}::toCharPtrArray</a> (const std::vector&lt; std::string &gt; &amp;vs)</td></tr>
+<tr class="memdesc:a44659e51fb8934c51b45f14053af876a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a vector of strings into a null-terminated <code>char*</code> array.  <br /></td></tr>
 <tr class="separator:a44659e51fb8934c51b45f14053af876a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a537e8dc1f7f04a7af29d7a787a1605ce" id="r_a537e8dc1f7f04a7af29d7a787a1605ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI.html#a537e8dc1f7f04a7af29d7a787a1605ce">CGI::tryTerminateCgi</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi)</td></tr>
-<tr class="separator:a537e8dc1f7f04a7af29d7a787a1605ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a269366ca367b3f85014b4742c0d16c" id="r_a7a269366ca367b3f85014b4742c0d16c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI.html#a7a269366ca367b3f85014b4742c0d16c">CGI::unlinkWithErrorLog</a> (const std::string &amp;path, const std::string &amp;context)</td></tr>
-<tr class="separator:a7a269366ca367b3f85014b4742c0d16c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1225229e10ab0367f24a30e34e7d0bb" id="r_ad1225229e10ab0367f24a30e34e7d0bb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03.html#ad1225229e10ab0367f24a30e34e7d0bb">anonymous_namespace{handleCgi.cpp}::validateCgiScript</a> (const std::filesystem::path &amp;path, int &amp;errorCode)</td></tr>
+<tr class="memitem:a20f26ded59767984a30b1bfa43ad512e" id="r_a20f26ded59767984a30b1bfa43ad512e"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::string, std::streamsize &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03_a20f26ded59767984a30b1bfa43ad512e.html#a20f26ded59767984a30b1bfa43ad512e">anonymous_namespace{handleCgi.cpp}::readInitialOutput</a> (std::ifstream &amp;file, size_t maxBytes)</td></tr>
+<tr class="memdesc:a20f26ded59767984a30b1bfa43ad512e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read up to a maximum number of bytes from a file stream.  <br /></td></tr>
+<tr class="separator:a20f26ded59767984a30b1bfa43ad512e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72918fa9565937913d5abb69f98d71ab" id="r_a72918fa9565937913d5abb69f98d71ab"><td class="memItemLeft" align="right" valign="top">std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03_a72918fa9565937913d5abb69f98d71ab.html#a72918fa9565937913d5abb69f98d71ab">anonymous_namespace{handleCgi.cpp}::findHeaderDelimiter</a> (const std::string &amp;data, size_t &amp;delimiterLength)</td></tr>
+<tr class="memdesc:a72918fa9565937913d5abb69f98d71ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locate the end of the HTTP header section in a <a class="el" href="namespaceCGI.html">CGI</a> response.  <br /></td></tr>
+<tr class="separator:a72918fa9565937913d5abb69f98d71ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57efdd89a937ab93f768c0427d7c133d" id="r_a57efdd89a937ab93f768c0427d7c133d"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03_a57efdd89a937ab93f768c0427d7c133d.html#a57efdd89a937ab93f768c0427d7c133d">anonymous_namespace{handleCgi.cpp}::parseHeaders</a> (const std::string &amp;header)</td></tr>
+<tr class="memdesc:a57efdd89a937ab93f768c0427d7c133d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse <a class="el" href="namespaceCGI.html">CGI</a> response headers for status code and content type.  <br /></td></tr>
+<tr class="separator:a57efdd89a937ab93f768c0427d7c133d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1225229e10ab0367f24a30e34e7d0bb" id="r_ad1225229e10ab0367f24a30e34e7d0bb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03_ad1225229e10ab0367f24a30e34e7d0bb.html#ad1225229e10ab0367f24a30e34e7d0bb">anonymous_namespace{handleCgi.cpp}::validateCgiScript</a> (const std::filesystem::path &amp;path, int &amp;errorCode)</td></tr>
 <tr class="separator:ad1225229e10ab0367f24a30e34e7d0bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac921accef6e91b67f8cff3c14ad78acd" id="r_ac921accef6e91b67f8cff3c14ad78acd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03_ac921accef6e91b67f8cff3c14ad78acd.html#ac921accef6e91b67f8cff3c14ad78acd">anonymous_namespace{handleCgi.cpp}::prepareCgiTempFiles</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, int &amp;bodyFd, int &amp;outputFd)</td></tr>
+<tr class="memdesc:ac921accef6e91b67f8cff3c14ad78acd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate that a <a class="el" href="namespaceCGI.html">CGI</a> script exists and is executable.  <br /></td></tr>
+<tr class="separator:ac921accef6e91b67f8cff3c14ad78acd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae24ca47ecaef5610e4cdae5c05f8b84b" id="r_ae24ca47ecaef5610e4cdae5c05f8b84b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleCgi_8cpp_03_ae24ca47ecaef5610e4cdae5c05f8b84b.html#ae24ca47ecaef5610e4cdae5c05f8b84b">anonymous_namespace{handleCgi.cpp}::setupAndRunCgiChild</a> (const <a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi, int body_fd, int output_fd, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classLocation.html">Location</a> &amp;loc, const std::vector&lt; pollfd &gt; &amp;poll_fds)</td></tr>
+<tr class="memdesc:ae24ca47ecaef5610e4cdae5c05f8b84b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup file descriptors, environment, and execute a <a class="el" href="namespaceCGI.html">CGI</a> script in the child process.  <br /></td></tr>
+<tr class="separator:ae24ca47ecaef5610e4cdae5c05f8b84b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a269366ca367b3f85014b4742c0d16c" id="r_a7a269366ca367b3f85014b4742c0d16c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI_a7a269366ca367b3f85014b4742c0d16c.html#a7a269366ca367b3f85014b4742c0d16c">CGI::unlinkWithErrorLog</a> (const std::string &amp;path, const std::string &amp;context)</td></tr>
+<tr class="memdesc:a7a269366ca367b3f85014b4742c0d16c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove a temporary <a class="el" href="namespaceCGI.html">CGI</a> file and log an error if the deletion fails.  <br /></td></tr>
+<tr class="separator:a7a269366ca367b3f85014b4742c0d16c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a3f351e9c644b2f80f5aa65990726f9" id="r_a3a3f351e9c644b2f80f5aa65990726f9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI_a3a3f351e9c644b2f80f5aa65990726f9.html#a3a3f351e9c644b2f80f5aa65990726f9">CGI::initCgiProcess</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classLocation.html">Location</a> &amp;loc, const std::vector&lt; pollfd &gt; &amp;poll_fds, int &amp;errorCode)</td></tr>
+<tr class="memdesc:a3a3f351e9c644b2f80f5aa65990726f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize and start a <a class="el" href="namespaceCGI.html">CGI</a> process for a given request.  <br /></td></tr>
+<tr class="separator:a3a3f351e9c644b2f80f5aa65990726f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a413463f03856a0eff42310c1cc1c80f7" id="r_a413463f03856a0eff42310c1cc1c80f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI_a413463f03856a0eff42310c1cc1c80f7.html#a413463f03856a0eff42310c1cc1c80f7">CGI::finalizeCgi</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req)</td></tr>
+<tr class="memdesc:a413463f03856a0eff42310c1cc1c80f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finalize a <a class="el" href="namespaceCGI.html">CGI</a> process by parsing its output and building an HTTP response.  <br /></td></tr>
+<tr class="separator:a413463f03856a0eff42310c1cc1c80f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96e4b50990676c6e74a57b85bba037d3" id="r_a96e4b50990676c6e74a57b85bba037d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI_a96e4b50990676c6e74a57b85bba037d3.html#a96e4b50990676c6e74a57b85bba037d3">CGI::errorOnCgi</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi)</td></tr>
+<tr class="memdesc:a96e4b50990676c6e74a57b85bba037d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forcefully terminate a <a class="el" href="namespaceCGI.html">CGI</a> process and clean up its resources.  <br /></td></tr>
+<tr class="separator:a96e4b50990676c6e74a57b85bba037d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c43ca81105ee1c019c6a4de7b1f392d" id="r_a1c43ca81105ee1c019c6a4de7b1f392d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI_a1c43ca81105ee1c019c6a4de7b1f392d.html#a1c43ca81105ee1c019c6a4de7b1f392d">CGI::cleanupCgi</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi)</td></tr>
+<tr class="memdesc:a1c43ca81105ee1c019c6a4de7b1f392d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clean up resources of a finished <a class="el" href="namespaceCGI.html">CGI</a> process.  <br /></td></tr>
+<tr class="separator:a1c43ca81105ee1c019c6a4de7b1f392d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a537e8dc1f7f04a7af29d7a787a1605ce" id="r_a537e8dc1f7f04a7af29d7a787a1605ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCGI_a537e8dc1f7f04a7af29d7a787a1605ce.html#a537e8dc1f7f04a7af29d7a787a1605ce">CGI::tryTerminateCgi</a> (<a class="el" href="structCgiProcess.html">CgiProcess</a> &amp;cgi)</td></tr>
+<tr class="memdesc:a537e8dc1f7f04a7af29d7a787a1605ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether a <a class="el" href="namespaceCGI.html">CGI</a> process has terminated, and reap it if so.  <br /></td></tr>
+<tr class="separator:a537e8dc1f7f04a7af29d7a787a1605ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements <a class="el" href="namespaceCGI.html">CGI</a> (Common Gateway Interface) request handling. </p>
+<p>This module provides full lifecycle management of <a class="el" href="namespaceCGI.html">CGI</a> processes:</p><ul>
+<li>Build <a class="el" href="namespaceCGI.html">CGI</a> environment variables from the incoming <code><a class="el" href="classHttpRequest.html" title="Encapsulates a client HTTP request.">HttpRequest</a></code>.</li>
+<li>Create temporary input/output files to stream request/response bodies.</li>
+<li>Fork and exec the target <a class="el" href="namespaceCGI.html">CGI</a> script with the correct interpreter.</li>
+<li>Collect, parse, and forward <a class="el" href="namespaceCGI.html">CGI</a> output as an <code><a class="el" href="classHttpResponse.html" title="Represents an HTTP response to be sent back to the client.">HttpResponse</a></code>.</li>
+<li>Handle errors, timeouts, and cleanup of child processes.</li>
+</ul>
+<h3>Workflow</h3>
+<ol type="1">
+<li><b>initCgiProcess</b>: validate script, create temp files, fork child, exec interpreter.</li>
+<li><b>Child process</b>: stdin → request body, stdout → temp output, <code>execve()</code> <a class="el" href="namespaceCGI.html">CGI</a> script.</li>
+<li><b>Parent process</b>: monitor PID, wait for completion, enforce timeouts.</li>
+<li><b>finalizeCgi</b>: parse <a class="el" href="namespaceCGI.html">CGI</a> headers (Status, Content-Type), build <code><a class="el" href="classHttpResponse.html" title="Represents an HTTP response to be sent back to the client.">HttpResponse</a></code>.</li>
+<li><b>cleanup</b>: delete temp files and reset <code><a class="el" href="structCgiProcess.html">CgiProcess</a></code> state.</li>
+</ol>
+<h3>Key Functions</h3>
+<ul>
+<li><code>prepareEnv</code> → Build <a class="el" href="namespaceCGI.html">CGI</a> environment (SCRIPT_NAME, PATH_INFO, QUERY_STRING, etc.).</li>
+<li><code>prepareCgiTempFiles</code> → Write request body to temp file, create output file.</li>
+<li><code>setupAndRunCgiChild</code> → Fork/exec child process safely.</li>
+<li><code>finalizeCgi</code> → Read output, parse headers, and generate HTTP response.</li>
+<li><code>errorOnCgi</code>, <code>cleanupCgi</code>, <code>tryTerminateCgi</code> → Robust process management.</li>
+</ul>
+<h3>Limitations</h3>
+<ul>
+<li>Blocking I/O (temp files, fork/exec).</li>
+<li>Only basic <a class="el" href="namespaceCGI.html">CGI</a> spec (no FastCGI, no async streaming). </li>
+</ul>
+
+<p class="definition">Definition in file <a class="el" href="handleCgi_8cpp_source.html">handleCgi.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

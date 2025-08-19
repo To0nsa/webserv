@@ -21,7 +21,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Declares normalization utilities for parsed configuration.">
 <polygon fill="#999999" stroke="#666666" points="136,-85 0,-85 0,-55 136,-55 136,-85"/>
 <text text-anchor="start" x="8" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">include/config/normalize</text>
 <text text-anchor="middle" x="68" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">Config.hpp</text>
@@ -31,9 +31,9 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="webserv_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="127.5,-19 8.5,-19 8.5,0 127.5,0 127.5,-19"/>
-<text text-anchor="middle" x="68" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">src/core/webserv.cpp</text>
+<g id="a_Node000002"><a xlink:href="runWebserv_8cpp.html" target="_top" xlink:title="Webserv bootstrap and runtime orchestration.">
+<polygon fill="white" stroke="#666666" points="135.5,-19 0.5,-19 0.5,0 135.5,0 135.5,-19"/>
+<text text-anchor="middle" x="68" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">src/core/runWebserv.cpp</text>
 </a>
 </g>
 </g>

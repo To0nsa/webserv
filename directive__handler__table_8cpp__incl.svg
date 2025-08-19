@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Implements directive handler maps for server and location blocks.">
 <polygon fill="#999999" stroke="#666666" points="810.5,-261 667.5,-261 667.5,-231 810.5,-231 810.5,-261"/>
 <text text-anchor="start" x="675.5" y="-249" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/parser/directive</text>
 <text text-anchor="middle" x="739" y="-238" font-family="Helvetica,sans-Serif" font-size="10.00">_handler_table.cpp</text>
@@ -67,7 +67,7 @@ var sectionId = 'dynsection-0';
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="directive__handler__table_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="directive__handler__table_8hpp.html" target="_top" xlink:title="Declares handler maps for server/location directives.">
 <polygon fill="white" stroke="#666666" points="474.5,-195 349.5,-195 349.5,-165 474.5,-165 474.5,-195"/>
 <text text-anchor="start" x="357.5" y="-183" font-family="Helvetica,sans-Serif" font-size="10.00">config/parser/directive</text>
 <text text-anchor="middle" x="412" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">_handler_table.hpp</text>
@@ -86,7 +86,7 @@ var sectionId = 'dynsection-0';
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="383.5,-74 280.5,-74 280.5,-55 383.5,-55 383.5,-74"/>
 <text text-anchor="middle" x="332" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>
@@ -140,7 +140,7 @@ var sectionId = 'dynsection-0';
 <!-- Node13 -->
 <g id="Node000013" class="node">
 <title>Node13</title>
-<g id="a_Node000013"><a xlink:href="ConfigParseError_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000013"><a xlink:href="ConfigParseError_8hpp.html" target="_top" xlink:title="Declares parse/validation error types for the config subsystem.">
 <polygon fill="white" stroke="#666666" points="926,-195 786,-195 786,-165 926,-165 926,-195"/>
 <text text-anchor="start" x="794" y="-183" font-family="Helvetica,sans-Serif" font-size="10.00">config/parser/ConfigParse</text>
 <text text-anchor="middle" x="856" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">Error.hpp</text>
@@ -159,7 +159,7 @@ var sectionId = 'dynsection-0';
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
-<g id="a_Node000015"><a xlink:href="errorUtils_8hpp.html" target="_top" xlink:title="Error formatting utilities.">
+<g id="a_Node000015"><a xlink:href="errorUtils_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="756.5,-74 649.5,-74 649.5,-55 756.5,-55 756.5,-74"/>
 <text text-anchor="middle" x="703" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">utils/errorUtils.hpp</text>
 </a>
@@ -177,7 +177,7 @@ var sectionId = 'dynsection-0';
 <!-- Node16 -->
 <g id="Node000016" class="node">
 <title>Node16</title>
-<g id="a_Node000016"><a xlink:href="stringUtils_8hpp.html" target="_top" xlink:title="Utility functions for parsing numeric string values.">
+<g id="a_Node000016"><a xlink:href="stringUtils_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="654,-189.5 542,-189.5 542,-170.5 654,-170.5 654,-189.5"/>
 <text text-anchor="middle" x="598" y="-177.5" font-family="Helvetica,sans-Serif" font-size="10.00">utils/stringUtils.hpp</text>
 </a>

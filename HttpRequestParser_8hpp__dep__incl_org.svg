@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Declares the HttpRequestParser utility class.">
 <polygon fill="#999999" stroke="#666666" points="241.5,-96 103.5,-96 103.5,-66 241.5,-66 241.5,-96"/>
 <text text-anchor="start" x="111.5" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">include/http/HttpRequest</text>
 <text text-anchor="middle" x="172.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">Parser.hpp</text>
@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="HttpRequestParser_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="HttpRequestParser_8cpp.html" target="_top" xlink:title="Implements the HttpRequestParser class and HTTP request parsing logic.">
 <polygon fill="white" stroke="#666666" points="167,-24.5 0,-24.5 0,-5.5 167,-5.5 167,-24.5"/>
 <text text-anchor="middle" x="83.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/HttpRequestParser.cpp</text>
 </a>
@@ -39,7 +39,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="SocketManagerRequest_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="SocketManagerRequest_8cpp.html" target="_top" xlink:title="Implements request handling logic for SocketManager.">
 <polygon fill="white" stroke="#666666" points="337.5,-30 185.5,-30 185.5,0 337.5,0 337.5,-30"/>
 <text text-anchor="start" x="193.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
 <text text-anchor="middle" x="261.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Request.cpp</text>

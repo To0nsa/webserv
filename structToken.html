@@ -94,11 +94,14 @@ $(document).ready(function(){initNavTree('structToken.html',''); initResizable()
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structToken-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">Token Struct Reference</div></div>
+  <div class="headertitle"><div class="title">Token Struct Reference<div class="ingroups"><a class="el" href="group__config.html">Configuration Parsing</a> &raquo; <a class="el" href="group__config__tokenizing.html">Tokenizing</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="token_8hpp_source.html">token.hpp</a>&gt;</code></p>
+<p>Plain-old-data token with source coordinates.  
+ <a href="structToken.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="token_8hpp_source.html">config/tokenizer/token.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for Token:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -106,181 +109,36 @@ $(document).ready(function(){initNavTree('structToken.html',''); initResizable()
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><iframe scrolling="no" frameborder="0" src="structToken__coll__graph.svg" width="88" height="156"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<table class="memberdecls">
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Plain-old-data token with source coordinates. </p>
+<p>Carries the token type, lexical value, and its position within the original input (line, column, byte offset) for diagnostics. </p>
+
+<p class="definition">Definition at line <a class="el" href="token_8hpp_source.html#l00066">66</a> of file <a class="el" href="token_8hpp_source.html">token.hpp</a>.</p>
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6a622f3976cdbce1db079f00784822a0" id="r_a6a622f3976cdbce1db079f00784822a0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken.html#a6a622f3976cdbce1db079f00784822a0">Token</a> (<a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> t, const std::string &amp;v, int l, int c, std::size_t o)</td></tr>
-<tr class="separator:a6a622f3976cdbce1db079f00784822a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6a622f3976cdbce1db079f00784822a0" id="r_ga6a622f3976cdbce1db079f00784822a0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__tokenizing_ga6a622f3976cdbce1db079f00784822a0.html#ga6a622f3976cdbce1db079f00784822a0">Token</a> (<a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#gaa520fbf142ba1e7e659590c07da31921">TokenType</a> t, const std::string &amp;v, int l, int c, std::size_t o)</td></tr>
+<tr class="memdesc:ga6a622f3976cdbce1db079f00784822a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="structToken.html" title="Plain-old-data token with source coordinates.">Token</a> with type, value and source coordinates.  <br /></td></tr>
+<tr class="separator:ga6a622f3976cdbce1db079f00784822a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a1f1d8ce91307dd46c151bc7e1b73685a" id="r_a1f1d8ce91307dd46c151bc7e1b73685a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken.html#a1f1d8ce91307dd46c151bc7e1b73685a">column</a></td></tr>
-<tr class="memdesc:a1f1d8ce91307dd46c151bc7e1b73685a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Column offset (zero-based)  <br /></td></tr>
-<tr class="separator:a1f1d8ce91307dd46c151bc7e1b73685a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b96c2a31d7c374fd2bd1986794f80dd" id="r_a4b96c2a31d7c374fd2bd1986794f80dd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken.html#a4b96c2a31d7c374fd2bd1986794f80dd">line</a></td></tr>
-<tr class="memdesc:a4b96c2a31d7c374fd2bd1986794f80dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Line number where the token begins.  <br /></td></tr>
-<tr class="separator:a4b96c2a31d7c374fd2bd1986794f80dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6180647a13a9ebea927b7ae3f08e5c81" id="r_a6180647a13a9ebea927b7ae3f08e5c81"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken.html#a6180647a13a9ebea927b7ae3f08e5c81">offset</a></td></tr>
-<tr class="memdesc:a6180647a13a9ebea927b7ae3f08e5c81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Byte offset in the original input string.  <br /></td></tr>
-<tr class="separator:a6180647a13a9ebea927b7ae3f08e5c81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67919af9f3a80dc0b28a0ab1e6d5bf8a" id="r_a67919af9f3a80dc0b28a0ab1e6d5bf8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken.html#a67919af9f3a80dc0b28a0ab1e6d5bf8a">type</a></td></tr>
+<tr class="memitem:a67919af9f3a80dc0b28a0ab1e6d5bf8a" id="r_a67919af9f3a80dc0b28a0ab1e6d5bf8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#gaa520fbf142ba1e7e659590c07da31921">TokenType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken_a67919af9f3a80dc0b28a0ab1e6d5bf8a.html#a67919af9f3a80dc0b28a0ab1e6d5bf8a">type</a></td></tr>
 <tr class="memdesc:a67919af9f3a80dc0b28a0ab1e6d5bf8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of the token (identifier, keyword, etc.)  <br /></td></tr>
 <tr class="separator:a67919af9f3a80dc0b28a0ab1e6d5bf8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b7142147b8598f8e24c404928d9263b" id="r_a4b7142147b8598f8e24c404928d9263b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken.html#a4b7142147b8598f8e24c404928d9263b">value</a></td></tr>
+<tr class="memitem:a4b7142147b8598f8e24c404928d9263b" id="r_a4b7142147b8598f8e24c404928d9263b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken_a4b7142147b8598f8e24c404928d9263b.html#a4b7142147b8598f8e24c404928d9263b">value</a></td></tr>
 <tr class="memdesc:a4b7142147b8598f8e24c404928d9263b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lexical string value of the token.  <br /></td></tr>
 <tr class="separator:a4b7142147b8598f8e24c404928d9263b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b96c2a31d7c374fd2bd1986794f80dd" id="r_a4b96c2a31d7c374fd2bd1986794f80dd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken_a4b96c2a31d7c374fd2bd1986794f80dd.html#a4b96c2a31d7c374fd2bd1986794f80dd">line</a></td></tr>
+<tr class="memdesc:a4b96c2a31d7c374fd2bd1986794f80dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Line number where the token begins (1-based)  <br /></td></tr>
+<tr class="separator:a4b96c2a31d7c374fd2bd1986794f80dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f1d8ce91307dd46c151bc7e1b73685a" id="r_a1f1d8ce91307dd46c151bc7e1b73685a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken_a1f1d8ce91307dd46c151bc7e1b73685a.html#a1f1d8ce91307dd46c151bc7e1b73685a">column</a></td></tr>
+<tr class="memdesc:a1f1d8ce91307dd46c151bc7e1b73685a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Column number where the token begins (1-based)  <br /></td></tr>
+<tr class="separator:a1f1d8ce91307dd46c151bc7e1b73685a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6180647a13a9ebea927b7ae3f08e5c81" id="r_a6180647a13a9ebea927b7ae3f08e5c81"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken_a6180647a13a9ebea927b7ae3f08e5c81.html#a6180647a13a9ebea927b7ae3f08e5c81">offset</a></td></tr>
+<tr class="memdesc:a6180647a13a9ebea927b7ae3f08e5c81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Byte offset in the original input string.  <br /></td></tr>
+<tr class="separator:a6180647a13a9ebea927b7ae3f08e5c81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="token_8hpp_source.html#l00043">43</a> of file <a class="el" href="token_8hpp_source.html">token.hpp</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a6a622f3976cdbce1db079f00784822a0" name="a6a622f3976cdbce1db079f00784822a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a622f3976cdbce1db079f00784822a0">&#9670;&#160;</a></span>Token()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Token::Token </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a>&#160;</td>
-          <td class="paramname"><em>t</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>v</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>l</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>c</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>o</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="token_8cpp_source.html#l00017">17</a> of file <a class="el" href="token_8cpp_source.html">token.cpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a1f1d8ce91307dd46c151bc7e1b73685a" name="a1f1d8ce91307dd46c151bc7e1b73685a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f1d8ce91307dd46c151bc7e1b73685a">&#9670;&#160;</a></span>column</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int Token::column</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Column offset (zero-based) </p>
-
-<p class="definition">Definition at line <a class="el" href="token_8hpp_source.html#l00047">47</a> of file <a class="el" href="token_8hpp_source.html">token.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="token_8cpp_source.html#l00070">debugToken()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">ConfigParser::expect()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00147">ConfigParser::parseLocation()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00191">ConfigParser::parseLocationDirective()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00134">ConfigParser::parseServerDirective()</a>.</p>
-
-</div>
-</div>
-<a id="a4b96c2a31d7c374fd2bd1986794f80dd" name="a4b96c2a31d7c374fd2bd1986794f80dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b96c2a31d7c374fd2bd1986794f80dd">&#9670;&#160;</a></span>line</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int Token::line</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Line number where the token begins. </p>
-
-<p class="definition">Definition at line <a class="el" href="token_8hpp_source.html#l00046">46</a> of file <a class="el" href="token_8hpp_source.html">token.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="token_8cpp_source.html#l00070">debugToken()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">ConfigParser::expect()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00147">ConfigParser::parseLocation()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00191">ConfigParser::parseLocationDirective()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00134">ConfigParser::parseServerDirective()</a>.</p>
-
-</div>
-</div>
-<a id="a6180647a13a9ebea927b7ae3f08e5c81" name="a6180647a13a9ebea927b7ae3f08e5c81"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6180647a13a9ebea927b7ae3f08e5c81">&#9670;&#160;</a></span>offset</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t Token::offset</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Byte offset in the original input string. </p>
-
-<p class="definition">Definition at line <a class="el" href="token_8hpp_source.html#l00048">48</a> of file <a class="el" href="token_8hpp_source.html">token.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a67919af9f3a80dc0b28a0ab1e6d5bf8a" name="a67919af9f3a80dc0b28a0ab1e6d5bf8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67919af9f3a80dc0b28a0ab1e6d5bf8a">&#9670;&#160;</a></span>type</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> Token::type</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Type of the token (identifier, keyword, etc.) </p>
-
-<p class="definition">Definition at line <a class="el" href="token_8hpp_source.html#l00044">44</a> of file <a class="el" href="token_8hpp_source.html">token.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00299">ConfigParser::collectArgs()</a>, <a class="el" href="token_8cpp_source.html#l00070">debugToken()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">ConfigParser::expect()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00272">ConfigParser::expectOneOf()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00147">ConfigParser::parseLocation()</a>.</p>
-
-</div>
-</div>
-<a id="a4b7142147b8598f8e24c404928d9263b" name="a4b7142147b8598f8e24c404928d9263b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b7142147b8598f8e24c404928d9263b">&#9670;&#160;</a></span>value</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string Token::value</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Lexical string value of the token. </p>
-
-<p class="definition">Definition at line <a class="el" href="token_8hpp_source.html#l00045">45</a> of file <a class="el" href="token_8hpp_source.html">token.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="token_8cpp_source.html#l00070">debugToken()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00044">anonymous_namespace{ConfigParser.cpp}::parseDirective()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00147">ConfigParser::parseLocation()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00105">ConfigParser::parseServer()</a>.</p>
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
 <li>include/config/tokenizer/<a class="el" href="token_8hpp_source.html">token.hpp</a></li>
 <li>src/config/tokenizer/<a class="el" href="token_8cpp_source.html">token.cpp</a></li>

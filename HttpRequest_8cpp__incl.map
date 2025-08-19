@@ -1,8 +1,8 @@
 <map id="src/http/HttpRequest.cpp" name="src/http/HttpRequest.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="523,5,706,31"/>
-<area shape="rect" id="Node000002" href="$HttpRequest_8hpp.html" title=" " alt="" coords="113,79,274,104"/>
+<area shape="rect" id="Node000001" title="Implements the HttpRequest class." alt="" coords="523,5,706,31"/>
+<area shape="rect" id="Node000002" href="$HttpRequest_8hpp.html" title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL." alt="" coords="113,79,274,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="547,33,275,79,274,74,547,28"/>
-<area shape="rect" id="Node000007" href="$stringUtils_8hpp.html" title="Utility functions for parsing numeric string values." alt="" coords="299,79,448,104"/>
+<area shape="rect" id="Node000007" href="$stringUtils_8hpp.html" title=" " alt="" coords="299,79,448,104"/>
 <area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="577,33,427,77,425,72,575,28"/>
 <area shape="rect" id="Node000010" title=" " alt="" coords="472,79,557,104"/>
 <area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="600,33,544,73,541,68,597,29"/>
@@ -14,7 +14,7 @@
 <area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="647,28,767,71,765,76,645,33"/>
 <area shape="rect" id="Node000014" title=" " alt="" coords="875,79,935,104"/>
 <area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="664,28,862,76,861,81,663,33"/>
-<area shape="rect" id="Node000003" href="$Url_8hpp.html" title=" " alt="" coords="5,152,104,177"/>
+<area shape="rect" id="Node000003" href="$Url_8hpp.html" title="Declares the Url POD for parsed URL components." alt="" coords="5,152,104,177"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="172,106,91,148,88,143,170,102"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="112,225,171,251"/>
 <area shape="poly" id="edge6_Node000002_Node000004" title=" " alt="" coords="190,105,169,153,150,213,145,211,164,151,185,103"/>

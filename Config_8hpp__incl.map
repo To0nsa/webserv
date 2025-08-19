@@ -1,10 +1,10 @@
 <map id="include/config/Config.hpp" name="include/config/Config.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="325,5,510,31"/>
+<area shape="rect" id="Node000001" title="Declares the Config aggregate for parsed virtual servers." alt="" coords="325,5,510,31"/>
 <area shape="rect" id="Node000002" href="$Server_8hpp.html" title="Declares the Server class for virtual host configuration." alt="" coords="252,79,375,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="402,33,343,73,340,68,399,28"/>
 <area shape="rect" id="Node000007" title=" " alt="" coords="439,225,502,251"/>
 <area shape="poly" id="edge12_Node000001_Node000007" title=" " alt="" coords="423,30,467,211,462,212,418,32"/>
-<area shape="rect" id="Node000003" href="$Location_8hpp.html" title=" " alt="" coords="245,152,382,177"/>
+<area shape="rect" id="Node000003" href="$Location_8hpp.html" title="Declares the Location class for route&#45;specific configuration." alt="" coords="245,152,382,177"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="316,104,316,138,311,138,311,104"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="361,225,412,251"/>
 <area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="342,102,372,121,386,135,397,151,402,166,403,182,398,212,393,211,398,182,397,167,392,153,382,138,369,125,339,106"/>

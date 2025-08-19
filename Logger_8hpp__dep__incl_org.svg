@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="HttpRequestParser_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="HttpRequestParser_8cpp.html" target="_top" xlink:title="Implements the HttpRequestParser class and HTTP request parsing logic.">
 <polygon fill="white" stroke="#666666" points="167,-24.5 0,-24.5 0,-5.5 167,-5.5 167,-24.5"/>
 <text text-anchor="middle" x="83.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/HttpRequestParser.cpp</text>
 </a>
@@ -38,7 +38,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="handleCgi_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="handleCgi_8cpp.html" target="_top" xlink:title="Implements CGI (Common Gateway Interface) request handling.">
 <polygon fill="white" stroke="#666666" points="310,-24.5 185,-24.5 185,-5.5 310,-5.5 310,-24.5"/>
 <text text-anchor="middle" x="247.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/handleCgi.cpp</text>
 </a>
@@ -75,7 +75,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="generateAutoindex_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="generateAutoindex_8cpp.html" target="_top" xlink:title="Implements directory autoindex (HTML listing) generation.">
 <polygon fill="white" stroke="#666666" points="669.5,-30 483.5,-30 483.5,0 669.5,0 669.5,-30"/>
 <text text-anchor="start" x="491.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="576.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handleGet/generateAutoindex.cpp</text>
@@ -94,7 +94,7 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="handleGet_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="handleGet_8cpp.html" target="_top" xlink:title="Implements the HTTP GET request handler.">
 <polygon fill="white" stroke="#666666" points="831,-30 688,-30 688,0 831,0 831,-30"/>
 <text text-anchor="start" x="696" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="759.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handleGet/handleGet.cpp</text>
@@ -113,7 +113,7 @@
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="handleMultipartForm_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="handleMultipartForm_8cpp.html" target="_top" xlink:title="Handles multipart/form&#45;data POST uploads and persists the first file part to disk.">
 <polygon fill="white" stroke="#666666" points="1048,-30 849,-30 849,0 1048,0 1048,-30"/>
 <text text-anchor="start" x="857" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="948.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handlePost/handleMultipartForm.cpp</text>
@@ -132,7 +132,7 @@
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="handlePost_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000008"><a xlink:href="handlePost_8cpp.html" target="_top" xlink:title="Implements HTTP POST request handling logic.">
 <polygon fill="white" stroke="#666666" points="1217,-30 1066,-30 1066,0 1217,0 1217,-30"/>
 <text text-anchor="start" x="1074" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="1141.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handlePost/handlePost.cpp</text>
@@ -151,7 +151,7 @@
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="requestRouter_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000009"><a xlink:href="requestRouter_8cpp.html" target="_top" xlink:title="Routes parsed HTTP requests to the appropriate handler.">
 <polygon fill="white" stroke="#666666" points="1380,-24.5 1235,-24.5 1235,-5.5 1380,-5.5 1380,-24.5"/>
 <text text-anchor="middle" x="1307.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/requestRouter.cpp</text>
 </a>
@@ -169,7 +169,7 @@
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
-<g id="a_Node000010"><a xlink:href="SocketManager_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000010"><a xlink:href="SocketManager_8cpp.html" target="_top" xlink:title="Implements the SocketManager core loop and server socket setup.">
 <polygon fill="white" stroke="#666666" points="1569,-24.5 1398,-24.5 1398,-5.5 1569,-5.5 1569,-24.5"/>
 <text text-anchor="middle" x="1483.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager.cpp</text>
 </a>
@@ -187,7 +187,7 @@
 <!-- Node11 -->
 <g id="Node000011" class="node">
 <title>Node11</title>
-<g id="a_Node000011"><a xlink:href="SocketManagerRequest_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000011"><a xlink:href="SocketManagerRequest_8cpp.html" target="_top" xlink:title="Implements request handling logic for SocketManager.">
 <polygon fill="white" stroke="#666666" points="1739.5,-30 1587.5,-30 1587.5,0 1739.5,0 1739.5,-30"/>
 <text text-anchor="start" x="1595.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
 <text text-anchor="middle" x="1663.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Request.cpp</text>
@@ -206,7 +206,7 @@
 <!-- Node12 -->
 <g id="Node000012" class="node">
 <title>Node12</title>
-<g id="a_Node000012"><a xlink:href="SocketManagerResponse_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000012"><a xlink:href="SocketManagerResponse_8cpp.html" target="_top" xlink:title="Implements response sending logic for SocketManager.">
 <polygon fill="white" stroke="#666666" points="1909.5,-30 1757.5,-30 1757.5,0 1909.5,0 1909.5,-30"/>
 <text text-anchor="start" x="1765.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
 <text text-anchor="middle" x="1833.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Response.cpp</text>
@@ -225,7 +225,7 @@
 <!-- Node13 -->
 <g id="Node000013" class="node">
 <title>Node13</title>
-<g id="a_Node000013"><a xlink:href="SocketManagerTimeouts_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000013"><a xlink:href="SocketManagerTimeouts_8cpp.html" target="_top" xlink:title="Implements timeout and limit enforcement for SocketManager.">
 <polygon fill="white" stroke="#666666" points="2079.5,-30 1927.5,-30 1927.5,0 2079.5,0 2079.5,-30"/>
 <text text-anchor="start" x="1935.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
 <text text-anchor="middle" x="2003.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Timeouts.cpp</text>
@@ -244,7 +244,7 @@
 <!-- Node14 -->
 <g id="Node000014" class="node">
 <title>Node14</title>
-<g id="a_Node000014"><a xlink:href="SocketManagerUtils_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000014"><a xlink:href="SocketManagerUtils_8cpp.html" target="_top" xlink:title="Utility methods for connection lifecycle management in SocketManager.">
 <polygon fill="white" stroke="#666666" points="2249.5,-30 2097.5,-30 2097.5,0 2249.5,0 2249.5,-30"/>
 <text text-anchor="start" x="2105.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
 <text text-anchor="middle" x="2173.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Utils.cpp</text>
@@ -263,7 +263,7 @@
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
-<g id="a_Node000015"><a xlink:href="Logger_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000015"><a xlink:href="Logger_8cpp.html" target="_top" xlink:title="Simple color&#45;coded logging utility.">
 <polygon fill="white" stroke="#666666" points="2377.5,-24.5 2267.5,-24.5 2267.5,-5.5 2377.5,-5.5 2377.5,-24.5"/>
 <text text-anchor="middle" x="2322.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/utils/Logger.cpp</text>
 </a>

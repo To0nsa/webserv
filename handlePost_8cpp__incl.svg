@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Implements HTTP POST request handling logic.">
 <polygon fill="#999999" stroke="#666666" points="1358.5,-195 1207.5,-195 1207.5,-165 1358.5,-165 1358.5,-195"/>
 <text text-anchor="start" x="1215.5" y="-183" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="1283" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">/handlePost/handlePost.cpp</text>
@@ -67,7 +67,7 @@ var sectionId = 'dynsection-0';
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="345.5,-74 242.5,-74 242.5,-55 345.5,-55 345.5,-74"/>
 <text text-anchor="middle" x="294" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>
@@ -121,7 +121,7 @@ var sectionId = 'dynsection-0';
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
-<g id="a_Node000010"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000010"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL.">
 <polygon fill="white" stroke="#666666" points="857.5,-129 736.5,-129 736.5,-110 857.5,-110 857.5,-129"/>
 <text text-anchor="middle" x="797" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">http/HttpRequest.hpp</text>
 </a>
@@ -139,7 +139,7 @@ var sectionId = 'dynsection-0';
 <!-- Node13 -->
 <g id="Node000013" class="node">
 <title>Node13</title>
-<g id="a_Node000013"><a xlink:href="HttpResponse_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000013"><a xlink:href="HttpResponse_8hpp.html" target="_top" xlink:title="Declares the HttpResponse class.">
 <polygon fill="white" stroke="#666666" points="1457,-74 1329,-74 1329,-55 1457,-55 1457,-74"/>
 <text text-anchor="middle" x="1393" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/HttpResponse.hpp</text>
 </a>
@@ -157,7 +157,7 @@ var sectionId = 'dynsection-0';
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
-<g id="a_Node000015"><a xlink:href="methodsHandler_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000015"><a xlink:href="methodsHandler_8hpp.html" target="_top" xlink:title="Declares HTTP method handlers for GET, POST, and DELETE.">
 <polygon fill="white" stroke="#666666" points="1161,-74 1021,-74 1021,-55 1161,-55 1161,-74"/>
 <text text-anchor="middle" x="1091" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/methodsHandler.hpp</text>
 </a>
@@ -175,7 +175,7 @@ var sectionId = 'dynsection-0';
 <!-- Node16 -->
 <g id="Node000016" class="node">
 <title>Node16</title>
-<g id="a_Node000016"><a xlink:href="responseBuilder_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000016"><a xlink:href="responseBuilder_8hpp.html" target="_top" xlink:title="Declarations of helper functions for constructing HTTP responses.">
 <polygon fill="white" stroke="#666666" points="1449,-129 1311,-129 1311,-110 1449,-110 1449,-129"/>
 <text text-anchor="middle" x="1380" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">http/responseBuilder.hpp</text>
 </a>
@@ -598,7 +598,7 @@ var sectionId = 'dynsection-0';
 <!-- Node11 -->
 <g id="Node000011" class="node">
 <title>Node11</title>
-<g id="a_Node000011"><a xlink:href="Url_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000011"><a xlink:href="Url_8hpp.html" target="_top" xlink:title="Declares the Url POD for parsed URL components.">
 <polygon fill="white" stroke="#666666" points="899,-74 825,-74 825,-55 899,-55 899,-74"/>
 <text text-anchor="middle" x="862" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/Url.hpp</text>
 </a>

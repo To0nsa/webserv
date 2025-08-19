@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Implements the Location class for route&#45;specific configuration.">
 <polygon fill="#999999" stroke="#666666" points="419.5,-129 300.5,-129 300.5,-110 419.5,-110 419.5,-129"/>
 <text text-anchor="middle" x="360" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">src/core/Location.cpp</text>
 </a>
@@ -66,7 +66,7 @@ var sectionId = 'dynsection-0';
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="136.5,-74 33.5,-74 33.5,-55 136.5,-55 136.5,-74"/>
 <text text-anchor="middle" x="85" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>
@@ -138,7 +138,7 @@ var sectionId = 'dynsection-0';
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="stringUtils_8hpp.html" target="_top" xlink:title="Utility functions for parsing numeric string values.">
+<g id="a_Node000009"><a xlink:href="stringUtils_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="458,-74 346,-74 346,-55 458,-55 458,-74"/>
 <text text-anchor="middle" x="402" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">utils/stringUtils.hpp</text>
 </a>

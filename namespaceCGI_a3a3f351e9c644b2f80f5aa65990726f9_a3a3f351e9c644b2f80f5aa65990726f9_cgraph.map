@@ -1,0 +1,16 @@
+<map id="CGI::initCgiProcess" name="CGI::initCgiProcess">
+<area shape="rect" id="Node000001" title="Initialize and start a CGI process for a given request." alt="" coords="5,55,151,80"/>
+<area shape="rect" id="Node000002" href="$filesystemUtils_8cpp_a2293ab4b3de5994471e981e4d63fa973.html#a2293ab4b3de5994471e981e4d63fa973" title=" " alt="" coords="246,5,370,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,52,234,31,235,36,138,57"/>
+<area shape="rect" id="Node000003" href="$group__http_ga02743663bb8998bd7450640035f5f6c0.html#ga02743663bb8998bd7450640035f5f6c0" title="Returns the normalized request path." alt="" coords="228,55,388,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="151,65,214,65,214,70,151,70"/>
+<area shape="rect" id="Node000004" href="$group__location__component_ga148538759d675943a6a87d281267fc30.html#ga148538759d675943a6a87d281267fc30" title="Resolves an absolute filesystem path from a URI." alt="" coords="199,104,417,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="138,77,235,98,234,104,137,83"/>
+<area shape="rect" id="Node000005" href="$group__filesystem__utils_ga60cb34db186e7da050316400c820c815.html#ga60cb34db186e7da050316400c820c815" title="Concatenates a base path and a suffix with a single &#39;/&#39; separator." alt="" coords="513,55,587,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="370,101,498,75,500,80,372,107"/>
+<area shape="rect" id="Node000006" href="$group__location__component_gae57275a4d165e540e073e35369423d16.html#gae57275a4d165e540e073e35369423d16" title="Checks if a URI matches this location&#39;s path." alt="" coords="465,104,635,129"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="417,114,452,114,452,119,417,119"/>
+<area shape="rect" id="Node000007" href="$group__filesystem__utils_gab31d472cab5ab15a13c3f5df7b349185.html#gab31d472cab5ab15a13c3f5df7b349185" title="Canonicalizes a URI&#45;style path and rejects traversal." alt="" coords="683,129,797,155"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="378,127,466,138,572,142,669,142,669,147,572,148,465,143,377,132"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="635,125,669,130,669,135,635,131"/>
+</map>

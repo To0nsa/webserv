@@ -1,5 +1,5 @@
 <map id="HttpRequest" name="HttpRequest">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,333,199,779"/>
-<area shape="rect" id="Node000002" href="$structUrl.html" title=" " alt="" coords="49,5,155,271"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,271,105,317,99,317,99,271"/>
+<area shape="rect" id="Node000001" title="Encapsulates a client HTTP request." alt="" coords="5,413,199,1679"/>
+<area shape="rect" id="Node000002" href="$structUrl.html" title="Parsed URL components." alt="" coords="49,5,155,351"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,351,105,397,99,397,99,351"/>
 </map>

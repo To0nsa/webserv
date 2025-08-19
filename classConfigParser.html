@@ -91,15 +91,15 @@ $(document).ready(function(){initNavTree('classConfigParser.html',''); initResiz
 
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classConfigParser-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">ConfigParser Class Reference</div></div>
+  <div class="headertitle"><div class="title">ConfigParser Class Reference<div class="ingroups"><a class="el" href="group__config.html">Configuration Parsing</a> &raquo; <a class="el" href="group__config__parsing.html">Parsing</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="ConfigParser_8hpp_source.html">ConfigParser.hpp</a>&gt;</code></p>
+<p>Syntactic parser for the webserv configuration language.  
+ <a href="classConfigParser.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ConfigParser_8hpp_source.html">config/parser/ConfigParser.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for ConfigParser:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -107,856 +107,86 @@ $(document).ready(function(){initNavTree('classConfigParser.html',''); initResiz
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
-<table class="memberdecls">
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Syntactic parser for the webserv configuration language. </p>
+<p>Validates block structure (<code>server</code> → <code>location</code>) and delegates directive semantics to the handler tables. Produces a fully constructed <a class="el" href="classConfig.html">Config</a> tree or throws on errors. </p>
+
+<p class="definition">Definition at line <a class="el" href="ConfigParser_8hpp_source.html#l00046">46</a> of file <a class="el" href="ConfigParser_8hpp_source.html">ConfigParser.hpp</a>.</p>
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a41f286ebab54d57477b7ff2964dba61e" id="r_a41f286ebab54d57477b7ff2964dba61e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a41f286ebab54d57477b7ff2964dba61e">ConfigParser</a> (std::string source)</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Public API</div></td></tr>
+<tr class="memitem:a41f286ebab54d57477b7ff2964dba61e" id="r_a41f286ebab54d57477b7ff2964dba61e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser_a41f286ebab54d57477b7ff2964dba61e.html#a41f286ebab54d57477b7ff2964dba61e">ConfigParser</a> (std::string source)</td></tr>
+<tr class="memdesc:a41f286ebab54d57477b7ff2964dba61e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classConfigParser.html" title="Syntactic parser for the webserv configuration language.">ConfigParser</a> instance from raw configuration text.  <br /></td></tr>
 <tr class="separator:a41f286ebab54d57477b7ff2964dba61e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b983e072038482de7698c091f5c8a99" id="r_a3b983e072038482de7698c091f5c8a99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classConfig.html">Config</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a3b983e072038482de7698c091f5c8a99">parseConfig</a> ()</td></tr>
+<tr class="memitem:a3b983e072038482de7698c091f5c8a99" id="r_a3b983e072038482de7698c091f5c8a99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classConfig.html">Config</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser_a3b983e072038482de7698c091f5c8a99.html#a3b983e072038482de7698c091f5c8a99">parseConfig</a> ()</td></tr>
+<tr class="memdesc:a3b983e072038482de7698c091f5c8a99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses the full configuration input into a <a class="el" href="classConfig.html" title="Top-level configuration aggregate.">Config</a> object.  <br /></td></tr>
 <tr class="separator:a3b983e072038482de7698c091f5c8a99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a8f4a7e75d8198a7a8ef85b8be1b1a568" id="r_a8f4a7e75d8198a7a8ef85b8be1b1a568"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structToken.html">Token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a8f4a7e75d8198a7a8ef85b8be1b1a568">advance</a> ()</td></tr>
-<tr class="separator:a8f4a7e75d8198a7a8ef85b8be1b1a568"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a582320b084ecf84703cb959d07696095" id="r_a582320b084ecf84703cb959d07696095"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a582320b084ecf84703cb959d07696095">collectArgs</a> (std::span&lt; const <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> &gt; validTypes)</td></tr>
-<tr class="separator:a582320b084ecf84703cb959d07696095"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade8ff0d1cb8a0285e1590319083d260c" id="r_ade8ff0d1cb8a0285e1590319083d260c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structToken.html">Token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#ade8ff0d1cb8a0285e1590319083d260c">current</a> () const</td></tr>
-<tr class="separator:ade8ff0d1cb8a0285e1590319083d260c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cf6ea001cf16a993d10cbd8b5701248" id="r_a0cf6ea001cf16a993d10cbd8b5701248"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a0cf6ea001cf16a993d10cbd8b5701248">expect</a> (<a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> expected, const std::string &amp;context)</td></tr>
-<tr class="separator:a0cf6ea001cf16a993d10cbd8b5701248"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48ee49c90c0dfe42b85c008e31aa81d2" id="r_a48ee49c90c0dfe42b85c008e31aa81d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structToken.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a48ee49c90c0dfe42b85c008e31aa81d2">expectOneOf</a> (std::initializer_list&lt; <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> &gt; types, const std::string &amp;context)</td></tr>
-<tr class="separator:a48ee49c90c0dfe42b85c008e31aa81d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad71d61af39486b10997020b572571dd4" id="r_ad71d61af39486b10997020b572571dd4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#ad71d61af39486b10997020b572571dd4">getLineSnippet</a> () const</td></tr>
-<tr class="separator:ad71d61af39486b10997020b572571dd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b3bdb05f58538d594227abbc64200fc" id="r_a0b3bdb05f58538d594227abbc64200fc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a0b3bdb05f58538d594227abbc64200fc">isAtEnd</a> () const</td></tr>
-<tr class="separator:a0b3bdb05f58538d594227abbc64200fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7789da21b4f670bffc7a786281e14c91" id="r_a7789da21b4f670bffc7a786281e14c91"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structToken.html">Token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a7789da21b4f670bffc7a786281e14c91">lookBehind</a> (std::size_t offset=1) const</td></tr>
-<tr class="separator:a7789da21b4f670bffc7a786281e14c91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabb998b9be6418778d65863c296ff9d2" id="r_aabb998b9be6418778d65863c296ff9d2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#aabb998b9be6418778d65863c296ff9d2">match</a> (<a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> type)</td></tr>
-<tr class="separator:aabb998b9be6418778d65863c296ff9d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab14af2f633e98e6182e1fce25c74f9e9" id="r_ab14af2f633e98e6182e1fce25c74f9e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classLocation.html">Location</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#ab14af2f633e98e6182e1fce25c74f9e9">parseLocation</a> ()</td></tr>
-<tr class="separator:ab14af2f633e98e6182e1fce25c74f9e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad27019103306be3877608677c5615a61" id="r_ad27019103306be3877608677c5615a61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#ad27019103306be3877608677c5615a61">parseLocationDirective</a> (<a class="el" href="classLocation.html">Location</a> &amp;location)</td></tr>
-<tr class="separator:ad27019103306be3877608677c5615a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec05768b15f77f3908738fba4237d2a8" id="r_aec05768b15f77f3908738fba4237d2a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classServer.html">Server</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#aec05768b15f77f3908738fba4237d2a8">parseServer</a> ()</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Server block parsing</div></td></tr>
+<tr class="memitem:aec05768b15f77f3908738fba4237d2a8" id="r_aec05768b15f77f3908738fba4237d2a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classServer.html">Server</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser_aec05768b15f77f3908738fba4237d2a8.html#aec05768b15f77f3908738fba4237d2a8">parseServer</a> ()</td></tr>
+<tr class="memdesc:aec05768b15f77f3908738fba4237d2a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a single <code>server</code> block into a <a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a> object.  <br /></td></tr>
 <tr class="separator:aec05768b15f77f3908738fba4237d2a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65dee8490851a65fb3d80ab1677c4a5d" id="r_a65dee8490851a65fb3d80ab1677c4a5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a65dee8490851a65fb3d80ab1677c4a5d">parseServerDirective</a> (<a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
+<tr class="memitem:a65dee8490851a65fb3d80ab1677c4a5d" id="r_a65dee8490851a65fb3d80ab1677c4a5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser_a65dee8490851a65fb3d80ab1677c4a5d.html#a65dee8490851a65fb3d80ab1677c4a5d">parseServerDirective</a> (<a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
+<tr class="memdesc:a65dee8490851a65fb3d80ab1677c4a5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses and applies a single directive inside a <code>server</code> block.  <br /></td></tr>
 <tr class="separator:a65dee8490851a65fb3d80ab1677c4a5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1be9330c39705b3a8ca01576d1d676ca" id="r_a1be9330c39705b3a8ca01576d1d676ca"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structToken.html">Token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a1be9330c39705b3a8ca01576d1d676ca">peek</a> (std::size_t offset=1) const</td></tr>
-<tr class="separator:a1be9330c39705b3a8ca01576d1d676ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1b4580f3dcf95b1231bb250a9b524fd" id="r_ae1b4580f3dcf95b1231bb250a9b524fd"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structToken.html">Token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#ae1b4580f3dcf95b1231bb250a9b524fd">previous</a> () const</td></tr>
-<tr class="separator:ae1b4580f3dcf95b1231bb250a9b524fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab14af2f633e98e6182e1fce25c74f9e9" id="r_ab14af2f633e98e6182e1fce25c74f9e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classLocation.html">Location</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser_ab14af2f633e98e6182e1fce25c74f9e9.html#ab14af2f633e98e6182e1fce25c74f9e9">parseLocation</a> ()</td></tr>
+<tr class="memdesc:ab14af2f633e98e6182e1fce25c74f9e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a single <code>location</code> block inside a <code>server</code> block.  <br /></td></tr>
+<tr class="separator:ab14af2f633e98e6182e1fce25c74f9e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad27019103306be3877608677c5615a61" id="r_ad27019103306be3877608677c5615a61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser_ad27019103306be3877608677c5615a61.html#ad27019103306be3877608677c5615a61">parseLocationDirective</a> (<a class="el" href="classLocation.html">Location</a> &amp;location)</td></tr>
+<tr class="memdesc:ad27019103306be3877608677c5615a61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a single directive inside a <code>location</code> block.  <br /></td></tr>
+<tr class="separator:ad27019103306be3877608677c5615a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Token navigation</div></td></tr>
+<tr class="memitem:gade8ff0d1cb8a0285e1590319083d260c" id="r_gade8ff0d1cb8a0285e1590319083d260c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structToken.html">Token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_gade8ff0d1cb8a0285e1590319083d260c.html#gade8ff0d1cb8a0285e1590319083d260c">current</a> () const</td></tr>
+<tr class="memdesc:gade8ff0d1cb8a0285e1590319083d260c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current token (bounds-checked).  <br /></td></tr>
+<tr class="separator:gade8ff0d1cb8a0285e1590319083d260c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae1b4580f3dcf95b1231bb250a9b524fd" id="r_gae1b4580f3dcf95b1231bb250a9b524fd"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structToken.html">Token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_gae1b4580f3dcf95b1231bb250a9b524fd.html#gae1b4580f3dcf95b1231bb250a9b524fd">previous</a> () const</td></tr>
+<tr class="memdesc:gae1b4580f3dcf95b1231bb250a9b524fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the previous token or the first token if at start.  <br /></td></tr>
+<tr class="separator:gae1b4580f3dcf95b1231bb250a9b524fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1be9330c39705b3a8ca01576d1d676ca" id="r_ga1be9330c39705b3a8ca01576d1d676ca"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structToken.html">Token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_ga1be9330c39705b3a8ca01576d1d676ca.html#ga1be9330c39705b3a8ca01576d1d676ca">peek</a> (std::size_t offset=1) const</td></tr>
+<tr class="memdesc:ga1be9330c39705b3a8ca01576d1d676ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peeks a token at an offset ≥ 1 from current.  <br /></td></tr>
+<tr class="separator:ga1be9330c39705b3a8ca01576d1d676ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7789da21b4f670bffc7a786281e14c91" id="r_ga7789da21b4f670bffc7a786281e14c91"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structToken.html">Token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_ga7789da21b4f670bffc7a786281e14c91.html#ga7789da21b4f670bffc7a786281e14c91">lookBehind</a> (std::size_t offset=1) const</td></tr>
+<tr class="memdesc:ga7789da21b4f670bffc7a786281e14c91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Looks behind by a given offset, or returns an EOF dummy.  <br /></td></tr>
+<tr class="separator:ga7789da21b4f670bffc7a786281e14c91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8f4a7e75d8198a7a8ef85b8be1b1a568" id="r_ga8f4a7e75d8198a7a8ef85b8be1b1a568"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structToken.html">Token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_ga8f4a7e75d8198a7a8ef85b8be1b1a568.html#ga8f4a7e75d8198a7a8ef85b8be1b1a568">advance</a> ()</td></tr>
+<tr class="memdesc:ga8f4a7e75d8198a7a8ef85b8be1b1a568"><td class="mdescLeft">&#160;</td><td class="mdescRight">Advances to the next token and returns it.  <br /></td></tr>
+<tr class="separator:ga8f4a7e75d8198a7a8ef85b8be1b1a568"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0b3bdb05f58538d594227abbc64200fc" id="r_ga0b3bdb05f58538d594227abbc64200fc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_ga0b3bdb05f58538d594227abbc64200fc.html#ga0b3bdb05f58538d594227abbc64200fc">isAtEnd</a> () const</td></tr>
+<tr class="memdesc:ga0b3bdb05f58538d594227abbc64200fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the parser has consumed all tokens or reached EOF.  <br /></td></tr>
+<tr class="separator:ga0b3bdb05f58538d594227abbc64200fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaabb998b9be6418778d65863c296ff9d2" id="r_gaabb998b9be6418778d65863c296ff9d2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_gaabb998b9be6418778d65863c296ff9d2.html#gaabb998b9be6418778d65863c296ff9d2">match</a> (<a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#gaa520fbf142ba1e7e659590c07da31921">TokenType</a> type)</td></tr>
+<tr class="memdesc:gaabb998b9be6418778d65863c296ff9d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Consumes the current token if its type matches.  <br /></td></tr>
+<tr class="separator:gaabb998b9be6418778d65863c296ff9d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0cf6ea001cf16a993d10cbd8b5701248" id="r_ga0cf6ea001cf16a993d10cbd8b5701248"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_ga0cf6ea001cf16a993d10cbd8b5701248.html#ga0cf6ea001cf16a993d10cbd8b5701248">expect</a> (<a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#gaa520fbf142ba1e7e659590c07da31921">TokenType</a> expected, const std::string &amp;context)</td></tr>
+<tr class="memdesc:ga0cf6ea001cf16a993d10cbd8b5701248"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensures that the current token matches a specific expected type.  <br /></td></tr>
+<tr class="separator:ga0cf6ea001cf16a993d10cbd8b5701248"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga48ee49c90c0dfe42b85c008e31aa81d2" id="r_ga48ee49c90c0dfe42b85c008e31aa81d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structToken.html">Token</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_ga48ee49c90c0dfe42b85c008e31aa81d2.html#ga48ee49c90c0dfe42b85c008e31aa81d2">expectOneOf</a> (std::initializer_list&lt; <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#gaa520fbf142ba1e7e659590c07da31921">TokenType</a> &gt; types, const std::string &amp;context)</td></tr>
+<tr class="memdesc:ga48ee49c90c0dfe42b85c008e31aa81d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensures the current token matches one of several expected types.  <br /></td></tr>
+<tr class="separator:ga48ee49c90c0dfe42b85c008e31aa81d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga582320b084ecf84703cb959d07696095" id="r_ga582320b084ecf84703cb959d07696095"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_ga582320b084ecf84703cb959d07696095.html#ga582320b084ecf84703cb959d07696095">collectArgs</a> (std::span&lt; const <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#gaa520fbf142ba1e7e659590c07da31921">TokenType</a> &gt; validTypes)</td></tr>
+<tr class="memdesc:ga582320b084ecf84703cb959d07696095"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collects a list of argument values following a directive.  <br /></td></tr>
+<tr class="separator:ga582320b084ecf84703cb959d07696095"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Error context</div></td></tr>
+<tr class="memitem:gad71d61af39486b10997020b572571dd4" id="r_gad71d61af39486b10997020b572571dd4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_gad71d61af39486b10997020b572571dd4.html#gad71d61af39486b10997020b572571dd4">getLineSnippet</a> () const</td></tr>
+<tr class="memdesc:gad71d61af39486b10997020b572571dd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts the full source line of the last consumed token.  <br /></td></tr>
+<tr class="separator:gad71d61af39486b10997020b572571dd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a9ae5e59f2d5f474859349165872adfbc" id="r_a9ae5e59f2d5f474859349165872adfbc"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a9ae5e59f2d5f474859349165872adfbc">_pos</a> = 0</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Internal state</div></td></tr>
+<tr class="memitem:a693b9ba330c1f548dc2eeaaecb3fec71" id="r_a693b9ba330c1f548dc2eeaaecb3fec71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classTokenizer.html">Tokenizer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser_a693b9ba330c1f548dc2eeaaecb3fec71.html#a693b9ba330c1f548dc2eeaaecb3fec71">_tokenizer</a></td></tr>
+<tr class="memdesc:a693b9ba330c1f548dc2eeaaecb3fec71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Produces the token stream from the raw source.  <br /></td></tr>
+<tr class="separator:a693b9ba330c1f548dc2eeaaecb3fec71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4234e2fbdea5c8a9088c675aa2e445c3" id="r_a4234e2fbdea5c8a9088c675aa2e445c3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structToken.html">Token</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser_a4234e2fbdea5c8a9088c675aa2e445c3.html#a4234e2fbdea5c8a9088c675aa2e445c3">_tokens</a></td></tr>
+<tr class="memdesc:a4234e2fbdea5c8a9088c675aa2e445c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flattened token list consumed by the parser.  <br /></td></tr>
+<tr class="separator:a4234e2fbdea5c8a9088c675aa2e445c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ae5e59f2d5f474859349165872adfbc" id="r_a9ae5e59f2d5f474859349165872adfbc"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser_a9ae5e59f2d5f474859349165872adfbc.html#a9ae5e59f2d5f474859349165872adfbc">_pos</a> = 0</td></tr>
 <tr class="memdesc:a9ae5e59f2d5f474859349165872adfbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current index in the token stream.  <br /></td></tr>
 <tr class="separator:a9ae5e59f2d5f474859349165872adfbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a693b9ba330c1f548dc2eeaaecb3fec71" id="r_a693b9ba330c1f548dc2eeaaecb3fec71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classTokenizer.html">Tokenizer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a693b9ba330c1f548dc2eeaaecb3fec71">_tokenizer</a></td></tr>
-<tr class="memdesc:a693b9ba330c1f548dc2eeaaecb3fec71"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTokenizer.html">Tokenizer</a> instance used to produce the token stream.  <br /></td></tr>
-<tr class="separator:a693b9ba330c1f548dc2eeaaecb3fec71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4234e2fbdea5c8a9088c675aa2e445c3" id="r_a4234e2fbdea5c8a9088c675aa2e445c3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structToken.html">Token</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParser.html#a4234e2fbdea5c8a9088c675aa2e445c3">_tokens</a></td></tr>
-<tr class="memdesc:a4234e2fbdea5c8a9088c675aa2e445c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flattened list of tokens extracted from the source input.  <br /></td></tr>
-<tr class="separator:a4234e2fbdea5c8a9088c675aa2e445c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8hpp_source.html#l00026">26</a> of file <a class="el" href="ConfigParser_8hpp_source.html">ConfigParser.hpp</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a41f286ebab54d57477b7ff2964dba61e" name="a41f286ebab54d57477b7ff2964dba61e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41f286ebab54d57477b7ff2964dba61e">&#9670;&#160;</a></span>ConfigParser()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ConfigParser::ConfigParser </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>source</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00063">63</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8hpp_source.html#l00061">_tokenizer</a>, <a class="el" href="ConfigParser_8hpp_source.html#l00062">_tokens</a>, and <a class="el" href="Tokenizer_8cpp_source.html#l00031">Tokenizer::tokenize()</a>.</p>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_a41f286ebab54d57477b7ff2964dba61e_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8f4a7e75d8198a7a8ef85b8be1b1a568" name="a8f4a7e75d8198a7a8ef85b8be1b1a568"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f4a7e75d8198a7a8ef85b8be1b1a568">&#9670;&#160;</a></span>advance()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="structToken.html">Token</a> &amp; ConfigParser::advance </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00232">232</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8hpp_source.html#l00063">_pos</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00203">current()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00238">isAtEnd()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00299">collectArgs()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00272">expectOneOf()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00147">parseLocation()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00191">parseLocationDirective()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00134">parseServerDirective()</a>.</p>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classConfigParser_a8f4a7e75d8198a7a8ef85b8be1b1a568_cgraph.svg" width="386" height="86"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_a8f4a7e75d8198a7a8ef85b8be1b1a568_icgraph.svg" width="100%" height="461"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a582320b084ecf84703cb959d07696095" name="a582320b084ecf84703cb959d07696095"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a582320b084ecf84703cb959d07696095">&#9670;&#160;</a></span>collectArgs()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; std::string &gt; ConfigParser::collectArgs </td>
-          <td>(</td>
-          <td class="paramtype">std::span&lt; const <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> &gt;&#160;</td>
-          <td class="paramname"><em>validTypes</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00299">299</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8cpp_source.html#l00232">advance()</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a4d9b3e9fc12849d060371eb65154c751">COMMA</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00203">current()</a>, <a class="el" href="errorUtils_8cpp_source.html#l00025">formatError()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00329">getLineSnippet()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00238">isAtEnd()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00243">match()</a>, and <a class="el" href="token_8hpp_source.html#l00044">Token::type</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00191">parseLocationDirective()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00134">parseServerDirective()</a>.</p>
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classConfigParser_a582320b084ecf84703cb959d07696095_cgraph.svg" width="664" height="294"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-5-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_a582320b084ecf84703cb959d07696095_icgraph.svg" width="100%" height="381"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="ade8ff0d1cb8a0285e1590319083d260c" name="ade8ff0d1cb8a0285e1590319083d260c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade8ff0d1cb8a0285e1590319083d260c">&#9670;&#160;</a></span>current()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="structToken.html">Token</a> &amp; ConfigParser::current </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00203">203</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8hpp_source.html#l00063">_pos</a>, and <a class="el" href="ConfigParser_8hpp_source.html#l00062">_tokens</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00232">advance()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00299">collectArgs()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00272">expectOneOf()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00070">parseConfig()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00147">parseLocation()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00191">parseLocationDirective()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00105">parseServer()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00134">parseServerDirective()</a>.</p>
-<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-6-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_ade8ff0d1cb8a0285e1590319083d260c_icgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a0cf6ea001cf16a993d10cbd8b5701248" name="a0cf6ea001cf16a993d10cbd8b5701248"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0cf6ea001cf16a993d10cbd8b5701248">&#9670;&#160;</a></span>expect()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ConfigParser::expect </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a>&#160;</td>
-          <td class="paramname"><em>expected</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>context</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00251">251</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8hpp_source.html#l00063">_pos</a>, <a class="el" href="ConfigParser_8hpp_source.html#l00062">_tokens</a>, <a class="el" href="token_8hpp_source.html#l00047">Token::column</a>, <a class="el" href="token_8cpp_source.html#l00021">debugTokenType()</a>, <a class="el" href="errorUtils_8cpp_source.html#l00025">formatError()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00329">getLineSnippet()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00238">isAtEnd()</a>, <a class="el" href="token_8hpp_source.html#l00046">Token::line</a>, and <a class="el" href="token_8hpp_source.html#l00044">Token::type</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00147">parseLocation()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00191">parseLocationDirective()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00105">parseServer()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00134">parseServerDirective()</a>.</p>
-<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-7-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classConfigParser_a0cf6ea001cf16a993d10cbd8b5701248_cgraph.svg" width="636" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-8-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_a0cf6ea001cf16a993d10cbd8b5701248_icgraph.svg" width="100%" height="441"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a48ee49c90c0dfe42b85c008e31aa81d2" name="a48ee49c90c0dfe42b85c008e31aa81d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a48ee49c90c0dfe42b85c008e31aa81d2">&#9670;&#160;</a></span>expectOneOf()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structToken.html">Token</a> ConfigParser::expectOneOf </td>
-          <td>(</td>
-          <td class="paramtype">std::initializer_list&lt; <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> &gt;&#160;</td>
-          <td class="paramname"><em>types</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>context</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00272">272</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8cpp_source.html#l00232">advance()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00203">current()</a>, <a class="el" href="token_8cpp_source.html#l00021">debugTokenType()</a>, <a class="el" href="errorUtils_8cpp_source.html#l00025">formatError()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00329">getLineSnippet()</a>, and <a class="el" href="token_8hpp_source.html#l00044">Token::type</a>.</p>
-<div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-9-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_a48ee49c90c0dfe42b85c008e31aa81d2_cgraph.svg" width="100%" height="493"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="ad71d61af39486b10997020b572571dd4" name="ad71d61af39486b10997020b572571dd4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad71d61af39486b10997020b572571dd4">&#9670;&#160;</a></span>getLineSnippet()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string ConfigParser::getLineSnippet </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00329">329</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8hpp_source.html#l00061">_tokenizer</a>, <a class="el" href="Tokenizer_8cpp_source.html#l00416">Tokenizer::extractLine()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00208">previous()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00299">collectArgs()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">expect()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00272">expectOneOf()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00070">parseConfig()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00147">parseLocation()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00191">parseLocationDirective()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00105">parseServer()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00134">parseServerDirective()</a>.</p>
-<div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-10-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classConfigParser_ad71d61af39486b10997020b572571dd4_cgraph.svg" width="434" height="86"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-11-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-11-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_ad71d61af39486b10997020b572571dd4_icgraph.svg" width="100%" height="588"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a0b3bdb05f58538d594227abbc64200fc" name="a0b3bdb05f58538d594227abbc64200fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b3bdb05f58538d594227abbc64200fc">&#9670;&#160;</a></span>isAtEnd()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool ConfigParser::isAtEnd </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00238">238</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8hpp_source.html#l00063">_pos</a>, <a class="el" href="ConfigParser_8hpp_source.html#l00062">_tokens</a>, and <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a581953f6b20ad7f993b64b1dc632032e">END_OF_FILE</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00232">advance()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00299">collectArgs()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">expect()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00243">match()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00070">parseConfig()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00147">parseLocation()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00105">parseServer()</a>.</p>
-<div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-12-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-12-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-12-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_a0b3bdb05f58538d594227abbc64200fc_icgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a7789da21b4f670bffc7a786281e14c91" name="a7789da21b4f670bffc7a786281e14c91"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7789da21b4f670bffc7a786281e14c91">&#9670;&#160;</a></span>lookBehind()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="structToken.html">Token</a> &amp; ConfigParser::lookBehind </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>offset</em> = <code>1</code></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00223">223</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8hpp_source.html#l00063">_pos</a>, <a class="el" href="ConfigParser_8hpp_source.html#l00062">_tokens</a>, and <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a581953f6b20ad7f993b64b1dc632032e">END_OF_FILE</a>.</p>
-
-</div>
-</div>
-<a id="aabb998b9be6418778d65863c296ff9d2" name="aabb998b9be6418778d65863c296ff9d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aabb998b9be6418778d65863c296ff9d2">&#9670;&#160;</a></span>match()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool ConfigParser::match </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a>&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00243">243</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8hpp_source.html#l00063">_pos</a>, <a class="el" href="ConfigParser_8hpp_source.html#l00062">_tokens</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00238">isAtEnd()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00299">collectArgs()</a>.</p>
-<div id="dynsection-13" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-13-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-13-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-13-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classConfigParser_aabb998b9be6418778d65863c296ff9d2_cgraph.svg" width="371" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-14" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-14-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-14-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-14-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_aabb998b9be6418778d65863c296ff9d2_icgraph.svg" width="100%" height="381"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a3b983e072038482de7698c091f5c8a99" name="a3b983e072038482de7698c091f5c8a99"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b983e072038482de7698c091f5c8a99">&#9670;&#160;</a></span>parseConfig()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classConfig.html">Config</a> ConfigParser::parseConfig </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00070">70</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="Config_8cpp_source.html#l00018">Config::addServer()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00203">current()</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a581953f6b20ad7f993b64b1dc632032e">END_OF_FILE</a>, <a class="el" href="errorUtils_8cpp_source.html#l00025">formatError()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00329">getLineSnippet()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00238">isAtEnd()</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ab4e08be3fe89a79b4231ed0627dc27ee">KEYWORD_SERVER</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00105">parseServer()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="webserv_8cpp_source.html#l00052">anonymous_namespace{webserv.cpp}::loadConfig()</a>.</p>
-<div id="dynsection-15" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-15-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-15-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-15-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_a3b983e072038482de7698c091f5c8a99_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-16" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-16-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-16-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-16-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_a3b983e072038482de7698c091f5c8a99_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="ab14af2f633e98e6182e1fce25c74f9e9" name="ab14af2f633e98e6182e1fce25c74f9e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab14af2f633e98e6182e1fce25c74f9e9">&#9670;&#160;</a></span>parseLocation()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classLocation.html">Location</a> ConfigParser::parseLocation </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00147">147</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8cpp_source.html#l00232">advance()</a>, <a class="el" href="token_8hpp_source.html#l00047">Token::column</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00203">current()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">expect()</a>, <a class="el" href="errorUtils_8cpp_source.html#l00025">formatError()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00329">getLineSnippet()</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a6fcc416051346daca31c571646af127a">IDENTIFIER</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00238">isAtEnd()</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ac5c53979872c4f30a57dfd2cf1329497">KEYWORD_LOCATION</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ad5e4de54911c050245979d940dc65c3a">LBRACE</a>, <a class="el" href="token_8hpp_source.html#l00046">Token::line</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00191">parseLocationDirective()</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a7907975edd3cb3611c6808f3ea6bd290">RBRACE</a>, <a class="el" href="Location_8cpp_source.html#l00031">Location::setPath()</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a63b588d5559f64f89a416e656880b949">STRING</a>, <a class="el" href="token_8hpp_source.html#l00044">Token::type</a>, and <a class="el" href="token_8hpp_source.html#l00045">Token::value</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00105">parseServer()</a>.</p>
-<div id="dynsection-17" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-17-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-17-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-17-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_ab14af2f633e98e6182e1fce25c74f9e9_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-18" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-18-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-18-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-18-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_ab14af2f633e98e6182e1fce25c74f9e9_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="ad27019103306be3877608677c5615a61" name="ad27019103306be3877608677c5615a61"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad27019103306be3877608677c5615a61">&#9670;&#160;</a></span>parseLocationDirective()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ConfigParser::parseLocationDirective </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classLocation.html">Location</a> &amp;&#160;</td>
-          <td class="paramname"><em>location</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00191">191</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8cpp_source.html#l00232">advance()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00299">collectArgs()</a>, <a class="el" href="token_8hpp_source.html#l00047">Token::column</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00203">current()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">expect()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00329">getLineSnippet()</a>, <a class="el" href="token_8hpp_source.html#l00046">Token::line</a>, <a class="el" href="directive__handler__table_8cpp_source.html#l00152">directive::locationHandlers()</a>, and <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921abaaceccc27b1d4e0968c999583f97de5">SEMICOLON</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00147">parseLocation()</a>.</p>
-<div id="dynsection-19" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-19-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-19-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-19-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_ad27019103306be3877608677c5615a61_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-20" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-20-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-20-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-20-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_ad27019103306be3877608677c5615a61_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="aec05768b15f77f3908738fba4237d2a8" name="aec05768b15f77f3908738fba4237d2a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec05768b15f77f3908738fba4237d2a8">&#9670;&#160;</a></span>parseServer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classServer.html">Server</a> ConfigParser::parseServer </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00105">105</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="Server_8cpp_source.html#l00068">Server::addLocation()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00203">current()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">expect()</a>, <a class="el" href="errorUtils_8cpp_source.html#l00025">formatError()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00329">getLineSnippet()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00238">isAtEnd()</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ac5c53979872c4f30a57dfd2cf1329497">KEYWORD_LOCATION</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ab4e08be3fe89a79b4231ed0627dc27ee">KEYWORD_SERVER</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ad5e4de54911c050245979d940dc65c3a">LBRACE</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00147">parseLocation()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00134">parseServerDirective()</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a7907975edd3cb3611c6808f3ea6bd290">RBRACE</a>, and <a class="el" href="token_8hpp_source.html#l00045">Token::value</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00070">parseConfig()</a>.</p>
-<div id="dynsection-21" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-21-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-21-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-21-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_aec05768b15f77f3908738fba4237d2a8_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-22" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-22-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-22-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-22-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_aec05768b15f77f3908738fba4237d2a8_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a65dee8490851a65fb3d80ab1677c4a5d" name="a65dee8490851a65fb3d80ab1677c4a5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a65dee8490851a65fb3d80ab1677c4a5d">&#9670;&#160;</a></span>parseServerDirective()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ConfigParser::parseServerDirective </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classServer.html">Server</a> &amp;&#160;</td>
-          <td class="paramname"><em>server</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00134">134</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8cpp_source.html#l00232">advance()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00299">collectArgs()</a>, <a class="el" href="token_8hpp_source.html#l00047">Token::column</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00203">current()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">expect()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00329">getLineSnippet()</a>, <a class="el" href="token_8hpp_source.html#l00046">Token::line</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921abaaceccc27b1d4e0968c999583f97de5">SEMICOLON</a>, and <a class="el" href="directive__handler__table_8cpp_source.html#l00104">directive::serverHandlers()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00105">parseServer()</a>.</p>
-<div id="dynsection-23" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-23-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-23-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-23-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_a65dee8490851a65fb3d80ab1677c4a5d_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-24" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-24-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-24-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-24-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_a65dee8490851a65fb3d80ab1677c4a5d_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a1be9330c39705b3a8ca01576d1d676ca" name="a1be9330c39705b3a8ca01576d1d676ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1be9330c39705b3a8ca01576d1d676ca">&#9670;&#160;</a></span>peek()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="structToken.html">Token</a> &amp; ConfigParser::peek </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>offset</em> = <code>1</code></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00215">215</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8hpp_source.html#l00063">_pos</a>, and <a class="el" href="ConfigParser_8hpp_source.html#l00062">_tokens</a>.</p>
-
-</div>
-</div>
-<a id="ae1b4580f3dcf95b1231bb250a9b524fd" name="ae1b4580f3dcf95b1231bb250a9b524fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1b4580f3dcf95b1231bb250a9b524fd">&#9670;&#160;</a></span>previous()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="structToken.html">Token</a> &amp; ConfigParser::previous </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8cpp_source.html#l00208">208</a> of file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="ConfigParser_8hpp_source.html#l00063">_pos</a>, and <a class="el" href="ConfigParser_8hpp_source.html#l00062">_tokens</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00329">getLineSnippet()</a>.</p>
-<div id="dynsection-25" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-25-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-25-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-25-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classConfigParser_ae1b4580f3dcf95b1231bb250a9b524fd_icgraph.svg" width="100%" height="588"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a9ae5e59f2d5f474859349165872adfbc" name="a9ae5e59f2d5f474859349165872adfbc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ae5e59f2d5f474859349165872adfbc">&#9670;&#160;</a></span>_pos</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t ConfigParser::_pos = 0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Current index in the token stream. </p>
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8hpp_source.html#l00063">63</a> of file <a class="el" href="ConfigParser_8hpp_source.html">ConfigParser.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00232">advance()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00203">current()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">expect()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00238">isAtEnd()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00223">lookBehind()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00243">match()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00215">peek()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00208">previous()</a>.</p>
-
-</div>
-</div>
-<a id="a693b9ba330c1f548dc2eeaaecb3fec71" name="a693b9ba330c1f548dc2eeaaecb3fec71"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a693b9ba330c1f548dc2eeaaecb3fec71">&#9670;&#160;</a></span>_tokenizer</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classTokenizer.html">Tokenizer</a> ConfigParser::_tokenizer</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p><a class="el" href="classTokenizer.html">Tokenizer</a> instance used to produce the token stream. </p>
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8hpp_source.html#l00061">61</a> of file <a class="el" href="ConfigParser_8hpp_source.html">ConfigParser.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00063">ConfigParser()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00329">getLineSnippet()</a>.</p>
-
-</div>
-</div>
-<a id="a4234e2fbdea5c8a9088c675aa2e445c3" name="a4234e2fbdea5c8a9088c675aa2e445c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4234e2fbdea5c8a9088c675aa2e445c3">&#9670;&#160;</a></span>_tokens</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="structToken.html">Token</a>&gt; ConfigParser::_tokens</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Flattened list of tokens extracted from the source input. </p>
-
-<p class="definition">Definition at line <a class="el" href="ConfigParser_8hpp_source.html#l00062">62</a> of file <a class="el" href="ConfigParser_8hpp_source.html">ConfigParser.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="ConfigParser_8cpp_source.html#l00063">ConfigParser()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00203">current()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">expect()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00238">isAtEnd()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00223">lookBehind()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00243">match()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00215">peek()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00208">previous()</a>.</p>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>include/config/parser/<a class="el" href="ConfigParser_8hpp_source.html">ConfigParser.hpp</a></li>
 <li>src/config/parser/<a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a></li>

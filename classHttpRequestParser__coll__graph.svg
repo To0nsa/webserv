@@ -21,7 +21,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Utility class for parsing raw HTTP requests.">
 <polygon fill="#999999" stroke="transparent" points="128,-109 0,-109 0,0 128,0 128,-109"/>
 <text text-anchor="start" x="18.5" y="-96.5" font-family="Helvetica,sans-Serif" font-size="10.00">HttpRequestParser</text>
 <text text-anchor="start" x="62" y="-81.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
@@ -30,11 +30,11 @@
 <text text-anchor="start" x="6.5" y="-51.5" font-family="Helvetica,sans-Serif" font-size="10.00">&#45;</text>
 <text text-anchor="start" x="17" y="-51.5" font-family="Helvetica,sans-Serif" font-size="10.00">HttpRequestParser()</text>
 <text text-anchor="start" x="6.5" y="-36.5" font-family="Helvetica,sans-Serif" font-size="10.00">&#45;</text>
-<text text-anchor="start" x="17" y="-36.5" font-family="Helvetica,sans-Serif" font-size="10.00">HttpRequestParser()</text>
+<text text-anchor="start" x="17" y="-36.5" font-family="Helvetica,sans-Serif" font-size="10.00">~HttpRequestParser()</text>
 <text text-anchor="start" x="6.5" y="-21.5" font-family="Helvetica,sans-Serif" font-size="10.00">&#45;</text>
-<text text-anchor="start" x="17" y="-21.5" font-family="Helvetica,sans-Serif" font-size="10.00">operator=()</text>
+<text text-anchor="start" x="17" y="-21.5" font-family="Helvetica,sans-Serif" font-size="10.00">HttpRequestParser()</text>
 <text text-anchor="start" x="6.5" y="-6.5" font-family="Helvetica,sans-Serif" font-size="10.00">&#45;</text>
-<text text-anchor="start" x="17" y="-6.5" font-family="Helvetica,sans-Serif" font-size="10.00">~HttpRequestParser()</text>
+<text text-anchor="start" x="17" y="-6.5" font-family="Helvetica,sans-Serif" font-size="10.00">operator=()</text>
 <polygon fill="#666666" stroke="#666666" points="0,-91.5 0,-91.5 128,-91.5 128,-91.5 0,-91.5"/>
 <polygon fill="#666666" stroke="#666666" points="0,-76.5 0,-76.5 128,-76.5 128,-76.5 0,-76.5"/>
 <polygon fill="none" stroke="#666666" points="0,0 0,-109 128,-109 128,0 0,0"/>

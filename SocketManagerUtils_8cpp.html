@@ -90,9 +90,12 @@ $(document).ready(function(){initNavTree('SocketManagerUtils_8cpp.html',''); ini
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">SocketManagerUtils.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">SocketManagerUtils.cpp File Reference<div class="ingroups"><a class="el" href="group__socket__manager.html">Network &amp; Socket Abstraction</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Utility methods for connection lifecycle management in <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a>.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="HttpRequest_8hpp_source.html">http/HttpRequest.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="HttpResponse_8hpp_source.html">http/HttpResponse.hpp</a>&quot;</code><br />
@@ -118,7 +121,20 @@ $(document).ready(function(){initNavTree('SocketManagerUtils_8cpp.html',''); ini
 </div>
 </div>
 <p><a href="SocketManagerUtils_8cpp_source.html">Go to the source code of this file.</a></p>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Utility methods for connection lifecycle management in <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a>. </p>
+<p>This file implements helper functions used internally by the <code><a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a></code> class to manage client state, poll descriptors, error handling, and cleanup routines. These utilities ensure proper resource deallocation and safe connection teardown.</p>
+<p>Main responsibilities:</p><ul>
+<li>Cleaning up <a class="el" href="namespaceCGI.html">CGI</a> processes associated with a client (<code>cleanupCgiForClient</code>).</li>
+<li>Removing <code>pollfd</code> entries from the monitored list (<code>removePollFd</code>).</li>
+<li>Resetting client request parsing state (<code>resetRequestState</code>).</li>
+<li>Gracefully closing client connections and releasing resources (<code>cleanupClientState</code>, <code>cleanupClientConnectionClose</code>).</li>
+<li>Generating and queuing error responses (<code>respondError</code>).</li>
+</ul>
+<p>These functions are invoked by higher-level event loop and request handling methods to enforce robustness, prevent resource leaks, and handle exceptional conditions. </p>
+
+<p class="definition">Definition in file <a class="el" href="SocketManagerUtils_8cpp_source.html">SocketManagerUtils.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Utility functions for parsing numeric string values.">
+<g id="a_Node000001"><a xlink:title=" ">
 <polygon fill="#999999" stroke="#666666" points="653.5,-85 503.5,-85 503.5,-66 653.5,-66 653.5,-85"/>
 <text text-anchor="middle" x="578.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">include/utils/stringUtils.hpp</text>
 </a>
@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="directive__handler__table_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="directive__handler__table_8cpp.html" target="_top" xlink:title="Implements directive handler maps for server and location blocks.">
 <polygon fill="white" stroke="#666666" points="143,-30 0,-30 0,0 143,0 143,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/parser/directive</text>
 <text text-anchor="middle" x="71.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">_handler_table.cpp</text>
@@ -39,7 +39,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="Location_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="Location_8cpp.html" target="_top" xlink:title="Implements the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="280,-24.5 161,-24.5 161,-5.5 280,-5.5 280,-24.5"/>
 <text text-anchor="middle" x="220.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/core/Location.cpp</text>
 </a>
@@ -75,7 +75,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="HttpRequest_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="HttpRequest_8cpp.html" target="_top" xlink:title="Implements the HttpRequest class.">
 <polygon fill="white" stroke="#666666" points="562,-24.5 425,-24.5 425,-5.5 562,-5.5 562,-24.5"/>
 <text text-anchor="middle" x="493.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/HttpRequest.cpp</text>
 </a>
@@ -93,7 +93,7 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="HttpRequestParser_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="HttpRequestParser_8cpp.html" target="_top" xlink:title="Implements the HttpRequestParser class and HTTP request parsing logic.">
 <polygon fill="white" stroke="#666666" points="747,-24.5 580,-24.5 580,-5.5 747,-5.5 747,-24.5"/>
 <text text-anchor="middle" x="663.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/HttpRequestParser.cpp</text>
 </a>
@@ -111,7 +111,7 @@
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="handleCgi_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="handleCgi_8cpp.html" target="_top" xlink:title="Implements CGI (Common Gateway Interface) request handling.">
 <polygon fill="white" stroke="#666666" points="890,-24.5 765,-24.5 765,-5.5 890,-5.5 890,-24.5"/>
 <text text-anchor="middle" x="827.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/handleCgi.cpp</text>
 </a>
@@ -129,7 +129,7 @@
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="printInfo_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000008"><a xlink:href="printInfo_8cpp.html" target="_top" xlink:title="Human&#45;readable printing helpers for Webserv configuration and servers.">
 <polygon fill="white" stroke="#666666" points="1027,-24.5 908,-24.5 908,-5.5 1027,-5.5 1027,-24.5"/>
 <text text-anchor="middle" x="967.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/utils/printInfo.cpp</text>
 </a>
@@ -147,7 +147,7 @@
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="stringUtils_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000009"><a xlink:href="stringUtils_8cpp.html" target="_top" xlink:title="Utility functions for string parsing, formatting, and case conversion.">
 <polygon fill="white" stroke="#666666" points="1173.5,-24.5 1045.5,-24.5 1045.5,-5.5 1173.5,-5.5 1173.5,-24.5"/>
 <text text-anchor="middle" x="1109.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/utils/stringUtils.cpp</text>
 </a>

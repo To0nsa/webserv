@@ -90,15 +90,18 @@ $(document).ready(function(){initNavTree('HttpResponse_8cpp.html',''); initResiz
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">HttpResponse.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">HttpResponse.cpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements the <a class="el" href="classHttpResponse.html" title="Represents an HTTP response to be sent back to the client.">HttpResponse</a> class.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="HttpResponse_8hpp_source.html">http/HttpResponse.hpp</a>&quot;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;ctype.h&gt;</code><br />
+<code>#include &lt;set&gt;</code><br />
 <code>#include &lt;sstream&gt;</code><br />
 <code>#include &lt;utility&gt;</code><br />
-<code>#include &lt;set&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for HttpResponse.cpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -108,7 +111,14 @@ $(document).ready(function(){initNavTree('HttpResponse_8cpp.html',''); initResiz
 </div>
 </div>
 <p><a href="HttpResponse_8cpp_source.html">Go to the source code of this file.</a></p>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements the <a class="el" href="classHttpResponse.html" title="Represents an HTTP response to be sent back to the client.">HttpResponse</a> class. </p>
+<p>Defines all methods of <a class="el" href="classHttpResponse.html">HttpResponse</a>, including setters for status, headers, body, file path, and <a class="el" href="namespaceCGI.html">CGI</a> metadata; getters and queries for response properties; and utilities such as <code>toHttpString()</code> for serializing the response into HTTP wire format.</p>
+<p>The implementation also includes connection management logic (<code>isConnectionClose</code>) that follows HTTP/1.0 and HTTP/1.1 semantics, as well as RFC-friendly handling for certain error status codes.</p>
+<p>Instances of this class are typically produced by <a class="el" href="namespaceResponseBuilder.html">ResponseBuilder</a> and HTTP method handlers, then written back to the client by the networking layer. </p>
+
+<p class="definition">Definition in file <a class="el" href="HttpResponse_8cpp_source.html">HttpResponse.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

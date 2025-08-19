@@ -1,0 +1,17 @@
+<map id="SocketManager::cleanupCgiForClient" name="SocketManager::cleanupCgiForClient">
+<area shape="rect" id="Node000001" title="Cleans up and resets CGI state for a specific client." alt="" coords="5,22,208,62"/>
+<area shape="rect" id="Node000002" href="$namespaceCGI_a1c43ca81105ee1c019c6a4de7b1f392d.html#a1c43ca81105ee1c019c6a4de7b1f392d" title="Clean up resources of a finished CGI process." alt="" coords="256,29,381,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,39,242,39,242,45,208,45"/>
+<area shape="rect" id="Node000003" href="$namespaceCGI_a7a269366ca367b3f85014b4742c0d16c.html#a7a269366ca367b3f85014b4742c0d16c" title="Remove a temporary CGI file and log an error if the deletion fails." alt="" coords="429,29,607,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="382,39,416,39,416,45,382,45"/>
+<area shape="rect" id="Node000004" href="$classLogger_a23f092a06cc63628beb87a1a54f9ea59.html#a23f092a06cc63628beb87a1a54f9ea59" title=" " alt="" coords="655,29,781,55"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="607,39,641,39,641,45,607,45"/>
+<area shape="rect" id="Node000005" href="$Logger_8cpp_a2c56a9a25fc1f2a14162f4df7ce936ff.html#a2c56a9a25fc1f2a14162f4df7ce936ff" title=" " alt="" coords="981,5,1069,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="763,27,829,14,877,12,924,14,967,14,967,20,924,19,877,17,830,19,764,32"/>
+<area shape="rect" id="Node000006" href="$Logger_8cpp_afc799b96df6ffe84b57bcce18820bc43.html#afc799b96df6ffe84b57bcce18820bc43" title=" " alt="" coords="972,55,1079,80"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="764,52,830,65,896,69,958,68,958,74,896,74,829,70,763,57"/>
+<area shape="rect" id="Node000007" href="$classLogger_a3d3f0801eeaf39b33a906ea8569c19b2.html#a3d3f0801eeaf39b33a906ea8569c19b2" title=" " alt="" coords="829,29,924,55"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="781,39,816,39,816,45,781,45"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="924,32,967,25,968,30,925,37"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="925,47,959,53,958,59,924,53"/>
+</map>

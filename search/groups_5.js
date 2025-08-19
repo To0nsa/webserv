@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['utilities_0',['String parsing utilities',['../group__StringUtils.html',1,'']]]
+  ['location_20component_0',['Location Component',['../group__location__component.html',1,'']]]
 ];

@@ -1,6 +1,6 @@
 <map id="src/network/SocketManagerRequest.cpp" name="src/network/SocketManagerRequest.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1693,5,1895,45"/>
-<area shape="rect" id="Node000002" href="$Location_8hpp.html" title=" " alt="" coords="151,240,288,265"/>
+<area shape="rect" id="Node000001" title="Implements request handling logic for SocketManager." alt="" coords="1693,5,1895,45"/>
+<area shape="rect" id="Node000002" href="$Location_8hpp.html" title="Declares the Location class for route&#45;specific configuration." alt="" coords="151,240,288,265"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1692,29,1426,30,1082,38,907,46,745,58,607,75,503,96,426,125,354,163,292,201,246,234,243,229,289,197,351,158,424,120,501,91,606,69,745,53,907,41,1081,33,1426,24,1692,23"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="722,313,773,339"/>
 <area shape="poly" id="edge61_Node000001_Node000003" title=" " alt="" coords="1692,33,1412,47,1060,74,893,92,748,114,642,139,607,154,587,168,577,189,578,209,590,228,608,248,659,282,711,307,708,312,656,286,605,252,585,232,573,210,571,188,583,165,604,149,640,134,747,108,892,86,1060,68,1411,42,1692,28"/>
@@ -10,19 +10,19 @@
 <area shape="poly" id="edge69_Node000001_Node000006" title=" " alt="" coords="1692,29,1466,31,1153,40,795,61,612,76,433,96,329,104,246,109,208,115,168,126,125,143,77,169,54,184,38,198,27,216,17,241,14,256,15,271,25,300,20,302,10,272,8,255,11,239,22,214,34,195,51,180,74,164,123,138,166,120,207,110,246,104,328,99,432,91,612,71,795,55,1153,35,1466,26,1692,24"/>
 <area shape="rect" id="Node000007" href="$Server_8hpp.html" title="Declares the Server class for virtual host configuration." alt="" coords="399,167,522,192"/>
 <area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1692,30,1409,35,1050,47,725,66,609,80,568,87,542,96,522,108,504,124,477,157,473,154,500,120,519,104,540,91,567,82,608,74,725,61,1050,41,1409,30,1692,25"/>
-<area shape="rect" id="Node000010" href="$HttpRequest_8hpp.html" title=" " alt="" coords="820,167,981,192"/>
+<area shape="rect" id="Node000010" href="$HttpRequest_8hpp.html" title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL." alt="" coords="820,167,981,192"/>
 <area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="1692,35,1458,55,1319,72,1181,96,1052,130,945,165,943,160,1050,124,1180,91,1318,67,1457,49,1692,29"/>
-<area shape="rect" id="Node000013" href="$HttpRequestParser_8hpp.html" title=" " alt="" coords="597,167,797,192"/>
+<area shape="rect" id="Node000013" href="$HttpRequestParser_8hpp.html" title="Declares the HttpRequestParser utility class." alt="" coords="597,167,797,192"/>
 <area shape="poly" id="edge19_Node000001_Node000013" title=" " alt="" coords="1692,35,1413,55,1244,73,1074,96,898,131,753,166,752,161,897,125,1074,91,1243,68,1412,50,1692,29"/>
-<area shape="rect" id="Node000014" href="$HttpResponse_8hpp.html" title=" " alt="" coords="1257,240,1427,265"/>
+<area shape="rect" id="Node000014" href="$HttpResponse_8hpp.html" title="Declares the HttpResponse class." alt="" coords="1257,240,1427,265"/>
 <area shape="poly" id="edge23_Node000001_Node000014" title=" " alt="" coords="1693,35,1568,44,1435,57,1324,74,1287,85,1268,95,1259,111,1256,128,1260,146,1268,164,1292,200,1320,229,1316,232,1288,203,1263,167,1255,147,1251,128,1254,109,1264,91,1285,80,1323,69,1435,52,1568,39,1692,30"/>
 <area shape="rect" id="Node000016" href="$handleCgi_8hpp.html" title=" " alt="" coords="1057,167,1203,192"/>
 <area shape="poly" id="edge27_Node000001_Node000016" title=" " alt="" coords="1693,34,1571,41,1435,54,1311,71,1261,83,1223,96,1201,108,1181,124,1149,157,1145,154,1178,120,1198,104,1221,91,1259,78,1310,66,1435,48,1571,36,1692,28"/>
 <area shape="rect" id="Node000019" href="$requestRouter_8hpp.html" title=" " alt="" coords="1510,93,1681,119"/>
 <area shape="poly" id="edge33_Node000001_Node000019" title=" " alt="" coords="1747,48,1638,91,1636,86,1745,43"/>
-<area shape="rect" id="Node000020" href="$responseBuilder_8hpp.html" title=" " alt="" coords="1910,167,2094,192"/>
+<area shape="rect" id="Node000020" href="$responseBuilder_8hpp.html" title="Declarations of helper functions for constructing HTTP responses." alt="" coords="1910,167,2094,192"/>
 <area shape="poly" id="edge34_Node000001_Node000020" title=" " alt="" coords="1821,43,1977,156,1974,161,1818,48"/>
-<area shape="rect" id="Node000021" href="$SocketManager_8hpp.html" title=" " alt="" coords="1279,93,1485,119"/>
+<area shape="rect" id="Node000021" href="$SocketManager_8hpp.html" title="Declares the SocketManager and per&#45;client state for non&#45;blocking I/O." alt="" coords="1279,93,1485,119"/>
 <area shape="poly" id="edge38_Node000001_Node000021" title=" " alt="" coords="1696,48,1456,93,1455,88,1695,43"/>
 <area shape="rect" id="Node000022" title=" " alt="" coords="1529,167,1616,192"/>
 <area shape="poly" id="edge60_Node000001_Node000022" title=" " alt="" coords="1778,48,1741,83,1694,121,1654,145,1615,164,1612,159,1652,140,1691,116,1737,79,1774,44"/>
@@ -63,7 +63,7 @@
 <area shape="poly" id="edge11_Node000007_Node000009" title=" " alt="" coords="463,192,463,226,458,226,458,192"/>
 <area shape="poly" id="edge17_Node000010_Node000003" title=" " alt="" coords="892,194,821,267,775,307,771,303,818,263,889,190"/>
 <area shape="poly" id="edge18_Node000010_Node000005" title=" " alt="" coords="909,191,934,227,953,247,974,263,1030,289,1090,306,1147,316,1195,321,1195,326,1146,321,1089,311,1028,294,971,268,949,251,930,230,905,194"/>
-<area shape="rect" id="Node000011" href="$Url_8hpp.html" title=" " alt="" coords="985,240,1083,265"/>
+<area shape="rect" id="Node000011" href="$Url_8hpp.html" title="Declares the Url POD for parsed URL components." alt="" coords="985,240,1083,265"/>
 <area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="923,190,1001,231,999,236,921,194"/>
 <area shape="rect" id="Node000012" title=" " alt="" coords="737,240,808,265"/>
 <area shape="poly" id="edge16_Node000010_Node000012" title=" " alt="" coords="881,194,807,235,805,231,879,190"/>

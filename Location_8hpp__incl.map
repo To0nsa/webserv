@@ -1,5 +1,5 @@
 <map id="include/core/Location.hpp" name="include/core/Location.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="45,5,233,31"/>
+<area shape="rect" id="Node000001" title="Declares the Location class for route&#45;specific configuration." alt="" coords="45,5,233,31"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,79,56,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,33,61,73,58,69,120,28"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="80,79,123,104"/>

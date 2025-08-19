@@ -39,7 +39,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="generateAutoindex_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="generateAutoindex_8cpp.html" target="_top" xlink:title="Implements directory autoindex (HTML listing) generation.">
 <polygon fill="white" stroke="#666666" points="341.5,-30 155.5,-30 155.5,0 341.5,0 341.5,-30"/>
 <text text-anchor="start" x="163.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="248.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handleGet/generateAutoindex.cpp</text>
@@ -58,7 +58,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="handleMultipartForm_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="handleMultipartForm_8cpp.html" target="_top" xlink:title="Handles multipart/form&#45;data POST uploads and persists the first file part to disk.">
 <polygon fill="white" stroke="#666666" points="559,-30 360,-30 360,0 559,0 559,-30"/>
 <text text-anchor="start" x="368" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="459.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handlePost/handleMultipartForm.cpp</text>
@@ -77,7 +77,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="handlePost_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="handlePost_8cpp.html" target="_top" xlink:title="Implements HTTP POST request handling logic.">
 <polygon fill="white" stroke="#666666" points="728,-30 577,-30 577,0 728,0 728,-30"/>
 <text text-anchor="start" x="585" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="652.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handlePost/handlePost.cpp</text>
@@ -96,7 +96,7 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="responseBuilder_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="responseBuilder_8cpp.html" target="_top" xlink:title="Implements the ResponseBuilder utilities for constructing HTTP responses.">
 <polygon fill="white" stroke="#666666" points="901,-24.5 746,-24.5 746,-5.5 901,-5.5 901,-24.5"/>
 <text text-anchor="middle" x="823.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/responseBuilder.cpp</text>
 </a>

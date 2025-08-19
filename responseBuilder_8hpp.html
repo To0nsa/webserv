@@ -93,9 +93,12 @@ $(document).ready(function(){initNavTree('responseBuilder_8hpp.html',''); initRe
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">responseBuilder.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">responseBuilder.hpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Declarations of helper functions for constructing HTTP responses.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="HttpResponse_8hpp_source.html">http/HttpResponse.hpp</a>&quot;</code><br />
 <code>#include &lt;iosfwd&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -119,24 +122,43 @@ $(document).ready(function(){initNavTree('responseBuilder_8hpp.html',''); initRe
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespaceMessageHandler" id="r_namespaceMessageHandler"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMessageHandler.html">MessageHandler</a></td></tr>
+<tr class="memdesc:namespaceMessageHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility namespace for HTTP status code reason phrases. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceResponseBuilder" id="r_namespaceResponseBuilder"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html">ResponseBuilder</a></td></tr>
+<tr class="memdesc:namespaceResponseBuilder"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory helpers for constructing HTTP responses. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1f8eaecab62a277ca49584495da022fc" id="r_a1f8eaecab62a277ca49584495da022fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#a1f8eaecab62a277ca49584495da022fc">ResponseBuilder::generateError</a> (int status_code, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
-<tr class="separator:a1f8eaecab62a277ca49584495da022fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa150e2f1e0cff9e7f1ebd1b66c4e4a1b" id="r_aa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#aa150e2f1e0cff9e7f1ebd1b66c4e4a1b">ResponseBuilder::generateRedirect</a> (int status_code, const std::string &amp;location, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
-<tr class="separator:aa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a822d078e27118227ea36e32830724915" id="r_a822d078e27118227ea36e32830724915"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#a822d078e27118227ea36e32830724915">ResponseBuilder::generateSuccess</a> (int status_code, const std::string &amp;body, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
-<tr class="separator:a822d078e27118227ea36e32830724915"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acde1853a1d9fe48161c9600e59a88956" id="r_acde1853a1d9fe48161c9600e59a88956"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#acde1853a1d9fe48161c9600e59a88956">ResponseBuilder::generateSuccessFile</a> (int status_code, const std::string &amp;file_path, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, std::streamsize content_length, std::streamsize cgiBodyOffset=0)</td></tr>
-<tr class="separator:acde1853a1d9fe48161c9600e59a88956"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a064a5d8be8de9234f362e73d9bb68b6b" id="r_a064a5d8be8de9234f362e73d9bb68b6b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMessageHandler.html#a064a5d8be8de9234f362e73d9bb68b6b">MessageHandler::getDefaultMessage</a> (int status_code)</td></tr>
-<tr class="separator:a064a5d8be8de9234f362e73d9bb68b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga064a5d8be8de9234f362e73d9bb68b6b" id="r_ga064a5d8be8de9234f362e73d9bb68b6b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga064a5d8be8de9234f362e73d9bb68b6b.html#ga064a5d8be8de9234f362e73d9bb68b6b">MessageHandler::getDefaultMessage</a> (int status_code)</td></tr>
+<tr class="memdesc:ga064a5d8be8de9234f362e73d9bb68b6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the default reason phrase for a given HTTP status code.  <br /></td></tr>
+<tr class="separator:ga064a5d8be8de9234f362e73d9bb68b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga822d078e27118227ea36e32830724915" id="r_ga822d078e27118227ea36e32830724915"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga822d078e27118227ea36e32830724915.html#ga822d078e27118227ea36e32830724915">ResponseBuilder::generateSuccess</a> (int status_code, const std::string &amp;body, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
+<tr class="memdesc:ga822d078e27118227ea36e32830724915"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a successful HTTP response with an inline body.  <br /></td></tr>
+<tr class="separator:ga822d078e27118227ea36e32830724915"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9d1fbebc083258c493e34686654d6f67" id="r_ga9d1fbebc083258c493e34686654d6f67"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga9d1fbebc083258c493e34686654d6f67.html#ga9d1fbebc083258c493e34686654d6f67">ResponseBuilder::generateSuccessFile</a> (int status_code, const std::string &amp;file_path, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, std::streamsize content_length, std::streamsize cgiBodyOffset)</td></tr>
+<tr class="memdesc:ga9d1fbebc083258c493e34686654d6f67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a successful HTTP response backed by a file on disk.  <br /></td></tr>
+<tr class="separator:ga9d1fbebc083258c493e34686654d6f67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1f8eaecab62a277ca49584495da022fc" id="r_ga1f8eaecab62a277ca49584495da022fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga1f8eaecab62a277ca49584495da022fc.html#ga1f8eaecab62a277ca49584495da022fc">ResponseBuilder::generateError</a> (int status_code, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
+<tr class="memdesc:ga1f8eaecab62a277ca49584495da022fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds an HTTP error response, optionally using a custom error page.  <br /></td></tr>
+<tr class="separator:ga1f8eaecab62a277ca49584495da022fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b" id="r_gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b.html#gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b">ResponseBuilder::generateRedirect</a> (int status_code, const std::string &amp;location, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
+<tr class="memdesc:gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates an HTTP redirect response.  <br /></td></tr>
+<tr class="separator:gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Declarations of helper functions for constructing HTTP responses. </p>
+<p>Defines the <code><a class="el" href="namespaceResponseBuilder.html" title="Factory helpers for constructing HTTP responses.">ResponseBuilder</a></code> namespace, which provides a set of high-level factory functions for creating different types of <a class="el" href="classHttpResponse.html">HttpResponse</a> objects:</p><ul>
+<li>generateSuccess : Builds a success response with an inline body.</li>
+<li>generateSuccessFile : Builds a success response backed by a file on disk.</li>
+<li>generateError : Builds an error response using a custom error page if available, or a default generated HTML fallback.</li>
+<li>generateRedirect : Builds a redirect response with a <code><a class="el" href="classLocation.html" title="Encapsulates configuration for a single URL path.">Location</a></code> header.</li>
+</ul>
+<p>Also defines the <code><a class="el" href="namespaceMessageHandler.html" title="Utility namespace for HTTP status code reason phrases.">MessageHandler</a></code> namespace with getDefaultMessage, a helper that maps HTTP status codes to their standard reason phrases.</p>
+<p>These functions are typically used by method handlers (GET/POST/DELETE/CGI) to generate complete responses ready for serialization and transmission by the networking layer. </p>
+
+<p class="definition">Definition in file <a class="el" href="responseBuilder_8hpp_source.html">responseBuilder.hpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

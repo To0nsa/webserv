@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="137.5,-74 34.5,-74 34.5,-55 137.5,-55 137.5,-74"/>
 <text text-anchor="middle" x="86" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>

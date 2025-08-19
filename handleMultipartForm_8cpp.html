@@ -93,9 +93,12 @@ $(document).ready(function(){initNavTree('handleMultipartForm_8cpp.html',''); in
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">handleMultipartForm.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">handleMultipartForm.cpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a> &raquo; <a class="el" href="group__request__handler.html">Request Handling</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Handles <code>multipart/form-data</code> POST uploads and persists the first file part to disk.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="HttpRequest_8hpp_source.html">http/HttpRequest.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="HttpResponse_8hpp_source.html">http/HttpResponse.hpp</a>&quot;</code><br />
@@ -125,81 +128,61 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7a388e9ecc1706e2abbf96741988d331" id="r_a7a388e9ecc1706e2abbf96741988d331"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03.html#a7a388e9ecc1706e2abbf96741988d331">anonymous_namespace{handleMultipartForm.cpp}::extractFilename</a> (const std::string &amp;headersBlock, std::string &amp;outFilename)</td></tr>
-<tr class="separator:a7a388e9ecc1706e2abbf96741988d331"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e3cbb85c890854e8714bf8640bd8d5a" id="r_a0e3cbb85c890854e8714bf8640bd8d5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03.html#a0e3cbb85c890854e8714bf8640bd8d5a">anonymous_namespace{handleMultipartForm.cpp}::findNextDelimiter</a> (const std::string &amp;body, const std::string &amp;delimiter, size_t startPos, size_t &amp;outPos)</td></tr>
-<tr class="separator:a0e3cbb85c890854e8714bf8640bd8d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17f2fba88ab8919ca4bc75a7b63110c6" id="r_a17f2fba88ab8919ca4bc75a7b63110c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="handleMultipartForm_8cpp.html#a17f2fba88ab8919ca4bc75a7b63110c6">handleMultipartForm</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, const std::string &amp;fullDirPath)</td></tr>
-<tr class="separator:a17f2fba88ab8919ca4bc75a7b63110c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79cf300d28df2d14033279ccc05d48c9" id="r_a79cf300d28df2d14033279ccc05d48c9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03.html#a79cf300d28df2d14033279ccc05d48c9">anonymous_namespace{handleMultipartForm.cpp}::isCloseDelimiter</a> (const std::string &amp;body, size_t pos, const std::string &amp;closeDelimiter)</td></tr>
-<tr class="separator:a79cf300d28df2d14033279ccc05d48c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a715752ba4fb2eef8db8e8369373a9b38" id="r_a715752ba4fb2eef8db8e8369373a9b38"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03.html#a715752ba4fb2eef8db8e8369373a9b38">anonymous_namespace{handleMultipartForm.cpp}::makeCloseDelimiter</a> (const std::string &amp;boundary)</td></tr>
-<tr class="separator:a715752ba4fb2eef8db8e8369373a9b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c457898d46828c595d6f40f3cf031de" id="r_a1c457898d46828c595d6f40f3cf031de"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03.html#a1c457898d46828c595d6f40f3cf031de">anonymous_namespace{handleMultipartForm.cpp}::makePartDelimiter</a> (const std::string &amp;boundary)</td></tr>
+<tr class="memitem:a1c457898d46828c595d6f40f3cf031de" id="r_a1c457898d46828c595d6f40f3cf031de"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a1c457898d46828c595d6f40f3cf031de.html#a1c457898d46828c595d6f40f3cf031de">anonymous_namespace{handleMultipartForm.cpp}::makePartDelimiter</a> (const std::string &amp;boundary)</td></tr>
+<tr class="memdesc:a1c457898d46828c595d6f40f3cf031de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct the opening delimiter for a multipart part.  <br /></td></tr>
 <tr class="separator:a1c457898d46828c595d6f40f3cf031de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d0565a8e69959a7243d7040d4f1daba" id="r_a6d0565a8e69959a7243d7040d4f1daba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03.html#a6d0565a8e69959a7243d7040d4f1daba">anonymous_namespace{handleMultipartForm.cpp}::parseHeadersAndData</a> (const std::string &amp;part, std::string &amp;headersBlock, std::string &amp;dataBlock)</td></tr>
+<tr class="memitem:a715752ba4fb2eef8db8e8369373a9b38" id="r_a715752ba4fb2eef8db8e8369373a9b38"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a715752ba4fb2eef8db8e8369373a9b38.html#a715752ba4fb2eef8db8e8369373a9b38">anonymous_namespace{handleMultipartForm.cpp}::makeCloseDelimiter</a> (const std::string &amp;boundary)</td></tr>
+<tr class="memdesc:a715752ba4fb2eef8db8e8369373a9b38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct the closing delimiter for a multipart body.  <br /></td></tr>
+<tr class="separator:a715752ba4fb2eef8db8e8369373a9b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e3cbb85c890854e8714bf8640bd8d5a" id="r_a0e3cbb85c890854e8714bf8640bd8d5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a0e3cbb85c890854e8714bf8640bd8d5a.html#a0e3cbb85c890854e8714bf8640bd8d5a">anonymous_namespace{handleMultipartForm.cpp}::findNextDelimiter</a> (const std::string &amp;body, const std::string &amp;delimiter, size_t startPos, size_t &amp;outPos)</td></tr>
+<tr class="memdesc:a0e3cbb85c890854e8714bf8640bd8d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the next occurrence of a delimiter in a multipart body.  <br /></td></tr>
+<tr class="separator:a0e3cbb85c890854e8714bf8640bd8d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79cf300d28df2d14033279ccc05d48c9" id="r_a79cf300d28df2d14033279ccc05d48c9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a79cf300d28df2d14033279ccc05d48c9.html#a79cf300d28df2d14033279ccc05d48c9">anonymous_namespace{handleMultipartForm.cpp}::isCloseDelimiter</a> (const std::string &amp;body, size_t pos, const std::string &amp;closeDelimiter)</td></tr>
+<tr class="memdesc:a79cf300d28df2d14033279ccc05d48c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the body contains the closing delimiter at the given position.  <br /></td></tr>
+<tr class="separator:a79cf300d28df2d14033279ccc05d48c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d0565a8e69959a7243d7040d4f1daba" id="r_a6d0565a8e69959a7243d7040d4f1daba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a6d0565a8e69959a7243d7040d4f1daba.html#a6d0565a8e69959a7243d7040d4f1daba">anonymous_namespace{handleMultipartForm.cpp}::parseHeadersAndData</a> (const std::string &amp;part, std::string &amp;headersBlock, std::string &amp;dataBlock)</td></tr>
+<tr class="memdesc:a6d0565a8e69959a7243d7040d4f1daba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a raw part into headers and data sections.  <br /></td></tr>
 <tr class="separator:a6d0565a8e69959a7243d7040d4f1daba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1aac800609853913d5d4564612c8a90" id="r_aa1aac800609853913d5d4564612c8a90"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03.html#aa1aac800609853913d5d4564612c8a90">anonymous_namespace{handleMultipartForm.cpp}::parseMultipartForm</a> (const std::string &amp;body, const std::string &amp;boundary, std::string &amp;filename, std::string &amp;fileContent)</td></tr>
-<tr class="separator:aa1aac800609853913d5d4564612c8a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97cca721ef601f48a167045b7f25489c" id="r_a97cca721ef601f48a167045b7f25489c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03.html#a97cca721ef601f48a167045b7f25489c">anonymous_namespace{handleMultipartForm.cpp}::trimEndingCRLF</a> (const std::string &amp;data)</td></tr>
+<tr class="memitem:a7a388e9ecc1706e2abbf96741988d331" id="r_a7a388e9ecc1706e2abbf96741988d331"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a7a388e9ecc1706e2abbf96741988d331.html#a7a388e9ecc1706e2abbf96741988d331">anonymous_namespace{handleMultipartForm.cpp}::extractFilename</a> (const std::string &amp;headersBlock, std::string &amp;outFilename)</td></tr>
+<tr class="memdesc:a7a388e9ecc1706e2abbf96741988d331"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract and sanitize the filename from a part's headers.  <br /></td></tr>
+<tr class="separator:a7a388e9ecc1706e2abbf96741988d331"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97cca721ef601f48a167045b7f25489c" id="r_a97cca721ef601f48a167045b7f25489c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a97cca721ef601f48a167045b7f25489c.html#a97cca721ef601f48a167045b7f25489c">anonymous_namespace{handleMultipartForm.cpp}::trimEndingCRLF</a> (const std::string &amp;data)</td></tr>
+<tr class="memdesc:a97cca721ef601f48a167045b7f25489c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Strip a trailing CRLF sequence from data if present.  <br /></td></tr>
 <tr class="separator:a97cca721ef601f48a167045b7f25489c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1aac800609853913d5d4564612c8a90" id="r_aa1aac800609853913d5d4564612c8a90"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_aa1aac800609853913d5d4564612c8a90.html#aa1aac800609853913d5d4564612c8a90">anonymous_namespace{handleMultipartForm.cpp}::parseMultipartForm</a> (const std::string &amp;body, const std::string &amp;boundary, std::string &amp;filename, std::string &amp;fileContent)</td></tr>
+<tr class="memdesc:aa1aac800609853913d5d4564612c8a90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a multipart/form-data body and extract the first file part.  <br /></td></tr>
+<tr class="separator:aa1aac800609853913d5d4564612c8a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga17f2fba88ab8919ca4bc75a7b63110c6" id="r_ga17f2fba88ab8919ca4bc75a7b63110c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga17f2fba88ab8919ca4bc75a7b63110c6.html#ga17f2fba88ab8919ca4bc75a7b63110c6">handleMultipartForm</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, const std::string &amp;fullDirPath)</td></tr>
+<tr class="memdesc:ga17f2fba88ab8919ca4bc75a7b63110c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle a multipart/form-data POST request and persist the uploaded file.  <br /></td></tr>
+<tr class="separator:ga17f2fba88ab8919ca4bc75a7b63110c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a17f2fba88ab8919ca4bc75a7b63110c6" name="a17f2fba88ab8919ca4bc75a7b63110c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17f2fba88ab8919ca4bc75a7b63110c6">&#9670;&#160;</a></span>handleMultipartForm()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Handles <code>multipart/form-data</code> POST uploads and persists the first file part to disk. </p>
+<p>Parses the request body using the <code>boundary</code> from the <code>Content-Type</code> header, scans parts until it finds a file part (<code>filename="..."</code>), trims the trailing CRLF from the part payload, enforces <code>client_max_body_size</code>, and writes the bytes to <code>&lt;upload_dir&gt;/&lt;sanitized-filename&gt;</code> (or a time‑based fallback).</p>
+<h3>Flow</h3>
+<ol type="1">
+<li>Extract <code>boundary</code> from <code>Content-Type</code>; <code>400</code> if missing.</li>
+<li><code>parseMultipartForm</code>: iterate parts, split headers/data, detect <code>filename=</code>, sanitize file name, trim payload CRLF, return name + bytes.</li>
+<li>Enforce per‑part size ≤ <code><a class="el" href="group__server__component_ga7ad9b923d766c82b58bcca01146cb375.html#ga7ad9b923d766c82b58bcca01146cb375" title="Returns the maximum allowed size for the request body.">Server::getClientMaxBodySize()</a></code>; <code>413</code> otherwise.</li>
+<li>Open destination file (binary) and write bytes atomically; <code>500</code> on I/O error.</li>
+<li>Log outcome and return <code>201 Created</code> with a minimal HTML confirmation.</li>
+</ol>
+<h3>Security &amp; Robustness</h3>
+<ul>
+<li><b>Filename sanitization</b>: strips unsafe characters to prevent path traversal.</li>
+<li><b>Size limits</b>: rejects oversized payloads to mitigate DoS.</li>
+<li><b>Strict delimiter matching</b>: avoids bleed between parts.</li>
+</ul>
+<h3>Limitations</h3>
+<ul>
+<li>Parses the <b>first</b> file part only (ignores subsequent files/fields).</li>
+<li>Operates in‑memory (no streaming/chunking); large files may increase RAM use.</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>Consider extending to stream to a temp file, support multiple files/fields, and return JSON for API clients.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classHttpRequest.html" title="Encapsulates a client HTTP request.">HttpRequest</a>, <a class="el" href="classHttpResponse.html" title="Represents an HTTP response to be sent back to the client.">HttpResponse</a>, <a class="el" href="namespaceResponseBuilder.html" title="Factory helpers for constructing HTTP responses.">ResponseBuilder</a>, <a class="el" href="classLogger.html">Logger</a>, filesystemUtils </dd></dl>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> handleMultipartForm </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td>
-          <td class="paramname"><em>server</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>fullDirPath</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="handleMultipartForm_8cpp_source.html#l00184">184</a> of file <a class="el" href="handleMultipartForm_8cpp_source.html">handleMultipartForm.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00105">ResponseBuilder::generateSuccess()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00099">HttpRequest::getBody()</a>, <a class="el" href="Server_8cpp_source.html#l00096">Server::getClientMaxBodySize()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00191">getCurrentTime()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00086">HttpRequest::getHeader()</a>, <a class="el" href="htmlUtils_8cpp_source.html#l00017">htmlEscape()</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">INFO</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00134">joinPath()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="handleMultipartForm_8cpp_source.html#l00114">anonymous_namespace{handleMultipartForm.cpp}::parseMultipartForm()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="handlePost_8cpp_source.html#l00235">dispatchPostByContentType()</a>.</p>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handleMultipartForm_8cpp_a17f2fba88ab8919ca4bc75a7b63110c6_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handleMultipartForm_8cpp_a17f2fba88ab8919ca4bc75a7b63110c6_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="handleMultipartForm_8cpp_source.html">handleMultipartForm.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

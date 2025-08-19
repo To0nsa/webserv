@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['parsing_20utilities_0',['String parsing utilities',['../group__StringUtils.html',1,'']]]
+  ['filesystem_20utilities_0',['Filesystem Utilities',['../group__filesystem__utils.html',1,'']]],
+  ['functions_1',['Utility Functions',['../group__utils.html',1,'']]]
 ];

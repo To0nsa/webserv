@@ -108,42 +108,37 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <p>For reference and correctness, Nginx was used as a behavioral benchmark: routing, error responses, and edge cases were compared against it to ensure realistic and compliant behavior.</p>
 <p>This project was both a challenge in systems programming and a solid introduction to networking, concurrency, and protocol design in modern C++. </p><hr  />
-<h1><a class="anchor" id="autotoc_md1"></a>
-Core of Webserv</h1>
+<h1>Core of Webserv</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Component   </th><th class="markdownTableHeadNone">Responsibility    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">**<code><a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a></code>**   </td><td class="markdownTableBodyNone">Represents a virtual host configuration. Manages binding (host + port), server names, error pages, body size limits, and a collection of <code><a class="el" href="classLocation.html">Location</a></code> blocks.    </td></tr>
+<td class="markdownTableBodyNone">**<code><a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a></code>**   </td><td class="markdownTableBodyNone">Represents a virtual host configuration. Manages binding (host + port), server names, error pages, body size limits, and a collection of <code><a class="el" href="classLocation.html" title="Encapsulates configuration for a single URL path.">Location</a></code> blocks.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">**<code><a class="el" href="classLocation.html">Location</a></code>**   </td><td class="markdownTableBodyNone">Encapsulates route-specific configuration. Defines path matching, allowed HTTP methods, root directories, index files, redirects, <a class="el" href="namespaceCGI.html">CGI</a> interpreters, and upload stores.    </td></tr>
+<td class="markdownTableBodyNone">**<code><a class="el" href="classLocation.html" title="Encapsulates configuration for a single URL path.">Location</a></code>**   </td><td class="markdownTableBodyNone">Encapsulates route-specific configuration. Defines path matching, allowed HTTP methods, root directories, index files, redirects, <a class="el" href="namespaceCGI.html">CGI</a> interpreters, and upload stores.    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">**<code>runWebserv</code>**   </td><td class="markdownTableBodyNone">Orchestrates the execution of the web server: initializes <code><a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a></code> objects from the parsed configuration, launches sockets, and enters the event loop.   </td></tr>
 </table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md2"></a>
-Program Entrypoint</h2>
+<h2>Program Entrypoint</h2>
 <ol type="1">
 <li>Parse CLI arguments or fallback to default configuration.</li>
 <li>Load and normalize configuration (via config parser).</li>
-<li>Validate <code><a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a></code> and <code><a class="el" href="classLocation.html">Location</a></code> objects.</li>
-<li>Call **<code><a class="el" href="webserv_8hpp.html#a6e58dbe6eab2d4b12d65b7b0e7297be8">runWebserv()</a></code>** to start the server runtime.</li>
+<li>Validate <code><a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a></code> and <code><a class="el" href="classLocation.html" title="Encapsulates configuration for a single URL path.">Location</a></code> objects.</li>
+<li>Call **<code><a class="el" href="group__entrypoint_ga6e58dbe6eab2d4b12d65b7b0e7297be8.html#ga6e58dbe6eab2d4b12d65b7b0e7297be8" title="Runs the Webserv server.">runWebserv()</a></code>** to start the server runtime.</li>
 </ol>
 <p>The program is designed so that <b>configuration and validation are complete before runtime begins</b>, ensuring that only consistent and safe server objects are passed to the execution loop.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md3"></a>
-Configuration Parsing Flow</h1>
+<h1>Configuration Parsing Flow</h1>
 <p>This section describes how the configuration parsing logic of <b>Webserv</b> works, including the step‑by‑step pipeline and the rules applied during parsing and validation.</p>
 <details >
 <summary >
 <b>See Details</b></summary>
 <p></p>
+<h2>1. Tokenization</h2>
 <p></p>
-</details>
-<h2><a class="anchor" id="autotoc_md4"></a>
-1. Tokenization</h2>
 <ul>
-<li><b>Component:</b> <code><a class="el" href="classTokenizer.html">Tokenizer</a></code></li>
+<li><b>Component:</b> <code><a class="el" href="classTokenizer.html" title="Stateful lexer for the configuration language.">Tokenizer</a></code></li>
 <li><b>Goal:</b> Convert raw configuration text into a structured list of tokens.</li>
 <li><b>Steps:</b><ul>
 <li>Skip UTF‑8 BOM if present.</li>
@@ -156,7 +151,7 @@ Configuration Parsing Flow</h1>
     * **Symbols:**&lt;/tt&gt;{&lt;tt&gt;,&lt;/tt&gt;}&lt;tt&gt;,&lt;/tt&gt;;&lt;tt&gt;,&lt;/tt&gt;,`.
   * Detect and reject invalid characters, control characters, or malformed identifiers.
 
-@subsection autotoc_md5 2. Parsing
+&lt;h2&gt;2. Parsing&lt;/h2&gt;
 
 * &lt;strong&gt;Component:&lt;/strong&gt; &lt;tt&gt;ConfigParser&lt;/tt&gt;
 * &lt;strong&gt;Goal:&lt;/strong&gt; Transform token stream into structured objects (&lt;tt&gt;Config&lt;/tt&gt;, &lt;tt&gt;Server&lt;/tt&gt;, &lt;tt&gt;Location&lt;/tt&gt;).
@@ -170,7 +165,7 @@ Configuration Parsing Flow</h1>
     * Location level: &lt;tt&gt;root&lt;/tt&gt;, &lt;tt&gt;index&lt;/tt&gt;, &lt;tt&gt;autoindex&lt;/tt&gt;, &lt;tt&gt;methods&lt;/tt&gt;, &lt;tt&gt;upload_store&lt;/tt&gt;, &lt;tt&gt;return&lt;/tt&gt;, &lt;tt&gt;cgi_extension&lt;/tt&gt;, &lt;tt&gt;cgi_interpreter&lt;/tt&gt;.
   * &lt;strong&gt;Nesting:&lt;/strong&gt; Locations may not contain other &lt;tt&gt;server&lt;/tt&gt; blocks.
 
-@subsection autotoc_md6 3. Configuration Objects
+&lt;h2&gt;3. Configuration Objects&lt;/h2&gt;
 
 * &lt;strong&gt;Server:&lt;/strong&gt; Represents a virtual host.
 
@@ -179,7 +174,7 @@ Configuration Parsing Flow</h1>
 
   * Includes root directory, index file(s), autoindex flag, allowed methods, redirects, CGI settings, and upload store.
 
-@subsection autotoc_md7 4. Normalization
+&lt;h2&gt;4. Normalization&lt;/h2&gt;
 
 * After parsing, the configuration is &lt;strong&gt;normalized&lt;/strong&gt; to ensure consistency and defaults:
 
@@ -190,7 +185,7 @@ Configuration Parsing Flow</h1>
   * Root location (&lt;tt&gt;/&lt;/tt&gt;) without &lt;tt&gt;index&lt;/tt&gt; → defaults to &lt;strong&gt;index.html&lt;/strong&gt;.
 * Normalization guarantees that later validation and runtime logic operate on a &lt;strong&gt;complete and uniform&lt;/strong&gt; model.
 
-@subsection autotoc_md8 5. Validation
+&lt;h2&gt;5. Validation&lt;/h2&gt;
 
 * &lt;strong&gt;Component:&lt;/strong&gt; &lt;tt&gt;validateConfig&lt;/tt&gt;
 * &lt;strong&gt;Goal:&lt;/strong&gt; Enforce semantic correctness beyond syntax.
@@ -209,7 +204,7 @@ Configuration Parsing Flow</h1>
   * &lt;strong&gt;Roots &amp; Upload stores:&lt;/strong&gt; Must exist and be directories.
   * &lt;strong&gt;Index:&lt;/strong&gt; Requires a valid &lt;tt&gt;root&lt;/tt&gt;.
 
-@subsection autotoc_md9 6. Error Handling
+&lt;h2&gt;6. Error Handling&lt;/h2&gt;
 
 * &lt;strong&gt;Tokenizer:&lt;/strong&gt; Throws &lt;tt&gt;TokenizerError&lt;/tt&gt; with line/column context when encountering invalid tokens.
 * &lt;strong&gt;Parser:&lt;/strong&gt; Throws &lt;tt&gt;ConfigParseError&lt;/tt&gt; on invalid structure or misplaced directives.
@@ -219,7 +214,7 @@ Configuration Parsing Flow</h1>
 
 &lt;hr&gt;
 
-@section autotoc_md10 Networking &lt;tt&gt;SocketManager&lt;/tt&gt;
+&lt;h1&gt;Networking &lt;tt&gt;SocketManager&lt;/tt&gt;&lt;/h1&gt;
 
 The heart of Webserv’s I/O: a single &lt;tt&gt;poll()&lt;/tt&gt; loop multiplexing &lt;strong&gt;listening sockets&lt;/strong&gt;, &lt;strong&gt;client sockets&lt;/strong&gt;, and &lt;strong&gt;CGI pipes&lt;/strong&gt;, with strict timeouts and robust error recovery.
 
@@ -241,14 +236,14 @@ The heart of Webserv’s I/O: a single &lt;tt&gt;poll()&lt;/tt&gt; loop multiple
 
 &lt;hr&gt;
 
-@section autotoc_md11 HTTP Handling
+&lt;h1&gt;HTTP Handling&lt;/h1&gt;
 
 This section explains how &lt;strong&gt;Webserv&lt;/strong&gt; processes HTTP/1.1 requests end‑to‑end, from bytes on a socket to fully formed responses, and how the server enforces protocol rules, timeouts, and connection reuse.
 
 &lt;details&gt;
 &lt;summary&gt;&lt;strong&gt;See Details&lt;/strong&gt;&lt;/summary&gt;
 
-@subsection autotoc_md12 Request Lifecycle (High‑Level)
+&lt;h2&gt;Request Lifecycle (High‑Level)&lt;/h2&gt;
 
 1. &lt;strong&gt;Accept &amp; Read&lt;/strong&gt;
    &lt;tt&gt;SocketManager&lt;/tt&gt; accepts client connections on non‑blocking sockets and collects incoming bytes. Per‑connection state tracks &lt;strong&gt;read deadlines&lt;/strong&gt; (header/body) and &lt;strong&gt;keep‑alive&lt;/strong&gt;.
@@ -275,13 +270,13 @@ This section explains how &lt;strong&gt;Webserv&lt;/strong&gt; processes HTTP/1.
 6. &lt;strong&gt;Send &amp; Reuse&lt;/strong&gt;
    &lt;tt&gt;SocketManager&lt;/tt&gt; writes the response, respecting &lt;strong&gt;write timeouts&lt;/strong&gt; and TCP backpressure. If &lt;tt&gt;Connection: keep-alive&lt;/tt&gt; and protocol rules allow, the connection stays open for subsequent pipelined requests.
 
-@subsection autotoc_md13 Static Files &amp; Autoindex
+&lt;h2&gt;Static Files &amp; Autoindex&lt;/h2&gt;
 
 * &lt;strong&gt;Static files&lt;/strong&gt;: Path is resolved from &lt;tt&gt;root&lt;/tt&gt; + URI, protecting against traversal. If an &lt;strong&gt;index&lt;/strong&gt; is configured and exists for a directory, it is served.
 * &lt;strong&gt;Autoindex&lt;/strong&gt;: When enabled and no index present, &lt;tt&gt;generateAutoindex&lt;/tt&gt; renders a minimal HTML directory listing.
 * &lt;strong&gt;ETag/Last‑Modified&lt;/strong&gt; *(optional)*: If enabled, responses include validators; otherwise strong caching is avoided. Range requests are not served unless explicitly implemented.
 
-@subsection autotoc_md14 Errors &amp; Edge Cases
+&lt;h2&gt;Errors &amp; Edge Cases&lt;/h2&gt;
 
 * &lt;strong&gt;400&lt;/strong&gt; malformed request, &lt;strong&gt;413&lt;/strong&gt; body too large, &lt;strong&gt;414&lt;/strong&gt; URI too long, &lt;strong&gt;404/403&lt;/strong&gt; missing or forbidden paths, &lt;strong&gt;405&lt;/strong&gt; method not allowed.
 * &lt;strong&gt;408/504&lt;/strong&gt; on header/body/send timeouts. &lt;strong&gt;431&lt;/strong&gt; for oversized header sections.
@@ -291,14 +286,14 @@ This section explains how &lt;strong&gt;Webserv&lt;/strong&gt; processes HTTP/1.
 
 &lt;hr&gt;
 
-@section autotoc_md15 Request &amp; CGI Handling
+&lt;h1&gt;Request &amp; CGI Handling&lt;/h1&gt;
 
 This section details how POST uploads, multipart forms, and CGI programs are handled, including sandboxing and timeout policy.
 
 &lt;details&gt;
 &lt;summary&gt;&lt;strong&gt;See Details&lt;/strong&gt;&lt;/summary&gt;
 
-@subsection autotoc_md16 POST Uploads &amp; Multipart
+&lt;h2&gt;POST Uploads &amp; Multipart&lt;/h2&gt;
 
 * &lt;strong&gt;Content dispatch&lt;/strong&gt;: &lt;tt&gt;handlePost&lt;/tt&gt; inspects &lt;tt&gt;Content-Type&lt;/tt&gt; and forwards to specialized handlers.
 * &lt;strong&gt;application/x-www-form-urlencoded&lt;/strong&gt;: Parsed into key/value pairs. Small payloads are buffered; oversized inputs fail fast with &lt;strong&gt;413&lt;/strong&gt;.
@@ -306,7 +301,7 @@ This section details how POST uploads, multipart forms, and CGI programs are han
 * &lt;strong&gt;application/octet-stream / arbitrary media&lt;/strong&gt;: Stored as a single file in &lt;tt&gt;upload_store&lt;/tt&gt; with a server‑generated filename when no name is provided.
 * &lt;strong&gt;Overwrite policy&lt;/strong&gt;: Configurable (e.g., reject on conflict or rename). Errors yield &lt;strong&gt;409&lt;/strong&gt; (conflict) or &lt;strong&gt;500&lt;/strong&gt; depending on the cause.
 
-@subsection autotoc_md17 CGI Execution Model
+&lt;h2&gt;CGI Execution Model&lt;/h2&gt;
 
 * &lt;strong&gt;When CGI triggers&lt;/strong&gt;: A request is routed to CGI when the target path matches a configured &lt;tt&gt;cgi_extension&lt;/tt&gt; (e.g., &lt;tt&gt;.py&lt;/tt&gt;, &lt;tt&gt;.php&lt;/tt&gt;) and an interpreter is set, or when the &lt;tt&gt;Location&lt;/tt&gt; forces CGI.
 
@@ -339,12 +334,12 @@ This section details how POST uploads, multipart forms, and CGI programs are han
   * Drop privileges/chroot *(if configured)*; never inherit ambient FDs; sanitize environment.
   * Enforce &lt;strong&gt;max body size&lt;/strong&gt;, &lt;strong&gt;max headers&lt;/strong&gt;, &lt;strong&gt;max response size&lt;/strong&gt; (protects RAM), and per‑request &lt;strong&gt;open‑file caps&lt;/strong&gt;.
 
-@subsection autotoc_md18 GET/DELETE Semantics
+&lt;h2&gt;GET/DELETE Semantics&lt;/h2&gt;
 
 * &lt;strong&gt;GET&lt;/strong&gt;: Serves static files, autoindex pages, or dispatches to CGI. Conditional GETs (If‑Modified‑Since/If‑None‑Match) may be supported depending on build settings.
 * &lt;strong&gt;DELETE&lt;/strong&gt;: Removes targeted file from the resolved root when allowed in &lt;tt&gt;methods&lt;/tt&gt;. On success → &lt;strong&gt;204 No Content&lt;/strong&gt;; on missing/forbidden → &lt;strong&gt;404/403&lt;/strong&gt;.
 
-@subsection autotoc_md19 Response Builder (Recap)
+&lt;h2&gt;Response Builder (Recap)&lt;/h2&gt;
 
 * Centralizes status line + headers, error page selection, and body streaming. Ensures &lt;tt&gt;Content-Length&lt;/tt&gt; vs &lt;tt&gt;chunked&lt;/tt&gt; consistency and keeps &lt;strong&gt;connection semantics&lt;/strong&gt; correct across errors and CGI boundaries.
 
@@ -352,7 +347,7 @@ This section details how POST uploads, multipart forms, and CGI programs are han
 
 &lt;hr&gt;
 
-@section autotoc_md20 Flow Overview - End‑to‑End Runtime
+&lt;h1&gt;Flow Overview - End‑to‑End Runtime&lt;/h1&gt;
 
 This is the complete lifecycle from configuration to bytes on the wire, aligned with the current codebase.
 
@@ -464,14 +459,14 @@ This is the complete lifecycle from configuration to bytes on the wire, aligned 
 
 &lt;hr&gt;
 
-@section autotoc_md21 Continuous Integration &amp; Documentation
+&lt;h1&gt;Continuous Integration &amp; Documentation&lt;/h1&gt;
 
 This project leverages &lt;strong&gt;GitHub Actions&lt;/strong&gt; to ensure code quality, stability, and up-to-date documentation.
 
 &lt;details&gt;
 &lt;summary&gt;&lt;strong&gt;See Details&lt;/strong&gt;&lt;/summary&gt;
 
-@subsection autotoc_md22 CI Pipeline
+&lt;h2&gt;CI Pipeline&lt;/h2&gt;
 
 * Runs automatically on pushes and pull requests to &lt;tt&gt;main&lt;/tt&gt; and &lt;tt&gt;dev&lt;/tt&gt;.
 * Includes manual triggers (&lt;tt&gt;workflow_dispatch&lt;/tt&gt;) and dependency checks after successful builds.
@@ -485,6 +480,7 @@ This project leverages &lt;strong&gt;GitHub Actions&lt;/strong&gt; to ensure cod
 </ul>
 </li>
 </ul>
+</details>
 <p>Description    </p>
 <p>🔨 <b>Build</b>   </p>
 <p>Compiles the project using the provided <code>Makefile</code> to ensure successful builds.    </p>
@@ -494,23 +490,20 @@ This project leverages &lt;strong&gt;GitHub Actions&lt;/strong&gt; to ensure cod
 <p>Generates Doxygen documentation (with Graphviz diagrams) and deploys it to <b>GitHub Pages</b>.   </p>
 <p>Every code change is built, tested, and documented automatically, ensuring a robust development workflow and always-available reference docs.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md23"></a>
-Documentation</h1>
+<h1>Documentation</h1>
 <p>This section describes how project documentation is generated, structured, and published.</p>
 <details >
 <summary >
 <b>See Details</b></summary>
 <p></p>
+<h2>1. Doxygen-Powered</h2>
 <p></p>
-</details>
-<h2><a class="anchor" id="autotoc_md24"></a>
-1. Doxygen-Powered</h2>
 <ul>
 <li>Documentation is generated automatically from <b>source code comments</b> and <b>Markdown files</b>.</li>
 <li><code><a class="el" href="README_8md.html">README.md</a></code> serves as the <b>entry point</b>, offering an overview and links to modules.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md25"></a>
-2. Graphical Support</h2>
+<h2>2. Graphical Support</h2>
+<p></p>
 <ul>
 <li><b>Graphviz</b> integration produces:<ul>
 <li><b>Class diagrams</b> to illustrate object hierarchies.</li>
@@ -520,30 +513,31 @@ Documentation</h1>
 </li>
 <li>These visuals improve comprehension of the server’s architecture.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md26"></a>
-3. Navigation &amp; Browsing</h2>
+<h2>3. Navigation &amp; Browsing</h2>
+<p></p>
 <ul>
 <li>The source browser cross-references <b>functions, classes, and files</b>.</li>
 <li>Each documented entity links directly to its definition in the codebase.</li>
 <li>Groups (<code>\defgroup</code>, <code>\ingroup</code>) provide thematic navigation across modules (e.g., <code>config</code>, <code>core</code>, <code>http</code>).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md27"></a>
-4. Deployment</h2>
+<h2>4. Deployment</h2>
+<p></p>
 <ul>
 <li>Documentation is built in <b>CI/CD pipelines</b>.</li>
 <li>Published automatically via <b>GitHub Pages</b> from the <code>docs/html</code> directory.</li>
 <li>Ensures the latest version is always available for contributors and maintainers.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md28"></a>
-5. Best Practices</h2>
+<h2>5. Best Practices</h2>
+<p></p>
 <ul>
 <li>Consistent <b>Doxygen-style headers</b> across <code>.hpp</code> and <code>.cpp</code> files.</li>
 <li>Markdown files complement code documentation with <b>high-level design notes</b> and <b>workflow explanations</b>.</li>
 <li>Together, these guarantee both <b>low-level API reference</b> and <b>high-level architectural guidance</b>.</li>
 </ul>
+<p></p>
+</details>
 <hr  />
-<h1><a class="anchor" id="autotoc_md29"></a>
-Project Structure Overview</h1>
+<h1>Project Structure Overview</h1>
 <div class="fragment"><div class="line">webserv</div>
 <div class="line">├── 📁 .github/               # GitHub Actions CI workflows and PR/issue templates</div>
 <div class="line">│   └── workflows/</div>
@@ -568,17 +562,14 @@ Project Structure Overview</h1>
 <div class="line">├── run_test.py                 # Entrypoint for python tests</div>
 <div class="line">├── webserv.subject.pdf         # Original subject specification for the project</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md30"></a>
-Build &amp; Test Instructions</h1>
-<h2><a class="anchor" id="autotoc_md31"></a>
-Build with Makefile</h2>
+<h1>Build &amp; Test Instructions</h1>
+<h2>Build with Makefile</h2>
 <div class="fragment"><div class="line">make</div>
 <div class="line">./bin/webserv &lt;path-to-config.conf&gt;</div>
 </div><!-- fragment --><blockquote class="doxtable">
 <p>&zwj;The default goal is <code>all</code>. The binary is produced at <code>bin/webserv</code>. </p>
 </blockquote>
-<h2><a class="anchor" id="autotoc_md32"></a>
-Available Makefile Targets</h2>
+<h2>Available Makefile Targets</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Command   </th><th class="markdownTableHeadNone">Description    </th></tr>
@@ -599,8 +590,7 @@ Available Makefile Targets</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>make help</code>   </td><td class="markdownTableBodyNone">Print a categorized list of available targets.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md33"></a>
-Notes</h2>
+<h2>Notes</h2>
 <ul>
 <li>Objects and auto-generated deps are stored under <code>objs/</code> (built via <code>-MMD -MP</code>).</li>
 <li>The build uses explicit source lists (no wildcards) for deterministic builds.</li>
@@ -608,8 +598,7 @@ Notes</h2>
 <li>Ensure <code>python3-venv</code> and <code>clang-format</code> are installed on your system.</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md34"></a>
-License</h1>
+<h1>License</h1>
 <p>This project is licensed under the terms of the [MIT License](LICENSE).</p>
 <hr  />
  </div></div><!-- PageDoc -->

@@ -1,0 +1,5 @@
+<map id="Tokenizer::peekNext" name="Tokenizer::peekNext">
+<area shape="rect" id="Node000001" title="Peeks the next character without consuming it." alt="" coords="5,5,160,31"/>
+<area shape="rect" id="Node000002" href="$group__config__tokenizing_ga0eb3b50597e00c5b298a0928e4cc683e.html#ga0eb3b50597e00c5b298a0928e4cc683e" title="Tests if the cursor reached the end of the input." alt="" coords="208,5,348,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,15,194,15,194,21,160,21"/>
+</map>

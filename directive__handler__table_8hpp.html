@@ -94,9 +94,12 @@ $(document).ready(function(){initNavTree('directive__handler__table_8hpp.html','
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">directive_handler_table.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">directive_handler_table.hpp File Reference<div class="ingroups"><a class="el" href="group__config.html">Configuration Parsing</a> &raquo; <a class="el" href="group__config__parsing.html">Parsing</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Declares handler maps for server/location directives.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
@@ -127,19 +130,28 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:acbf2d747b7dc7c47c0c4989ab2853c6b" id="r_acbf2d747b7dc7c47c0c4989ab2853c6b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective.html#acbf2d747b7dc7c47c0c4989ab2853c6b">directive::LocationHandler</a> = std::function&lt; void(<a class="el" href="classLocation.html">Location</a> &amp;loc, const std::vector&lt; std::string &gt; &amp;args, int line, int column, const std::string &amp;getLineSnippet)&gt;</td></tr>
-<tr class="separator:acbf2d747b7dc7c47c0c4989ab2853c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0e12e108ebe1eed97742d22f5424b42" id="r_af0e12e108ebe1eed97742d22f5424b42"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective.html#af0e12e108ebe1eed97742d22f5424b42">directive::ServerHandler</a> = std::function&lt; void(<a class="el" href="classServer.html">Server</a> &amp;s, const std::vector&lt; std::string &gt; &amp;args, int line, int column, const std::string &amp;getLineSnippet)&gt;</td></tr>
-<tr class="separator:af0e12e108ebe1eed97742d22f5424b42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1a6204ee3ff462d788c258418495bc14" id="r_ga1a6204ee3ff462d788c258418495bc14"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_ga1a6204ee3ff462d788c258418495bc14.html#ga1a6204ee3ff462d788c258418495bc14">directive::ServerHandler</a> = std::function&lt; void(<a class="el" href="classServer.html">Server</a> &amp;s, const std::vector&lt; std::string &gt; &amp;args, int line, int column, const std::string &amp;ctx)&gt;</td></tr>
+<tr class="memdesc:ga1a6204ee3ff462d788c258418495bc14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler signature for server-level directives.  <br /></td></tr>
+<tr class="separator:ga1a6204ee3ff462d788c258418495bc14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab957d8f147c96cf7e6e5a7ae9dec2be4" id="r_gab957d8f147c96cf7e6e5a7ae9dec2be4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_gab957d8f147c96cf7e6e5a7ae9dec2be4.html#gab957d8f147c96cf7e6e5a7ae9dec2be4">directive::LocationHandler</a> = std::function&lt; void(<a class="el" href="classLocation.html">Location</a> &amp;loc, const std::vector&lt; std::string &gt; &amp;args, int line, int column, const std::string &amp;ctx)&gt;</td></tr>
+<tr class="memdesc:gab957d8f147c96cf7e6e5a7ae9dec2be4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler signature for location-level directives.  <br /></td></tr>
+<tr class="separator:gab957d8f147c96cf7e6e5a7ae9dec2be4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a4167e9343de67ad75b94d04a0ee62577" id="r_a4167e9343de67ad75b94d04a0ee62577"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="namespacedirective.html#acbf2d747b7dc7c47c0c4989ab2853c6b">LocationHandler</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective.html#a4167e9343de67ad75b94d04a0ee62577">directive::locationHandlers</a> ()</td></tr>
-<tr class="separator:a4167e9343de67ad75b94d04a0ee62577"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3338d7904396548486d9d2dce2367c06" id="r_a3338d7904396548486d9d2dce2367c06"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="namespacedirective.html#af0e12e108ebe1eed97742d22f5424b42">ServerHandler</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective.html#a3338d7904396548486d9d2dce2367c06">directive::serverHandlers</a> ()</td></tr>
+<tr class="memitem:a3338d7904396548486d9d2dce2367c06" id="r_a3338d7904396548486d9d2dce2367c06"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="group__config__parsing_ga1a6204ee3ff462d788c258418495bc14.html#ga1a6204ee3ff462d788c258418495bc14">ServerHandler</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective_a3338d7904396548486d9d2dce2367c06.html#a3338d7904396548486d9d2dce2367c06">directive::serverHandlers</a> ()</td></tr>
+<tr class="memdesc:a3338d7904396548486d9d2dce2367c06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the mapping of server-level directives to their handler functions.  <br /></td></tr>
 <tr class="separator:a3338d7904396548486d9d2dce2367c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4167e9343de67ad75b94d04a0ee62577" id="r_a4167e9343de67ad75b94d04a0ee62577"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="group__config__parsing_gab957d8f147c96cf7e6e5a7ae9dec2be4.html#gab957d8f147c96cf7e6e5a7ae9dec2be4">LocationHandler</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective_a4167e9343de67ad75b94d04a0ee62577.html#a4167e9343de67ad75b94d04a0ee62577">directive::locationHandlers</a> ()</td></tr>
+<tr class="memdesc:a4167e9343de67ad75b94d04a0ee62577"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the mapping of location-level directives to their handler functions.  <br /></td></tr>
+<tr class="separator:a4167e9343de67ad75b94d04a0ee62577"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Declares handler maps for server/location directives. </p>
+<p>Provides the callable signatures and lookup tables used by <a class="el" href="classConfigParser.html">ConfigParser</a> to apply parsed directives to <a class="el" href="classServer.html">Server</a> and <a class="el" href="classLocation.html">Location</a> instances. Each entry maps a directive keyword (e.g., "listen", "root") to a function that mutates the target object or throws on invalid arguments. </p>
+
+<p class="definition">Definition in file <a class="el" href="directive__handler__table_8hpp_source.html">directive_handler_table.hpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

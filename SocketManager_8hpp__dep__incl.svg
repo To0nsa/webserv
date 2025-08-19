@@ -46,7 +46,7 @@
   </g>
 </defs>
 <script type="application/ecmascript">
-var viewWidth = 997;
+var viewWidth = 1013;
 var viewHeight = 93;
 var sectionId = 'dynsection-1';
 </script>
@@ -57,18 +57,18 @@ var sectionId = 'dynsection-1';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
-<polygon fill="#999999" stroke="#666666" points="584,-85 391,-85 391,-66 584,-66 584,-85"/>
-<text text-anchor="middle" x="487.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">include/network/SocketManager.hpp</text>
+<g id="a_Node000001"><a xlink:title="Declares the SocketManager and per&#45;client state for non&#45;blocking I/O.">
+<polygon fill="#999999" stroke="#666666" points="600,-85 407,-85 407,-66 600,-66 600,-85"/>
+<text text-anchor="middle" x="503.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">include/network/SocketManager.hpp</text>
 </a>
 </g>
 </g>
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="webserv_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="119,-24.5 0,-24.5 0,-5.5 119,-5.5 119,-24.5"/>
-<text text-anchor="middle" x="59.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/core/webserv.cpp</text>
+<g id="a_Node000002"><a xlink:href="runWebserv_8cpp.html" target="_top" xlink:title="Webserv bootstrap and runtime orchestration.">
+<polygon fill="white" stroke="#666666" points="135,-24.5 0,-24.5 0,-5.5 135,-5.5 135,-24.5"/>
+<text text-anchor="middle" x="67.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/core/runWebserv.cpp</text>
 </a>
 </g>
 </g>
@@ -76,17 +76,17 @@ var sectionId = 'dynsection-1';
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node1&#45;&gt;Node2</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M392.79,-64.89C320.01,-56.99 217.12,-44.74 127.5,-30 117.99,-28.44 107.78,-26.48 98.24,-24.53"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="392.53,-68.38 402.85,-65.97 393.28,-61.42 392.53,-68.38"/>
+<path fill="none" stroke="#63b8ff" d="M413.52,-64.87C340.58,-56.71 235.2,-44.1 143.5,-30 133.02,-28.39 121.78,-26.44 111.23,-24.51"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="413.27,-68.37 423.6,-66 414.05,-61.41 413.27,-68.37"/>
 </a>
 </g>
 </g>
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="SocketManager_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="308,-24.5 137,-24.5 137,-5.5 308,-5.5 308,-24.5"/>
-<text text-anchor="middle" x="222.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager.cpp</text>
+<g id="a_Node000003"><a xlink:href="SocketManager_8cpp.html" target="_top" xlink:title="Implements the SocketManager core loop and server socket setup.">
+<polygon fill="white" stroke="#666666" points="324,-24.5 153,-24.5 153,-5.5 324,-5.5 324,-24.5"/>
+<text text-anchor="middle" x="238.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager.cpp</text>
 </a>
 </g>
 </g>
@@ -94,18 +94,18 @@ var sectionId = 'dynsection-1';
 <g id="edge2_Node000001_Node000003" class="edge">
 <title>Node1&#45;&gt;Node3</title>
 <g id="a_edge2_Node000001_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M439.13,-63.82C387.95,-52.52 308.2,-34.92 261.08,-24.52"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="438.45,-67.26 448.97,-65.99 439.96,-60.42 438.45,-67.26"/>
+<path fill="none" stroke="#63b8ff" d="M455.13,-63.82C403.95,-52.52 324.2,-34.92 277.08,-24.52"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="454.45,-67.26 464.97,-65.99 455.96,-60.42 454.45,-67.26"/>
 </a>
 </g>
 </g>
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="SocketManagerRequest_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="478.5,-30 326.5,-30 326.5,0 478.5,0 478.5,-30"/>
-<text text-anchor="start" x="334.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
-<text text-anchor="middle" x="402.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Request.cpp</text>
+<g id="a_Node000004"><a xlink:href="SocketManagerRequest_8cpp.html" target="_top" xlink:title="Implements request handling logic for SocketManager.">
+<polygon fill="white" stroke="#666666" points="494.5,-30 342.5,-30 342.5,0 494.5,0 494.5,-30"/>
+<text text-anchor="start" x="350.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
+<text text-anchor="middle" x="418.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Request.cpp</text>
 </a>
 </g>
 </g>
@@ -113,18 +113,18 @@ var sectionId = 'dynsection-1';
 <g id="edge3_Node000001_Node000004" class="edge">
 <title>Node1&#45;&gt;Node4</title>
 <g id="a_edge3_Node000001_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M466.48,-60.03C453.21,-50.9 436.17,-39.17 423.01,-30.11"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="464.74,-63.08 474.96,-65.87 468.7,-57.32 464.74,-63.08"/>
+<path fill="none" stroke="#63b8ff" d="M482.48,-60.03C469.21,-50.9 452.17,-39.17 439.01,-30.11"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="480.74,-63.08 490.96,-65.87 484.7,-57.32 480.74,-63.08"/>
 </a>
 </g>
 </g>
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="SocketManagerResponse_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="648.5,-30 496.5,-30 496.5,0 648.5,0 648.5,-30"/>
-<text text-anchor="start" x="504.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
-<text text-anchor="middle" x="572.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Response.cpp</text>
+<g id="a_Node000005"><a xlink:href="SocketManagerResponse_8cpp.html" target="_top" xlink:title="Implements response sending logic for SocketManager.">
+<polygon fill="white" stroke="#666666" points="664.5,-30 512.5,-30 512.5,0 664.5,0 664.5,-30"/>
+<text text-anchor="start" x="520.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
+<text text-anchor="middle" x="588.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Response.cpp</text>
 </a>
 </g>
 </g>
@@ -132,18 +132,18 @@ var sectionId = 'dynsection-1';
 <g id="edge4_Node000001_Node000005" class="edge">
 <title>Node1&#45;&gt;Node5</title>
 <g id="a_edge4_Node000001_Node000005"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M508.52,-60.03C521.79,-50.9 538.83,-39.17 551.99,-30.11"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="506.3,-57.32 500.04,-65.87 510.26,-63.08 506.3,-57.32"/>
+<path fill="none" stroke="#63b8ff" d="M524.52,-60.03C537.79,-50.9 554.83,-39.17 567.99,-30.11"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="522.3,-57.32 516.04,-65.87 526.26,-63.08 522.3,-57.32"/>
 </a>
 </g>
 </g>
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="SocketManagerTimeouts_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="818.5,-30 666.5,-30 666.5,0 818.5,0 818.5,-30"/>
-<text text-anchor="start" x="674.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
-<text text-anchor="middle" x="742.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Timeouts.cpp</text>
+<g id="a_Node000006"><a xlink:href="SocketManagerTimeouts_8cpp.html" target="_top" xlink:title="Implements timeout and limit enforcement for SocketManager.">
+<polygon fill="white" stroke="#666666" points="834.5,-30 682.5,-30 682.5,0 834.5,0 834.5,-30"/>
+<text text-anchor="start" x="690.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
+<text text-anchor="middle" x="758.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Timeouts.cpp</text>
 </a>
 </g>
 </g>
@@ -151,18 +151,18 @@ var sectionId = 'dynsection-1';
 <g id="edge5_Node000001_Node000006" class="edge">
 <title>Node1&#45;&gt;Node6</title>
 <g id="a_edge5_Node000001_Node000006"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M534.38,-63.74C575.67,-54.27 636.08,-40.41 681.19,-30.06"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="533.54,-60.35 524.58,-65.99 535.11,-67.17 533.54,-60.35"/>
+<path fill="none" stroke="#63b8ff" d="M550.38,-63.74C591.67,-54.27 652.08,-40.41 697.19,-30.06"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="549.54,-60.35 540.58,-65.99 551.11,-67.17 549.54,-60.35"/>
 </a>
 </g>
 </g>
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="SocketManagerUtils_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="988.5,-30 836.5,-30 836.5,0 988.5,0 988.5,-30"/>
-<text text-anchor="start" x="844.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
-<text text-anchor="middle" x="912.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Utils.cpp</text>
+<g id="a_Node000007"><a xlink:href="SocketManagerUtils_8cpp.html" target="_top" xlink:title="Utility methods for connection lifecycle management in SocketManager.">
+<polygon fill="white" stroke="#666666" points="1004.5,-30 852.5,-30 852.5,0 1004.5,0 1004.5,-30"/>
+<text text-anchor="start" x="860.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
+<text text-anchor="middle" x="928.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Utils.cpp</text>
 </a>
 </g>
 </g>
@@ -170,8 +170,8 @@ var sectionId = 'dynsection-1';
 <g id="edge6_Node000001_Node000007" class="edge">
 <title>Node1&#45;&gt;Node7</title>
 <g id="a_edge6_Node000001_Node000007"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M567.85,-64.74C636.81,-56.19 738.81,-43.1 827.5,-30 830.31,-29.58 833.17,-29.15 836.06,-28.71"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="567.42,-61.27 557.92,-65.97 568.28,-68.22 567.42,-61.27"/>
+<path fill="none" stroke="#63b8ff" d="M583.85,-64.74C652.81,-56.19 754.81,-43.1 843.5,-30 846.31,-29.58 849.17,-29.15 852.06,-28.71"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="583.42,-61.27 573.92,-65.97 584.28,-68.22 583.42,-61.27"/>
 </a>
 </g>
 </g>

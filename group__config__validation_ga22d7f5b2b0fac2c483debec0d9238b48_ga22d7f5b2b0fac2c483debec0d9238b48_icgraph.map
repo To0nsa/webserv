@@ -1,0 +1,13 @@
+<map id="anonymous_namespace{validateConfig::cpp}::splitLabels" name="anonymous_namespace{validateConfig::cpp}::splitLabels">
+<area shape="rect" id="Node000001" title="Splits a domain name into its individual labels." alt="" coords="905,5,1085,60"/>
+<area shape="rect" id="Node000002" href="$group__config__validation_ga74c6e43efabb8dbf3a8da16cff4c3f36.html#ga74c6e43efabb8dbf3a8da16cff4c3f36" title="Validates a full server name against domain format rules." alt="" coords="677,5,857,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="891,35,857,35,857,30,891,30"/>
+<area shape="rect" id="Node000003" href="$group__config__validation_ga42ca79ba2c93b1435422557dbcf5ac33.html#ga42ca79ba2c93b1435422557dbcf5ac33" title="Validates the format of all server_name directives across servers." alt="" coords="419,5,629,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="663,35,629,35,629,30,663,30"/>
+<area shape="rect" id="Node000004" href="$validateConfig_8cpp_a3da4407495bdbfabadd421d999918810.html#a3da4407495bdbfabadd421d999918810" title=" " alt="" coords="255,20,371,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="405,35,371,35,371,30,405,30"/>
+<area shape="rect" id="Node000005" href="$group__entrypoint_ga6e58dbe6eab2d4b12d65b7b0e7297be8.html#ga6e58dbe6eab2d4b12d65b7b0e7297be8" title="Runs the Webserv server." alt="" coords="108,20,207,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="241,35,207,35,207,30,241,30"/>
+<area shape="rect" id="Node000006" href="$group__entrypoint_ga3c04138a5bfe5d72780bb7e82a18e627.html#ga3c04138a5bfe5d72780bb7e82a18e627" title="Program entry point." alt="" coords="5,20,60,45"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,35,60,35,60,30,94,30"/>
+</map>

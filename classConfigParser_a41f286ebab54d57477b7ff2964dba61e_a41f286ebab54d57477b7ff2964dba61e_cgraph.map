@@ -1,0 +1,87 @@
+<map id="ConfigParser::ConfigParser" name="ConfigParser::ConfigParser">
+<area shape="rect" id="Node000001" title="Constructs a ConfigParser instance from raw configuration text." alt="" coords="5,817,197,843"/>
+<area shape="rect" id="Node000002" href="$group__config__tokenizing_ga535ed2343bd999378d3295edc150e746.html#ga535ed2343bd999378d3295edc150e746" title="Converts the input buffer into a sequence of tokens." alt="" coords="245,817,392,843"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,827,232,827,232,833,197,833"/>
+<area shape="rect" id="Node000003" href="$group__config__tokenizing_gabb60123728550edb23bb1624f3cfe780.html#gabb60123728550edb23bb1624f3cfe780" title="Reads and emits the next token from the input." alt="" coords="440,501,623,527"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="326,816,438,645,511,536,516,539,442,648,331,819"/>
+<area shape="rect" id="Node000010" href="$group__config__tokenizing_ga507c90c0e852845bb26142c482864e25.html#ga507c90c0e852845bb26142c482864e25" title="Creates a token with current source coordinates." alt="" coords="973,656,1137,681"/>
+<area shape="poly" id="edge47_Node000002_Node000010" title=" " alt="" coords="343,815,479,751,572,715,670,688,745,675,822,667,960,663,960,668,822,672,746,680,671,693,574,721,481,756,345,820"/>
+<area shape="rect" id="Node000014" href="$group__config__tokenizing_ga0eb3b50597e00c5b298a0928e4cc683e.html#ga0eb3b50597e00c5b298a0928e4cc683e" title="Tests if the cursor reached the end of the input." alt="" coords="1244,681,1384,707"/>
+<area shape="poly" id="edge46_Node000002_Node000014" title=" " alt="" coords="392,825,537,818,730,804,950,778,1061,761,1170,740,1221,726,1268,709,1270,714,1223,731,1171,745,1062,766,951,784,731,809,537,824,393,831"/>
+<area shape="rect" id="Node000023" href="$group__config__tokenizing_ga7e666e3d4378360b9f0f6f3a7834e4d9.html#ga7e666e3d4378360b9f0f6f3a7834e4d9" title="Skips a UTF&#45;8 Byte Order Mark at input start." alt="" coords="443,868,620,893"/>
+<area shape="poly" id="edge48_Node000002_Node000023" title=" " alt="" coords="374,840,465,862,464,868,372,846"/>
+<area shape="rect" id="Node000024" href="$group__config__tokenizing_ga7d070f27222fc3297b38c9d2f87f0b57.html#ga7d070f27222fc3297b38c9d2f87f0b57" title="Skips whitespace and hash (#) comments." alt="" coords="684,1001,879,1041"/>
+<area shape="poly" id="edge49_Node000002_Node000024" title=" " alt="" coords="339,841,384,871,441,902,572,955,693,994,692,999,570,960,439,907,382,875,336,845"/>
+<area shape="rect" id="Node000004" href="$group__config__tokenizing_gac2386c92405b58ea06660287d2146b84.html#gac2386c92405b58ea06660287d2146b84" title="Advances by one character, updating line/column." alt="" coords="1241,396,1387,421"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="535,500,552,465,580,417,619,370,643,349,669,333,710,316,751,304,838,292,926,293,1012,305,1093,323,1165,345,1274,388,1273,393,1164,350,1091,328,1011,310,925,298,838,297,753,309,711,321,672,338,646,354,623,374,584,421,557,467,540,503"/>
+<area shape="rect" id="Node000005" href="$group__config__tokenizing_gaa7daa721fdeeb87cd3da853c2886dd96.html#gaa7daa721fdeeb87cd3da853c2886dd96" title="Extracts the full source line containing a given byte offset." alt="" coords="1232,79,1396,104"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="534,500,549,452,577,380,617,299,641,259,669,222,731,149,786,97,816,76,851,58,939,24,1003,7,1054,3,1107,10,1171,24,1231,44,1282,70,1280,74,1229,49,1170,29,1106,15,1054,9,1003,12,941,29,853,63,819,81,790,101,735,153,673,225,646,262,621,301,582,382,554,454,539,502"/>
+<area shape="rect" id="Node000006" href="$errorUtils_8cpp_a3a83368b4a479591239a5a9c8740a587.html#a3a83368b4a479591239a5a9c8740a587" title=" " alt="" coords="1265,187,1363,212"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="535,500,553,461,581,407,620,348,669,295,735,243,793,211,857,190,940,172,1024,161,1109,162,1187,171,1252,182,1251,188,1186,176,1108,168,1024,166,940,177,858,195,795,216,738,247,672,299,624,351,586,409,557,463,540,502"/>
+<area shape="rect" id="Node000007" href="$group__config__tokenizing_gabcf82afa6d4a2af3ff374931bf09d401.html#gabcf82afa6d4a2af3ff374931bf09d401" title="Checks if a byte is a valid identifier continuation." alt="" coords="1219,1057,1409,1083"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="539,526,625,855,634,913,637,960,645,1003,656,1026,673,1051,726,1113,780,1161,835,1197,894,1221,955,1232,1021,1231,1092,1218,1170,1193,1208,1173,1242,1146,1293,1092,1297,1096,1246,1150,1211,1178,1172,1198,1094,1223,1022,1236,955,1237,892,1226,833,1202,777,1166,722,1117,669,1054,651,1029,640,1005,632,961,629,913,620,856,534,528"/>
+<area shape="rect" id="Node000008" href="$group__config__tokenizing_ga9d74de8385f7c8e5de7dda35647e1403.html#ga9d74de8385f7c8e5de7dda35647e1403" title="Checks if a byte is a valid identifier start." alt="" coords="686,501,877,527"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="623,511,672,511,672,517,623,517"/>
+<area shape="rect" id="Node000009" href="$group__config__tokenizing_ga287a7fbedcc15e24d05d280ce62ecd7e.html#ga287a7fbedcc15e24d05d280ce62ecd7e" title="Heuristically checks if the remaining slice looks like an IPv4 address." alt="" coords="673,551,889,576"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="597,524,703,545,702,551,596,529"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="554,525,606,555,672,585,746,609,822,628,960,654,959,659,821,633,744,614,670,590,603,560,551,529"/>
+<area shape="rect" id="Node000011" href="$group__config__tokenizing_gaeca329bc1d78e2038fc11fa3c8b519a8.html#gaeca329bc1d78e2038fc11fa3c8b519a8" title="Parses an identifier and resolves to keyword when applicable." alt="" coords="689,702,874,742"/>
+<area shape="poly" id="edge10_Node000003_Node000011" title=" " alt="" coords="549,525,672,631,746,691,743,696,669,635,546,529"/>
+<area shape="rect" id="Node000015" href="$group__config__tokenizing_ga1f0151fc9f4abe60041f7ace3fd6dc45.html#ga1f0151fc9f4abe60041f7ace3fd6dc45" title="Peeks the current character without consuming it." alt="" coords="1253,857,1375,883"/>
+<area shape="poly" id="edge43_Node000003_Node000015" title=" " alt="" coords="540,526,587,625,625,691,673,752,737,821,792,871,854,908,941,941,1004,957,1055,961,1106,955,1170,941,1201,931,1231,917,1282,888,1285,893,1234,922,1203,936,1171,946,1107,961,1055,967,1003,963,939,946,852,913,788,875,733,825,669,756,621,694,582,628,535,528"/>
+<area shape="rect" id="Node000017" href="$group__config__tokenizing_ga141512a45a6c06a887161961c8e41d49.html#ga141512a45a6c06a887161961c8e41d49" title="Parses a NUMBER token with optional single&#45;letter suffix." alt="" coords="671,403,892,428"/>
+<area shape="poly" id="edge21_Node000003_Node000017" title=" " alt="" coords="551,499,603,468,670,437,694,429,696,434,672,442,606,473,553,504"/>
+<area shape="rect" id="Node000020" href="$group__config__tokenizing_ga5fd74c00aa7b3104c20cc7c4a814fd32.html#ga5fd74c00aa7b3104c20cc7c4a814fd32" title="Parses a quoted string literal." alt="" coords="678,348,885,373"/>
+<area shape="poly" id="edge33_Node000003_Node000020" title=" " alt="" coords="541,499,593,445,629,414,669,388,699,375,701,380,672,392,632,419,596,449,545,503"/>
+<area shape="rect" id="Node000022" href="$group__config__tokenizing_ga02d3001df90bcae05fa3986086070936.html#ga02d3001df90bcae05fa3986086070936" title="Peeks the next character without consuming it." alt="" coords="704,452,859,477"/>
+<area shape="poly" id="edge44_Node000003_Node000022" title=" " alt="" coords="596,499,702,478,703,483,597,504"/>
+<area shape="poly" id="edge11_Node000011_Node000010" title=" " alt="" coords="874,702,976,681,977,687,875,707"/>
+<area shape="rect" id="Node000012" href="$group__config__tokenizing_gaf0d69a37816c673679ea7057bd0559f2.html#gaf0d69a37816c673679ea7057bd0559f2" title="Resolves an identifier to a keyword token type when applicable." alt="" coords="943,705,1168,731"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="874,718,929,717,929,723,874,723"/>
+<area shape="rect" id="Node000013" href="$group__config__tokenizing_gafe7c2c0ef9cb08bb6a82f4abbb420e85.html#gafe7c2c0ef9cb08bb6a82f4abbb420e85" title="Scans an identifier body after a valid start." alt="" coords="966,857,1145,883"/>
+<area shape="poly" id="edge13_Node000011_Node000013" title=" " alt="" coords="849,740,893,758,968,803,1029,847,1025,851,965,808,891,763,847,745"/>
+<area shape="rect" id="Node000016" href="$group__config__tokenizing_ga7dd8e4b178f5d819ec70b840eeba6ea0.html#ga7dd8e4b178f5d819ec70b840eeba6ea0" title="Validates the last scanned identifier." alt="" coords="954,187,1157,212"/>
+<area shape="poly" id="edge18_Node000011_Node000016" title=" " alt="" coords="802,700,847,651,870,620,890,586,902,556,909,530,915,483,920,434,938,376,959,331,985,288,1033,221,1037,225,990,291,964,334,942,378,925,435,920,483,915,531,907,558,894,589,875,623,851,654,806,704"/>
+<area shape="poly" id="edge14_Node000013_Node000004" title=" " alt="" coords="1069,855,1116,807,1144,775,1168,741,1215,656,1254,569,1302,433,1307,435,1259,571,1220,659,1173,744,1148,778,1120,811,1073,859"/>
+<area shape="poly" id="edge16_Node000013_Node000007" title=" " alt="" coords="1146,880,1172,892,1216,926,1253,968,1282,1009,1302,1044,1298,1047,1277,1012,1248,971,1212,930,1169,896,1144,885"/>
+<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="1123,855,1169,836,1208,809,1242,776,1293,716,1298,720,1246,780,1211,813,1172,840,1125,860"/>
+<area shape="poly" id="edge17_Node000013_Node000015" title=" " alt="" coords="1145,867,1239,867,1239,873,1145,873"/>
+<area shape="poly" id="edge19_Node000016_Node000005" title=" " alt="" coords="1086,184,1269,107,1271,112,1088,189"/>
+<area shape="poly" id="edge20_Node000016_Node000006" title=" " alt="" coords="1157,197,1252,197,1252,202,1157,202"/>
+<area shape="poly" id="edge22_Node000017_Node000010" title=" " alt="" coords="877,426,894,437,909,455,918,473,923,509,925,546,931,565,942,585,978,620,1017,647,1014,652,974,625,938,588,926,567,920,547,917,510,913,475,905,458,890,441,874,431"/>
+<area shape="rect" id="Node000018" href="$group__config__tokenizing_ga72ddfff726551ec4af08a7a70995bf46.html#ga72ddfff726551ec4af08a7a70995bf46" title="Consumes consecutive decimal digits." alt="" coords="976,504,1135,529"/>
+<area shape="poly" id="edge23_Node000017_Node000018" title=" " alt="" coords="865,426,893,437,909,448,918,460,927,472,941,483,976,498,974,502,939,487,924,475,914,464,905,452,891,442,863,431"/>
+<area shape="rect" id="Node000019" href="$group__config__tokenizing_gaee3735b01289546812d2180ee9355ff1.html#gaee3735b01289546812d2180ee9355ff1" title="Optionally consumes a single&#45;letter size suffix." alt="" coords="954,389,1157,429"/>
+<area shape="poly" id="edge27_Node000017_Node000019" title=" " alt="" coords="892,410,940,409,940,414,892,415"/>
+<area shape="poly" id="edge24_Node000018_Node000004" title=" " alt="" coords="1086,502,1269,424,1271,429,1088,506"/>
+<area shape="poly" id="edge25_Node000018_Node000014" title=" " alt="" coords="1125,527,1172,546,1211,575,1246,607,1298,668,1294,672,1242,611,1208,579,1169,551,1123,532"/>
+<area shape="poly" id="edge26_Node000018_Node000015" title=" " alt="" coords="1136,525,1155,534,1173,547,1190,568,1200,588,1206,627,1208,669,1212,692,1221,717,1259,788,1297,845,1293,848,1255,791,1216,719,1207,693,1203,670,1201,628,1195,589,1185,570,1169,551,1153,538,1134,530"/>
+<area shape="poly" id="edge28_Node000019_Node000004" title=" " alt="" coords="1157,406,1227,406,1227,411,1157,411"/>
+<area shape="poly" id="edge29_Node000019_Node000005" title=" " alt="" coords="1066,387,1126,292,1169,231,1217,172,1250,139,1283,111,1287,115,1254,143,1221,176,1173,234,1131,294,1070,390"/>
+<area shape="poly" id="edge30_Node000019_Node000006" title=" " alt="" coords="1080,387,1284,219,1288,223,1083,391"/>
+<area shape="poly" id="edge31_Node000019_Node000014" title=" " alt="" coords="1141,427,1172,445,1199,471,1223,499,1262,561,1290,620,1307,667,1302,669,1285,622,1257,563,1218,502,1195,474,1169,450,1138,431"/>
+<area shape="poly" id="edge32_Node000019_Node000015" title=" " alt="" coords="1100,427,1139,453,1157,470,1173,490,1190,521,1199,549,1204,601,1206,654,1210,684,1221,717,1258,788,1296,845,1292,848,1253,791,1216,719,1205,685,1200,655,1199,602,1194,550,1185,523,1168,493,1153,474,1135,457,1097,431"/>
+<area shape="poly" id="edge34_Node000020_Node000004" title=" " alt="" coords="885,357,1021,361,1171,374,1253,390,1252,395,1170,379,1021,367,885,363"/>
+<area shape="poly" id="edge35_Node000020_Node000005" title=" " alt="" coords="782,347,794,291,821,210,842,166,868,124,900,87,939,57,981,38,1026,28,1073,25,1119,29,1205,47,1273,71,1271,76,1204,53,1118,34,1072,31,1027,33,982,43,941,62,904,91,872,128,847,169,826,212,799,292,787,348"/>
+<area shape="poly" id="edge36_Node000020_Node000006" title=" " alt="" coords="824,345,1257,214,1259,219,825,351"/>
+<area shape="poly" id="edge38_Node000020_Node000010" title=" " alt="" coords="869,371,894,388,912,413,922,437,924,461,923,484,923,533,929,558,942,585,958,604,977,621,1016,648,1013,652,973,625,954,608,938,588,924,560,918,533,918,484,919,461,916,438,908,415,890,392,866,376"/>
+<area shape="poly" id="edge37_Node000020_Node000014" title=" " alt="" coords="854,371,893,388,909,401,918,414,927,427,941,439,973,453,1003,460,1057,461,1111,464,1140,472,1172,489,1219,530,1257,579,1286,628,1305,668,1300,670,1281,630,1252,582,1215,534,1169,494,1138,477,1110,469,1057,466,1002,465,972,458,939,443,923,430,914,417,905,404,891,392,852,376"/>
+<area shape="poly" id="edge39_Node000020_Node000015" title=" " alt="" coords="868,371,894,388,909,407,917,426,920,464,922,501,929,520,942,539,969,564,997,579,1024,588,1052,593,1110,606,1141,619,1173,642,1300,844,1295,847,1169,645,1138,624,1109,611,1051,599,1023,593,995,584,966,568,938,543,924,522,917,503,915,464,912,427,904,410,890,392,865,376"/>
+<area shape="rect" id="Node000021" href="$group__config__tokenizing_ga85e938ec2eba987c83bed60c6340cc40.html#ga85e938ec2eba987c83bed60c6340cc40" title="Throws a formatted unterminated string error." alt="" coords="946,71,1165,111"/>
+<area shape="poly" id="edge40_Node000020_Node000021" title=" " alt="" coords="790,346,849,270,891,220,938,172,1009,117,1012,121,942,176,895,224,853,273,794,350"/>
+<area shape="poly" id="edge41_Node000021_Node000005" title=" " alt="" coords="1165,89,1218,89,1218,94,1165,94"/>
+<area shape="poly" id="edge42_Node000021_Node000006" title=" " alt="" coords="1121,109,1172,128,1278,178,1276,183,1170,133,1120,114"/>
+<area shape="poly" id="edge45_Node000022_Node000014" title=" " alt="" coords="860,473,893,486,909,499,919,512,927,526,942,539,1002,571,1090,609,1264,674,1262,679,1088,614,1000,576,938,543,923,529,914,515,905,503,891,491,858,478"/>
+<area shape="poly" id="edge50_Node000024_Node000014" title=" " alt="" coords="793,999,816,965,849,922,891,879,939,843,971,826,1000,816,1053,809,1106,804,1136,797,1170,785,1233,750,1285,713,1288,717,1236,754,1172,790,1137,802,1107,809,1053,814,1001,821,973,831,941,847,894,883,853,926,820,968,797,1002"/>
+<area shape="poly" id="edge51_Node000024_Node000015" title=" " alt="" coords="879,1026,945,1026,1020,1022,1096,1009,1170,986,1206,967,1240,942,1292,891,1295,895,1244,946,1209,971,1172,991,1097,1014,1020,1027,945,1032,879,1031"/>
+<area shape="rect" id="Node000025" href="$group__config__tokenizing_ga7f51838fc1cad8173cf090de9628c3bb.html#ga7f51838fc1cad8173cf090de9628c3bb" title="Skips a carriage return (‘’\r&#39;`)." alt="" coords="987,1108,1123,1133"/>
+<area shape="poly" id="edge52_Node000024_Node000025" title=" " alt="" coords="819,1038,875,1067,941,1094,974,1104,973,1109,939,1099,873,1072,817,1043"/>
+<area shape="rect" id="Node000026" href="$group__config__tokenizing_gad766fa2d8ca48844ce155e86e4ca48fa.html#gad766fa2d8ca48844ce155e86e4ca48fa" title="Skips a #&#45;style comment to the end of the line." alt="" coords="948,907,1163,932"/>
+<area shape="poly" id="edge53_Node000024_Node000026" title=" " alt="" coords="835,998,1006,934,1008,939,837,1003"/>
+<area shape="rect" id="Node000027" href="$group__config__tokenizing_ga6a22533e9857e176c16c77937552c9ea.html#ga6a22533e9857e176c16c77937552c9ea" title="Skips a newline and advances line counter." alt="" coords="970,1157,1141,1183"/>
+<area shape="poly" id="edge56_Node000024_Node000027" title=" " alt="" coords="804,1039,862,1092,900,1120,941,1144,959,1151,957,1156,939,1149,897,1125,859,1096,800,1043"/>
+<area shape="rect" id="Node000028" href="$group__config__tokenizing_ga0260d45034ce40e8abec042a9a97e565.html#ga0260d45034ce40e8abec042a9a97e565" title="Skips a single whitespace character (except newline)." alt="" coords="940,1059,1171,1084"/>
+<area shape="poly" id="edge57_Node000024_Node000028" title=" " alt="" coords="879,1036,973,1054,972,1059,878,1041"/>
+<area shape="poly" id="edge54_Node000026_Node000014" title=" " alt="" coords="1144,904,1169,892,1199,862,1234,815,1296,718,1300,721,1239,818,1203,866,1172,896,1146,909"/>
+<area shape="poly" id="edge55_Node000026_Node000015" title=" " alt="" coords="1122,904,1239,882,1240,887,1123,909"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="Tokenizer::makeToken" name="Tokenizer::makeToken">
+<area shape="rect" id="Node000001" title="Creates a token with current source coordinates." alt="" coords="940,104,1104,129"/>
+<area shape="rect" id="Node000002" href="$group__config__tokenizing_gabb60123728550edb23bb1624f3cfe780.html#gabb60123728550edb23bb1624f3cfe780" title="Reads and emits the next token from the input." alt="" coords="440,104,623,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="996,96,950,59,922,42,891,29,831,13,782,8,732,14,672,29,634,45,599,65,548,106,545,101,596,61,632,40,670,24,731,8,781,3,832,8,893,24,924,37,953,55,1000,92"/>
+<area shape="rect" id="Node000003" href="$group__config__tokenizing_ga535ed2343bd999378d3295edc150e746.html#ga535ed2343bd999378d3295edc150e746" title="Converts the input buffer into a sequence of tokens." alt="" coords="245,154,392,180"/>
+<area shape="poly" id="edge10_Node000001_Node000003" title=" " alt="" coords="996,139,950,169,922,183,893,193,821,208,747,216,673,218,601,215,471,200,373,182,374,177,472,195,602,210,673,212,747,211,820,203,891,188,920,178,947,165,993,135"/>
+<area shape="rect" id="Node000005" href="$group__config__tokenizing_gaeca329bc1d78e2038fc11fa3c8b519a8.html#gaeca329bc1d78e2038fc11fa3c8b519a8" title="Parses an identifier and resolves to keyword when applicable." alt="" coords="689,39,874,79"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="954,103,865,82,866,76,955,98"/>
+<area shape="rect" id="Node000006" href="$group__config__tokenizing_ga141512a45a6c06a887161961c8e41d49.html#ga141512a45a6c06a887161961c8e41d49" title="Parses a NUMBER token with optional single&#45;letter suffix." alt="" coords="671,104,892,129"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="926,119,892,119,892,114,926,114"/>
+<area shape="rect" id="Node000007" href="$group__config__tokenizing_ga5fd74c00aa7b3104c20cc7c4a814fd32.html#ga5fd74c00aa7b3104c20cc7c4a814fd32" title="Parses a quoted string literal." alt="" coords="678,153,885,178"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="947,134,845,155,844,150,946,129"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="464,135,373,157,372,152,463,130"/>
+<area shape="rect" id="Node000004" href="$classConfigParser_a41f286ebab54d57477b7ff2964dba61e.html#a41f286ebab54d57477b7ff2964dba61e" title="Constructs a ConfigParser instance from raw configuration text." alt="" coords="5,154,197,180"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="232,170,197,170,197,164,232,164"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="681,85,588,106,587,101,679,79"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="657,119,623,119,623,114,657,114"/>
+<area shape="poly" id="edge9_Node000007_Node000002" title=" " alt="" coords="702,153,596,132,597,126,704,148"/>
+</map>

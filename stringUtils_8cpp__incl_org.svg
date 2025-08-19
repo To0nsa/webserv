@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Utility functions for string parsing, formatting, and case conversion.">
 <polygon fill="#999999" stroke="#666666" points="597.5,-140 469.5,-140 469.5,-121 597.5,-121 597.5,-140"/>
 <text text-anchor="middle" x="533.5" y="-128" font-family="Helvetica,sans-Serif" font-size="10.00">src/utils/stringUtils.cpp</text>
 </a>
@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="stringUtils_8hpp.html" target="_top" xlink:title="Utility functions for parsing numeric string values.">
+<g id="a_Node000002"><a xlink:href="stringUtils_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="161.5,-79.5 49.5,-79.5 49.5,-60.5 161.5,-60.5 161.5,-79.5"/>
 <text text-anchor="middle" x="105.5" y="-67.5" font-family="Helvetica,sans-Serif" font-size="10.00">utils/stringUtils.hpp</text>
 </a>
@@ -56,7 +56,7 @@
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="ConfigParseError_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="ConfigParseError_8hpp.html" target="_top" xlink:title="Declares parse/validation error types for the config subsystem.">
 <polygon fill="white" stroke="#666666" points="483.5,-85 343.5,-85 343.5,-55 483.5,-55 483.5,-85"/>
 <text text-anchor="start" x="351.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">config/parser/ConfigParse</text>
 <text text-anchor="middle" x="413.5" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">Error.hpp</text>
@@ -75,7 +75,7 @@
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="errorUtils_8hpp.html" target="_top" xlink:title="Error formatting utilities.">
+<g id="a_Node000009"><a xlink:href="errorUtils_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="325,-79.5 218,-79.5 218,-60.5 325,-60.5 325,-79.5"/>
 <text text-anchor="middle" x="271.5" y="-67.5" font-family="Helvetica,sans-Serif" font-size="10.00">utils/errorUtils.hpp</text>
 </a>

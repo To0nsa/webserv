@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Implements CGI (Common Gateway Interface) request handling.">
 <polygon fill="#999999" stroke="#666666" points="1582.5,-184 1457.5,-184 1457.5,-165 1582.5,-165 1582.5,-184"/>
 <text text-anchor="middle" x="1520" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/handleCgi.cpp</text>
 </a>
@@ -138,7 +138,7 @@ var sectionId = 'dynsection-0';
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
-<g id="a_Node000010"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000010"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="1139.5,-74 1036.5,-74 1036.5,-55 1139.5,-55 1139.5,-74"/>
 <text text-anchor="middle" x="1088" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>
@@ -174,7 +174,7 @@ var sectionId = 'dynsection-0';
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
-<g id="a_Node000015"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000015"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL.">
 <polygon fill="white" stroke="#666666" points="788.5,-129 667.5,-129 667.5,-110 788.5,-110 788.5,-129"/>
 <text text-anchor="middle" x="728" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">http/HttpRequest.hpp</text>
 </a>
@@ -192,7 +192,7 @@ var sectionId = 'dynsection-0';
 <!-- Node18 -->
 <g id="Node000018" class="node">
 <title>Node18</title>
-<g id="a_Node000018"><a xlink:href="responseBuilder_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000018"><a xlink:href="responseBuilder_8hpp.html" target="_top" xlink:title="Declarations of helper functions for constructing HTTP responses.">
 <polygon fill="white" stroke="#666666" points="244,-129 106,-129 106,-110 244,-110 244,-129"/>
 <text text-anchor="middle" x="175" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">http/responseBuilder.hpp</text>
 </a>
@@ -246,7 +246,7 @@ var sectionId = 'dynsection-0';
 <!-- Node21 -->
 <g id="Node000021" class="node">
 <title>Node21</title>
-<g id="a_Node000021"><a xlink:href="stringUtils_8hpp.html" target="_top" xlink:title="Utility functions for parsing numeric string values.">
+<g id="a_Node000021"><a xlink:href="stringUtils_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="1356,-129 1244,-129 1244,-110 1356,-110 1356,-129"/>
 <text text-anchor="middle" x="1300" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">utils/stringUtils.hpp</text>
 </a>
@@ -516,7 +516,7 @@ var sectionId = 'dynsection-0';
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="HttpResponse_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="HttpResponse_8hpp.html" target="_top" xlink:title="Declares the HttpResponse class.">
 <polygon fill="white" stroke="#666666" points="354,-74 226,-74 226,-55 354,-55 354,-74"/>
 <text text-anchor="middle" x="290" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/HttpResponse.hpp</text>
 </a>
@@ -759,7 +759,7 @@ var sectionId = 'dynsection-0';
 <!-- Node16 -->
 <g id="Node000016" class="node">
 <title>Node16</title>
-<g id="a_Node000016"><a xlink:href="Url_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000016"><a xlink:href="Url_8hpp.html" target="_top" xlink:title="Declares the Url POD for parsed URL components.">
 <polygon fill="white" stroke="#666666" points="662,-74 588,-74 588,-55 662,-55 662,-74"/>
 <text text-anchor="middle" x="625" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/Url.hpp</text>
 </a>

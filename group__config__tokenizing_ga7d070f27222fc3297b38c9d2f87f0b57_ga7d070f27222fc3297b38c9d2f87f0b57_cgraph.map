@@ -1,0 +1,17 @@
+<map id="Tokenizer::skipWhitespaceAndComments" name="Tokenizer::skipWhitespaceAndComments">
+<area shape="rect" id="Node000001" title="Skips whitespace and hash (#) comments." alt="" coords="5,106,200,146"/>
+<area shape="rect" id="Node000002" href="$group__config__tokenizing_ga0eb3b50597e00c5b298a0928e4cc683e.html#ga0eb3b50597e00c5b298a0928e4cc683e" title="Tests if the cursor reached the end of the input." alt="" coords="527,14,667,39"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,104,176,61,210,39,247,24,316,9,386,3,454,5,513,10,513,15,453,10,386,9,317,14,249,29,212,44,179,65,126,108"/>
+<area shape="rect" id="Node000003" href="$group__config__tokenizing_ga1f0151fc9f4abe60041f7ace3fd6dc45.html#ga1f0151fc9f4abe60041f7ace3fd6dc45" title="Peeks the current character without consuming it." alt="" coords="535,88,658,114"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,129,332,131,478,124,534,114,535,119,479,129,333,137,200,134"/>
+<area shape="rect" id="Node000004" href="$group__config__tokenizing_ga7f51838fc1cad8173cf090de9628c3bb.html#ga7f51838fc1cad8173cf090de9628c3bb" title="Skips a carriage return (‘’\r&#39;`)." alt="" coords="295,88,431,114"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="200,114,281,106,282,111,200,119"/>
+<area shape="rect" id="Node000005" href="$group__config__tokenizing_gad766fa2d8ca48844ce155e86e4ca48fa.html#gad766fa2d8ca48844ce155e86e4ca48fa" title="Skips a #&#45;style comment to the end of the line." alt="" coords="256,39,471,64"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="155,104,247,73,280,65,282,70,249,78,157,109"/>
+<area shape="rect" id="Node000006" href="$group__config__tokenizing_ga6a22533e9857e176c16c77937552c9ea.html#ga6a22533e9857e176c16c77937552c9ea" title="Skips a newline and advances line counter." alt="" coords="278,190,449,215"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="169,144,249,168,304,183,302,188,247,173,168,149"/>
+<area shape="rect" id="Node000007" href="$group__config__tokenizing_ga0260d45034ce40e8abec042a9a97e565.html#ga0260d45034ce40e8abec042a9a97e565" title="Skips a single whitespace character (except newline)." alt="" coords="248,239,479,264"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="128,144,181,186,214,207,249,225,269,232,267,237,247,230,211,212,178,190,125,148"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="471,37,513,33,513,38,471,42"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="426,62,479,73,524,83,523,88,478,78,425,67"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="Core Components" name="Core Components">
+<area shape="rect" id="Node000001" title="Main server components, control flow, and application entry point." alt="" coords="5,55,144,80"/>
+<area shape="rect" id="Node000002" href="$group__entrypoint.html" title="Program entry and top&#45;level orchestration." alt="" coords="192,5,359,31"/>
+<area shape="rect" id="Node000003" href="$group__location__component.html" title="Path&#45;specific routing and configuration within a server." alt="" coords="197,55,353,80"/>
+<area shape="rect" id="Node000004" href="$group__server__component.html" title="Main Server class and its implementation." alt="" coords="204,104,347,129"/>
+</map>

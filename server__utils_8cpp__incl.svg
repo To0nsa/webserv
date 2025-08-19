@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Implements server selection utilities for virtual host resolution.">
 <polygon fill="#999999" stroke="#666666" points="354,-184 219,-184 219,-165 354,-165 354,-184"/>
 <text text-anchor="middle" x="286.5" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">src/core/server_utils.cpp</text>
 </a>
@@ -66,7 +66,7 @@ var sectionId = 'dynsection-0';
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="server__utils_8hpp.html" target="_top" xlink:title="Provides utility functions for selecting the correct Server instance.">
+<g id="a_Node000002"><a xlink:href="server__utils_8hpp.html" target="_top" xlink:title="Declares server selection util for virtual host resolution.">
 <polygon fill="white" stroke="#666666" points="119,-74 0,-74 0,-55 119,-55 119,-74"/>
 <text text-anchor="middle" x="59.5" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/server_utils.hpp</text>
 </a>
@@ -174,7 +174,7 @@ var sectionId = 'dynsection-0';
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="483,-74 380,-74 380,-55 483,-55 483,-74"/>
 <text text-anchor="middle" x="431.5" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>

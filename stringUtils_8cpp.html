@@ -92,9 +92,12 @@ $(document).ready(function(){initNavTree('stringUtils_8cpp.html',''); initResiza
 <div class="header">
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">stringUtils.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">stringUtils.cpp File Reference<div class="ingroups"><a class="el" href="group__utils.html">Utility Functions</a> &raquo; <a class="el" href="group__string__utils.html">String Utilities</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Utility functions for string parsing, formatting, and case conversion.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="stringUtils_8hpp_source.html">utils/stringUtils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ConfigParseError_8hpp_source.html">config/parser/ConfigParseError.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="errorUtils_8hpp_source.html">utils/errorUtils.hpp</a>&quot;</code><br />
@@ -116,25 +119,38 @@ $(document).ready(function(){initNavTree('stringUtils_8cpp.html',''); initResiza
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga2c53306bb48cc0a5a9cc6e5420816ae0" id="r_ga2c53306bb48cc0a5a9cc6e5420816ae0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__StringUtils.html#ga2c53306bb48cc0a5a9cc6e5420816ae0">formatBytes</a> (std::size_t bytes)</td></tr>
-<tr class="separator:ga2c53306bb48cc0a5a9cc6e5420816ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga45bdcfbf6fa362f90f241654800ea25b" id="r_ga45bdcfbf6fa362f90f241654800ea25b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__StringUtils.html#ga45bdcfbf6fa362f90f241654800ea25b">joinStrings</a> (const std::vector&lt; std::string &gt; &amp;list, const std::string &amp;delim)</td></tr>
-<tr class="separator:ga45bdcfbf6fa362f90f241654800ea25b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7950ec426b55a9170dccbd5b463cba43" id="r_ga7950ec426b55a9170dccbd5b463cba43"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__StringUtils.html#ga7950ec426b55a9170dccbd5b463cba43">parseByteSize</a> (const std::string &amp;value, const std::string &amp;field, int line, int column, const std::function&lt; std::string()&gt; &amp;context_provider)</td></tr>
-<tr class="memdesc:ga7950ec426b55a9170dccbd5b463cba43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a byte size with detailed error context.  <br /></td></tr>
-<tr class="separator:ga7950ec426b55a9170dccbd5b463cba43"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaab21b0d358ae4429fc4ca818719be9df" id="r_gaab21b0d358ae4429fc4ca818719be9df"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__StringUtils.html#gaab21b0d358ae4429fc4ca818719be9df">parseInt</a> (const std::string &amp;value, const std::string &amp;field, int line, int column, const std::function&lt; std::string()&gt; &amp;context_provider)</td></tr>
-<tr class="memdesc:gaab21b0d358ae4429fc4ca818719be9df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses an integer with detailed error context.  <br /></td></tr>
+<tr class="memitem:gaab21b0d358ae4429fc4ca818719be9df" id="r_gaab21b0d358ae4429fc4ca818719be9df"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__string__utils_gaab21b0d358ae4429fc4ca818719be9df.html#gaab21b0d358ae4429fc4ca818719be9df">parseInt</a> (const std::string &amp;value, const std::string &amp;field, int line, int column, const std::function&lt; std::string()&gt; &amp;context_provider)</td></tr>
+<tr class="memdesc:gaab21b0d358ae4429fc4ca818719be9df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a non-negative integer from a string with context-aware error reporting.  <br /></td></tr>
 <tr class="separator:gaab21b0d358ae4429fc4ca818719be9df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5930346e5253c53724c9306433a485ea" id="r_ga5930346e5253c53724c9306433a485ea"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__StringUtils.html#ga5930346e5253c53724c9306433a485ea">toLower</a> (const std::string &amp;str)</td></tr>
-<tr class="memdesc:ga5930346e5253c53724c9306433a485ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a string to lowercase.  <br /></td></tr>
-<tr class="separator:ga5930346e5253c53724c9306433a485ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8c2a03f0e678a0bfd4a479acc1e3d6e7" id="r_ga8c2a03f0e678a0bfd4a479acc1e3d6e7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__StringUtils.html#ga8c2a03f0e678a0bfd4a479acc1e3d6e7">toUpper</a> (const std::string &amp;str)</td></tr>
-<tr class="separator:ga8c2a03f0e678a0bfd4a479acc1e3d6e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5a01f705cc7b4a7317a57f6bf41aef25" id="r_ga5a01f705cc7b4a7317a57f6bf41aef25"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__StringUtils.html#ga5a01f705cc7b4a7317a57f6bf41aef25">trim</a> (const std::string &amp;s)</td></tr>
-<tr class="separator:ga5a01f705cc7b4a7317a57f6bf41aef25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7950ec426b55a9170dccbd5b463cba43" id="r_ga7950ec426b55a9170dccbd5b463cba43"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__string__utils_ga7950ec426b55a9170dccbd5b463cba43.html#ga7950ec426b55a9170dccbd5b463cba43">parseByteSize</a> (const std::string &amp;value, const std::string &amp;field, int line, int column, const std::function&lt; std::string()&gt; &amp;context_provider)</td></tr>
+<tr class="memdesc:ga7950ec426b55a9170dccbd5b463cba43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a human-readable byte size string into a byte count.  <br /></td></tr>
+<tr class="separator:ga7950ec426b55a9170dccbd5b463cba43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96432d89bc886bc9cdd1d73f86b2bbca" id="r_a96432d89bc886bc9cdd1d73f86b2bbca"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stringUtils_8cpp_a96432d89bc886bc9cdd1d73f86b2bbca.html#a96432d89bc886bc9cdd1d73f86b2bbca">toLower</a> (const std::string &amp;str)</td></tr>
+<tr class="separator:a96432d89bc886bc9cdd1d73f86b2bbca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d2414ad61e591a6b14cd96c306b59e4" id="r_a0d2414ad61e591a6b14cd96c306b59e4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stringUtils_8cpp_a0d2414ad61e591a6b14cd96c306b59e4.html#a0d2414ad61e591a6b14cd96c306b59e4">toUpper</a> (const std::string &amp;str)</td></tr>
+<tr class="separator:a0d2414ad61e591a6b14cd96c306b59e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c53306bb48cc0a5a9cc6e5420816ae0" id="r_a2c53306bb48cc0a5a9cc6e5420816ae0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stringUtils_8cpp_a2c53306bb48cc0a5a9cc6e5420816ae0.html#a2c53306bb48cc0a5a9cc6e5420816ae0">formatBytes</a> (std::size_t bytes)</td></tr>
+<tr class="separator:a2c53306bb48cc0a5a9cc6e5420816ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a6663bd06c71e4bcabd00a5578bbf0d" id="r_a1a6663bd06c71e4bcabd00a5578bbf0d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stringUtils_8cpp_a1a6663bd06c71e4bcabd00a5578bbf0d.html#a1a6663bd06c71e4bcabd00a5578bbf0d">joinStrings</a> (const std::vector&lt; std::string &gt; &amp;list, const std::string &amp;delim)</td></tr>
+<tr class="separator:a1a6663bd06c71e4bcabd00a5578bbf0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a32c4d3bd87256731e67936766c65ca" id="r_a1a32c4d3bd87256731e67936766c65ca"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stringUtils_8cpp_a1a32c4d3bd87256731e67936766c65ca.html#a1a32c4d3bd87256731e67936766c65ca">trim</a> (const std::string &amp;s)</td></tr>
+<tr class="separator:a1a32c4d3bd87256731e67936766c65ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Utility functions for string parsing, formatting, and case conversion. </p>
+<p>Implements the <a class="el" href="group__string__utils.html">String Utilities</a> helpers used across Webserv for:</p><ul>
+<li>Parsing integers and byte sizes from configuration strings with rich error reporting.</li>
+<li>Converting strings to lowercase or uppercase.</li>
+<li>Formatting byte counts into human-readable units.</li>
+<li>Joining lists of strings with a delimiter.</li>
+<li>Trimming whitespace from strings.</li>
+</ul>
+<p>These functions are used in configuration parsing, logging, formatting HTTP responses, and general-purpose string handling.</p>
+<dl class="section note"><dt>Note</dt><dd>Parsing helpers (<code>parseInt</code>, <code>parseByteSize</code>) throw <a class="el" href="classConfigParseError.html">ConfigParseError</a> with contextual information for configuration errors. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>None of these functions are locale-sensitive beyond standard <code>std::tolower</code> / <code>std::toupper</code> behavior, and they do not perform Unicode normalization. </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="stringUtils_8cpp_source.html">stringUtils.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

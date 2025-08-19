@@ -1,7 +1,0 @@
-<map id="Tokenizer::validateIdentifier" name="Tokenizer::validateIdentifier">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,208,56"/>
-<area shape="rect" id="Node000002" href="$classTokenizer.html#aa7daa721fdeeb87cd3da853c2886dd96" title=" " alt="" coords="256,5,420,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,30,242,26,242,31,209,35"/>
-<area shape="rect" id="Node000003" href="$group__ErrorUtils.html#ga3a83368b4a479591239a5a9c8740a587" title="Formats an error message with line and column information." alt="" coords="289,55,387,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,51,276,58,275,64,208,57"/>
-</map>

@@ -1,0 +1,11 @@
+<map id="Tokenizer::validateIdentifier" name="Tokenizer::validateIdentifier">
+<area shape="rect" id="Node000001" title="Validates the last scanned identifier." alt="" coords="904,13,1107,38"/>
+<area shape="rect" id="Node000002" href="$group__config__tokenizing_gaeca329bc1d78e2038fc11fa3c8b519a8.html#gaeca329bc1d78e2038fc11fa3c8b519a8" title="Parses an identifier and resolves to keyword when applicable." alt="" coords="671,5,856,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="891,28,856,28,856,23,891,23"/>
+<area shape="rect" id="Node000003" href="$group__config__tokenizing_gabb60123728550edb23bb1624f3cfe780.html#gabb60123728550edb23bb1624f3cfe780" title="Reads and emits the next token from the input." alt="" coords="440,13,623,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="656,28,623,28,623,23,656,23"/>
+<area shape="rect" id="Node000004" href="$group__config__tokenizing_ga535ed2343bd999378d3295edc150e746.html#ga535ed2343bd999378d3295edc150e746" title="Converts the input buffer into a sequence of tokens." alt="" coords="245,13,392,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="426,28,392,28,392,23,426,23"/>
+<area shape="rect" id="Node000005" href="$classConfigParser_a41f286ebab54d57477b7ff2964dba61e.html#a41f286ebab54d57477b7ff2964dba61e" title="Constructs a ConfigParser instance from raw configuration text." alt="" coords="5,13,197,38"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="232,28,197,28,197,23,232,23"/>
+</map>

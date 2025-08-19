@@ -91,11 +91,13 @@ $(document).ready(function(){initNavTree('SocketManager_8hpp.html',''); initResi
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#define-members">Macros</a>  </div>
-  <div class="headertitle"><div class="title">SocketManager.hpp File Reference</div></div>
+<a href="#nested-classes">Classes</a>  </div>
+  <div class="headertitle"><div class="title">SocketManager.hpp File Reference<div class="ingroups"><a class="el" href="group__socket__manager.html">Network &amp; Socket Abstraction</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Declares the <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a> and per-client state for non-blocking I/O.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="HttpRequest_8hpp_source.html">http/HttpRequest.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="HttpResponse_8hpp_source.html">http/HttpResponse.hpp</a>&quot;</code><br />
@@ -129,143 +131,59 @@ $(document).ready(function(){initNavTree('SocketManager_8hpp.html',''); initResi
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html">ClientInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-client runtime state tracked by the <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a>.  <a href="structClientInfo.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSocketManager.html">SocketManager</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Poll-driven socket and <a class="el" href="namespaceCGI.html">CGI</a> orchestrator.  <a href="classSocketManager.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSocketManager_1_1SocketError.html">SocketManager::SocketError</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a19c49ddf7bea4f0b05d8d368377ebc06" id="r_a19c49ddf7bea4f0b05d8d368377ebc06"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp.html#a19c49ddf7bea4f0b05d8d368377ebc06">CGI_TIMEOUT_SECONDS</a>&#160;&#160;&#160;45</td></tr>
-<tr class="separator:a19c49ddf7bea4f0b05d8d368377ebc06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a448b7f3f2c0ddd3afd061075c84b77ea" id="r_a448b7f3f2c0ddd3afd061075c84b77ea"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp.html#a448b7f3f2c0ddd3afd061075c84b77ea">HEADER_MAX_LENGTH</a>&#160;&#160;&#160;8192</td></tr>
-<tr class="separator:a448b7f3f2c0ddd3afd061075c84b77ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2fc235ff7dec966a6641dec984f1a69" id="r_ab2fc235ff7dec966a6641dec984f1a69"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp.html#ab2fc235ff7dec966a6641dec984f1a69">HEADER_MIN_LENGTH</a>&#160;&#160;&#160;15</td></tr>
-<tr class="separator:ab2fc235ff7dec966a6641dec984f1a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b2d4ea4be4734c1fc50ecf5b1efc4dd" id="r_a8b2d4ea4be4734c1fc50ecf5b1efc4dd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp.html#a8b2d4ea4be4734c1fc50ecf5b1efc4dd">HEADER_TIMEOUT_SECONDS</a>&#160;&#160;&#160;6</td></tr>
-<tr class="separator:a8b2d4ea4be4734c1fc50ecf5b1efc4dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a8f91f93d75a07f0ae45077db45b3eb" id="r_a0a8f91f93d75a07f0ae45077db45b3eb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp.html#a0a8f91f93d75a07f0ae45077db45b3eb">MAX_CLIENTS</a>&#160;&#160;&#160;1024</td></tr>
-<tr class="separator:a0a8f91f93d75a07f0ae45077db45b3eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6bacbdc986448749636e64db1018ec5" id="r_aa6bacbdc986448749636e64db1018ec5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp.html#aa6bacbdc986448749636e64db1018ec5">RECV_BUFFER</a>&#160;&#160;&#160;<a class="el" href="SocketManager_8hpp.html#a448b7f3f2c0ddd3afd061075c84b77ea">HEADER_MAX_LENGTH</a> * 2</td></tr>
-<tr class="separator:aa6bacbdc986448749636e64db1018ec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45ba202b05caf39795aeca91b0ae547e" id="r_a45ba202b05caf39795aeca91b0ae547e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp.html#a45ba202b05caf39795aeca91b0ae547e">TIMEOUT</a>&#160;&#160;&#160;20</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Socket and protocol timeouts / limits</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><p>Runtime guards for robustness and resource control. </p>
+</div></td></tr>
+<tr class="memitem:a45ba202b05caf39795aeca91b0ae547e" id="r_a45ba202b05caf39795aeca91b0ae547e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp_a45ba202b05caf39795aeca91b0ae547e.html#a45ba202b05caf39795aeca91b0ae547e">TIMEOUT</a>&#160;&#160;&#160;20</td></tr>
+<tr class="memdesc:a45ba202b05caf39795aeca91b0ae547e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic inactivity timeout (seconds) for body recv / idle / send.  <br /></td></tr>
 <tr class="separator:a45ba202b05caf39795aeca91b0ae547e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b2d4ea4be4734c1fc50ecf5b1efc4dd" id="r_a8b2d4ea4be4734c1fc50ecf5b1efc4dd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp_a8b2d4ea4be4734c1fc50ecf5b1efc4dd.html#a8b2d4ea4be4734c1fc50ecf5b1efc4dd">HEADER_TIMEOUT_SECONDS</a>&#160;&#160;&#160;6</td></tr>
+<tr class="memdesc:a8b2d4ea4be4734c1fc50ecf5b1efc4dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max delay to complete request headers once bytes start arriving.  <br /></td></tr>
+<tr class="separator:a8b2d4ea4be4734c1fc50ecf5b1efc4dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2fc235ff7dec966a6641dec984f1a69" id="r_ab2fc235ff7dec966a6641dec984f1a69"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp_ab2fc235ff7dec966a6641dec984f1a69.html#ab2fc235ff7dec966a6641dec984f1a69">HEADER_MIN_LENGTH</a>&#160;&#160;&#160;15</td></tr>
+<tr class="memdesc:ab2fc235ff7dec966a6641dec984f1a69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimal sane header size to consider a request "non-empty".  <br /></td></tr>
+<tr class="separator:ab2fc235ff7dec966a6641dec984f1a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a448b7f3f2c0ddd3afd061075c84b77ea" id="r_a448b7f3f2c0ddd3afd061075c84b77ea"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp_a448b7f3f2c0ddd3afd061075c84b77ea.html#a448b7f3f2c0ddd3afd061075c84b77ea">HEADER_MAX_LENGTH</a>&#160;&#160;&#160;8192</td></tr>
+<tr class="memdesc:a448b7f3f2c0ddd3afd061075c84b77ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum allowed header bytes before replying 431.  <br /></td></tr>
+<tr class="separator:a448b7f3f2c0ddd3afd061075c84b77ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6bacbdc986448749636e64db1018ec5" id="r_aa6bacbdc986448749636e64db1018ec5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp_aa6bacbdc986448749636e64db1018ec5.html#aa6bacbdc986448749636e64db1018ec5">RECV_BUFFER</a>&#160;&#160;&#160;<a class="el" href="SocketManager_8hpp_a448b7f3f2c0ddd3afd061075c84b77ea.html#a448b7f3f2c0ddd3afd061075c84b77ea">HEADER_MAX_LENGTH</a> * 2</td></tr>
+<tr class="memdesc:aa6bacbdc986448749636e64db1018ec5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive buffer size for a single <code>recv()</code> call.  <br /></td></tr>
+<tr class="separator:aa6bacbdc986448749636e64db1018ec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a8f91f93d75a07f0ae45077db45b3eb" id="r_a0a8f91f93d75a07f0ae45077db45b3eb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp_a0a8f91f93d75a07f0ae45077db45b3eb.html#a0a8f91f93d75a07f0ae45077db45b3eb">MAX_CLIENTS</a>&#160;&#160;&#160;1024</td></tr>
+<tr class="memdesc:a0a8f91f93d75a07f0ae45077db45b3eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hard cap on the number of concurrent tracked client FDs.  <br /></td></tr>
+<tr class="separator:a0a8f91f93d75a07f0ae45077db45b3eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19c49ddf7bea4f0b05d8d368377ebc06" id="r_a19c49ddf7bea4f0b05d8d368377ebc06"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8hpp_a19c49ddf7bea4f0b05d8d368377ebc06.html#a19c49ddf7bea4f0b05d8d368377ebc06">CGI_TIMEOUT_SECONDS</a>&#160;&#160;&#160;45</td></tr>
+<tr class="memdesc:a19c49ddf7bea4f0b05d8d368377ebc06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max time a <a class="el" href="namespaceCGI.html">CGI</a> is allowed to run without finishing (seconds).  <br /></td></tr>
+<tr class="separator:a19c49ddf7bea4f0b05d8d368377ebc06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a19c49ddf7bea4f0b05d8d368377ebc06" name="a19c49ddf7bea4f0b05d8d368377ebc06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a19c49ddf7bea4f0b05d8d368377ebc06">&#9670;&#160;</a></span>CGI_TIMEOUT_SECONDS</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Declares the <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a> and per-client state for non-blocking I/O. </p>
+<p>The <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a> owns the event loop (based on <code>poll(2)</code>) and multiplexes:</p><ul>
+<li>listening sockets (bind/listen for each configured host:port),</li>
+<li>accepted client sockets (read → parse → route → respond),</li>
+<li><a class="el" href="namespaceCGI.html">CGI</a> subprocess pipes (lifecycle, timeouts, finalization),</li>
+<li>write-side backpressure and keep-alive.</li>
+</ul>
+<p>Each connected client is tracked with a <a class="el" href="structClientInfo.html">ClientInfo</a> structure that aggregates request/response buffers, timers, <a class="el" href="namespaceCGI.html">CGI</a> state, and file-stream handles for zero-copy file responses.</p>
+<p>The implementation guarantees:</p><ul>
+<li>single <code>poll()</code> over all FDs, read &amp; write monitored together,</li>
+<li>non-blocking I/O for sockets and <a class="el" href="namespaceCGI.html">CGI</a> pipes,</li>
+<li>accurate HTTP status codes and default error pages,</li>
+<li>resilient behavior under stress and strict timeouts. </li>
+</ul>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define CGI_TIMEOUT_SECONDS&#160;&#160;&#160;45</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00035">35</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a448b7f3f2c0ddd3afd061075c84b77ea" name="a448b7f3f2c0ddd3afd061075c84b77ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a448b7f3f2c0ddd3afd061075c84b77ea">&#9670;&#160;</a></span>HEADER_MAX_LENGTH</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define HEADER_MAX_LENGTH&#160;&#160;&#160;8192</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00032">32</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ab2fc235ff7dec966a6641dec984f1a69" name="ab2fc235ff7dec966a6641dec984f1a69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2fc235ff7dec966a6641dec984f1a69">&#9670;&#160;</a></span>HEADER_MIN_LENGTH</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define HEADER_MIN_LENGTH&#160;&#160;&#160;15</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00031">31</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a8b2d4ea4be4734c1fc50ecf5b1efc4dd" name="a8b2d4ea4be4734c1fc50ecf5b1efc4dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b2d4ea4be4734c1fc50ecf5b1efc4dd">&#9670;&#160;</a></span>HEADER_TIMEOUT_SECONDS</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define HEADER_TIMEOUT_SECONDS&#160;&#160;&#160;6</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00030">30</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a0a8f91f93d75a07f0ae45077db45b3eb" name="a0a8f91f93d75a07f0ae45077db45b3eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a8f91f93d75a07f0ae45077db45b3eb">&#9670;&#160;</a></span>MAX_CLIENTS</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAX_CLIENTS&#160;&#160;&#160;1024</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00034">34</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-</div>
-</div>
-<a id="aa6bacbdc986448749636e64db1018ec5" name="aa6bacbdc986448749636e64db1018ec5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa6bacbdc986448749636e64db1018ec5">&#9670;&#160;</a></span>RECV_BUFFER</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define RECV_BUFFER&#160;&#160;&#160;<a class="el" href="SocketManager_8hpp.html#a448b7f3f2c0ddd3afd061075c84b77ea">HEADER_MAX_LENGTH</a> * 2</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00033">33</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a45ba202b05caf39795aeca91b0ae547e" name="a45ba202b05caf39795aeca91b0ae547e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45ba202b05caf39795aeca91b0ae547e">&#9670;&#160;</a></span>TIMEOUT</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define TIMEOUT&#160;&#160;&#160;20</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00029">29</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -1,0 +1,54 @@
+<map id="preparePostTargetPath" name="preparePostTargetPath">
+<area shape="rect" id="Node000001" title="Resolve and validate the filesystem path for a POST upload target." alt="" coords="5,478,173,503"/>
+<area shape="rect" id="Node000002" href="$group__url__utils_gabf2641feed820a4fcaf2699a86d1a4f7.html#gabf2641feed820a4fcaf2699a86d1a4f7" title="Decodes percent&#45;encoded octets in a string." alt="" coords="236,135,413,161"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,477,98,421,119,338,136,293,158,248,186,207,220,171,228,165,231,169,223,175,190,210,163,251,141,295,124,340,103,422,95,478"/>
+<area shape="rect" id="Node000003" href="$group__http_ga1f8eaecab62a277ca49584495da022fc.html#ga1f8eaecab62a277ca49584495da022fc" title="Builds an HTTP error response, optionally using a custom error page." alt="" coords="226,185,423,225"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="91,477,105,433,130,370,168,302,192,270,220,242,237,230,240,234,223,246,196,274,173,305,135,373,110,435,96,479"/>
+<area shape="rect" id="Node000008" href="$group__filesystem__utils_ga60cb34db186e7da050316400c820c815.html#ga60cb34db186e7da050316400c820c815" title="Concatenates a base path and a suffix with a single &#39;/&#39; separator." alt="" coords="543,317,617,342"/>
+<area shape="poly" id="edge16_Node000001_Node000008" title=" " alt="" coords="92,477,106,437,131,383,168,328,192,305,220,286,249,272,274,265,298,262,321,263,429,285,453,292,477,301,530,315,529,321,475,307,451,298,427,291,321,269,298,267,275,270,251,277,223,290,196,309,173,332,135,386,111,439,97,478"/>
+<area shape="rect" id="Node000011" href="$group__request__handler_ga1f1e28ca7655266fabc0a1e504ea1220.html#ga1f1e28ca7655266fabc0a1e504ea1220" title="Generate a unique filename for uploaded files." alt="" coords="221,301,428,355"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="99,476,148,423,182,392,220,364,228,360,231,364,223,369,186,396,152,427,103,479"/>
+<area shape="rect" id="Node000012" href="$group__location__component_ga0e5f51972e02ed954426e0222215484b.html#ga0e5f51972e02ed954426e0222215484b" title="Returns the path this location matches." alt="" coords="257,379,392,405"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="108,475,157,445,220,414,243,406,245,411,222,418,160,449,111,480"/>
+<area shape="rect" id="Node000013" href="$group__http_ga02743663bb8998bd7450640035f5f6c0.html#ga02743663bb8998bd7450640035f5f6c0" title="Returns the normalized request path." alt="" coords="245,429,405,454"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="150,475,249,454,250,460,151,481"/>
+<area shape="rect" id="Node000014" href="$group__location__component_ga16546e5661036b8cd9dc12532a4d82f2.html#ga16546e5661036b8cd9dc12532a4d82f2" title="Returns the root directory path." alt="" coords="257,478,393,503"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="173,488,243,488,243,493,173,493"/>
+<area shape="rect" id="Node000015" href="$group__location__component_gaf0f6e7f96f5a26e3e64e38a44ff82bd4.html#gaf0f6e7f96f5a26e3e64e38a44ff82bd4" title="Returns the upload store directory." alt="" coords="231,527,418,553"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="151,501,250,522,249,527,150,506"/>
+<area shape="rect" id="Node000016" href="$filesystemUtils_8cpp_ab15541f5b09bc6ca4db980a9e6b6aeb5.html#ab15541f5b09bc6ca4db980a9e6b6aeb5" title=" " alt="" coords="297,577,353,602"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="111,501,160,531,222,562,284,579,282,585,220,566,158,536,108,506"/>
+<area shape="rect" id="Node000017" href="$classLogger_a23f092a06cc63628beb87a1a54f9ea59.html#a23f092a06cc63628beb87a1a54f9ea59" title=" " alt="" coords="261,626,388,651"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="103,502,150,555,185,585,223,611,249,622,247,627,220,616,181,590,147,559,99,505"/>
+<area shape="rect" id="Node000021" href="$group__filesystem__utils_gac2bd72a316d163f375ffba9801542d41.html#gac2bd72a316d163f375ffba9801542d41" title="Resolves a safe absolute path for an uploaded file." alt="" coords="244,675,405,701"/>
+<area shape="poly" id="edge23_Node000001_Node000021" title=" " alt="" coords="99,502,116,535,143,578,179,623,223,660,236,668,233,672,220,665,175,626,138,581,111,537,94,505"/>
+<area shape="rect" id="Node000024" href="$group__filesystem__utils_ga114db7b785fefcba4012faa22b67ab90.html#ga114db7b785fefcba4012faa22b67ab90" title="Ensures that a directory exists, creating missing parents as needed." alt="" coords="263,725,387,750"/>
+<area shape="poly" id="edge26_Node000001_Node000024" title=" " alt="" coords="97,503,111,544,136,601,173,661,196,688,223,711,251,725,249,730,220,716,193,692,169,664,131,603,106,546,92,505"/>
+<area shape="rect" id="Node000025" href="$group__filesystem__utils_gab31d472cab5ab15a13c3f5df7b349185.html#gab31d472cab5ab15a13c3f5df7b349185" title="Canonicalizes a URI&#45;style path and rejects traversal." alt="" coords="267,774,382,799"/>
+<area shape="poly" id="edge27_Node000001_Node000025" title=" " alt="" coords="95,503,107,552,130,622,147,660,168,697,193,731,223,760,255,777,252,781,220,765,189,735,163,700,142,663,125,624,101,554,90,505"/>
+<area shape="rect" id="Node000004" href="$group__http_ga064a5d8be8de9234f362e73d9bb68b6b.html#ga064a5d8be8de9234f362e73d9bb68b6b" title="Returns the default reason phrase for a given HTTP status code." alt="" coords="476,5,684,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="408,183,426,170,438,156,444,143,449,114,454,85,462,70,474,55,480,51,483,55,478,59,466,73,460,86,455,115,449,144,442,159,430,174,411,187"/>
+<area shape="rect" id="Node000005" href="$group__server__component_ga53fb46a6288fcdc4270ad5900f50736e.html#ga53fb46a6288fcdc4270ad5900f50736e" title="Returns the mapping of HTTP error codes to custom error pages." alt="" coords="499,70,661,95"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="403,183,426,170,441,154,449,138,458,121,474,105,485,99,487,103,478,109,462,124,454,140,446,157,430,174,406,188"/>
+<area shape="rect" id="Node000006" href="$group__server__component_ga06b6c9af45443180a65bcc145e1b2f1e.html#ga06b6c9af45443180a65bcc145e1b2f1e" title="Returns the list of location blocks defined for this server." alt="" coords="503,119,657,145"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="387,183,427,169,475,153,506,145,507,150,477,159,429,175,388,188"/>
+<area shape="rect" id="Node000007" href="$group__html__utils_gaf5ddafc8d1e304df95c0aee1984b2682.html#gaf5ddafc8d1e304df95c0aee1984b2682" title="Escapes special HTML characters in a string." alt="" coords="531,169,629,194"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="423,193,517,185,518,190,424,199"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="396,223,430,242,445,258,454,273,462,288,477,302,503,314,530,321,529,326,501,319,475,306,458,291,449,276,441,261,426,246,393,228"/>
+<area shape="rect" id="Node000009" href="$group__http_ga3e83ff074d5f7a6de514a4edcb02ab4d.html#ga3e83ff074d5f7a6de514a4edcb02ab4d" title="Sets the body of the response." alt="" coords="493,218,667,243"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="424,212,479,218,478,223,423,218"/>
+<area shape="rect" id="Node000010" href="$group__http_ga7efa3ab17ead358609d80b55db164867.html#ga7efa3ab17ead358609d80b55db164867" title="Adds or replaces a header in the response." alt="" coords="486,267,674,293"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="384,223,477,252,511,261,510,266,475,257,383,228"/>
+<area shape="rect" id="Node000018" href="$Logger_8cpp_a2c56a9a25fc1f2a14162f4df7ce936ff.html#a2c56a9a25fc1f2a14162f4df7ce936ff" title=" " alt="" coords="763,575,851,601"/>
+<area shape="poly" id="edge18_Node000017_Node000018" title=" " alt="" coords="387,623,427,611,450,597,475,585,549,573,623,570,692,572,750,577,749,583,692,577,623,575,549,579,477,591,453,602,429,616,388,628"/>
+<area shape="rect" id="Node000019" href="$Logger_8cpp_afc799b96df6ffe84b57bcce18820bc43.html#afc799b96df6ffe84b57bcce18820bc43" title=" " alt="" coords="754,638,861,663"/>
+<area shape="poly" id="edge19_Node000017_Node000019" title=" " alt="" coords="388,638,740,646,740,652,388,643"/>
+<area shape="rect" id="Node000020" href="$classLogger_a3d3f0801eeaf39b33a906ea8569c19b2.html#a3d3f0801eeaf39b33a906ea8569c19b2" title=" " alt="" coords="533,601,627,626"/>
+<area shape="poly" id="edge20_Node000017_Node000020" title=" " alt="" coords="388,630,519,617,519,622,389,635"/>
+<area shape="poly" id="edge21_Node000020_Node000018" title=" " alt="" coords="627,605,749,592,750,597,628,611"/>
+<area shape="poly" id="edge22_Node000020_Node000019" title=" " alt="" coords="628,618,741,637,740,642,627,624"/>
+<area shape="rect" id="Node000022" href="$group__filesystem__utils_ga22a224ea6d75056313024fedf64dd6b4.html#ga22a224ea6d75056313024fedf64dd6b4" title="Produces a safe filename from untrusted input." alt="" coords="513,702,647,727"/>
+<area shape="poly" id="edge24_Node000021_Node000022" title=" " alt="" coords="406,694,500,704,499,709,405,699"/>
+<area shape="rect" id="Node000023" href="$group__filesystem__utils_ga0f26334fa81c376898a717eb94ef31f0.html#ga0f26334fa81c376898a717eb94ef31f0" title="Generates a timestamp&#45;based fallback filename for uploads." alt="" coords="732,702,883,727"/>
+<area shape="poly" id="edge25_Node000022_Node000023" title=" " alt="" coords="647,712,718,712,718,717,647,717"/>
+</map>

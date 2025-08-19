@@ -92,9 +92,12 @@ $(document).ready(function(){initNavTree('HttpRequest_8hpp.html',''); initResiza
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a>  </div>
-  <div class="headertitle"><div class="title">HttpRequest.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">HttpRequest.hpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Immutable-ish HTTP/1.x request model with header map and parsed URL.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="Url_8hpp_source.html">http/Url.hpp</a>&quot;</code><br />
 <code>#include &lt;cstddef&gt;</code><br />
 <code>#include &lt;map&gt;</code><br />
@@ -119,9 +122,36 @@ $(document).ready(function(){initNavTree('HttpRequest_8hpp.html',''); initResiza
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHttpRequest.html">HttpRequest</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encapsulates a client HTTP request.  <a href="classHttpRequest.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Immutable-ish HTTP/1.x request model with header map and parsed URL. </p>
+<p>Represents a single HTTP/1.x request after (or while) being parsed by <a class="el" href="classHttpRequestParser.html">HttpRequestParser</a>. The object stores:</p><ul>
+<li>Request line fields: method, path (raw target), and HTTP version.</li>
+<li>Header fields in a case-preserving map (lookups are done via hasHeader and getHeader).</li>
+<li>Optional message body and the tracked _contentLength.</li>
+<li>A parsed <a class="el" href="structUrl.html">Url</a> object and extracted query string (text after <code>?</code>).</li>
+<li>A parser status code (_parseError) and the selected virtual server index (_matchedServerIndex) for routing (see <code>requestRouter.*</code>).</li>
+<li>The resolved <code>Host</code> header value for vhost matching.</li>
+</ul>
+<p>Typical lifecycle in this codebase:</p><ol type="1">
+<li>Bytes arrive on a socket and are parsed into <a class="el" href="classHttpRequest.html">HttpRequest</a> by <code><a class="el" href="classHttpRequestParser.html" title="Utility class for parsing raw HTTP requests.">HttpRequestParser</a>.*</code>.</li>
+<li><code>requestRouter.*</code> sets setMatchedServerIndex and may refine path/URL.</li>
+<li>Method handlers (<code><a class="el" href="handleGet_8cpp.html" title="Implements the HTTP GET request handler.">handleGet.cpp</a></code>, <code><a class="el" href="handlePost_8cpp.html" title="Implements HTTP POST request handling logic.">handlePost.cpp</a></code>, <code><a class="el" href="handleDelete_8cpp.html">handleDelete.cpp</a></code>, plus <code><a class="el" href="handleMultipartForm_8cpp.html" title="Handles multipart/form-data POST uploads and persists the first file part to disk.">handleMultipartForm.cpp</a></code> / <code>handleCgi.*</code>) consume this object.</li>
+<li><code>responseBuilder.*</code> uses fields (method, headers, body, URL) to craft an <a class="el" href="classHttpResponse.html">HttpResponse</a>.</li>
+</ol>
+<dl class="section user"><dt>Invariants</dt><dd><ul>
+<li>If getParseErrorCode returns non‑zero, the request is considered malformed and the server should generate an appropriate error response.</li>
+<li>getContentLength equals the numeric value derived from the <code>Content-Length</code> header if present; handlers must validate coherence with getBody.</li>
+<li>getQuery is the substring of the request-target after <code>?</code> (empty if absent). The raw getPath is not percent-decoded.</li>
+</ul>
+</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This type is not thread-safe; owning code must synchronize externally. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classHttpRequestParser.html" title="Utility class for parsing raw HTTP requests.">HttpRequestParser</a>, <a class="el" href="structUrl.html" title="Parsed URL components.">Url</a>, <a class="el" href="classHttpResponse.html" title="Represents an HTTP response to be sent back to the client.">HttpResponse</a>, responseBuilder, requestRouter, <a class="el" href="group__request__handler_ga58b82fdef553c71ee2b3486efd914319.html#ga58b82fdef553c71ee2b3486efd914319" title="Handles an HTTP GET request for a resource.">handleGet</a>, <a class="el" href="group__request__handler_gab04155bc2520cd5a1a910077ae2805f9.html#gab04155bc2520cd5a1a910077ae2805f9" title="Handles an HTTP POST request end-to-end.">handlePost</a>, <a class="el" href="group__request__handler_ga1650db59e4fe0954c080fa46c4bd84ab.html#ga1650db59e4fe0954c080fa46c4bd84ab" title="Handles an HTTP DELETE request for a given resource.">handleDelete</a>, handleCgi </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="HttpRequest_8hpp_source.html">HttpRequest.hpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -97,7 +97,10 @@ $(document).ready(function(){initNavTree('structClientInfo.html',''); initResiza
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>&gt;</code></p>
+<p>Per-client runtime state tracked by the <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a>.  
+ <a href="structClientInfo.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="SocketManager_8hpp_source.html">network/SocketManager.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for ClientInfo:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -105,354 +108,66 @@ $(document).ready(function(){initNavTree('structClientInfo.html',''); initResiza
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structClientInfo__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
-<table class="memberdecls">
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Per-client runtime state tracked by the <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a>. </p>
+<p>Holds identifiers, rolling counters, parsing flags, request and response queues, <a class="el" href="namespaceCGI.html">CGI</a> process handle, and file streaming context. All fields are mutated only by the owning <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a> on the poll thread. </p>
+
+<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00094">94</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a4abc604fce5acc10e008f8d1bd11431d" id="r_a4abc604fce5acc10e008f8d1bd11431d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#a4abc604fce5acc10e008f8d1bd11431d">bodyBytesReceived</a></td></tr>
-<tr class="separator:a4abc604fce5acc10e008f8d1bd11431d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e341749bf707d57e0d3446a2930de09" id="r_a7e341749bf707d57e0d3446a2930de09"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#a7e341749bf707d57e0d3446a2930de09">bytes_sent</a></td></tr>
-<tr class="separator:a7e341749bf707d57e0d3446a2930de09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9884c5f229c1164ff92ab1cc02f8647" id="r_ac9884c5f229c1164ff92ab1cc02f8647"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structCgiProcess.html">CgiProcess</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#ac9884c5f229c1164ff92ab1cc02f8647">cgiProcess</a></td></tr>
-<tr class="separator:ac9884c5f229c1164ff92ab1cc02f8647"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afcdb55ea154b8f5f383c90281918f751" id="r_afcdb55ea154b8f5f383c90281918f751"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#afcdb55ea154b8f5f383c90281918f751">client_fd</a></td></tr>
+<tr class="memitem:afcdb55ea154b8f5f383c90281918f751" id="r_afcdb55ea154b8f5f383c90281918f751"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_afcdb55ea154b8f5f383c90281918f751.html#afcdb55ea154b8f5f383c90281918f751">client_fd</a></td></tr>
+<tr class="memdesc:afcdb55ea154b8f5f383c90281918f751"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accepted client socket FD.  <br /></td></tr>
 <tr class="separator:afcdb55ea154b8f5f383c90281918f751"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1086b226d91158cc25f63628ae502bdc" id="r_a1086b226d91158cc25f63628ae502bdc"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#a1086b226d91158cc25f63628ae502bdc">connectionStartTime</a></td></tr>
-<tr class="separator:a1086b226d91158cc25f63628ae502bdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62a1c7f32d49c2ab28cb3af05c19654e" id="r_a62a1c7f32d49c2ab28cb3af05c19654e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#a62a1c7f32d49c2ab28cb3af05c19654e">current_raw_response</a></td></tr>
-<tr class="separator:a62a1c7f32d49c2ab28cb3af05c19654e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33683f1f7464af185c4bb1e82d92c9c4" id="r_a33683f1f7464af185c4bb1e82d92c9c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpRequest.html">HttpRequest</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#a33683f1f7464af185c4bb1e82d92c9c4">currentCgiRequest</a></td></tr>
-<tr class="separator:a33683f1f7464af185c4bb1e82d92c9c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab372a7aafbdb546e5024e71b015b2f1a" id="r_ab372a7aafbdb546e5024e71b015b2f1a"><td class="memItemLeft" align="right" valign="top">std::ifstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#ab372a7aafbdb546e5024e71b015b2f1a">file_stream</a></td></tr>
-<tr class="separator:ab372a7aafbdb546e5024e71b015b2f1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21c756d87b979526762f5f522e4367dd" id="r_a21c756d87b979526762f5f522e4367dd"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#a21c756d87b979526762f5f522e4367dd">headerBytesReceived</a></td></tr>
-<tr class="separator:a21c756d87b979526762f5f522e4367dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1b015ac6ea7525c2e91542c9140a8cd" id="r_aa1b015ac6ea7525c2e91542c9140a8cd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#aa1b015ac6ea7525c2e91542c9140a8cd">headerComplete</a></td></tr>
-<tr class="separator:aa1b015ac6ea7525c2e91542c9140a8cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f41d041674d771b04139d9911a5f779" id="r_a4f41d041674d771b04139d9911a5f779"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#a4f41d041674d771b04139d9911a5f779">isCgiProcessRunning</a></td></tr>
-<tr class="separator:a4f41d041674d771b04139d9911a5f779"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a303f4c379c14e5479bcff71a295a64a4" id="r_a303f4c379c14e5479bcff71a295a64a4"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#a303f4c379c14e5479bcff71a295a64a4">lastRequestTime</a></td></tr>
+<tr class="memitem:a303f4c379c14e5479bcff71a295a64a4" id="r_a303f4c379c14e5479bcff71a295a64a4"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_a303f4c379c14e5479bcff71a295a64a4.html#a303f4c379c14e5479bcff71a295a64a4">lastRequestTime</a></td></tr>
+<tr class="memdesc:a303f4c379c14e5479bcff71a295a64a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Last time we received any bytes from client.  <br /></td></tr>
 <tr class="separator:a303f4c379c14e5479bcff71a295a64a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cff1ec5408cc589e9cd2229a899434a" id="r_a3cff1ec5408cc589e9cd2229a899434a"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#a3cff1ec5408cc589e9cd2229a899434a">lastSendAttemptTime</a></td></tr>
+<tr class="memitem:a1086b226d91158cc25f63628ae502bdc" id="r_a1086b226d91158cc25f63628ae502bdc"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_a1086b226d91158cc25f63628ae502bdc.html#a1086b226d91158cc25f63628ae502bdc">connectionStartTime</a></td></tr>
+<tr class="memdesc:a1086b226d91158cc25f63628ae502bdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">First byte time for the <em>current</em> request header.  <br /></td></tr>
+<tr class="separator:a1086b226d91158cc25f63628ae502bdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cff1ec5408cc589e9cd2229a899434a" id="r_a3cff1ec5408cc589e9cd2229a899434a"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_a3cff1ec5408cc589e9cd2229a899434a.html#a3cff1ec5408cc589e9cd2229a899434a">lastSendAttemptTime</a></td></tr>
+<tr class="memdesc:a3cff1ec5408cc589e9cd2229a899434a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Last time we attempted to <code>send()</code> bytes.  <br /></td></tr>
 <tr class="separator:a3cff1ec5408cc589e9cd2229a899434a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa46a6ef0a20412625c262d55e2b792a8" id="r_aa46a6ef0a20412625c262d55e2b792a8"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="classHttpRequest.html">HttpRequest</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#aa46a6ef0a20412625c262d55e2b792a8">pendingRequests</a></td></tr>
-<tr class="separator:aa46a6ef0a20412625c262d55e2b792a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6b98dd62bfd9011e4de88232ac5f727" id="r_ae6b98dd62bfd9011e4de88232ac5f727"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#ae6b98dd62bfd9011e4de88232ac5f727">requestBuffer</a></td></tr>
+<tr class="memitem:a3180f7d31b9eecda97d9f37b671991f4" id="r_a3180f7d31b9eecda97d9f37b671991f4"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_a3180f7d31b9eecda97d9f37b671991f4.html#a3180f7d31b9eecda97d9f37b671991f4">headerBytesReceived</a></td></tr>
+<tr class="memdesc:a3180f7d31b9eecda97d9f37b671991f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count of header bytes seen so far.  <br /></td></tr>
+<tr class="separator:a3180f7d31b9eecda97d9f37b671991f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0354188dea8785a2cf38efc7c13d740" id="r_ac0354188dea8785a2cf38efc7c13d740"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_ac0354188dea8785a2cf38efc7c13d740.html#ac0354188dea8785a2cf38efc7c13d740">bodyBytesReceived</a></td></tr>
+<tr class="memdesc:ac0354188dea8785a2cf38efc7c13d740"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count of body bytes seen so far.  <br /></td></tr>
+<tr class="separator:ac0354188dea8785a2cf38efc7c13d740"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a6b63de6fcda884049dbb360dba240f" id="r_a2a6b63de6fcda884049dbb360dba240f"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_a2a6b63de6fcda884049dbb360dba240f.html#a2a6b63de6fcda884049dbb360dba240f">bytes_sent</a></td></tr>
+<tr class="memdesc:a2a6b63de6fcda884049dbb360dba240f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bytes already sent from the current raw buffer.  <br /></td></tr>
+<tr class="separator:a2a6b63de6fcda884049dbb360dba240f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1b015ac6ea7525c2e91542c9140a8cd" id="r_aa1b015ac6ea7525c2e91542c9140a8cd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_aa1b015ac6ea7525c2e91542c9140a8cd.html#aa1b015ac6ea7525c2e91542c9140a8cd">headerComplete</a></td></tr>
+<tr class="memdesc:aa1b015ac6ea7525c2e91542c9140a8cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">True once <code>\r\n\r\n</code> found for the current request.  <br /></td></tr>
+<tr class="separator:aa1b015ac6ea7525c2e91542c9140a8cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6b98dd62bfd9011e4de88232ac5f727" id="r_ae6b98dd62bfd9011e4de88232ac5f727"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_ae6b98dd62bfd9011e4de88232ac5f727.html#ae6b98dd62bfd9011e4de88232ac5f727">requestBuffer</a></td></tr>
+<tr class="memdesc:ae6b98dd62bfd9011e4de88232ac5f727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inbound raw buffer (may hold pipelined requests).  <br /></td></tr>
 <tr class="separator:ae6b98dd62bfd9011e4de88232ac5f727"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af742cbf2b6a80435976bba28d565cdc2" id="r_af742cbf2b6a80435976bba28d565cdc2"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#af742cbf2b6a80435976bba28d565cdc2">responses</a></td></tr>
-<tr class="separator:af742cbf2b6a80435976bba28d565cdc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef891cb6bfd6562ba246e0dfc0e3996b" id="r_aef891cb6bfd6562ba246e0dfc0e3996b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo.html#aef891cb6bfd6562ba246e0dfc0e3996b">serversOnPort</a></td></tr>
+<tr class="memitem:a62a1c7f32d49c2ab28cb3af05c19654e" id="r_a62a1c7f32d49c2ab28cb3af05c19654e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_a62a1c7f32d49c2ab28cb3af05c19654e.html#a62a1c7f32d49c2ab28cb3af05c19654e">current_raw_response</a></td></tr>
+<tr class="memdesc:a62a1c7f32d49c2ab28cb3af05c19654e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outbound raw response header/body (when not file).  <br /></td></tr>
+<tr class="separator:a62a1c7f32d49c2ab28cb3af05c19654e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef891cb6bfd6562ba246e0dfc0e3996b" id="r_aef891cb6bfd6562ba246e0dfc0e3996b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_aef891cb6bfd6562ba246e0dfc0e3996b.html#aef891cb6bfd6562ba246e0dfc0e3996b">serversOnPort</a></td></tr>
+<tr class="memdesc:aef891cb6bfd6562ba246e0dfc0e3996b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual servers sharing the same listen FD.  <br /></td></tr>
 <tr class="separator:aef891cb6bfd6562ba246e0dfc0e3996b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa46a6ef0a20412625c262d55e2b792a8" id="r_aa46a6ef0a20412625c262d55e2b792a8"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="classHttpRequest.html">HttpRequest</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_aa46a6ef0a20412625c262d55e2b792a8.html#aa46a6ef0a20412625c262d55e2b792a8">pendingRequests</a></td></tr>
+<tr class="memdesc:aa46a6ef0a20412625c262d55e2b792a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parsed but not yet processed requests.  <br /></td></tr>
+<tr class="separator:aa46a6ef0a20412625c262d55e2b792a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af742cbf2b6a80435976bba28d565cdc2" id="r_af742cbf2b6a80435976bba28d565cdc2"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_af742cbf2b6a80435976bba28d565cdc2.html#af742cbf2b6a80435976bba28d565cdc2">responses</a></td></tr>
+<tr class="memdesc:af742cbf2b6a80435976bba28d565cdc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepared responses waiting to be sent.  <br /></td></tr>
+<tr class="separator:af742cbf2b6a80435976bba28d565cdc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9884c5f229c1164ff92ab1cc02f8647" id="r_ac9884c5f229c1164ff92ab1cc02f8647"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structCgiProcess.html">CgiProcess</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_ac9884c5f229c1164ff92ab1cc02f8647.html#ac9884c5f229c1164ff92ab1cc02f8647">cgiProcess</a></td></tr>
+<tr class="memdesc:ac9884c5f229c1164ff92ab1cc02f8647"><td class="mdescLeft">&#160;</td><td class="mdescRight">Active <a class="el" href="namespaceCGI.html">CGI</a> process/pipe set (if any).  <br /></td></tr>
+<tr class="separator:ac9884c5f229c1164ff92ab1cc02f8647"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f41d041674d771b04139d9911a5f779" id="r_a4f41d041674d771b04139d9911a5f779"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_a4f41d041674d771b04139d9911a5f779.html#a4f41d041674d771b04139d9911a5f779">isCgiProcessRunning</a></td></tr>
+<tr class="memdesc:a4f41d041674d771b04139d9911a5f779"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience flag while <a class="el" href="namespaceCGI.html">CGI</a> is alive.  <br /></td></tr>
+<tr class="separator:a4f41d041674d771b04139d9911a5f779"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33683f1f7464af185c4bb1e82d92c9c4" id="r_a33683f1f7464af185c4bb1e82d92c9c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpRequest.html">HttpRequest</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_a33683f1f7464af185c4bb1e82d92c9c4.html#a33683f1f7464af185c4bb1e82d92c9c4">currentCgiRequest</a></td></tr>
+<tr class="memdesc:a33683f1f7464af185c4bb1e82d92c9c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request currently handled by <a class="el" href="namespaceCGI.html">CGI</a>.  <br /></td></tr>
+<tr class="separator:a33683f1f7464af185c4bb1e82d92c9c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab372a7aafbdb546e5024e71b015b2f1a" id="r_ab372a7aafbdb546e5024e71b015b2f1a"><td class="memItemLeft" align="right" valign="top">std::ifstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structClientInfo_ab372a7aafbdb546e5024e71b015b2f1a.html#ab372a7aafbdb546e5024e71b015b2f1a">file_stream</a></td></tr>
+<tr class="memdesc:ab372a7aafbdb546e5024e71b015b2f1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opened file for body streaming (<a class="el" href="namespaceCGI.html">CGI</a> temp or static file).  <br /></td></tr>
+<tr class="separator:ab372a7aafbdb546e5024e71b015b2f1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00039">39</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-</div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a4abc604fce5acc10e008f8d1bd11431d" name="a4abc604fce5acc10e008f8d1bd11431d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4abc604fce5acc10e008f8d1bd11431d">&#9670;&#160;</a></span>bodyBytesReceived</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ClientInfo::bodyBytesReceived</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00048">48</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManager_8cpp_source.html#l00192">SocketManager::initializeClientInfo()</a>.</p>
-
-</div>
-</div>
-<a id="a7e341749bf707d57e0d3446a2930de09" name="a7e341749bf707d57e0d3446a2930de09"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e341749bf707d57e0d3446a2930de09">&#9670;&#160;</a></span>bytes_sent</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ClientInfo::bytes_sent</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00049">49</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManager_8cpp_source.html#l00192">SocketManager::initializeClientInfo()</a>, <a class="el" href="SocketManagerResponse_8cpp_source.html#l00043">SocketManager::sendFileResponse()</a>, and <a class="el" href="SocketManagerResponse_8cpp_source.html#l00123">SocketManager::sendRawResponse()</a>.</p>
-
-</div>
-</div>
-<a id="ac9884c5f229c1164ff92ab1cc02f8647" name="ac9884c5f229c1164ff92ab1cc02f8647"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac9884c5f229c1164ff92ab1cc02f8647">&#9670;&#160;</a></span>cgiProcess</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::optional&lt;<a class="el" href="structCgiProcess.html">CgiProcess</a>&gt; ClientInfo::cgiProcess</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00060">60</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManagerUtils_8cpp_source.html#l00030">SocketManager::cleanupCgiForClient()</a>, <a class="el" href="SocketManagerUtils_8cpp_source.html#l00050">SocketManager::cleanupClientState()</a>, <a class="el" href="SocketManagerRequest_8cpp_source.html#l00259">SocketManager::handleCgiRequest()</a>, and <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00062">SocketManager::isIdleTimeout()</a>.</p>
-
-</div>
-</div>
-<a id="afcdb55ea154b8f5f383c90281918f751" name="afcdb55ea154b8f5f383c90281918f751"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afcdb55ea154b8f5f383c90281918f751">&#9670;&#160;</a></span>client_fd</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int ClientInfo::client_fd</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00041">41</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManager_8cpp_source.html#l00192">SocketManager::initializeClientInfo()</a>.</p>
-
-</div>
-</div>
-<a id="a1086b226d91158cc25f63628ae502bdc" name="a1086b226d91158cc25f63628ae502bdc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1086b226d91158cc25f63628ae502bdc">&#9670;&#160;</a></span>connectionStartTime</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">time_t ClientInfo::connectionStartTime</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00043">43</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManager_8cpp_source.html#l00192">SocketManager::initializeClientInfo()</a>, <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00040">SocketManager::isBodyTimeout()</a>, and <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00026">SocketManager::isHeaderTimeout()</a>.</p>
-
-</div>
-</div>
-<a id="a62a1c7f32d49c2ab28cb3af05c19654e" name="a62a1c7f32d49c2ab28cb3af05c19654e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62a1c7f32d49c2ab28cb3af05c19654e">&#9670;&#160;</a></span>current_raw_response</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string ClientInfo::current_raw_response</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00054">54</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00040">SocketManager::isBodyTimeout()</a>, <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00026">SocketManager::isHeaderTimeout()</a>, <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00062">SocketManager::isIdleTimeout()</a>, <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00051">SocketManager::isSendTimeout()</a>, <a class="el" href="SocketManagerResponse_8cpp_source.html#l00043">SocketManager::sendFileResponse()</a>, and <a class="el" href="SocketManagerResponse_8cpp_source.html#l00123">SocketManager::sendRawResponse()</a>.</p>
-
-</div>
-</div>
-<a id="a33683f1f7464af185c4bb1e82d92c9c4" name="a33683f1f7464af185c4bb1e82d92c9c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33683f1f7464af185c4bb1e82d92c9c4">&#9670;&#160;</a></span>currentCgiRequest</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpRequest.html">HttpRequest</a> ClientInfo::currentCgiRequest</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00062">62</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManagerUtils_8cpp_source.html#l00030">SocketManager::cleanupCgiForClient()</a>, <a class="el" href="SocketManagerUtils_8cpp_source.html#l00050">SocketManager::cleanupClientState()</a>, <a class="el" href="SocketManagerRequest_8cpp_source.html#l00259">SocketManager::handleCgiRequest()</a>, and <a class="el" href="SocketManagerRequest_8cpp_source.html#l00096">SocketManager::processPendingRequests()</a>.</p>
-
-</div>
-</div>
-<a id="ab372a7aafbdb546e5024e71b015b2f1a" name="ab372a7aafbdb546e5024e71b015b2f1a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab372a7aafbdb546e5024e71b015b2f1a">&#9670;&#160;</a></span>file_stream</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ifstream ClientInfo::file_stream</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00065">65</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManagerUtils_8cpp_source.html#l00050">SocketManager::cleanupClientState()</a>, and <a class="el" href="SocketManagerResponse_8cpp_source.html#l00043">SocketManager::sendFileResponse()</a>.</p>
-
-</div>
-</div>
-<a id="a21c756d87b979526762f5f522e4367dd" name="a21c756d87b979526762f5f522e4367dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21c756d87b979526762f5f522e4367dd">&#9670;&#160;</a></span>headerBytesReceived</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ClientInfo::headerBytesReceived</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00047">47</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00092">SocketManager::checkRequestLimits()</a>, <a class="el" href="SocketManager_8cpp_source.html#l00192">SocketManager::initializeClientInfo()</a>, <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00026">SocketManager::isHeaderTimeout()</a>, and <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00062">SocketManager::isIdleTimeout()</a>.</p>
-
-</div>
-</div>
-<a id="aa1b015ac6ea7525c2e91542c9140a8cd" name="aa1b015ac6ea7525c2e91542c9140a8cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1b015ac6ea7525c2e91542c9140a8cd">&#9670;&#160;</a></span>headerComplete</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool ClientInfo::headerComplete</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00052">52</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManager_8cpp_source.html#l00192">SocketManager::initializeClientInfo()</a>, <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00040">SocketManager::isBodyTimeout()</a>, <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00026">SocketManager::isHeaderTimeout()</a>, and <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00062">SocketManager::isIdleTimeout()</a>.</p>
-
-</div>
-</div>
-<a id="a4f41d041674d771b04139d9911a5f779" name="a4f41d041674d771b04139d9911a5f779"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f41d041674d771b04139d9911a5f779">&#9670;&#160;</a></span>isCgiProcessRunning</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool ClientInfo::isCgiProcessRunning</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00061">61</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManagerUtils_8cpp_source.html#l00030">SocketManager::cleanupCgiForClient()</a>, <a class="el" href="SocketManagerUtils_8cpp_source.html#l00050">SocketManager::cleanupClientState()</a>, <a class="el" href="SocketManagerRequest_8cpp_source.html#l00259">SocketManager::handleCgiRequest()</a>, and <a class="el" href="SocketManagerRequest_8cpp_source.html#l00096">SocketManager::processPendingRequests()</a>.</p>
-
-</div>
-</div>
-<a id="a303f4c379c14e5479bcff71a295a64a4" name="a303f4c379c14e5479bcff71a295a64a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a303f4c379c14e5479bcff71a295a64a4">&#9670;&#160;</a></span>lastRequestTime</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">time_t ClientInfo::lastRequestTime</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00042">42</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManager_8cpp_source.html#l00192">SocketManager::initializeClientInfo()</a>, and <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00062">SocketManager::isIdleTimeout()</a>.</p>
-
-</div>
-</div>
-<a id="a3cff1ec5408cc589e9cd2229a899434a" name="a3cff1ec5408cc589e9cd2229a899434a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3cff1ec5408cc589e9cd2229a899434a">&#9670;&#160;</a></span>lastSendAttemptTime</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">time_t ClientInfo::lastSendAttemptTime</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00044">44</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00051">SocketManager::isSendTimeout()</a>, <a class="el" href="SocketManagerResponse_8cpp_source.html#l00043">SocketManager::sendFileResponse()</a>, and <a class="el" href="SocketManagerResponse_8cpp_source.html#l00123">SocketManager::sendRawResponse()</a>.</p>
-
-</div>
-</div>
-<a id="aa46a6ef0a20412625c262d55e2b792a8" name="aa46a6ef0a20412625c262d55e2b792a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa46a6ef0a20412625c262d55e2b792a8">&#9670;&#160;</a></span>pendingRequests</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::queue&lt;<a class="el" href="classHttpRequest.html">HttpRequest</a>&gt; ClientInfo::pendingRequests</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00056">56</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManagerRequest_8cpp_source.html#l00138">SocketManager::parseAndQueueRequests()</a>, and <a class="el" href="SocketManagerRequest_8cpp_source.html#l00096">SocketManager::processPendingRequests()</a>.</p>
-
-</div>
-</div>
-<a id="ae6b98dd62bfd9011e4de88232ac5f727" name="ae6b98dd62bfd9011e4de88232ac5f727"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6b98dd62bfd9011e4de88232ac5f727">&#9670;&#160;</a></span>requestBuffer</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string ClientInfo::requestBuffer</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00053">53</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManagerRequest_8cpp_source.html#l00138">SocketManager::parseAndQueueRequests()</a>.</p>
-
-</div>
-</div>
-<a id="af742cbf2b6a80435976bba28d565cdc2" name="af742cbf2b6a80435976bba28d565cdc2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af742cbf2b6a80435976bba28d565cdc2">&#9670;&#160;</a></span>responses</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::queue&lt;<a class="el" href="classHttpResponse.html">HttpResponse</a>&gt; ClientInfo::responses</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00057">57</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManagerUtils_8cpp_source.html#l00050">SocketManager::cleanupClientState()</a>, <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00040">SocketManager::isBodyTimeout()</a>, <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00026">SocketManager::isHeaderTimeout()</a>, <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00062">SocketManager::isIdleTimeout()</a>, <a class="el" href="SocketManagerTimeouts_8cpp_source.html#l00051">SocketManager::isSendTimeout()</a>, <a class="el" href="SocketManagerRequest_8cpp_source.html#l00096">SocketManager::processPendingRequests()</a>, <a class="el" href="SocketManagerResponse_8cpp_source.html#l00043">SocketManager::sendFileResponse()</a>, and <a class="el" href="SocketManagerResponse_8cpp_source.html#l00123">SocketManager::sendRawResponse()</a>.</p>
-
-</div>
-</div>
-<a id="aef891cb6bfd6562ba246e0dfc0e3996b" name="aef891cb6bfd6562ba246e0dfc0e3996b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aef891cb6bfd6562ba246e0dfc0e3996b">&#9670;&#160;</a></span>serversOnPort</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="classServer.html">Server</a>&gt; ClientInfo::serversOnPort</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8hpp_source.html#l00055">55</a> of file <a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManager_8cpp_source.html#l00192">SocketManager::initializeClientInfo()</a>, <a class="el" href="SocketManagerRequest_8cpp_source.html#l00138">SocketManager::parseAndQueueRequests()</a>, and <a class="el" href="SocketManagerRequest_8cpp_source.html#l00096">SocketManager::processPendingRequests()</a>.</p>
-
-</div>
-</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/network/<a class="el" href="SocketManager_8hpp_source.html">SocketManager.hpp</a></li>
 </ul>

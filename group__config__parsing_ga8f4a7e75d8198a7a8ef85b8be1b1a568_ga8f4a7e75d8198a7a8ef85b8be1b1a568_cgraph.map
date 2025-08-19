@@ -1,0 +1,7 @@
+<map id="ConfigParser::advance" name="ConfigParser::advance">
+<area shape="rect" id="Node000001" title="Advances to the next token and returns it." alt="" coords="5,31,172,56"/>
+<area shape="rect" id="Node000002" href="$group__config__parsing_gade8ff0d1cb8a0285e1590319083d260c.html#gade8ff0d1cb8a0285e1590319083d260c" title="Returns the current token (bounds&#45;checked)." alt="" coords="221,5,379,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,31,207,26,208,32,173,36"/>
+<area shape="rect" id="Node000003" href="$group__config__parsing_ga0b3bdb05f58538d594227abbc64200fc.html#ga0b3bdb05f58538d594227abbc64200fc" title="Checks if the parser has consumed all tokens or reached EOF." alt="" coords="220,55,380,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="173,50,207,54,206,59,172,55"/>
+</map>

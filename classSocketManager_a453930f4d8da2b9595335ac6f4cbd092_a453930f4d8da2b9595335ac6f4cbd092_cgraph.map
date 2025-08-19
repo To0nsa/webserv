@@ -1,0 +1,13 @@
+<map id="SocketManager::isSendTimeout" name="SocketManager::isSendTimeout">
+<area shape="rect" id="Node000001" title="Detects send timeout for a client connection." alt="" coords="5,29,232,55"/>
+<area shape="rect" id="Node000002" href="$classLogger_a23f092a06cc63628beb87a1a54f9ea59.html#a23f092a06cc63628beb87a1a54f9ea59" title=" " alt="" coords="280,29,407,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,39,266,39,266,45,232,45"/>
+<area shape="rect" id="Node000003" href="$Logger_8cpp_a2c56a9a25fc1f2a14162f4df7ce936ff.html#a2c56a9a25fc1f2a14162f4df7ce936ff" title=" " alt="" coords="607,5,695,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="389,27,454,14,502,12,549,14,593,14,593,20,549,19,502,17,455,19,390,32"/>
+<area shape="rect" id="Node000004" href="$Logger_8cpp_afc799b96df6ffe84b57bcce18820bc43.html#afc799b96df6ffe84b57bcce18820bc43" title=" " alt="" coords="597,55,704,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="390,52,455,65,521,69,584,68,584,74,521,74,454,70,389,57"/>
+<area shape="rect" id="Node000005" href="$classLogger_a3d3f0801eeaf39b33a906ea8569c19b2.html#a3d3f0801eeaf39b33a906ea8569c19b2" title=" " alt="" coords="455,29,549,55"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="407,39,441,39,441,45,407,45"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="549,32,593,25,593,30,550,37"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="550,47,584,53,583,59,549,53"/>
+</map>

@@ -1,0 +1,14 @@
+<map id="Tokenizer::isIdentifierChar" name="Tokenizer::isIdentifierChar">
+<area shape="rect" id="Node000001" title="Checks if a byte is a valid identifier continuation." alt="" coords="1131,5,1321,31"/>
+<area shape="rect" id="Node000002" href="$group__config__tokenizing_gabb60123728550edb23bb1624f3cfe780.html#gabb60123728550edb23bb1624f3cfe780" title="Reads and emits the next token from the input." alt="" coords="440,7,623,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1117,19,671,18,623,19,623,14,671,13,1117,14"/>
+<area shape="rect" id="Node000005" href="$group__config__tokenizing_gafe7c2c0ef9cb08bb6a82f4abbb420e85.html#gafe7c2c0ef9cb08bb6a82f4abbb420e85" title="Scans an identifier body after a valid start." alt="" coords="904,31,1083,56"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1117,33,1083,36,1083,31,1117,27"/>
+<area shape="rect" id="Node000003" href="$group__config__tokenizing_ga535ed2343bd999378d3295edc150e746.html#ga535ed2343bd999378d3295edc150e746" title="Converts the input buffer into a sequence of tokens." alt="" coords="245,7,392,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="426,22,392,22,392,17,426,17"/>
+<area shape="rect" id="Node000004" href="$classConfigParser_a41f286ebab54d57477b7ff2964dba61e.html#a41f286ebab54d57477b7ff2964dba61e" title="Constructs a ConfigParser instance from raw configuration text." alt="" coords="5,7,197,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="232,22,197,22,197,17,232,17"/>
+<area shape="rect" id="Node000006" href="$group__config__tokenizing_gaeca329bc1d78e2038fc11fa3c8b519a8.html#gaeca329bc1d78e2038fc11fa3c8b519a8" title="Parses an identifier and resolves to keyword when applicable." alt="" coords="671,27,856,67"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="890,48,856,48,856,43,890,42"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="656,37,622,33,623,28,657,32"/>
+</map>

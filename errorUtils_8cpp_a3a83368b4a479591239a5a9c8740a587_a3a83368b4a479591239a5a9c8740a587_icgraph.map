@@ -1,0 +1,85 @@
+<map id="formatError" name="formatError">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1984,507,2081,533"/>
+<area shape="rect" id="Node000002" href="$group__config__parsing_ga582320b084ecf84703cb959d07696095.html#ga582320b084ecf84703cb959d07696095" title="Collects a list of argument values following a directive." alt="" coords="1461,418,1643,443"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1970,512,1710,465,1614,446,1615,441,1711,460,1971,507"/>
+<area shape="rect" id="Node000004" href="$classConfigParser_ab14af2f633e98e6182e1fce25c74f9e9.html#ab14af2f633e98e6182e1fce25c74f9e9" title="Parses a single location block inside a server block." alt="" coords="940,482,1143,507"/>
+<area shape="poly" id="edge32_Node000001_Node000004" title=" " alt="" coords="1970,528,1936,529,1823,531,1711,529,1441,521,1143,504,1143,499,1441,516,1711,524,1823,526,1936,524,1970,522"/>
+<area shape="rect" id="Node000005" href="$classConfigParser_aec05768b15f77f3908738fba4237d2a8.html#aec05768b15f77f3908738fba4237d2a8" title="Parses a single server block into a Server object." alt="" coords="701,482,891,507"/>
+<area shape="poly" id="edge33_Node000001_Node000005" title=" " alt="" coords="2027,494,2019,400,2002,272,1989,208,1974,151,1956,104,1934,74,1889,39,1846,19,1804,10,1762,9,1668,20,1614,27,1553,29,1291,29,1241,34,1194,46,1149,65,1106,89,1065,119,1027,153,959,228,902,306,857,380,805,483,801,481,853,377,898,303,955,224,1024,149,1062,115,1103,85,1146,60,1192,41,1240,28,1291,24,1553,24,1614,21,1667,15,1761,3,1805,4,1848,14,1892,35,1938,70,1960,102,1979,149,1994,207,2007,271,2024,399,2032,494"/>
+<area shape="rect" id="Node000006" href="$classConfigParser_a3b983e072038482de7698c091f5c8a99.html#a3b983e072038482de7698c091f5c8a99" title="Parses the full configuration input into a Config object." alt="" coords="464,558,652,583"/>
+<area shape="poly" id="edge25_Node000001_Node000006" title=" " alt="" coords="1992,541,1913,573,1805,608,1681,637,1617,646,1553,649,1040,649,917,643,795,626,688,605,607,586,608,581,689,600,796,621,917,637,1040,644,1553,644,1617,641,1680,632,1804,603,1911,568,1990,536"/>
+<area shape="rect" id="Node000011" href="$group__config__tokenizing_gabb60123728550edb23bb1624f3cfe780.html#gabb60123728550edb23bb1624f3cfe780" title="Reads and emits the next token from the input." alt="" coords="1201,819,1383,845"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="2024,547,1992,608,1968,640,1937,668,1905,681,1847,697,1692,732,1442,783,1327,822,1326,817,1441,777,1691,726,1846,692,1903,676,1935,663,1964,637,1988,605,2019,544"/>
+<area shape="rect" id="Node000014" href="$group__config__parsing_ga0cf6ea001cf16a993d10cbd8b5701248.html#ga0cf6ea001cf16a993d10cbd8b5701248" title="Ensures that the current token matches a specific expected type." alt="" coords="1475,482,1629,507"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="1970,523,1850,522,1710,516,1629,508,1630,503,1711,511,1850,517,1970,518"/>
+<area shape="rect" id="Node000015" href="$group__config__parsing_ga48ee49c90c0dfe42b85c008e31aa81d2.html#ga48ee49c90c0dfe42b85c008e31aa81d2" title="Ensures the current token matches one of several expected types." alt="" coords="1725,963,1921,989"/>
+<area shape="poly" id="edge19_Node000001_Node000015" title=" " alt="" coords="2032,547,2022,638,2004,760,1992,821,1977,877,1959,923,1938,954,1923,965,1919,961,1934,950,1954,920,1972,875,1986,820,1999,759,2017,638,2026,547"/>
+<area shape="rect" id="Node000016" href="$namespacedirective_a4167e9343de67ad75b94d04a0ee62577.html#a4167e9343de67ad75b94d04a0ee62577" title="Returns the mapping of location&#45;level directives to their handler functions." alt="" coords="1453,369,1651,394"/>
+<area shape="poly" id="edge20_Node000001_Node000016" title=" " alt="" coords="2000,502,1969,484,1935,468,1874,448,1824,439,1774,432,1710,420,1662,408,1612,397,1614,392,1663,403,1711,415,1775,427,1825,434,1875,443,1937,463,1972,479,2003,498"/>
+<area shape="rect" id="Node000017" href="$group__string__utils_ga7950ec426b55a9170dccbd5b463cba43.html#ga7950ec426b55a9170dccbd5b463cba43" title="Parses a human&#45;readable byte size string into a byte count." alt="" coords="1495,115,1609,141"/>
+<area shape="poly" id="edge22_Node000001_Node000017" title=" " alt="" coords="2026,494,2015,416,1996,315,1969,220,1952,184,1934,161,1897,136,1855,119,1811,109,1765,104,1678,107,1605,118,1604,113,1677,101,1765,99,1812,103,1857,114,1899,131,1938,157,1957,181,1974,218,2001,313,2020,415,2031,493"/>
+<area shape="rect" id="Node000018" href="$namespacedirective_a3338d7904396548486d9d2dce2367c06.html#a3338d7904396548486d9d2dce2367c06" title="Returns the mapping of server&#45;level directives to their handler functions." alt="" coords="1199,217,1385,242"/>
+<area shape="poly" id="edge45_Node000001_Node000018" title=" " alt="" coords="2027,494,2017,407,2000,291,1987,233,1972,182,1955,141,1934,114,1916,102,1894,93,1837,78,1769,71,1696,70,1621,73,1551,81,1489,92,1442,105,1398,129,1358,160,1327,192,1305,218,1301,215,1323,189,1355,156,1395,124,1440,100,1488,87,1550,76,1621,68,1695,64,1770,66,1838,73,1895,88,1919,98,1938,110,1959,138,1977,180,1993,232,2005,290,2023,406,2032,494"/>
+<area shape="rect" id="Node000019" href="$namespaceanonymous__namespace_02ConfigParser_8cpp_03_a78387fc5ca311812bfbf94a0dd76d0e3.html#a78387fc5ca311812bfbf94a0dd76d0e3" title="Dispatches a configuration directive to its registered handler." alt="" coords="1733,1013,1913,1067"/>
+<area shape="poly" id="edge26_Node000001_Node000019" title=" " alt="" coords="2032,547,2023,646,2005,782,1993,851,1978,915,1959,967,1938,1003,1915,1021,1912,1017,1934,1000,1955,965,1973,913,1988,850,2000,781,2018,646,2027,546"/>
+<area shape="rect" id="Node000020" href="$group__string__utils_gaab21b0d358ae4429fc4ca818719be9df.html#gaab21b0d358ae4429fc4ca818719be9df" title="Parses a non&#45;negative integer from a string with context&#45;aware error reporting." alt="" coords="1786,217,1861,242"/>
+<area shape="poly" id="edge27_Node000001_Node000020" title=" " alt="" coords="2027,494,2021,443,2006,378,1994,344,1978,311,1959,281,1934,255,1918,244,1899,237,1860,231,1861,226,1900,232,1920,240,1938,251,1963,278,1983,309,1999,342,2011,376,2026,442,2033,493"/>
+<area shape="rect" id="Node000021" href="$namespacedirective_a88f8d5330b2461bd038b66acd16f1f01.html#a88f8d5330b2461bd038b66acd16f1f01" title="Validates that a given string is a valid IPv4 address." alt="" coords="1442,166,1662,191"/>
+<area shape="poly" id="edge53_Node000001_Node000021" title=" " alt="" coords="2030,494,2028,433,2016,353,2004,312,1987,272,1964,236,1934,206,1896,182,1854,166,1809,156,1763,152,1675,156,1603,169,1602,163,1674,151,1763,147,1809,151,1855,161,1898,177,1938,202,1968,233,1992,270,2009,310,2021,352,2033,432,2035,494"/>
+<area shape="rect" id="Node000022" href="$group__config__tokenizing_ga5fd74c00aa7b3104c20cc7c4a814fd32.html#ga5fd74c00aa7b3104c20cc7c4a814fd32" title="Parses a quoted string literal." alt="" coords="1449,793,1655,818"/>
+<area shape="poly" id="edge34_Node000001_Node000022" title=" " alt="" coords="2029,547,2018,585,2000,632,1974,678,1957,700,1937,718,1896,732,1810,752,1615,795,1613,790,1809,747,1894,727,1935,714,1953,696,1970,675,1996,629,2013,584,2024,545"/>
+<area shape="rect" id="Node000023" href="$namespacedirective_ab413e7282a09df0d3339f88ce6d423ff.html#ab413e7282a09df0d3339f88ce6d423ff" title="Ensures that a directive has exactly the expected number of arguments." alt="" coords="1727,266,1920,291"/>
+<area shape="poly" id="edge36_Node000001_Node000023" title=" " alt="" coords="2025,494,2015,452,1999,401,1972,349,1955,326,1934,306,1914,294,1917,289,1938,302,1959,323,1977,346,2003,399,2021,451,2030,493"/>
+<area shape="rect" id="Node000024" href="$namespacedirective_a168b6924c56f46b36e98b6020a19945b.html#a168b6924c56f46b36e98b6020a19945b" title="Ensures that a directive has at least the required number of arguments." alt="" coords="1734,316,1913,356"/>
+<area shape="poly" id="edge39_Node000001_Node000024" title=" " alt="" coords="2020,496,1988,432,1964,399,1934,370,1911,357,1914,352,1938,366,1968,395,1993,429,2024,493"/>
+<area shape="rect" id="Node000025" href="$group__config__tokenizing_gaee3735b01289546812d2180ee9355ff1.html#gaee3735b01289546812d2180ee9355ff1" title="Optionally consumes a single&#45;letter size suffix." alt="" coords="1722,849,1925,889"/>
+<area shape="poly" id="edge42_Node000001_Node000025" title=" " alt="" coords="2034,547,2030,606,2017,685,2005,726,1988,767,1966,806,1938,839,1922,851,1919,847,1934,835,1961,803,1983,765,1999,725,2011,684,2025,606,2029,546"/>
+<area shape="rect" id="Node000027" href="$group__config__tokenizing_ga85e938ec2eba987c83bed60c6340cc40.html#ga85e938ec2eba987c83bed60c6340cc40" title="Throws a formatted unterminated string error." alt="" coords="1714,785,1933,825"/>
+<area shape="poly" id="edge46_Node000001_Node000027" title=" " alt="" coords="2031,547,2023,594,2006,653,1979,715,1960,743,1938,769,1910,787,1907,783,1934,765,1956,740,1974,712,2001,651,2017,593,2026,546"/>
+<area shape="rect" id="Node000028" href="$namespacedirective_ab0d35b6ad2c2f8d0eea5231b431187b6.html#ab0d35b6ad2c2f8d0eea5231b431187b6" title="Validates the syntax of a CGI file extension." alt="" coords="1711,381,1936,406"/>
+<area shape="poly" id="edge48_Node000001_Node000028" title=" " alt="" coords="2011,498,1978,462,1935,428,1888,409,1890,404,1937,423,1982,458,2015,494"/>
+<area shape="rect" id="Node000029" href="$group__config__tokenizing_ga7dd8e4b178f5d819ec70b840eeba6ea0.html#ga7dd8e4b178f5d819ec70b840eeba6ea0" title="Validates the last scanned identifier." alt="" coords="1722,914,1925,939"/>
+<area shape="poly" id="edge50_Node000001_Node000029" title=" " alt="" coords="2031,547,2020,628,2000,735,1973,837,1957,876,1938,903,1920,916,1917,912,1934,900,1952,874,1968,835,1995,734,2014,628,2026,546"/>
+<area shape="rect" id="Node000003" href="$classConfigParser_ad27019103306be3877608677c5615a61.html#ad27019103306be3877608677c5615a61" title="Parses a single directive inside a location block." alt="" coords="1191,367,1393,407"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1463,418,1393,407,1394,401,1463,413"/>
+<area shape="rect" id="Node000010" href="$classConfigParser_a65dee8490851a65fb3d80ab1677c4a5d.html#a65dee8490851a65fb3d80ab1677c4a5d" title="Parses and applies a single directive inside a server block." alt="" coords="947,363,1136,403"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="1457,416,1440,408,1424,394,1416,380,1407,368,1392,357,1355,345,1316,338,1276,336,1237,337,1162,349,1099,365,1098,360,1161,344,1236,332,1276,330,1317,333,1356,340,1395,352,1411,364,1420,377,1429,391,1443,403,1459,411"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1233,415,1073,484,1071,480,1231,410"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="927,497,891,497,891,492,927,492"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="743,514,600,560,598,555,742,509"/>
+<area shape="rect" id="Node000007" href="$namespacebootstrap_a6788c3d01506cbf268f74a60be16385c.html#a6788c3d01506cbf268f74a60be16385c" title="Parses a configuration string into a Config object." alt="" coords="255,558,416,583"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="450,573,416,573,416,568,450,568"/>
+<area shape="rect" id="Node000008" href="$group__entrypoint_ga6e58dbe6eab2d4b12d65b7b0e7297be8.html#ga6e58dbe6eab2d4b12d65b7b0e7297be8" title="Runs the Webserv server." alt="" coords="108,558,207,583"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="241,573,207,573,207,568,241,568"/>
+<area shape="rect" id="Node000009" href="$group__entrypoint_ga3c04138a5bfe5d72780bb7e82a18e627.html#ga3c04138a5bfe5d72780bb7e82a18e627" title="Program entry point." alt="" coords="5,558,60,583"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="94,573,60,573,60,568,94,568"/>
+<area shape="poly" id="edge10_Node000010_Node000005" title=" " alt="" coords="986,411,826,484,824,480,983,406"/>
+<area shape="rect" id="Node000012" href="$group__config__tokenizing_ga535ed2343bd999378d3295edc150e746.html#ga535ed2343bd999378d3295edc150e746" title="Converts the input buffer into a sequence of tokens." alt="" coords="968,819,1115,845"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="1187,835,1115,835,1115,829,1187,829"/>
+<area shape="rect" id="Node000013" href="$classConfigParser_a41f286ebab54d57477b7ff2964dba61e.html#a41f286ebab54d57477b7ff2964dba61e" title="Constructs a ConfigParser instance from raw configuration text." alt="" coords="700,819,892,845"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="954,835,892,835,892,829,954,829"/>
+<area shape="poly" id="edge16_Node000014_Node000003" title=" " alt="" coords="1496,480,1440,457,1392,428,1350,409,1352,404,1395,423,1443,452,1498,475"/>
+<area shape="poly" id="edge15_Node000014_Node000004" title=" " alt="" coords="1461,497,1143,497,1143,492,1461,492"/>
+<area shape="poly" id="edge17_Node000014_Node000005" title=" " alt="" coords="1461,508,1356,517,1225,525,1083,527,940,521,859,510,860,505,940,516,1083,522,1225,520,1355,512,1461,502"/>
+<area shape="poly" id="edge18_Node000014_Node000010" title=" " alt="" coords="1474,482,1190,421,1123,405,1124,400,1191,416,1475,477"/>
+<area shape="poly" id="edge21_Node000016_Node000003" title=" " alt="" coords="1440,386,1394,387,1393,382,1440,381"/>
+<area shape="poly" id="edge23_Node000017_Node000018" title=" " alt="" coords="1482,144,1442,156,1372,188,1315,219,1313,214,1369,183,1440,151,1480,139"/>
+<area shape="poly" id="edge24_Node000018_Node000010" title=" " alt="" coords="1260,252,1076,365,1074,360,1257,247"/>
+<area shape="poly" id="edge28_Node000020_Node000016" title=" " alt="" coords="1773,238,1742,245,1712,256,1667,283,1625,314,1567,370,1563,367,1622,310,1664,278,1710,251,1740,240,1772,232"/>
+<area shape="poly" id="edge29_Node000020_Node000018" title=" " alt="" coords="1772,232,1385,232,1385,227,1772,227"/>
+<area shape="poly" id="edge30_Node000020_Node000021" title=" " alt="" coords="1772,223,1620,194,1621,189,1773,217"/>
+<area shape="poly" id="edge31_Node000021_Node000018" title=" " alt="" coords="1473,197,1358,219,1357,214,1472,191"/>
+<area shape="poly" id="edge35_Node000022_Node000011" title=" " alt="" coords="1435,820,1384,825,1383,820,1435,815"/>
+<area shape="poly" id="edge37_Node000023_Node000016" title=" " alt="" coords="1742,297,1712,307,1636,339,1576,371,1574,366,1634,334,1710,302,1740,292"/>
+<area shape="poly" id="edge38_Node000023_Node000018" title=" " alt="" coords="1713,271,1385,241,1386,235,1713,266"/>
+<area shape="poly" id="edge40_Node000024_Node000016" title=" " alt="" coords="1721,356,1629,371,1628,366,1720,351"/>
+<area shape="poly" id="edge41_Node000024_Node000018" title=" " alt="" coords="1720,323,1587,301,1441,272,1336,245,1337,240,1442,267,1588,296,1721,318"/>
+<area shape="rect" id="Node000026" href="$group__config__tokenizing_ga141512a45a6c06a887161961c8e41d49.html#ga141512a45a6c06a887161961c8e41d49" title="Parses a NUMBER token with optional single&#45;letter suffix." alt="" coords="1441,846,1663,871"/>
+<area shape="poly" id="edge43_Node000025_Node000026" title=" " alt="" coords="1708,868,1663,866,1663,860,1708,862"/>
+<area shape="poly" id="edge44_Node000026_Node000011" title=" " alt="" coords="1427,849,1383,844,1384,839,1428,843"/>
+<area shape="poly" id="edge47_Node000027_Node000022" title=" " alt="" coords="1700,808,1656,808,1656,803,1700,803"/>
+<area shape="poly" id="edge49_Node000028_Node000016" title=" " alt="" coords="1697,390,1651,388,1651,383,1697,385"/>
+<area shape="rect" id="Node000030" href="$group__config__tokenizing_gaeca329bc1d78e2038fc11fa3c8b519a8.html#gaeca329bc1d78e2038fc11fa3c8b519a8" title="Parses an identifier and resolves to keyword when applicable." alt="" coords="1459,903,1645,943"/>
+<area shape="poly" id="edge51_Node000029_Node000030" title=" " alt="" coords="1708,928,1645,927,1645,921,1708,922"/>
+<area shape="poly" id="edge52_Node000030_Node000011" title=" " alt="" coords="1480,901,1329,847,1331,842,1482,896"/>
+</map>

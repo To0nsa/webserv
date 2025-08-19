@@ -1,0 +1,37 @@
+<map id="validatePostRequest" name="validatePostRequest">
+<area shape="rect" id="Node000001" title="Validate the prerequisites for processing a POST request." alt="" coords="5,301,161,326"/>
+<area shape="rect" id="Node000002" href="$group__http_ga1f8eaecab62a277ca49584495da022fc.html#ga1f8eaecab62a277ca49584495da022fc" title="Builds an HTTP error response, optionally using a custom error page." alt="" coords="220,161,417,201"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,298,142,256,174,232,208,211,223,204,225,209,211,216,177,236,146,260,99,302"/>
+<area shape="rect" id="Node000010" href="$group__http_gab30e8ad147999e3dc043302f81e7fef9.html#gab30e8ad147999e3dc043302f81e7fef9" title="Returns the request body string." alt="" coords="236,226,401,251"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="111,298,208,260,238,252,239,257,210,265,113,303"/>
+<area shape="rect" id="Node000011" href="$group__server__component_ga7ad9b923d766c82b58bcca01146cb375.html#ga7ad9b923d766c82b58bcca01146cb375" title="Returns the maximum allowed size for the request body." alt="" coords="209,275,428,301"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="161,302,195,299,196,304,162,308"/>
+<area shape="rect" id="Node000012" href="$group__http_ga02743663bb8998bd7450640035f5f6c0.html#ga02743663bb8998bd7450640035f5f6c0" title="Returns the normalized request path." alt="" coords="239,325,399,350"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="162,319,225,325,225,330,161,324"/>
+<area shape="rect" id="Node000013" href="$group__location__component_gaf0f6e7f96f5a26e3e64e38a44ff82bd4.html#gaf0f6e7f96f5a26e3e64e38a44ff82bd4" title="Returns the upload store directory." alt="" coords="225,374,412,399"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="115,324,210,359,244,368,242,373,209,364,114,329"/>
+<area shape="rect" id="Node000014" href="$classLogger_a23f092a06cc63628beb87a1a54f9ea59.html#a23f092a06cc63628beb87a1a54f9ea59" title=" " alt="" coords="255,423,382,449"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="99,324,146,366,177,389,210,408,243,420,241,425,208,413,174,393,142,370,95,328"/>
+<area shape="rect" id="Node000003" href="$group__http_ga064a5d8be8de9234f362e73d9bb68b6b.html#ga064a5d8be8de9234f362e73d9bb68b6b" title="Returns the default reason phrase for a given HTTP status code." alt="" coords="476,5,684,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,159,397,108,435,80,475,55,489,48,492,53,477,60,438,84,400,112,342,163"/>
+<area shape="rect" id="Node000004" href="$group__server__component_ga53fb46a6288fcdc4270ad5900f50736e.html#ga53fb46a6288fcdc4270ad5900f50736e" title="Returns the mapping of HTTP error codes to custom error pages." alt="" coords="499,70,661,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="355,159,411,131,475,104,500,96,502,101,477,109,413,136,357,164"/>
+<area shape="rect" id="Node000005" href="$group__server__component_ga06b6c9af45443180a65bcc145e1b2f1e.html#ga06b6c9af45443180a65bcc145e1b2f1e" title="Returns the list of location blocks defined for this server." alt="" coords="503,119,657,145"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="417,160,498,145,499,150,418,165"/>
+<area shape="rect" id="Node000006" href="$group__html__utils_gaf5ddafc8d1e304df95c0aee1984b2682.html#gaf5ddafc8d1e304df95c0aee1984b2682" title="Escapes special HTML characters in a string." alt="" coords="531,169,629,194"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="417,179,517,179,517,184,417,184"/>
+<area shape="rect" id="Node000007" href="$group__filesystem__utils_ga60cb34db186e7da050316400c820c815.html#ga60cb34db186e7da050316400c820c815" title="Concatenates a base path and a suffix with a single &#39;/&#39; separator." alt="" coords="543,218,617,243"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="418,197,530,219,529,224,417,203"/>
+<area shape="rect" id="Node000008" href="$group__http_ga3e83ff074d5f7a6de514a4edcb02ab4d.html#ga3e83ff074d5f7a6de514a4edcb02ab4d" title="Sets the body of the response." alt="" coords="493,267,667,293"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="403,199,429,211,444,222,454,232,463,243,477,252,496,261,494,265,475,257,460,247,450,236,441,226,427,216,401,204"/>
+<area shape="rect" id="Node000009" href="$group__http_ga7efa3ab17ead358609d80b55db164867.html#ga7efa3ab17ead358609d80b55db164867" title="Adds or replaces a header in the response." alt="" coords="486,317,674,342"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="411,199,430,211,448,235,454,258,461,281,478,302,487,308,484,313,474,306,456,283,449,260,443,237,426,215,408,204"/>
+<area shape="rect" id="Node000015" href="$Logger_8cpp_a2c56a9a25fc1f2a14162f4df7ce936ff.html#a2c56a9a25fc1f2a14162f4df7ce936ff" title=" " alt="" coords="741,399,829,425"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="382,421,476,408,580,405,684,408,727,408,727,414,684,413,580,410,476,413,383,426"/>
+<area shape="rect" id="Node000016" href="$Logger_8cpp_afc799b96df6ffe84b57bcce18820bc43.html#afc799b96df6ffe84b57bcce18820bc43" title=" " alt="" coords="732,449,839,474"/>
+<area shape="poly" id="edge15_Node000014_Node000016" title=" " alt="" coords="383,446,476,459,605,464,718,462,718,467,605,469,476,464,382,451"/>
+<area shape="rect" id="Node000017" href="$classLogger_a3d3f0801eeaf39b33a906ea8569c19b2.html#a3d3f0801eeaf39b33a906ea8569c19b2" title=" " alt="" coords="533,423,627,449"/>
+<area shape="poly" id="edge16_Node000014_Node000017" title=" " alt="" coords="383,433,519,433,519,439,383,439"/>
+<area shape="poly" id="edge17_Node000017_Node000015" title=" " alt="" coords="628,428,727,416,728,421,628,433"/>
+<area shape="poly" id="edge18_Node000017_Node000016" title=" " alt="" coords="628,439,718,450,718,456,627,444"/>
+</map>

@@ -93,9 +93,12 @@ $(document).ready(function(){initNavTree('responseBuilder_8cpp.html',''); initRe
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">responseBuilder.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">responseBuilder.cpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements the <a class="el" href="namespaceResponseBuilder.html" title="Factory helpers for constructing HTTP responses.">ResponseBuilder</a> utilities for constructing HTTP responses.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="responseBuilder_8hpp_source.html">http/responseBuilder.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Location_8hpp_source.html">core/Location.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
@@ -122,31 +125,53 @@ $(document).ready(function(){initNavTree('responseBuilder_8cpp.html',''); initRe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
+<tr class="memitem:namespaceMessageHandler" id="r_namespaceMessageHandler"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMessageHandler.html">MessageHandler</a></td></tr>
+<tr class="memdesc:namespaceMessageHandler"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility namespace for HTTP status code reason phrases. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceanonymous__namespace_02responseBuilder_8cpp_03" id="r_namespaceanonymous__namespace_02responseBuilder_8cpp_03"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02responseBuilder_8cpp_03.html">anonymous_namespace{responseBuilder.cpp}</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceMessageHandler" id="r_namespaceMessageHandler"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMessageHandler.html">MessageHandler</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceResponseBuilder" id="r_namespaceResponseBuilder"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html">ResponseBuilder</a></td></tr>
+<tr class="memdesc:namespaceResponseBuilder"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory helpers for constructing HTTP responses. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1f8eaecab62a277ca49584495da022fc" id="r_a1f8eaecab62a277ca49584495da022fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#a1f8eaecab62a277ca49584495da022fc">ResponseBuilder::generateError</a> (int status_code, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
-<tr class="separator:a1f8eaecab62a277ca49584495da022fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa150e2f1e0cff9e7f1ebd1b66c4e4a1b" id="r_aa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#aa150e2f1e0cff9e7f1ebd1b66c4e4a1b">ResponseBuilder::generateRedirect</a> (int status_code, const std::string &amp;location, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
-<tr class="separator:aa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a822d078e27118227ea36e32830724915" id="r_a822d078e27118227ea36e32830724915"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#a822d078e27118227ea36e32830724915">ResponseBuilder::generateSuccess</a> (int status_code, const std::string &amp;body, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
-<tr class="separator:a822d078e27118227ea36e32830724915"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acde1853a1d9fe48161c9600e59a88956" id="r_acde1853a1d9fe48161c9600e59a88956"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#acde1853a1d9fe48161c9600e59a88956">ResponseBuilder::generateSuccessFile</a> (int status_code, const std::string &amp;file_path, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, std::streamsize content_length, std::streamsize cgiBodyOffset=0)</td></tr>
-<tr class="separator:acde1853a1d9fe48161c9600e59a88956"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a064a5d8be8de9234f362e73d9bb68b6b" id="r_a064a5d8be8de9234f362e73d9bb68b6b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMessageHandler.html#a064a5d8be8de9234f362e73d9bb68b6b">MessageHandler::getDefaultMessage</a> (int status_code)</td></tr>
-<tr class="separator:a064a5d8be8de9234f362e73d9bb68b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ccd9d142df9f83e5a80945c55d6bb1f" id="r_a5ccd9d142df9f83e5a80945c55d6bb1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02responseBuilder_8cpp_03.html#a5ccd9d142df9f83e5a80945c55d6bb1f">anonymous_namespace{responseBuilder.cpp}::initializeResponse</a> (<a class="el" href="classHttpResponse.html">HttpResponse</a> &amp;response, int status_code, const std::string &amp;message, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
-<tr class="separator:a5ccd9d142df9f83e5a80945c55d6bb1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac92dc857b1f22af7c8074ffe44436234" id="r_ac92dc857b1f22af7c8074ffe44436234"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02responseBuilder_8cpp_03.html#ac92dc857b1f22af7c8074ffe44436234">anonymous_namespace{responseBuilder.cpp}::shouldKeepAlive</a> (const std::string &amp;version, const std::string &amp;conn)</td></tr>
-<tr class="separator:ac92dc857b1f22af7c8074ffe44436234"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga064a5d8be8de9234f362e73d9bb68b6b" id="r_ga064a5d8be8de9234f362e73d9bb68b6b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga064a5d8be8de9234f362e73d9bb68b6b.html#ga064a5d8be8de9234f362e73d9bb68b6b">MessageHandler::getDefaultMessage</a> (int status_code)</td></tr>
+<tr class="memdesc:ga064a5d8be8de9234f362e73d9bb68b6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the default reason phrase for a given HTTP status code.  <br /></td></tr>
+<tr class="separator:ga064a5d8be8de9234f362e73d9bb68b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac92dc857b1f22af7c8074ffe44436234" id="r_gac92dc857b1f22af7c8074ffe44436234"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_gac92dc857b1f22af7c8074ffe44436234.html#gac92dc857b1f22af7c8074ffe44436234">anonymous_namespace{responseBuilder.cpp}::shouldKeepAlive</a> (const std::string &amp;version, const std::string &amp;conn)</td></tr>
+<tr class="memdesc:gac92dc857b1f22af7c8074ffe44436234"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the TCP connection should be kept alive based on HTTP version and the <code>Connection</code> header.  <br /></td></tr>
+<tr class="separator:gac92dc857b1f22af7c8074ffe44436234"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5ccd9d142df9f83e5a80945c55d6bb1f" id="r_ga5ccd9d142df9f83e5a80945c55d6bb1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga5ccd9d142df9f83e5a80945c55d6bb1f.html#ga5ccd9d142df9f83e5a80945c55d6bb1f">anonymous_namespace{responseBuilder.cpp}::initializeResponse</a> (<a class="el" href="classHttpResponse.html">HttpResponse</a> &amp;response, int status_code, const std::string &amp;message, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
+<tr class="memdesc:ga5ccd9d142df9f83e5a80945c55d6bb1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new HTTP response with status and connection metadata.  <br /></td></tr>
+<tr class="separator:ga5ccd9d142df9f83e5a80945c55d6bb1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga822d078e27118227ea36e32830724915" id="r_ga822d078e27118227ea36e32830724915"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga822d078e27118227ea36e32830724915.html#ga822d078e27118227ea36e32830724915">ResponseBuilder::generateSuccess</a> (int status_code, const std::string &amp;body, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
+<tr class="memdesc:ga822d078e27118227ea36e32830724915"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a successful HTTP response with an inline body.  <br /></td></tr>
+<tr class="separator:ga822d078e27118227ea36e32830724915"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9d1fbebc083258c493e34686654d6f67" id="r_ga9d1fbebc083258c493e34686654d6f67"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga9d1fbebc083258c493e34686654d6f67.html#ga9d1fbebc083258c493e34686654d6f67">ResponseBuilder::generateSuccessFile</a> (int status_code, const std::string &amp;file_path, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, std::streamsize content_length, std::streamsize cgiBodyOffset)</td></tr>
+<tr class="memdesc:ga9d1fbebc083258c493e34686654d6f67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a successful HTTP response backed by a file on disk.  <br /></td></tr>
+<tr class="separator:ga9d1fbebc083258c493e34686654d6f67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1f8eaecab62a277ca49584495da022fc" id="r_ga1f8eaecab62a277ca49584495da022fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga1f8eaecab62a277ca49584495da022fc.html#ga1f8eaecab62a277ca49584495da022fc">ResponseBuilder::generateError</a> (int status_code, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
+<tr class="memdesc:ga1f8eaecab62a277ca49584495da022fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds an HTTP error response, optionally using a custom error page.  <br /></td></tr>
+<tr class="separator:ga1f8eaecab62a277ca49584495da022fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b" id="r_gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b.html#gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b">ResponseBuilder::generateRedirect</a> (int status_code, const std::string &amp;location, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
+<tr class="memdesc:gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates an HTTP redirect response.  <br /></td></tr>
+<tr class="separator:gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements the <a class="el" href="namespaceResponseBuilder.html" title="Factory helpers for constructing HTTP responses.">ResponseBuilder</a> utilities for constructing HTTP responses. </p>
+<p>This file defines helper functions to generate HTTP responses of different types (success, file-based success, error, redirect). It encapsulates the boilerplate logic of setting status codes, headers, body content, and connection persistence rules based on HTTP version and <code>Connection</code> headers.</p>
+<p>Key features:</p><ul>
+<li>Provides default status messages for standard HTTP codes via <a class="el" href="group__http_ga064a5d8be8de9234f362e73d9bb68b6b.html#ga064a5d8be8de9234f362e73d9bb68b6b">MessageHandler::getDefaultMessage</a>.</li>
+<li>Centralizes connection management (keep-alive vs. close) in <code>initializeResponse</code>, consistent with HTTP/1.0 and HTTP/1.1 semantics.</li>
+<li>Supports custom error pages configured in <a class="el" href="classServer.html">Server</a> instances, falling back to generated HTML when missing.</li>
+<li>Generates file-backed responses (for static files or <a class="el" href="namespaceCGI.html">CGI</a> output) with proper <code>Content-Length</code> and offset handling.</li>
+<li>Generates redirect responses with appropriate <code><a class="el" href="classLocation.html" title="Encapsulates configuration for a single URL path.">Location</a></code> headers.</li>
+</ul>
+<p>These utilities are typically invoked by request handlers (GET, POST, DELETE, <a class="el" href="namespaceCGI.html">CGI</a>, etc.) to produce fully-formed <a class="el" href="classHttpResponse.html">HttpResponse</a> objects that can be sent back to clients. </p>
+
+<p class="definition">Definition in file <a class="el" href="responseBuilder_8cpp_source.html">responseBuilder.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

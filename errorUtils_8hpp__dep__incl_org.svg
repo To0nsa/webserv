@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Error formatting utilities.">
+<g id="a_Node000001"><a xlink:title=" ">
 <polygon fill="#999999" stroke="#666666" points="365.5,-85 219.5,-85 219.5,-66 365.5,-66 365.5,-85"/>
 <text text-anchor="middle" x="292.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">include/utils/errorUtils.hpp</text>
 </a>
@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="ConfigParser_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="ConfigParser_8cpp.html" target="_top" xlink:title="Implements parsing of servers, locations, and directives.">
 <polygon fill="white" stroke="#666666" points="131,-30 0,-30 0,0 131,0 131,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/parser/Config</text>
 <text text-anchor="middle" x="65.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Parser.cpp</text>
@@ -39,7 +39,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="directive__handler__table_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="directive__handler__table_8cpp.html" target="_top" xlink:title="Implements directive handler maps for server and location blocks.">
 <polygon fill="white" stroke="#666666" points="292,-30 149,-30 149,0 292,0 292,-30"/>
 <text text-anchor="start" x="157" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/parser/directive</text>
 <text text-anchor="middle" x="220.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">_handler_table.cpp</text>
@@ -58,7 +58,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="Tokenizer_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="Tokenizer_8cpp.html" target="_top" xlink:title="Implements the Tokenizer used for config lexical analysis.">
 <polygon fill="white" stroke="#666666" points="421,-30 310,-30 310,0 421,0 421,-30"/>
 <text text-anchor="start" x="318" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/tokenizer</text>
 <text text-anchor="middle" x="365.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/Tokenizer.cpp</text>
@@ -77,7 +77,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="stringUtils_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="stringUtils_8cpp.html" target="_top" xlink:title="Utility functions for string parsing, formatting, and case conversion.">
 <polygon fill="white" stroke="#666666" points="567.5,-24.5 439.5,-24.5 439.5,-5.5 567.5,-5.5 567.5,-24.5"/>
 <text text-anchor="middle" x="503.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/utils/stringUtils.cpp</text>
 </a>

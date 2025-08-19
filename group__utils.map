@@ -1,0 +1,7 @@
+<map id="Utility Functions" name="Utility Functions">
+<area shape="rect" id="Node000002" href="$group__filesystem__utils.html" title="Path manipulation, safe file handling, and directory management." alt="" coords="181,5,329,31"/>
+<area shape="rect" id="Node000003" href="$group__html__utils.html" title="Safe HTML encoding and related helpers." alt="" coords="198,55,313,80"/>
+<area shape="rect" id="Node000004" href="$group__string__utils.html" title="String manipulation, parsing, and formatting helpers." alt="" coords="198,104,313,129"/>
+<area shape="rect" id="Node000005" href="$group__url__utils.html" title="Helpers for percent&#45;decoding, form decoding, and safe filename extraction." alt="" coords="204,153,307,179"/>
+<area shape="rect" id="Node000001" title="Shared helper routines for common operations." alt="" coords="5,80,133,105"/>
+</map>

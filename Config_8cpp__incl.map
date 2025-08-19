@@ -1,25 +1,30 @@
 <map id="src/config/Config.cpp" name="src/config/Config.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="339,5,495,31"/>
-<area shape="rect" id="Node000002" href="$Config_8hpp.html" title=" " alt="" coords="350,79,485,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="420,31,420,65,415,65,415,31"/>
-<area shape="rect" id="Node000003" href="$Server_8hpp.html" title="Declares the Server class for virtual host configuration." alt="" coords="252,152,375,177"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="402,106,343,146,340,142,399,102"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="439,299,502,324"/>
-<area shape="poly" id="edge13_Node000002_Node000008" title=" " alt="" coords="423,104,467,284,462,286,418,105"/>
-<area shape="rect" id="Node000004" href="$Location_8hpp.html" title=" " alt="" coords="245,225,382,251"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="316,178,316,212,311,212,311,178"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="361,299,412,324"/>
-<area shape="poly" id="edge8_Node000003_Node000005" title=" " alt="" coords="342,175,372,195,386,208,397,224,402,239,403,256,398,286,393,285,398,255,397,241,392,227,382,212,369,199,339,180"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="84,299,143,324"/>
-<area shape="poly" id="edge10_Node000003_Node000007" title=" " alt="" coords="252,172,185,178,114,188,52,205,29,215,14,227,9,236,9,245,21,263,44,279,72,293,70,297,41,284,17,267,4,247,4,235,10,224,26,210,50,200,113,183,185,173,252,167"/>
-<area shape="poly" id="edge12_Node000003_Node000008" title=" " alt="" coords="342,175,380,195,418,223,443,254,461,285,457,287,439,257,414,227,377,199,339,180"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="24,225,99,251"/>
-<area shape="poly" id="edge9_Node000003_Node000009" title=" " alt="" coords="273,180,113,225,111,220,272,175"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="123,225,221,251"/>
-<area shape="poly" id="edge11_Node000003_Node000010" title=" " alt="" coords="292,180,208,221,206,217,289,175"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="327,249,367,287,363,291,324,253"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="292,299,335,324"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="316,251,316,285,311,285,311,251"/>
-<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="282,253,157,298,155,292,280,248"/>
-<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="340,248,434,291,432,295,337,253"/>
+<area shape="rect" id="Node000001" title="Implements the Config aggregate for parsed servers." alt="" coords="395,5,551,31"/>
+<area shape="rect" id="Node000002" href="$Config_8hpp.html" title="Declares the Config aggregate for parsed virtual servers." alt="" coords="252,86,387,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="451,33,356,82,353,77,449,28"/>
+<area shape="rect" id="Node000011" href="$ConfigParseError_8hpp.html" title="Declares parse/validation error types for the config subsystem." alt="" coords="479,79,666,119"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="489,29,539,68,536,72,486,33"/>
+<area shape="rect" id="Node000003" href="$Server_8hpp.html" title="Declares the Server class for virtual host configuration." alt="" coords="258,167,381,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="322,112,322,153,317,153,317,112"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="128,313,191,339"/>
+<area shape="poly" id="edge13_Node000002_Node000008" title=" " alt="" coords="252,112,191,127,125,152,93,169,63,189,36,213,14,241,8,255,11,268,20,279,34,289,73,304,115,315,114,320,71,309,31,293,16,283,6,270,3,255,9,239,32,210,59,185,90,164,123,147,190,122,251,107"/>
+<area shape="rect" id="Node000004" href="$Location_8hpp.html" title="Declares the Location class for route&#45;specific configuration." alt="" coords="197,240,335,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="313,194,285,231,281,228,309,191"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="315,313,366,339"/>
+<area shape="poly" id="edge8_Node000003_Node000005" title=" " alt="" coords="329,191,341,213,350,239,353,271,349,300,344,300,347,271,345,241,336,215,325,194"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="394,313,453,339"/>
+<area shape="poly" id="edge10_Node000003_Node000007" title=" " alt="" coords="331,191,368,238,411,300,406,303,364,242,327,194"/>
+<area shape="poly" id="edge12_Node000003_Node000008" title=" " alt="" coords="269,195,225,213,205,226,187,242,171,270,164,300,159,298,166,268,183,238,201,221,223,208,267,190"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="461,240,535,265"/>
+<area shape="poly" id="edge9_Node000003_Node000009" title=" " alt="" coords="349,190,457,232,455,237,347,195"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="24,240,121,265"/>
+<area shape="poly" id="edge11_Node000003_Node000010" title=" " alt="" coords="281,195,127,239,125,234,279,189"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="280,263,321,302,317,306,276,267"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="245,313,287,339"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="269,266,269,300,263,300,263,266"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="293,263,387,305,384,310,290,268"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="250,268,190,308,187,303,248,263"/>
+<area shape="poly" id="edge16_Node000011_Node000007" title=" " alt="" coords="578,119,580,150,577,188,569,229,550,267,532,285,511,299,467,318,465,313,509,295,529,281,545,264,564,228,572,188,574,150,573,119"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="611,167,697,192"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="594,117,634,155,630,159,591,121"/>
 </map>

@@ -1,12 +1,12 @@
 <map id="src/utils/printInfo.cpp" name="src/utils/printInfo.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="531,5,690,31"/>
+<area shape="rect" id="Node000001" title="Human&#45;readable printing helpers for Webserv configuration and servers." alt="" coords="531,5,690,31"/>
 <area shape="rect" id="Node000002" href="$printInfo_8hpp.html" title=" " alt="" coords="30,152,167,177"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="531,22,460,26,379,36,293,54,210,81,160,111,121,144,117,140,157,106,208,76,291,48,378,31,460,21,531,17"/>
-<area shape="rect" id="Node000004" href="$Config_8hpp.html" title=" " alt="" coords="412,79,547,104"/>
+<area shape="rect" id="Node000004" href="$Config_8hpp.html" title="Declares the Config aggregate for parsed virtual servers." alt="" coords="412,79,547,104"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="591,33,514,74,512,70,588,28"/>
 <area shape="rect" id="Node000005" href="$Server_8hpp.html" title="Declares the Server class for virtual host configuration." alt="" coords="294,152,417,177"/>
 <area shape="poly" id="edge17_Node000001_Node000005" title=" " alt="" coords="531,29,464,47,431,61,402,81,379,109,365,140,360,137,374,106,398,77,429,56,462,41,530,24"/>
-<area shape="rect" id="Node000006" href="$Location_8hpp.html" title=" " alt="" coords="87,225,224,251"/>
+<area shape="rect" id="Node000006" href="$Location_8hpp.html" title="Declares the Location class for route&#45;specific configuration." alt="" coords="87,225,224,251"/>
 <area shape="poly" id="edge16_Node000001_Node000006" title=" " alt="" coords="536,33,457,52,376,81,317,113,262,150,180,218,177,214,259,146,314,109,373,76,455,47,535,28"/>
 <area shape="rect" id="Node000007" title=" " alt="" coords="24,299,74,324"/>
 <area shape="poly" id="edge24_Node000001_Node000007" title=" " alt="" coords="531,26,395,38,238,62,164,78,100,99,50,124,32,138,19,153,12,169,9,186,12,222,23,257,37,285,32,288,18,259,7,223,4,186,7,168,15,151,28,134,47,120,98,94,163,73,237,56,395,33,530,21"/>
@@ -16,7 +16,7 @@
 <area shape="poly" id="edge29_Node000001_Node000009" title=" " alt="" coords="624,29,642,50,657,78,673,127,683,168,683,188,679,208,670,230,656,252,631,278,598,295,564,305,532,311,531,305,563,300,596,290,627,273,652,249,666,227,674,207,677,188,677,169,668,128,652,80,638,53,620,32"/>
 <area shape="rect" id="Node000010" title=" " alt="" coords="524,225,598,251"/>
 <area shape="poly" id="edge27_Node000001_Node000010" title=" " alt="" coords="610,32,569,212,564,211,605,30"/>
-<area shape="rect" id="Node000012" href="$stringUtils_8hpp.html" title="Utility functions for parsing numeric string values." alt="" coords="724,225,873,251"/>
+<area shape="rect" id="Node000012" href="$stringUtils_8hpp.html" title=" " alt="" coords="724,225,873,251"/>
 <area shape="poly" id="edge18_Node000001_Node000012" title=" " alt="" coords="637,28,672,49,707,77,735,110,759,147,791,212,786,214,754,150,731,114,703,81,669,53,634,33"/>
 <area shape="rect" id="Node000015" title=" " alt="" coords="774,79,854,104"/>
 <area shape="poly" id="edge23_Node000001_Node000015" title=" " alt="" coords="644,28,769,72,768,77,642,33"/>

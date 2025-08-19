@@ -1,41 +1,41 @@
 <map id="include/http/HttpRequest.hpp" name="include/http/HttpRequest.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1603,5,1815,31"/>
-<area shape="rect" id="Node000002" href="$SocketManager_8hpp.html" title=" " alt="" coords="521,86,778,111"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1589,27,1234,47,798,81,733,89,732,83,797,76,1234,42,1589,22"/>
-<area shape="rect" id="Node000005" href="$SocketManagerRequest_8cpp.html" title=" " alt="" coords="5,167,208,207"/>
-<area shape="poly" id="edge18_Node000001_Node000005" title=" " alt="" coords="1590,25,1029,43,728,60,604,70,510,81,413,100,318,123,163,169,162,164,317,118,412,95,509,76,604,65,728,55,1028,38,1589,19"/>
-<area shape="rect" id="Node000008" href="$SocketManagerUtils_8cpp.html" title=" " alt="" coords="1121,167,1324,207"/>
-<area shape="poly" id="edge19_Node000001_Node000008" title=" " alt="" coords="1590,21,1385,23,1150,31,1042,39,949,49,881,63,858,72,845,81,838,90,836,98,844,117,1122,166,1121,171,841,121,831,99,833,87,841,77,856,67,879,58,948,44,1041,34,1150,26,1384,18,1589,16"/>
-<area shape="rect" id="Node000009" href="$HttpRequest_8cpp.html" title=" " alt="" coords="854,86,1037,111"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1590,30,1341,49,1050,81,1004,89,1003,83,1049,76,1340,44,1590,24"/>
-<area shape="rect" id="Node000010" href="$HttpRequestParser_8cpp.html" title=" " alt="" coords="1061,86,1283,111"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1616,35,1296,81,1247,89,1246,83,1296,76,1615,30"/>
-<area shape="rect" id="Node000011" href="$handleCgi_8cpp.html" title=" " alt="" coords="1307,86,1474,111"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1651,36,1438,89,1436,83,1649,31"/>
-<area shape="rect" id="Node000012" href="$handleDelete_8cpp.html" title=" " alt="" coords="1498,79,1681,119"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1682,41,1620,81,1617,76,1679,36"/>
-<area shape="rect" id="Node000013" href="$generateAutoindex_8cpp.html" title=" " alt="" coords="1705,79,1953,119"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1740,36,1802,76,1799,81,1737,41"/>
-<area shape="rect" id="Node000014" href="$handleGet_8cpp.html" title=" " alt="" coords="1978,79,2169,119"/>
-<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1776,31,1987,76,1986,81,1775,36"/>
-<area shape="rect" id="Node000015" href="$handleMultipartForm_8cpp.html" title=" " alt="" coords="2193,79,2458,119"/>
-<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1815,30,2182,76,2193,77,2192,83,2181,81,1814,35"/>
-<area shape="rect" id="Node000016" href="$handlePost_8cpp.html" title=" " alt="" coords="2482,79,2683,119"/>
-<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="1829,23,2122,42,2297,57,2471,76,2482,77,2482,83,2470,81,2296,63,2121,48,1829,28"/>
-<area shape="rect" id="Node000017" href="$requestRouter_8cpp.html" title=" " alt="" coords="2707,86,2901,111"/>
-<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="1829,20,2216,36,2456,53,2696,76,2746,83,2745,89,2696,81,2455,58,2215,42,1829,25"/>
-<area shape="rect" id="Node000018" href="$responseBuilder_8cpp.html" title=" " alt="" coords="2925,86,3131,111"/>
-<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="1830,18,2035,23,2305,33,2608,50,2914,76,2967,83,2966,89,2913,81,2608,55,2304,38,2035,28,1829,23"/>
-<area shape="rect" id="Node000019" href="$filesystemUtils_8cpp.html" title=" " alt="" coords="3156,86,3359,111"/>
-<area shape="poly" id="edge20_Node000001_Node000019" title=" " alt="" coords="1829,17,2070,19,2397,28,2768,46,2958,59,3144,76,3197,83,3197,89,3144,81,2958,65,2768,51,2397,33,2070,25,1829,22"/>
-<area shape="rect" id="Node000003" href="$webserv_8cpp.html" title=" " alt="" coords="233,174,391,199"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="592,117,358,177,356,171,590,112"/>
-<area shape="rect" id="Node000004" href="$SocketManager_8cpp.html" title=" " alt="" coords="415,174,643,199"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="623,122,547,176,544,172,620,117"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="562,116,220,169,209,171,208,166,220,164,561,111"/>
-<area shape="rect" id="Node000006" href="$SocketManagerResponse_8cpp.html" title=" " alt="" coords="668,167,871,207"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="678,117,744,164,741,169,675,122"/>
-<area shape="rect" id="Node000007" href="$SocketManagerTimeouts_8cpp.html" title=" " alt="" coords="895,167,1097,207"/>
-<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="709,112,921,164,919,169,708,117"/>
-<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="745,111,1110,164,1121,166,1120,171,1109,169,744,116"/>
+<area shape="rect" id="Node000001" title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL." alt="" coords="1625,5,1837,31"/>
+<area shape="rect" id="Node000002" href="$SocketManager_8hpp.html" title="Declares the SocketManager and per&#45;client state for non&#45;blocking I/O." alt="" coords="542,86,799,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1611,27,1256,47,819,81,754,89,753,83,818,76,1255,42,1611,22"/>
+<area shape="rect" id="Node000005" href="$SocketManagerRequest_8cpp.html" title="Implements request handling logic for SocketManager." alt="" coords="5,167,208,207"/>
+<area shape="poly" id="edge18_Node000001_Node000005" title=" " alt="" coords="1611,25,1050,44,750,61,626,70,531,81,430,100,330,123,166,169,165,164,328,118,429,95,530,76,625,65,749,55,1050,39,1611,20"/>
+<area shape="rect" id="Node000008" href="$SocketManagerUtils_8cpp.html" title="Utility methods for connection lifecycle management in SocketManager." alt="" coords="1143,167,1345,207"/>
+<area shape="poly" id="edge19_Node000001_Node000008" title=" " alt="" coords="1611,21,1406,23,1172,31,1063,39,970,49,902,63,879,72,866,81,860,90,858,98,866,117,1143,166,1142,171,862,121,853,99,855,87,862,77,877,67,900,58,970,44,1062,34,1171,26,1406,18,1611,16"/>
+<area shape="rect" id="Node000009" href="$HttpRequest_8cpp.html" title="Implements the HttpRequest class." alt="" coords="875,86,1058,111"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1611,30,1362,49,1071,81,1025,89,1024,83,1070,76,1362,44,1611,24"/>
+<area shape="rect" id="Node000010" href="$HttpRequestParser_8cpp.html" title="Implements the HttpRequestParser class and HTTP request parsing logic." alt="" coords="1082,86,1305,111"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1637,35,1318,81,1268,89,1268,83,1317,76,1636,30"/>
+<area shape="rect" id="Node000011" href="$handleCgi_8cpp.html" title="Implements CGI (Common Gateway Interface) request handling." alt="" coords="1329,86,1495,111"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1672,36,1459,89,1458,83,1671,31"/>
+<area shape="rect" id="Node000012" href="$handleDelete_8cpp.html" title=" " alt="" coords="1519,79,1702,119"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1703,41,1641,81,1638,76,1700,36"/>
+<area shape="rect" id="Node000013" href="$generateAutoindex_8cpp.html" title="Implements directory autoindex (HTML listing) generation." alt="" coords="1727,79,1975,119"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1761,36,1823,76,1820,81,1758,41"/>
+<area shape="rect" id="Node000014" href="$handleGet_8cpp.html" title="Implements the HTTP GET request handler." alt="" coords="1999,79,2190,119"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1797,31,2008,76,2007,81,1796,36"/>
+<area shape="rect" id="Node000015" href="$handleMultipartForm_8cpp.html" title="Handles multipart/form&#45;data POST uploads and persists the first file part to disk." alt="" coords="2214,79,2479,119"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1836,30,2203,76,2214,77,2213,83,2202,81,1835,35"/>
+<area shape="rect" id="Node000016" href="$handlePost_8cpp.html" title="Implements HTTP POST request handling logic." alt="" coords="2503,79,2705,119"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="1851,23,2143,42,2318,57,2492,76,2504,77,2503,83,2492,81,2317,63,2143,48,1850,28"/>
+<area shape="rect" id="Node000017" href="$requestRouter_8cpp.html" title="Routes parsed HTTP requests to the appropriate handler." alt="" coords="2729,86,2922,111"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="1851,20,2237,36,2477,53,2718,76,2767,83,2766,89,2717,81,2476,58,2237,42,1850,25"/>
+<area shape="rect" id="Node000018" href="$responseBuilder_8cpp.html" title="Implements the ResponseBuilder utilities for constructing HTTP responses." alt="" coords="2946,86,3153,111"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="1851,18,2056,23,2326,33,2629,50,2935,76,2988,83,2987,89,2934,81,2629,55,2326,38,2056,28,1851,23"/>
+<area shape="rect" id="Node000019" href="$filesystemUtils_8cpp.html" title="Implements filesystem utility functions for Webserv." alt="" coords="3177,86,3380,111"/>
+<area shape="poly" id="edge20_Node000001_Node000019" title=" " alt="" coords="1850,17,2092,19,2418,28,2790,46,2980,59,3166,76,3219,83,3218,89,3165,81,2979,65,2789,51,2418,33,2091,25,1850,22"/>
+<area shape="rect" id="Node000003" href="$runWebserv_8cpp.html" title="Webserv bootstrap and runtime orchestration." alt="" coords="233,174,413,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="612,117,370,177,368,171,610,112"/>
+<area shape="rect" id="Node000004" href="$SocketManager_8cpp.html" title="Implements the SocketManager core loop and server socket setup." alt="" coords="437,174,665,199"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="645,122,569,176,565,172,642,117"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="578,116,220,169,209,171,208,166,220,164,577,111"/>
+<area shape="rect" id="Node000006" href="$SocketManagerResponse_8cpp.html" title="Implements response sending logic for SocketManager." alt="" coords="689,167,892,207"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="700,117,766,164,763,169,697,122"/>
+<area shape="rect" id="Node000007" href="$SocketManagerTimeouts_8cpp.html" title="Implements timeout and limit enforcement for SocketManager." alt="" coords="916,167,1119,207"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="731,112,942,164,941,169,729,117"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="766,111,1131,164,1142,166,1142,171,1130,169,766,116"/>
 </map>

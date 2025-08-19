@@ -1,0 +1,46 @@
+<map id="anonymous_namespace{handleCgi::cpp}::setupAndRunCgiChild" name="anonymous_namespace{handleCgi::cpp}::setupAndRunCgiChild">
+<area shape="rect" id="Node000001" title="Setup file descriptors, environment, and execute a CGI script in the child process." alt="" coords="5,269,208,324"/>
+<area shape="rect" id="Node000002" href="$group__location__component_ga952a2dc2f00e501a5a01d9bf66c4c8fd.html#ga952a2dc2f00e501a5a01d9bf66c4c8fd" title="Returns the interpreter for a CGI extension." alt="" coords="266,32,462,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,267,180,196,216,156,254,117,291,87,328,62,331,67,295,92,258,121,220,159,184,200,130,271"/>
+<area shape="rect" id="Node000004" href="$classLogger_a23f092a06cc63628beb87a1a54f9ea59.html#a23f092a06cc63628beb87a1a54f9ea59" title=" " alt="" coords="301,132,427,157"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="153,267,328,162,331,167,155,271"/>
+<area shape="rect" id="Node000008" href="$group__request__handler_gacc44b00f1024c8fa4ed4b410755c9999.html#gacc44b00f1024c8fa4ed4b410755c9999" title="Build the environment variables required for a CGI script execution." alt="" coords="256,426,472,466"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="156,322,318,417,315,421,153,326"/>
+<area shape="rect" id="Node000021" href="$namespaceanonymous__namespace_02handleCgi_8cpp_03_a44659e51fb8934c51b45f14053af876a.html#a44659e51fb8934c51b45f14053af876a" title="Convert a vector of strings into a null&#45;terminated char* array." alt="" coords="263,491,465,545"/>
+<area shape="poly" id="edge23_Node000001_Node000021" title=" " alt="" coords="126,323,179,398,216,440,258,476,266,482,263,486,254,480,212,444,175,402,122,326"/>
+<area shape="rect" id="Node000003" href="$stringUtils_8cpp_a96432d89bc886bc9cdd1d73f86b2bbca.html#a96432d89bc886bc9cdd1d73f86b2bbca" title=" " alt="" coords="596,5,671,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="462,32,582,20,582,26,463,38"/>
+<area shape="rect" id="Node000005" href="$Logger_8cpp_a2c56a9a25fc1f2a14162f4df7ce936ff.html#a2c56a9a25fc1f2a14162f4df7ce936ff" title=" " alt="" coords="804,81,892,107"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="394,129,451,108,520,91,592,83,665,81,790,86,790,91,665,86,593,89,520,97,453,113,396,134"/>
+<area shape="rect" id="Node000006" href="$Logger_8cpp_afc799b96df6ffe84b57bcce18820bc43.html#afc799b96df6ffe84b57bcce18820bc43" title=" " alt="" coords="795,144,901,169"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="428,144,781,152,781,158,428,149"/>
+<area shape="rect" id="Node000007" href="$classLogger_a3d3f0801eeaf39b33a906ea8569c19b2.html#a3d3f0801eeaf39b33a906ea8569c19b2" title=" " alt="" coords="586,107,681,132"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="427,136,572,122,572,128,428,141"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="680,111,790,98,790,103,681,116"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="681,125,781,142,780,148,680,130"/>
+<area shape="rect" id="Node000009" href="$group__http_gaab7f5c99d28da1cd9ce9f2ce48a9b716.html#gaab7f5c99d28da1cd9ce9f2ce48a9b716" title="Returns the declared Content&#45;Length." alt="" coords="520,208,747,233"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="372,424,393,385,425,335,467,285,492,262,519,242,530,236,532,241,521,247,495,266,471,288,430,339,398,388,377,427"/>
+<area shape="rect" id="Node000010" href="$group__server__component_gafdf9faf4d055bfc0cf6fb255c6fcf57d.html#gafdf9faf4d055bfc0cf6fb255c6fcf57d" title="Returns the default server name for this virtual host." alt="" coords="522,257,745,283"/>
+<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="378,424,434,358,474,322,519,292,533,285,536,290,521,296,477,326,438,362,382,427"/>
+<area shape="rect" id="Node000011" href="$group__http_gab537cb11b054734695ee4889d88aec6d.html#gab537cb11b054734695ee4889d88aec6d" title="Returns the value of a header." alt="" coords="544,307,723,332"/>
+<area shape="poly" id="edge12_Node000008_Node000011" title=" " alt="" coords="392,424,449,386,519,349,562,333,564,338,521,354,452,391,395,428"/>
+<area shape="rect" id="Node000012" href="$stringUtils_8cpp_a0d2414ad61e591a6b14cd96c306b59e4.html#a0d2414ad61e591a6b14cd96c306b59e4" title=" " alt="" coords="811,332,885,357"/>
+<area shape="poly" id="edge22_Node000008_Node000012" title=" " alt="" coords="418,423,519,393,670,364,797,347,798,352,671,369,521,398,420,429"/>
+<area shape="rect" id="Node000013" href="$group__http_ga188fa270d7e2b0c6bb0db7e1440bc7fa.html#ga188fa270d7e2b0c6bb0db7e1440bc7fa" title="Returns the full header map." alt="" coords="540,408,727,433"/>
+<area shape="poly" id="edge14_Node000008_Node000013" title=" " alt="" coords="472,433,526,428,526,433,473,438"/>
+<area shape="rect" id="Node000014" href="$group__http_ga937646b8d0ee3301b119d3f50ca0a50a.html#ga937646b8d0ee3301b119d3f50ca0a50a" title="Returns the HTTP method (e.g. &quot;GET&quot;, &quot;POST&quot;)." alt="" coords="543,457,724,483"/>
+<area shape="poly" id="edge15_Node000008_Node000014" title=" " alt="" coords="472,453,529,458,529,463,472,458"/>
+<area shape="rect" id="Node000015" href="$group__location__component_ga0e5f51972e02ed954426e0222215484b.html#ga0e5f51972e02ed954426e0222215484b" title="Returns the path this location matches." alt="" coords="566,507,701,532"/>
+<area shape="poly" id="edge16_Node000008_Node000015" title=" " alt="" coords="434,463,473,475,521,491,558,501,557,506,519,497,471,481,432,469"/>
+<area shape="rect" id="Node000016" href="$group__http_ga02743663bb8998bd7450640035f5f6c0.html#ga02743663bb8998bd7450640035f5f6c0" title="Returns the normalized request path." alt="" coords="553,556,713,581"/>
+<area shape="poly" id="edge17_Node000008_Node000016" title=" " alt="" coords="452,464,474,476,490,493,498,510,506,526,522,541,541,551,539,556,518,545,502,529,493,512,485,496,470,480,450,468"/>
+<area shape="rect" id="Node000017" href="$group__server__component_ga69d6c7fb2d3f04cfc62779b26c455259.html#ga69d6c7fb2d3f04cfc62779b26c455259" title="Returns the port number this server listens on." alt="" coords="574,605,693,631"/>
+<area shape="poly" id="edge18_Node000008_Node000017" title=" " alt="" coords="457,464,474,476,486,491,493,506,498,535,503,564,510,578,522,591,540,602,561,610,559,615,538,607,518,595,505,581,498,566,493,536,488,507,482,494,470,480,454,468"/>
+<area shape="rect" id="Node000018" href="$group__http_gaa5569f930b487ec5316acffb92131904.html#gaa5569f930b487ec5316acffb92131904" title="Returns the query string after &quot;?&quot; in URI." alt="" coords="548,655,719,680"/>
+<area shape="poly" id="edge19_Node000008_Node000018" title=" " alt="" coords="459,464,474,476,490,497,497,519,498,561,499,601,507,621,522,640,537,651,534,655,518,644,502,624,494,603,493,561,492,520,485,500,470,480,455,468"/>
+<area shape="rect" id="Node000019" href="$group__location__component_ga16546e5661036b8cd9dc12532a4d82f2.html#ga16546e5661036b8cd9dc12532a4d82f2" title="Returns the root directory path." alt="" coords="565,704,701,729"/>
+<area shape="poly" id="edge20_Node000008_Node000019" title=" " alt="" coords="459,464,474,476,493,504,500,531,501,559,498,586,495,612,495,639,503,664,522,689,536,700,553,708,551,713,533,705,518,693,499,667,490,639,489,612,492,585,496,558,495,532,488,506,470,480,456,468"/>
+<area shape="rect" id="Node000020" href="$group__filesystem__utils_gab31d472cab5ab15a13c3f5df7b349185.html#gab31d472cab5ab15a13c3f5df7b349185" title="Canonicalizes a URI&#45;style path and rejects traversal." alt="" coords="576,753,691,779"/>
+<area shape="poly" id="edge21_Node000008_Node000020" title=" " alt="" coords="460,464,474,476,496,510,504,544,503,578,498,611,492,643,492,676,500,707,522,739,541,752,563,761,561,766,538,757,518,743,495,710,486,676,487,643,492,610,498,577,499,545,491,512,470,480,456,468"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="723,327,797,336,796,341,722,333"/>
+</map>

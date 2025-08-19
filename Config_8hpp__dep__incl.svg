@@ -46,7 +46,7 @@
   </g>
 </defs>
 <script type="application/ecmascript">
-var viewWidth = 875;
+var viewWidth = 879;
 var viewHeight = 159;
 var sectionId = 'dynsection-1';
 </script>
@@ -57,19 +57,19 @@ var sectionId = 'dynsection-1';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
-<polygon fill="#999999" stroke="#666666" points="381,-151 242,-151 242,-132 381,-132 381,-151"/>
-<text text-anchor="middle" x="311.5" y="-139" font-family="Helvetica,sans-Serif" font-size="10.00">include/config/Config.hpp</text>
+<g id="a_Node000001"><a xlink:title="Declares the Config aggregate for parsed virtual servers.">
+<polygon fill="#999999" stroke="#666666" points="385,-151 246,-151 246,-132 385,-132 385,-151"/>
+<text text-anchor="middle" x="315.5" y="-139" font-family="Helvetica,sans-Serif" font-size="10.00">include/config/Config.hpp</text>
 </a>
 </g>
 </g>
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="ConfigParser_8hpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="196.5,-96 78.5,-96 78.5,-66 196.5,-66 196.5,-96"/>
-<text text-anchor="start" x="86.5" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">include/config/parser</text>
-<text text-anchor="middle" x="137.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">/ConfigParser.hpp</text>
+<g id="a_Node000002"><a xlink:href="ConfigParser_8hpp.html" target="_top" xlink:title="Declares the ConfigParser for syntactic/semantic directive parsing.">
+<polygon fill="white" stroke="#666666" points="200.5,-96 82.5,-96 82.5,-66 200.5,-66 200.5,-96"/>
+<text text-anchor="start" x="90.5" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">include/config/parser</text>
+<text text-anchor="middle" x="141.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">/ConfigParser.hpp</text>
 </a>
 </g>
 </g>
@@ -77,15 +77,15 @@ var sectionId = 'dynsection-1';
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node1&#45;&gt;Node2</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M276.42,-128.71C248.39,-119.28 209.01,-106.04 179.33,-96.06"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="275.6,-132.12 286.2,-131.99 277.84,-125.49 275.6,-132.12"/>
+<path fill="none" stroke="#63b8ff" d="M280.42,-128.71C252.39,-119.28 213.01,-106.04 183.33,-96.06"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="279.6,-132.12 290.2,-131.99 281.84,-125.49 279.6,-132.12"/>
 </a>
 </g>
 </g>
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="ConfigParser_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="ConfigParser_8cpp.html" target="_top" xlink:title="Implements parsing of servers, locations, and directives.">
 <polygon fill="white" stroke="#666666" points="131,-30 0,-30 0,0 131,0 131,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/parser/Config</text>
 <text text-anchor="middle" x="65.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Parser.cpp</text>
@@ -96,17 +96,17 @@ var sectionId = 'dynsection-1';
 <g id="edge6_Node000001_Node000003" class="edge">
 <title>Node1&#45;&gt;Node3</title>
 <g id="a_edge6_Node000001_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M231.54,-136.27C169.47,-131.15 90.53,-120.01 69.5,-96 53.65,-77.9 57.39,-47.73 61.49,-30.07"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="231.49,-139.77 241.74,-137.07 232.04,-132.8 231.49,-139.77"/>
+<path fill="none" stroke="#63b8ff" d="M235.55,-135.97C173.71,-130.67 95.09,-119.44 73.5,-96 57.14,-78.24 59.24,-47.95 62.32,-30.17"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="235.46,-139.47 245.71,-136.8 236.03,-132.49 235.46,-139.47"/>
 </a>
 </g>
 </g>
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="webserv_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="276,-24.5 157,-24.5 157,-5.5 276,-5.5 276,-24.5"/>
-<text text-anchor="middle" x="216.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/core/webserv.cpp</text>
+<g id="a_Node000004"><a xlink:href="runWebserv_8cpp.html" target="_top" xlink:title="Webserv bootstrap and runtime orchestration.">
+<polygon fill="white" stroke="#666666" points="290,-24.5 155,-24.5 155,-5.5 290,-5.5 290,-24.5"/>
+<text text-anchor="middle" x="222.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/core/runWebserv.cpp</text>
 </a>
 </g>
 </g>
@@ -114,17 +114,17 @@ var sectionId = 'dynsection-1';
 <g id="edge8_Node000001_Node000004" class="edge">
 <title>Node1&#45;&gt;Node4</title>
 <g id="a_edge8_Node000001_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M283.38,-127.26C270,-119.74 254.73,-109.17 244.5,-96 227.25,-73.81 220.16,-40.2 217.66,-24.56"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="281.78,-130.38 292.25,-131.98 285.07,-124.2 281.78,-130.38"/>
+<path fill="none" stroke="#63b8ff" d="M286.98,-127.21C273.64,-119.71 258.52,-109.19 248.5,-96 231.63,-73.78 225.46,-40.19 223.42,-24.56"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="285.37,-130.32 295.85,-131.91 288.65,-124.13 285.37,-130.32"/>
 </a>
 </g>
 </g>
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="Config_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="370,-90.5 253,-90.5 253,-71.5 370,-71.5 370,-90.5"/>
-<text text-anchor="middle" x="311.5" y="-78.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/Config.cpp</text>
+<g id="a_Node000005"><a xlink:href="Config_8cpp.html" target="_top" xlink:title="Implements the Config aggregate for parsed servers.">
+<polygon fill="white" stroke="#666666" points="374,-90.5 257,-90.5 257,-71.5 374,-71.5 374,-90.5"/>
+<text text-anchor="middle" x="315.5" y="-78.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/Config.cpp</text>
 </a>
 </g>
 </g>
@@ -132,17 +132,17 @@ var sectionId = 'dynsection-1';
 <g id="edge4_Node000001_Node000005" class="edge">
 <title>Node1&#45;&gt;Node5</title>
 <g id="a_edge4_Node000001_Node000005"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M311.5,-121.66C311.5,-111.24 311.5,-98.8 311.5,-90.67"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="308,-121.87 311.5,-131.87 315,-121.87 308,-121.87"/>
+<path fill="none" stroke="#63b8ff" d="M315.5,-121.66C315.5,-111.24 315.5,-98.8 315.5,-90.67"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="312,-121.87 315.5,-131.87 319,-121.87 312,-121.87"/>
 </a>
 </g>
 </g>
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="normalizeConfig_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="554.5,-90.5 388.5,-90.5 388.5,-71.5 554.5,-71.5 554.5,-90.5"/>
-<text text-anchor="middle" x="471.5" y="-78.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/normalizeConfig.cpp</text>
+<g id="a_Node000006"><a xlink:href="normalizeConfig_8cpp.html" target="_top" xlink:title="Implements post&#45;parse normalization of configuration objects.">
+<polygon fill="white" stroke="#666666" points="558.5,-90.5 392.5,-90.5 392.5,-71.5 558.5,-71.5 558.5,-90.5"/>
+<text text-anchor="middle" x="475.5" y="-78.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/normalizeConfig.cpp</text>
 </a>
 </g>
 </g>
@@ -150,17 +150,17 @@ var sectionId = 'dynsection-1';
 <g id="edge5_Node000001_Node000006" class="edge">
 <title>Node1&#45;&gt;Node6</title>
 <g id="a_edge5_Node000001_Node000006"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M344.25,-128.52C375.19,-117.21 420.82,-100.53 448.21,-90.52"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="342.96,-125.27 334.77,-131.99 345.36,-131.85 342.96,-125.27"/>
+<path fill="none" stroke="#63b8ff" d="M348.25,-128.52C379.19,-117.21 424.82,-100.53 452.21,-90.52"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="346.96,-125.27 338.77,-131.99 349.36,-131.85 346.96,-125.27"/>
 </a>
 </g>
 </g>
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="validateConfig_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="730,-90.5 573,-90.5 573,-71.5 730,-71.5 730,-90.5"/>
-<text text-anchor="middle" x="651.5" y="-78.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/validateConfig.cpp</text>
+<g id="a_Node000007"><a xlink:href="validateConfig_8cpp.html" target="_top" xlink:title="Implements validation logic for parsed configuration objects.">
+<polygon fill="white" stroke="#666666" points="734,-90.5 577,-90.5 577,-71.5 734,-71.5 734,-90.5"/>
+<text text-anchor="middle" x="655.5" y="-78.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/validateConfig.cpp</text>
 </a>
 </g>
 </g>
@@ -168,17 +168,17 @@ var sectionId = 'dynsection-1';
 <g id="edge7_Node000001_Node000007" class="edge">
 <title>Node1&#45;&gt;Node7</title>
 <g id="a_edge7_Node000001_Node000007"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M371.12,-130.24C436.66,-118.96 540.79,-101.05 602,-90.52"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="370.2,-126.85 360.94,-131.99 371.39,-133.75 370.2,-126.85"/>
+<path fill="none" stroke="#63b8ff" d="M375.12,-130.24C440.66,-118.96 544.79,-101.05 606,-90.52"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="374.2,-126.85 364.94,-131.99 375.39,-133.75 374.2,-126.85"/>
 </a>
 </g>
 </g>
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="printInfo_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="867,-90.5 748,-90.5 748,-71.5 867,-71.5 867,-90.5"/>
-<text text-anchor="middle" x="807.5" y="-78.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/utils/printInfo.cpp</text>
+<g id="a_Node000008"><a xlink:href="printInfo_8cpp.html" target="_top" xlink:title="Human&#45;readable printing helpers for Webserv configuration and servers.">
+<polygon fill="white" stroke="#666666" points="871,-90.5 752,-90.5 752,-71.5 871,-71.5 871,-90.5"/>
+<text text-anchor="middle" x="811.5" y="-78.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/utils/printInfo.cpp</text>
 </a>
 </g>
 </g>
@@ -186,8 +186,8 @@ var sectionId = 'dynsection-1';
 <g id="edge9_Node000001_Node000008" class="edge">
 <title>Node1&#45;&gt;Node8</title>
 <g id="a_edge9_Node000001_Node000008"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M391.06,-134.61C477.23,-127.67 618.59,-114.68 739.5,-96 749.27,-94.49 759.75,-92.51 769.5,-90.52"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="390.77,-131.12 381.08,-135.4 391.33,-138.1 390.77,-131.12"/>
+<path fill="none" stroke="#63b8ff" d="M395.06,-134.61C481.23,-127.67 622.59,-114.68 743.5,-96 753.27,-94.49 763.75,-92.51 773.5,-90.52"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="394.77,-131.12 385.08,-135.4 395.33,-138.1 394.77,-131.12"/>
 </a>
 </g>
 </g>
@@ -195,8 +195,8 @@ var sectionId = 'dynsection-1';
 <g id="edge2_Node000002_Node000003" class="edge">
 <title>Node2&#45;&gt;Node3</title>
 <g id="a_edge2_Node000002_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M113.79,-58.92C103.17,-49.49 90.93,-38.61 81.43,-30.16"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="111.72,-61.77 121.52,-65.8 116.37,-56.54 111.72,-61.77"/>
+<path fill="none" stroke="#63b8ff" d="M116.8,-59.2C105.52,-49.7 92.45,-38.69 82.32,-30.16"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="114.73,-62.03 124.63,-65.8 119.24,-56.68 114.73,-62.03"/>
 </a>
 </g>
 </g>
@@ -204,8 +204,8 @@ var sectionId = 'dynsection-1';
 <g id="edge3_Node000002_Node000004" class="edge">
 <title>Node2&#45;&gt;Node4</title>
 <g id="a_edge3_Node000002_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M163.1,-59.26C177.48,-47.61 194.67,-33.69 205.58,-24.84"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="160.6,-56.78 155.03,-65.8 165.01,-62.22 160.6,-56.78"/>
+<path fill="none" stroke="#63b8ff" d="M167.34,-59.58C182.16,-47.87 200.01,-33.77 211.31,-24.84"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="165.15,-56.85 159.48,-65.8 169.49,-62.34 165.15,-56.85"/>
 </a>
 </g>
 </g>

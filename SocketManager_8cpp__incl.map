@@ -1,6 +1,6 @@
 <map id="src/network/SocketManager.cpp" name="src/network/SocketManager.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1967,5,2195,31"/>
-<area shape="rect" id="Node000002" href="$SocketManager_8hpp.html" title=" " alt="" coords="831,79,1038,104"/>
+<area shape="rect" id="Node000001" title="Implements the SocketManager core loop and server socket setup." alt="" coords="1967,5,2195,31"/>
+<area shape="rect" id="Node000002" href="$SocketManager_8hpp.html" title="Declares the SocketManager and per&#45;client state for non&#45;blocking I/O." alt="" coords="831,79,1038,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1967,29,1052,85,1052,80,1967,24"/>
 <area shape="rect" id="Node000006" title=" " alt="" coords="1703,299,1745,324"/>
 <area shape="poly" id="edge49_Node000001_Node000006" title=" " alt="" coords="1967,32,1860,51,1816,64,1787,81,1777,95,1767,116,1750,173,1730,285,1725,284,1745,172,1762,114,1772,92,1784,77,1814,59,1859,46,1967,27"/>
@@ -36,9 +36,9 @@
 <area shape="poly" id="edge35_Node000002_Node000007" title=" " alt="" coords="933,105,917,142,902,163,884,179,851,198,821,206,791,208,763,207,706,206,675,213,641,228,606,256,580,289,576,285,603,253,639,223,673,208,705,201,763,202,791,203,820,201,849,193,881,175,898,159,912,139,929,103"/>
 <area shape="rect" id="Node000008" title=" " alt="" coords="1529,299,1591,324"/>
 <area shape="poly" id="edge37_Node000002_Node000008" title=" " alt="" coords="1038,92,1212,100,1313,108,1415,121,1512,138,1597,160,1666,188,1692,205,1711,224,1719,239,1717,254,1707,266,1691,277,1650,294,1606,305,1604,300,1648,289,1689,272,1703,263,1712,252,1714,240,1707,227,1689,209,1663,193,1596,165,1511,143,1414,126,1313,114,1212,105,1038,97"/>
-<area shape="rect" id="Node000011" href="$HttpRequest_8hpp.html" title=" " alt="" coords="233,152,394,177"/>
+<area shape="rect" id="Node000011" href="$HttpRequest_8hpp.html" title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL." alt="" coords="233,152,394,177"/>
 <area shape="poly" id="edge13_Node000002_Node000011" title=" " alt="" coords="831,107,408,154,407,149,831,101"/>
-<area shape="rect" id="Node000014" href="$HttpResponse_8hpp.html" title=" " alt="" coords="1113,225,1284,251"/>
+<area shape="rect" id="Node000014" href="$HttpResponse_8hpp.html" title="Declares the HttpResponse class." alt="" coords="1113,225,1284,251"/>
 <area shape="poly" id="edge19_Node000002_Node000014" title=" " alt="" coords="1010,101,1073,119,1104,133,1134,150,1165,180,1188,212,1183,215,1161,183,1130,154,1102,138,1071,124,1009,107"/>
 <area shape="rect" id="Node000016" href="$handleCgi_8hpp.html" title=" " alt="" coords="1195,152,1341,177"/>
 <area shape="poly" id="edge23_Node000002_Node000016" title=" " alt="" coords="989,101,1201,146,1200,152,988,107"/>
@@ -54,7 +54,7 @@
 <area shape="poly" id="edge33_Node000002_Node000022" title=" " alt="" coords="907,107,798,149,796,144,905,102"/>
 <area shape="rect" id="Node000023" title=" " alt="" coords="809,152,871,177"/>
 <area shape="poly" id="edge34_Node000002_Node000023" title=" " alt="" coords="921,106,868,146,865,141,918,102"/>
-<area shape="rect" id="Node000004" href="$Location_8hpp.html" title=" " alt="" coords="1359,225,1497,251"/>
+<area shape="rect" id="Node000004" href="$Location_8hpp.html" title="Declares the Location class for route&#45;specific configuration." alt="" coords="1359,225,1497,251"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1119,175,1355,220,1354,225,1118,180"/>
 <area shape="poly" id="edge8_Node000003_Node000005" title=" " alt="" coords="1066,176,1081,210,1104,249,1137,288,1133,291,1099,252,1076,213,1061,179"/>
 <area shape="poly" id="edge10_Node000003_Node000007" title=" " alt="" coords="997,177,894,196,780,228,754,240,729,253,607,299,605,294,727,248,752,235,778,223,893,191,996,172"/>
@@ -69,7 +69,7 @@
 <area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="1450,248,1528,290,1525,294,1448,253"/>
 <area shape="poly" id="edge17_Node000011_Node000005" title=" " alt="" coords="357,175,641,248,777,270,913,286,1118,305,1118,310,913,292,777,275,639,253,356,180"/>
 <area shape="poly" id="edge18_Node000011_Node000007" title=" " alt="" coords="313,178,310,213,313,232,322,249,335,259,354,268,407,284,522,303,521,308,406,289,353,273,332,264,318,252,308,234,305,213,308,177"/>
-<area shape="rect" id="Node000012" href="$Url_8hpp.html" title=" " alt="" coords="428,225,527,251"/>
+<area shape="rect" id="Node000012" href="$Url_8hpp.html" title="Declares the Url POD for parsed URL components." alt="" coords="428,225,527,251"/>
 <area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="341,175,439,217,437,222,339,180"/>
 <area shape="rect" id="Node000013" title=" " alt="" coords="333,225,403,251"/>
 <area shape="poly" id="edge16_Node000011_Node000013" title=" " alt="" coords="324,176,353,213,349,216,320,179"/>

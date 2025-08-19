@@ -94,9 +94,12 @@ $(document).ready(function(){initNavTree('handlePost_8cpp.html',''); initResizab
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
-  <div class="headertitle"><div class="title">handlePost.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">handlePost.cpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a> &raquo; <a class="el" href="group__request__handler.html">Request Handling</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements HTTP POST request handling logic.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="Location_8hpp_source.html">core/Location.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="HttpRequest_8hpp_source.html">http/HttpRequest.hpp</a>&quot;</code><br />
@@ -135,298 +138,54 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a4e9585316acc9cb1ed5aec446e549d08" id="r_a4e9585316acc9cb1ed5aec446e549d08"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="handlePost_8cpp.html#a4e9585316acc9cb1ed5aec446e549d08">dispatchPostByContentType</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;request, <a class="el" href="classServer.html">Server</a> const &amp;server, std::filesystem::path const &amp;targetPath, std::string const &amp;targetDirectory, std::string const &amp;targetFilename)</td></tr>
-<tr class="separator:a4e9585316acc9cb1ed5aec446e549d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f1e28ca7655266fabc0a1e504ea1220" id="r_a1f1e28ca7655266fabc0a1e504ea1220"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handlePost_8cpp_03.html#a1f1e28ca7655266fabc0a1e504ea1220">anonymous_namespace{handlePost.cpp}::generateFilename</a> ()</td></tr>
-<tr class="separator:a1f1e28ca7655266fabc0a1e504ea1220"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab04155bc2520cd5a1a910077ae2805f9" id="r_ab04155bc2520cd5a1a910077ae2805f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="handlePost_8cpp.html#ab04155bc2520cd5a1a910077ae2805f9">handlePost</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;request, <a class="el" href="classServer.html">Server</a> const &amp;server, <a class="el" href="classLocation.html">Location</a> const &amp;location)</td></tr>
-<tr class="separator:ab04155bc2520cd5a1a910077ae2805f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a180e5fb1a4a618496ec1597a023a9c5c" id="r_a180e5fb1a4a618496ec1597a023a9c5c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handlePost_8cpp_03.html#a180e5fb1a4a618496ec1597a023a9c5c">anonymous_namespace{handlePost.cpp}::handleRawBody</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, const std::string &amp;fullpath, const std::string &amp;filename)</td></tr>
-<tr class="separator:a180e5fb1a4a618496ec1597a023a9c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ac3362c96da141e1eace42920d590e3" id="r_a9ac3362c96da141e1eace42920d590e3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handlePost_8cpp_03.html#a9ac3362c96da141e1eace42920d590e3">anonymous_namespace{handlePost.cpp}::handleUrlEncodedForm</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, const std::string &amp;fullpath, const std::string &amp;filename)</td></tr>
-<tr class="separator:a9ac3362c96da141e1eace42920d590e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ff313dc02727ea9ee8185084f3db538" id="r_a9ff313dc02727ea9ee8185084f3db538"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="handlePost_8cpp.html#a9ff313dc02727ea9ee8185084f3db538">preparePostTargetPath</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;request, <a class="el" href="classServer.html">Server</a> const &amp;server, <a class="el" href="classLocation.html">Location</a> const &amp;location, fs::path &amp;outTargetPath, std::string &amp;outTargetDirectory, std::string &amp;outTargetFilename)</td></tr>
-<tr class="separator:a9ff313dc02727ea9ee8185084f3db538"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99c270438eea87f6b2054e2c7224183f" id="r_a99c270438eea87f6b2054e2c7224183f"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="handlePost_8cpp.html#a99c270438eea87f6b2054e2c7224183f">validatePostRequest</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;request, <a class="el" href="classServer.html">Server</a> const &amp;server, <a class="el" href="classLocation.html">Location</a> const &amp;location)</td></tr>
-<tr class="separator:a99c270438eea87f6b2054e2c7224183f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9ac3362c96da141e1eace42920d590e3" id="r_ga9ac3362c96da141e1eace42920d590e3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga9ac3362c96da141e1eace42920d590e3.html#ga9ac3362c96da141e1eace42920d590e3">anonymous_namespace{handlePost.cpp}::handleUrlEncodedForm</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, const std::string &amp;fullpath, const std::string &amp;filename)</td></tr>
+<tr class="memdesc:ga9ac3362c96da141e1eace42920d590e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle a <code>application/x-www-form-urlencoded</code> POST request.  <br /></td></tr>
+<tr class="separator:ga9ac3362c96da141e1eace42920d590e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga180e5fb1a4a618496ec1597a023a9c5c" id="r_ga180e5fb1a4a618496ec1597a023a9c5c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga180e5fb1a4a618496ec1597a023a9c5c.html#ga180e5fb1a4a618496ec1597a023a9c5c">anonymous_namespace{handlePost.cpp}::handleRawBody</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, const std::string &amp;fullpath, const std::string &amp;filename)</td></tr>
+<tr class="memdesc:ga180e5fb1a4a618496ec1597a023a9c5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle a POST request with a raw body (no specific content type).  <br /></td></tr>
+<tr class="separator:ga180e5fb1a4a618496ec1597a023a9c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1f1e28ca7655266fabc0a1e504ea1220" id="r_ga1f1e28ca7655266fabc0a1e504ea1220"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga1f1e28ca7655266fabc0a1e504ea1220.html#ga1f1e28ca7655266fabc0a1e504ea1220">anonymous_namespace{handlePost.cpp}::generateFilename</a> ()</td></tr>
+<tr class="memdesc:ga1f1e28ca7655266fabc0a1e504ea1220"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a unique filename for uploaded files.  <br /></td></tr>
+<tr class="separator:ga1f1e28ca7655266fabc0a1e504ea1220"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga99c270438eea87f6b2054e2c7224183f" id="r_ga99c270438eea87f6b2054e2c7224183f"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga99c270438eea87f6b2054e2c7224183f.html#ga99c270438eea87f6b2054e2c7224183f">validatePostRequest</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;request, <a class="el" href="classServer.html">Server</a> const &amp;server, <a class="el" href="classLocation.html">Location</a> const &amp;location)</td></tr>
+<tr class="memdesc:ga99c270438eea87f6b2054e2c7224183f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate the prerequisites for processing a POST request.  <br /></td></tr>
+<tr class="separator:ga99c270438eea87f6b2054e2c7224183f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9ff313dc02727ea9ee8185084f3db538" id="r_ga9ff313dc02727ea9ee8185084f3db538"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga9ff313dc02727ea9ee8185084f3db538.html#ga9ff313dc02727ea9ee8185084f3db538">preparePostTargetPath</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;request, <a class="el" href="classServer.html">Server</a> const &amp;server, <a class="el" href="classLocation.html">Location</a> const &amp;location, fs::path &amp;outTargetPath, std::string &amp;outTargetDirectory, std::string &amp;outTargetFilename)</td></tr>
+<tr class="memdesc:ga9ff313dc02727ea9ee8185084f3db538"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolve and validate the filesystem path for a POST upload target.  <br /></td></tr>
+<tr class="separator:ga9ff313dc02727ea9ee8185084f3db538"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf184a4a0bb09e11c8184a99496fd62f0" id="r_gaf184a4a0bb09e11c8184a99496fd62f0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_gaf184a4a0bb09e11c8184a99496fd62f0.html#gaf184a4a0bb09e11c8184a99496fd62f0">dispatchPostByContentType</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, std::filesystem::path const &amp;targetPath, std::string const &amp;targetDirectory, std::string const &amp;targetFilename)</td></tr>
+<tr class="memdesc:gaf184a4a0bb09e11c8184a99496fd62f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatch POST handling based on the request's Content-Type.  <br /></td></tr>
+<tr class="separator:gaf184a4a0bb09e11c8184a99496fd62f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab04155bc2520cd5a1a910077ae2805f9" id="r_gab04155bc2520cd5a1a910077ae2805f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_gab04155bc2520cd5a1a910077ae2805f9.html#gab04155bc2520cd5a1a910077ae2805f9">handlePost</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;request, <a class="el" href="classServer.html">Server</a> const &amp;server, <a class="el" href="classLocation.html">Location</a> const &amp;location)</td></tr>
+<tr class="memdesc:gab04155bc2520cd5a1a910077ae2805f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles an HTTP POST request end-to-end.  <br /></td></tr>
+<tr class="separator:gab04155bc2520cd5a1a910077ae2805f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ace072f6f605afcac86db459db29c6ed2" id="r_ace072f6f605afcac86db459db29c6ed2"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handlePost_8cpp_03.html#ace072f6f605afcac86db459db29c6ed2">anonymous_namespace{handlePost.cpp}::uploadCounter</a> {0}</td></tr>
+<tr class="memitem:ace072f6f605afcac86db459db29c6ed2" id="r_ace072f6f605afcac86db459db29c6ed2"><td class="memItemLeft" align="right" valign="top">static std::atomic&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02handlePost_8cpp_03_ace072f6f605afcac86db459db29c6ed2.html#ace072f6f605afcac86db459db29c6ed2">anonymous_namespace{handlePost.cpp}::uploadCounter</a> {0}</td></tr>
 <tr class="separator:ace072f6f605afcac86db459db29c6ed2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a4e9585316acc9cb1ed5aec446e549d08" name="a4e9585316acc9cb1ed5aec446e549d08"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e9585316acc9cb1ed5aec446e549d08">&#9670;&#160;</a></span>dispatchPostByContentType()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements HTTP POST request handling logic. </p>
+<p>This file provides the full workflow for processing POST requests:</p><ul>
+<li>Validating request body size and upload configuration.</li>
+<li>Normalizing and securing the target upload path against symlinks, escapes, and unsafe locations.</li>
+<li>Supporting multiple content types:<ul>
+<li><code>multipart/form-data</code> → handled by <a class="el" href="group__request__handler_ga17f2fba88ab8919ca4bc75a7b63110c6.html#ga17f2fba88ab8919ca4bc75a7b63110c6">handleMultipartForm</a>.</li>
+<li><code>application/x-www-form-urlencoded</code> → parsed into key/value pairs and saved as HTML.</li>
+<li>Raw body data → stored directly as a file.</li>
+</ul>
+</li>
+<li>Generating safe, unique filenames for uploads when needed.</li>
+<li>Returning appropriate <code><a class="el" href="classHttpResponse.html" title="Represents an HTTP response to be sent back to the client.">HttpResponse</a></code> objects:<ul>
+<li><code>201 Created</code> with confirmation on success.</li>
+<li>Error responses (<code>400</code>, <code>403</code>, <code>404</code>, <code>413</code>, <code>500</code>) on invalid or failed operations. </li>
+</ul>
+</li>
+</ul>
 
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classHttpResponse.html">HttpResponse</a> dispatchPostByContentType </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classServer.html">Server</a> const &amp;&#160;</td>
-          <td class="paramname"><em>server</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::filesystem::path const &amp;&#160;</td>
-          <td class="paramname"><em>targetPath</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string const &amp;&#160;</td>
-          <td class="paramname"><em>targetDirectory</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string const &amp;&#160;</td>
-          <td class="paramname"><em>targetFilename</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="handlePost_8cpp_source.html#l00235">235</a> of file <a class="el" href="handlePost_8cpp_source.html">handlePost.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="HttpRequest_8cpp_source.html#l00086">HttpRequest::getHeader()</a>, <a class="el" href="handleMultipartForm_8cpp_source.html#l00184">handleMultipartForm()</a>, <a class="el" href="handlePost_8cpp_source.html#l00074">anonymous_namespace{handlePost.cpp}::handleRawBody()</a>, and <a class="el" href="handlePost_8cpp_source.html#l00037">anonymous_namespace{handlePost.cpp}::handleUrlEncodedForm()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="handlePost_8cpp_source.html#l00252">handlePost()</a>.</p>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handlePost_8cpp_a4e9585316acc9cb1ed5aec446e549d08_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handlePost_8cpp_a4e9585316acc9cb1ed5aec446e549d08_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="ab04155bc2520cd5a1a910077ae2805f9" name="ab04155bc2520cd5a1a910077ae2805f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab04155bc2520cd5a1a910077ae2805f9">&#9670;&#160;</a></span>handlePost()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> handlePost </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classServer.html">Server</a> const &amp;&#160;</td>
-          <td class="paramname"><em>server</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classLocation.html">Location</a> const &amp;&#160;</td>
-          <td class="paramname"><em>location</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="handlePost_8cpp_source.html#l00252">252</a> of file <a class="el" href="handlePost_8cpp_source.html">handlePost.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="handlePost_8cpp_source.html#l00235">dispatchPostByContentType()</a>, <a class="el" href="handlePost_8cpp_source.html#l00141">preparePostTargetPath()</a>, and <a class="el" href="handlePost_8cpp_source.html#l00113">validatePostRequest()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="requestRouter_8cpp_source.html#l00125">anonymous_namespace{requestRouter.cpp}::dispatchByMethod()</a>.</p>
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handlePost_8cpp_ab04155bc2520cd5a1a910077ae2805f9_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handlePost_8cpp_ab04155bc2520cd5a1a910077ae2805f9_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a9ff313dc02727ea9ee8185084f3db538" name="a9ff313dc02727ea9ee8185084f3db538"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ff313dc02727ea9ee8185084f3db538">&#9670;&#160;</a></span>preparePostTargetPath()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt; preparePostTargetPath </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classServer.html">Server</a> const &amp;&#160;</td>
-          <td class="paramname"><em>server</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classLocation.html">Location</a> const &amp;&#160;</td>
-          <td class="paramname"><em>location</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">fs::path &amp;&#160;</td>
-          <td class="paramname"><em>outTargetPath</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>outTargetDirectory</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>outTargetFilename</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="handlePost_8cpp_source.html#l00141">141</a> of file <a class="el" href="handlePost_8cpp_source.html">handlePost.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="urlUtils_8cpp_source.html#l00022">decodePercentEncoding()</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="handlePost_8cpp_source.html#l00099">anonymous_namespace{handlePost.cpp}::generateFilename()</a>, <a class="el" href="Location_8cpp_source.html#l00078">Location::getPath()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00078">HttpRequest::getPath()</a>, <a class="el" href="Location_8cpp_source.html#l00086">Location::getRoot()</a>, <a class="el" href="Location_8cpp_source.html#l00115">Location::getUploadStore()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00065">isFile()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00134">joinPath()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00226">makeSafeUploadPath()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00169">mkdirRecursive()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00084">normalizePath()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="handlePost_8cpp_source.html#l00252">handlePost()</a>.</p>
-<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-5-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handlePost_8cpp_a9ff313dc02727ea9ee8185084f3db538_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-6-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handlePost_8cpp_a9ff313dc02727ea9ee8185084f3db538_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a99c270438eea87f6b2054e2c7224183f" name="a99c270438eea87f6b2054e2c7224183f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99c270438eea87f6b2054e2c7224183f">&#9670;&#160;</a></span>validatePostRequest()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt; validatePostRequest </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classHttpRequest.html">HttpRequest</a> const &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classServer.html">Server</a> const &amp;&#160;</td>
-          <td class="paramname"><em>server</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classLocation.html">Location</a> const &amp;&#160;</td>
-          <td class="paramname"><em>location</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="handlePost_8cpp_source.html#l00113">113</a> of file <a class="el" href="handlePost_8cpp_source.html">handlePost.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00099">HttpRequest::getBody()</a>, <a class="el" href="Server_8cpp_source.html#l00096">Server::getClientMaxBodySize()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00078">HttpRequest::getPath()</a>, <a class="el" href="Location_8cpp_source.html#l00115">Location::getUploadStore()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="handlePost_8cpp_source.html#l00252">handlePost()</a>.</p>
-<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-7-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handlePost_8cpp_a99c270438eea87f6b2054e2c7224183f_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-8-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="handlePost_8cpp_a99c270438eea87f6b2054e2c7224183f_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="handlePost_8cpp_source.html">handlePost.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

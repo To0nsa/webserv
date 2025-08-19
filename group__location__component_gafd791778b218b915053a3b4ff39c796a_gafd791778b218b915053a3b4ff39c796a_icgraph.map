@@ -1,0 +1,21 @@
+<map id="Location::addMethod" name="Location::addMethod">
+<area shape="rect" id="Node000001" title="Adds a single allowed HTTP method." alt="" coords="1700,38,1859,63"/>
+<area shape="rect" id="Node000002" href="$namespacedirective_a4167e9343de67ad75b94d04a0ee62577.html#a4167e9343de67ad75b94d04a0ee62577" title="Returns the mapping of location&#45;level directives to their handler functions." alt="" coords="1447,13,1644,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1686,43,1644,39,1644,33,1686,38"/>
+<area shape="rect" id="Node000010" href="$group__location__component_gaaec5f09e73760daa6153568afdf6edec.html#gaaec5f09e73760daa6153568afdf6edec" title="Replaces the set of allowed HTTP methods." alt="" coords="1439,62,1652,87"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1687,63,1653,66,1652,61,1686,58"/>
+<area shape="rect" id="Node000003" href="$classConfigParser_ad27019103306be3877608677c5615a61.html#ad27019103306be3877608677c5615a61" title="Parses a single directive inside a location block." alt="" coords="1188,5,1391,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1433,28,1391,28,1391,23,1433,23"/>
+<area shape="rect" id="Node000004" href="$classConfigParser_ab14af2f633e98e6182e1fce25c74f9e9.html#ab14af2f633e98e6182e1fce25c74f9e9" title="Parses a single location block inside a server block." alt="" coords="937,13,1140,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1174,28,1140,28,1140,23,1174,23"/>
+<area shape="rect" id="Node000005" href="$classConfigParser_aec05768b15f77f3908738fba4237d2a8.html#aec05768b15f77f3908738fba4237d2a8" title="Parses a single server block into a Server object." alt="" coords="700,13,889,38"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="924,28,889,28,889,23,924,23"/>
+<area shape="rect" id="Node000006" href="$classConfigParser_a3b983e072038482de7698c091f5c8a99.html#a3b983e072038482de7698c091f5c8a99" title="Parses the full configuration input into a Config object." alt="" coords="464,13,652,38"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="686,28,652,28,652,23,686,23"/>
+<area shape="rect" id="Node000007" href="$namespacebootstrap_a6788c3d01506cbf268f74a60be16385c.html#a6788c3d01506cbf268f74a60be16385c" title="Parses a configuration string into a Config object." alt="" coords="255,13,416,38"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="450,28,416,28,416,23,450,23"/>
+<area shape="rect" id="Node000008" href="$group__entrypoint_ga6e58dbe6eab2d4b12d65b7b0e7297be8.html#ga6e58dbe6eab2d4b12d65b7b0e7297be8" title="Runs the Webserv server." alt="" coords="108,13,207,38"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="241,28,207,28,207,23,241,23"/>
+<area shape="rect" id="Node000009" href="$group__entrypoint_ga3c04138a5bfe5d72780bb7e82a18e627.html#ga3c04138a5bfe5d72780bb7e82a18e627" title="Program entry point." alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

@@ -1,18 +1,18 @@
 <map id="include/config/parser/ConfigParser.hpp" name="include/config/parser/ConfigParser.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="593,5,751,45"/>
-<area shape="rect" id="Node000002" href="$Config_8hpp.html" title=" " alt="" coords="375,93,510,119"/>
+<area shape="rect" id="Node000001" title="Declares the ConfigParser for syntactic/semantic directive parsing." alt="" coords="593,5,751,45"/>
+<area shape="rect" id="Node000002" href="$Config_8hpp.html" title="Declares the Config aggregate for parsed virtual servers." alt="" coords="375,93,510,119"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="618,48,490,91,488,86,616,43"/>
 <area shape="rect" id="Node000003" href="$Server_8hpp.html" title="Declares the Server class for virtual host configuration." alt="" coords="288,167,411,192"/>
 <area shape="poly" id="edge23_Node000001_Node000003" title=" " alt="" coords="594,36,528,45,461,57,403,74,381,84,366,95,357,108,352,122,349,153,344,153,347,121,353,105,362,91,378,80,401,69,459,52,527,40,593,31"/>
-<area shape="rect" id="Node000004" href="$Location_8hpp.html" title=" " alt="" coords="50,240,187,265"/>
+<area shape="rect" id="Node000004" href="$Location_8hpp.html" title="Declares the Location class for route&#45;specific configuration." alt="" coords="50,240,187,265"/>
 <area shape="poly" id="edge22_Node000001_Node000004" title=" " alt="" coords="594,36,474,56,409,73,346,96,286,127,229,165,143,233,140,228,226,160,283,123,344,91,408,68,473,51,593,31"/>
 <area shape="rect" id="Node000007" title=" " alt="" coords="620,313,679,339"/>
 <area shape="poly" id="edge27_Node000001_Node000007" title=" " alt="" coords="656,47,640,69,628,94,621,122,619,150,622,208,632,259,643,299,638,301,626,261,616,208,613,150,616,121,623,92,636,66,652,44"/>
 <area shape="rect" id="Node000008" title=" " alt="" coords="466,313,529,339"/>
 <area shape="poly" id="edge28_Node000001_Node000008" title=" " alt="" coords="655,47,616,95,581,151,551,208,510,301,505,299,547,206,577,148,611,92,651,44"/>
-<area shape="rect" id="Node000011" href="$Tokenizer_8hpp.html" title=" " alt="" coords="637,93,854,119"/>
+<area shape="rect" id="Node000011" href="$Tokenizer_8hpp.html" title="Declares the Tokenizer for config lexical analysis." alt="" coords="637,93,854,119"/>
 <area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="692,44,727,81,723,85,688,47"/>
-<area shape="rect" id="Node000012" href="$token_8hpp.html" title=" " alt="" coords="914,167,1001,192"/>
+<area shape="rect" id="Node000012" href="$token_8hpp.html" title="Token and TokenType declarations for the config lexer." alt="" coords="914,167,1001,192"/>
 <area shape="poly" id="edge21_Node000001_Node000012" title=" " alt="" coords="752,30,791,38,833,50,875,67,912,91,937,120,952,152,947,154,932,123,909,95,872,72,832,55,790,43,751,36"/>
 <area shape="rect" id="Node000013" title=" " alt="" coords="841,240,911,265"/>
 <area shape="poly" id="edge24_Node000001_Node000013" title=" " alt="" coords="752,31,783,38,815,50,845,68,869,92,885,125,891,162,890,198,885,227,880,227,884,197,885,162,880,127,865,95,841,72,813,55,782,43,750,36"/>

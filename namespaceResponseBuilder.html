@@ -92,263 +92,40 @@ $(document).ready(function(){initNavTree('namespaceResponseBuilder.html',''); in
 <div class="header">
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">ResponseBuilder Namespace Reference</div></div>
+  <div class="headertitle"><div class="title">ResponseBuilder Namespace Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Factory helpers for constructing HTTP responses.  
+<a href="namespaceResponseBuilder.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1f8eaecab62a277ca49584495da022fc" id="r_a1f8eaecab62a277ca49584495da022fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#a1f8eaecab62a277ca49584495da022fc">generateError</a> (int status_code, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
-<tr class="separator:a1f8eaecab62a277ca49584495da022fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa150e2f1e0cff9e7f1ebd1b66c4e4a1b" id="r_aa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#aa150e2f1e0cff9e7f1ebd1b66c4e4a1b">generateRedirect</a> (int status_code, const std::string &amp;location, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
-<tr class="separator:aa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a822d078e27118227ea36e32830724915" id="r_a822d078e27118227ea36e32830724915"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#a822d078e27118227ea36e32830724915">generateSuccess</a> (int status_code, const std::string &amp;body, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
-<tr class="separator:a822d078e27118227ea36e32830724915"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acde1853a1d9fe48161c9600e59a88956" id="r_acde1853a1d9fe48161c9600e59a88956"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceResponseBuilder.html#acde1853a1d9fe48161c9600e59a88956">generateSuccessFile</a> (int status_code, const std::string &amp;file_path, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, std::streamsize content_length, std::streamsize cgiBodyOffset=0)</td></tr>
-<tr class="separator:acde1853a1d9fe48161c9600e59a88956"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga822d078e27118227ea36e32830724915" id="r_ga822d078e27118227ea36e32830724915"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga822d078e27118227ea36e32830724915.html#ga822d078e27118227ea36e32830724915">generateSuccess</a> (int status_code, const std::string &amp;body, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
+<tr class="memdesc:ga822d078e27118227ea36e32830724915"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a successful HTTP response with an inline body.  <br /></td></tr>
+<tr class="separator:ga822d078e27118227ea36e32830724915"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9d1fbebc083258c493e34686654d6f67" id="r_ga9d1fbebc083258c493e34686654d6f67"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga9d1fbebc083258c493e34686654d6f67.html#ga9d1fbebc083258c493e34686654d6f67">generateSuccessFile</a> (int status_code, const std::string &amp;file_path, const std::string &amp;content_type, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, std::streamsize content_length, std::streamsize cgiBodyOffset)</td></tr>
+<tr class="memdesc:ga9d1fbebc083258c493e34686654d6f67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a successful HTTP response backed by a file on disk.  <br /></td></tr>
+<tr class="separator:ga9d1fbebc083258c493e34686654d6f67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1f8eaecab62a277ca49584495da022fc" id="r_ga1f8eaecab62a277ca49584495da022fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga1f8eaecab62a277ca49584495da022fc.html#ga1f8eaecab62a277ca49584495da022fc">generateError</a> (int status_code, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
+<tr class="memdesc:ga1f8eaecab62a277ca49584495da022fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds an HTTP error response, optionally using a custom error page.  <br /></td></tr>
+<tr class="separator:ga1f8eaecab62a277ca49584495da022fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b" id="r_gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b.html#gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b">generateRedirect</a> (int status_code, const std::string &amp;location, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request)</td></tr>
+<tr class="memdesc:gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates an HTTP redirect response.  <br /></td></tr>
+<tr class="separator:gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a1f8eaecab62a277ca49584495da022fc" name="a1f8eaecab62a277ca49584495da022fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f8eaecab62a277ca49584495da022fc">&#9670;&#160;</a></span>generateError()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> ResponseBuilder::generateError </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>status_code</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td>
-          <td class="paramname"><em>server</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>request</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="responseBuilder_8cpp_source.html#l00138">138</a> of file <a class="el" href="responseBuilder_8cpp_source.html">responseBuilder.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="responseBuilder_8cpp_source.html#l00030">MessageHandler::getDefaultMessage()</a>, <a class="el" href="Server_8cpp_source.html#l00092">Server::getErrorPages()</a>, <a class="el" href="Server_8cpp_source.html#l00100">Server::getLocations()</a>, <a class="el" href="htmlUtils_8cpp_source.html#l00017">htmlEscape()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00134">joinPath()</a>, <a class="el" href="HttpResponse_8cpp_source.html#l00038">HttpResponse::setBody()</a>, and <a class="el" href="HttpResponse_8cpp_source.html#l00034">HttpResponse::setHeader()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="handleCgi_8cpp_source.html#l00297">CGI::finalizeCgi()</a>, <a class="el" href="generateAutoindex_8cpp_source.html#l00208">generateAutoindex()</a>, <a class="el" href="SocketManagerRequest_8cpp_source.html#l00187">SocketManager::handleCgiPollEvents()</a>, <a class="el" href="SocketManagerRequest_8cpp_source.html#l00259">SocketManager::handleCgiRequest()</a>, <a class="el" href="handleDelete_8cpp_source.html#l00098">handleDelete()</a>, <a class="el" href="handleGet_8cpp_source.html#l00139">handleGet()</a>, <a class="el" href="handleMultipartForm_8cpp_source.html#l00184">handleMultipartForm()</a>, <a class="el" href="handlePost_8cpp_source.html#l00074">anonymous_namespace{handlePost.cpp}::handleRawBody()</a>, <a class="el" href="requestRouter_8cpp_source.html#l00139">handleRequest()</a>, <a class="el" href="SocketManagerRequest_8cpp_source.html#l00280">SocketManager::handleRequestErrorIfAny()</a>, <a class="el" href="handlePost_8cpp_source.html#l00037">anonymous_namespace{handlePost.cpp}::handleUrlEncodedForm()</a>, <a class="el" href="handlePost_8cpp_source.html#l00141">preparePostTargetPath()</a>, <a class="el" href="handleGet_8cpp_source.html#l00096">anonymous_namespace{handleGet.cpp}::processDirectory()</a>, <a class="el" href="SocketManagerUtils_8cpp_source.html#l00105">SocketManager::respondError()</a>, <a class="el" href="handleGet_8cpp_source.html#l00059">anonymous_namespace{handleGet.cpp}::serveFile()</a>, <a class="el" href="handleDelete_8cpp_source.html#l00031">anonymous_namespace{handleDelete.cpp}::unlinkFile()</a>, <a class="el" href="handlePost_8cpp_source.html#l00113">validatePostRequest()</a>, and <a class="el" href="requestRouter_8cpp_source.html#l00102">anonymous_namespace{requestRouter.cpp}::validateRequestMethod()</a>.</p>
-<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespaceResponseBuilder_a1f8eaecab62a277ca49584495da022fc_cgraph.svg" width="464" height="348"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="namespaceResponseBuilder_a1f8eaecab62a277ca49584495da022fc_icgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="aa150e2f1e0cff9e7f1ebd1b66c4e4a1b" name="aa150e2f1e0cff9e7f1ebd1b66c4e4a1b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa150e2f1e0cff9e7f1ebd1b66c4e4a1b">&#9670;&#160;</a></span>generateRedirect()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> ResponseBuilder::generateRedirect </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>status_code</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>location</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>request</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="responseBuilder_8cpp_source.html#l00184">184</a> of file <a class="el" href="responseBuilder_8cpp_source.html">responseBuilder.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="responseBuilder_8cpp_source.html#l00030">MessageHandler::getDefaultMessage()</a>, and <a class="el" href="HttpResponse_8cpp_source.html#l00034">HttpResponse::setHeader()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="handleGet_8cpp_source.html#l00096">anonymous_namespace{handleGet.cpp}::processDirectory()</a>, <a class="el" href="requestRouter_8cpp_source.html#l00091">anonymous_namespace{requestRouter.cpp}::redirectOnConfigured()</a>, and <a class="el" href="requestRouter_8cpp_source.html#l00029">anonymous_namespace{requestRouter.cpp}::redirectOnDirectorySlash()</a>.</p>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespaceResponseBuilder_aa150e2f1e0cff9e7f1ebd1b66c4e4a1b_cgraph.svg" width="464" height="102"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="namespaceResponseBuilder_aa150e2f1e0cff9e7f1ebd1b66c4e4a1b_icgraph.svg" width="100%" height="456"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a822d078e27118227ea36e32830724915" name="a822d078e27118227ea36e32830724915"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a822d078e27118227ea36e32830724915">&#9670;&#160;</a></span>generateSuccess()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> ResponseBuilder::generateSuccess </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>status_code</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>body</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>content_type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>request</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="responseBuilder_8cpp_source.html#l00105">105</a> of file <a class="el" href="responseBuilder_8cpp_source.html">responseBuilder.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="responseBuilder_8cpp_source.html#l00030">MessageHandler::getDefaultMessage()</a>, <a class="el" href="HttpResponse_8cpp_source.html#l00038">HttpResponse::setBody()</a>, and <a class="el" href="HttpResponse_8cpp_source.html#l00034">HttpResponse::setHeader()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="generateAutoindex_8cpp_source.html#l00208">generateAutoindex()</a>, <a class="el" href="handleDelete_8cpp_source.html#l00098">handleDelete()</a>, <a class="el" href="handleMultipartForm_8cpp_source.html#l00184">handleMultipartForm()</a>, <a class="el" href="handlePost_8cpp_source.html#l00074">anonymous_namespace{handlePost.cpp}::handleRawBody()</a>, <a class="el" href="handlePost_8cpp_source.html#l00037">anonymous_namespace{handlePost.cpp}::handleUrlEncodedForm()</a>, and <a class="el" href="handleGet_8cpp_source.html#l00059">anonymous_namespace{handleGet.cpp}::serveFile()</a>.</p>
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespaceResponseBuilder_a822d078e27118227ea36e32830724915_cgraph.svg" width="464" height="151"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-5-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="namespaceResponseBuilder_a822d078e27118227ea36e32830724915_icgraph.svg" width="100%" height="579"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="acde1853a1d9fe48161c9600e59a88956" name="acde1853a1d9fe48161c9600e59a88956"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acde1853a1d9fe48161c9600e59a88956">&#9670;&#160;</a></span>generateSuccessFile()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> ResponseBuilder::generateSuccessFile </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>status_code</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>file_path</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>content_type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::streamsize&#160;</td>
-          <td class="paramname"><em>content_length</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::streamsize&#160;</td>
-          <td class="paramname"><em>cgiBodyOffset</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="responseBuilder_8cpp_source.html#l00120">120</a> of file <a class="el" href="responseBuilder_8cpp_source.html">responseBuilder.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="responseBuilder_8cpp_source.html#l00030">MessageHandler::getDefaultMessage()</a>, <a class="el" href="HttpResponse_8cpp_source.html#l00146">HttpResponse::setCgiBodyOffset()</a>, <a class="el" href="HttpResponse_8cpp_source.html#l00122">HttpResponse::setFilePath()</a>, and <a class="el" href="HttpResponse_8cpp_source.html#l00034">HttpResponse::setHeader()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="handleCgi_8cpp_source.html#l00297">CGI::finalizeCgi()</a>, and <a class="el" href="handleGet_8cpp_source.html#l00059">anonymous_namespace{handleGet.cpp}::serveFile()</a>.</p>
-<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-6-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespaceResponseBuilder_acde1853a1d9fe48161c9600e59a88956_cgraph.svg" width="464" height="215"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-7-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="namespaceResponseBuilder_acde1853a1d9fe48161c9600e59a88956_icgraph.svg" width="100%" height="441"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Factory helpers for constructing HTTP responses. </p>
+<p>The <a class="el" href="namespaceResponseBuilder.html" title="Factory helpers for constructing HTTP responses.">ResponseBuilder</a> namespace groups together utility functions that generate fully-formed <a class="el" href="classHttpResponse.html">HttpResponse</a> objects for different scenarios:</p>
+<ul>
+<li><a class="el" href="group__http_ga822d078e27118227ea36e32830724915.html#ga822d078e27118227ea36e32830724915">generateSuccess</a> : Build a success response with an inline body.</li>
+<li><a class="el" href="group__http_ga9d1fbebc083258c493e34686654d6f67.html#ga9d1fbebc083258c493e34686654d6f67">generateSuccessFile</a> : Build a response backed by a file (static file or <a class="el" href="namespaceCGI.html">CGI</a> temp file).</li>
+<li><a class="el" href="group__http_ga1f8eaecab62a277ca49584495da022fc.html#ga1f8eaecab62a277ca49584495da022fc">generateError</a> : Build an error response, using custom pages if available or a default fallback.</li>
+<li><a class="el" href="group__http_gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b.html#gaa150e2f1e0cff9e7f1ebd1b66c4e4a1b">generateRedirect</a> : Build a redirect response with a <code><a class="el" href="classLocation.html" title="Encapsulates configuration for a single URL path.">Location</a></code> header.</li>
+</ul>
+<p>All builders rely on initializeResponse to apply consistent status metadata, HTTP version, and connection persistence rules. This ensures uniform behavior across all response types.</p>
+<p>These functions are typically used by request handlers, <a class="el" href="namespaceCGI.html">CGI</a> logic, and the router when constructing responses to be sent back to clients. </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

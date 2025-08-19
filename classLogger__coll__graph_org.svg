@@ -22,11 +22,11 @@
 <text text-anchor="start" x="7" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">&#45;</text>
 <text text-anchor="start" x="17.5" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">Logger()</text>
 <text text-anchor="start" x="7" y="-37" font-family="Helvetica,sans-Serif" font-size="10.00">&#45;</text>
-<text text-anchor="start" x="17.5" y="-37" font-family="Helvetica,sans-Serif" font-size="10.00">Logger()</text>
+<text text-anchor="start" x="17.5" y="-37" font-family="Helvetica,sans-Serif" font-size="10.00">~Logger()</text>
 <text text-anchor="start" x="7" y="-22" font-family="Helvetica,sans-Serif" font-size="10.00">&#45;</text>
-<text text-anchor="start" x="17.5" y="-22" font-family="Helvetica,sans-Serif" font-size="10.00">operator=()</text>
+<text text-anchor="start" x="17.5" y="-22" font-family="Helvetica,sans-Serif" font-size="10.00">Logger()</text>
 <text text-anchor="start" x="7" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">&#45;</text>
-<text text-anchor="start" x="17.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">~Logger()</text>
+<text text-anchor="start" x="17.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">operator=()</text>
 <polygon fill="#666666" stroke="#666666" points="0.5,-107 0.5,-107 79.5,-107 79.5,-107 0.5,-107"/>
 <polygon fill="#666666" stroke="#666666" points="0.5,-92 0.5,-92 79.5,-92 79.5,-92 0.5,-92"/>
 <polygon fill="none" stroke="#666666" points="0,0 0,-124 79,-124 79,0 0,0"/>

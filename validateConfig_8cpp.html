@@ -93,9 +93,12 @@ $(document).ready(function(){initNavTree('validateConfig_8cpp.html',''); initRes
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">validateConfig.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">validateConfig.cpp File Reference<div class="ingroups"><a class="el" href="group__config.html">Configuration Parsing</a> &raquo; <a class="el" href="group__config__validation.html">Validating</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements validation logic for parsed configuration objects.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="validateConfig_8hpp_source.html">config/validateConfig.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Config_8hpp_source.html">config/Config.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ConfigParseError_8hpp_source.html">config/parser/ConfigParseError.hpp</a>&quot;</code><br />
@@ -130,85 +133,84 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a74c6e43efabb8dbf3a8da16cff4c3f36" id="r_a74c6e43efabb8dbf3a8da16cff4c3f36"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a74c6e43efabb8dbf3a8da16cff4c3f36">anonymous_namespace{validateConfig.cpp}::isServerNameValid</a> (const std::string &amp;name)</td></tr>
-<tr class="separator:a74c6e43efabb8dbf3a8da16cff4c3f36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5208c2ce108fba5927b1264c66a9d966" id="r_a5208c2ce108fba5927b1264c66a9d966"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a5208c2ce108fba5927b1264c66a9d966">anonymous_namespace{validateConfig.cpp}::isValidLabel</a> (const std::string &amp;label)</td></tr>
-<tr class="separator:a5208c2ce108fba5927b1264c66a9d966"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22d7f5b2b0fac2c483debec0d9238b48" id="r_a22d7f5b2b0fac2c483debec0d9238b48"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a22d7f5b2b0fac2c483debec0d9238b48">anonymous_namespace{validateConfig.cpp}::splitLabels</a> (const std::string &amp;name)</td></tr>
-<tr class="separator:a22d7f5b2b0fac2c483debec0d9238b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f9b93fddccae7b498954e5755631b55" id="r_a5f9b93fddccae7b498954e5755631b55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a5f9b93fddccae7b498954e5755631b55">anonymous_namespace{validateConfig.cpp}::validateAllowedMethods</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:a5f9b93fddccae7b498954e5755631b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafeab76c24e87c8a4c544d6fda03eeef" id="r_aafeab76c24e87c8a4c544d6fda03eeef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#aafeab76c24e87c8a4c544d6fda03eeef">anonymous_namespace{validateConfig.cpp}::validateCgiExtensions</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:aafeab76c24e87c8a4c544d6fda03eeef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9538197f92c18176cc1e663baffc537" id="r_af9538197f92c18176cc1e663baffc537"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#af9538197f92c18176cc1e663baffc537">anonymous_namespace{validateConfig.cpp}::validateCgiInterpreters</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:af9538197f92c18176cc1e663baffc537"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8773798b0a389bef797ff186c90c1687" id="r_a8773798b0a389bef797ff186c90c1687"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a8773798b0a389bef797ff186c90c1687">anonymous_namespace{validateConfig.cpp}::validateClientMaxBodySize</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:a8773798b0a389bef797ff186c90c1687"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3da4407495bdbfabadd421d999918810" id="r_a3da4407495bdbfabadd421d999918810"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="validateConfig_8cpp.html#a3da4407495bdbfabadd421d999918810">validateConfig</a> (const <a class="el" href="classConfig.html">Config</a> &amp;config)</td></tr>
+<tr class="memitem:ga9e5561606bc2bc3d4f6732b178be5c54" id="r_ga9e5561606bc2bc3d4f6732b178be5c54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga9e5561606bc2bc3d4f6732b178be5c54.html#ga9e5561606bc2bc3d4f6732b178be5c54">anonymous_namespace{validateConfig.cpp}::validateHasLocation</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:ga9e5561606bc2bc3d4f6732b178be5c54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensures that each server has at least one location block.  <br /></td></tr>
+<tr class="separator:ga9e5561606bc2bc3d4f6732b178be5c54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga50216933b964db6da5cffd2991cd02e2" id="r_ga50216933b964db6da5cffd2991cd02e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga50216933b964db6da5cffd2991cd02e2.html#ga50216933b964db6da5cffd2991cd02e2">anonymous_namespace{validateConfig.cpp}::validateLocationPaths</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:ga50216933b964db6da5cffd2991cd02e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates location paths inside each server block.  <br /></td></tr>
+<tr class="separator:ga50216933b964db6da5cffd2991cd02e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga79806660af905db58f0450525ace9758" id="r_ga79806660af905db58f0450525ace9758"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga79806660af905db58f0450525ace9758.html#ga79806660af905db58f0450525ace9758">anonymous_namespace{validateConfig.cpp}::validateLocationDefaults</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:ga79806660af905db58f0450525ace9758"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates default requirements for each location block.  <br /></td></tr>
+<tr class="separator:ga79806660af905db58f0450525ace9758"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga22d7f5b2b0fac2c483debec0d9238b48" id="r_ga22d7f5b2b0fac2c483debec0d9238b48"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga22d7f5b2b0fac2c483debec0d9238b48.html#ga22d7f5b2b0fac2c483debec0d9238b48">anonymous_namespace{validateConfig.cpp}::splitLabels</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:ga22d7f5b2b0fac2c483debec0d9238b48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Splits a domain name into its individual labels.  <br /></td></tr>
+<tr class="separator:ga22d7f5b2b0fac2c483debec0d9238b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5208c2ce108fba5927b1264c66a9d966" id="r_ga5208c2ce108fba5927b1264c66a9d966"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga5208c2ce108fba5927b1264c66a9d966.html#ga5208c2ce108fba5927b1264c66a9d966">anonymous_namespace{validateConfig.cpp}::isValidLabel</a> (const std::string &amp;label)</td></tr>
+<tr class="memdesc:ga5208c2ce108fba5927b1264c66a9d966"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates a single domain label according to RFC 1035.  <br /></td></tr>
+<tr class="separator:ga5208c2ce108fba5927b1264c66a9d966"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga74c6e43efabb8dbf3a8da16cff4c3f36" id="r_ga74c6e43efabb8dbf3a8da16cff4c3f36"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga74c6e43efabb8dbf3a8da16cff4c3f36.html#ga74c6e43efabb8dbf3a8da16cff4c3f36">anonymous_namespace{validateConfig.cpp}::isServerNameValid</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:ga74c6e43efabb8dbf3a8da16cff4c3f36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates a full server name against domain format rules.  <br /></td></tr>
+<tr class="separator:ga74c6e43efabb8dbf3a8da16cff4c3f36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga42ca79ba2c93b1435422557dbcf5ac33" id="r_ga42ca79ba2c93b1435422557dbcf5ac33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga42ca79ba2c93b1435422557dbcf5ac33.html#ga42ca79ba2c93b1435422557dbcf5ac33">anonymous_namespace{validateConfig.cpp}::validateServerNameFormat</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:ga42ca79ba2c93b1435422557dbcf5ac33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates the format of all <code>server_name</code> directives across servers.  <br /></td></tr>
+<tr class="separator:ga42ca79ba2c93b1435422557dbcf5ac33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga72aa384294bcaf6612355e863fbdf76c" id="r_ga72aa384294bcaf6612355e863fbdf76c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga72aa384294bcaf6612355e863fbdf76c.html#ga72aa384294bcaf6612355e863fbdf76c">anonymous_namespace{validateConfig.cpp}::validateUniqueServerNames</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:ga72aa384294bcaf6612355e863fbdf76c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensures uniqueness of <code>server_name</code> directives within each server block.  <br /></td></tr>
+<tr class="separator:ga72aa384294bcaf6612355e863fbdf76c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5974e83d9c8278534c1bfe30d48eb279" id="r_ga5974e83d9c8278534c1bfe30d48eb279"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga5974e83d9c8278534c1bfe30d48eb279.html#ga5974e83d9c8278534c1bfe30d48eb279">anonymous_namespace{validateConfig.cpp}::validateUniquePorts</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:ga5974e83d9c8278534c1bfe30d48eb279"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensures uniqueness of (host, port, server_name) bindings across servers.  <br /></td></tr>
+<tr class="separator:ga5974e83d9c8278534c1bfe30d48eb279"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga88f7e5cf89755cd4f3401f550c4393e3" id="r_ga88f7e5cf89755cd4f3401f550c4393e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga88f7e5cf89755cd4f3401f550c4393e3.html#ga88f7e5cf89755cd4f3401f550c4393e3">anonymous_namespace{validateConfig.cpp}::validateErrorPageCodes</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:ga88f7e5cf89755cd4f3401f550c4393e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates that all configured error_page directives use valid HTTP status codes.  <br /></td></tr>
+<tr class="separator:ga88f7e5cf89755cd4f3401f550c4393e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9789c78fd1902b5042bc98f5e36848ca" id="r_ga9789c78fd1902b5042bc98f5e36848ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga9789c78fd1902b5042bc98f5e36848ca.html#ga9789c78fd1902b5042bc98f5e36848ca">anonymous_namespace{validateConfig.cpp}::validateRedirectCodes</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:ga9789c78fd1902b5042bc98f5e36848ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates that all <code>return</code> directives use valid HTTP redirection codes.  <br /></td></tr>
+<tr class="separator:ga9789c78fd1902b5042bc98f5e36848ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5f9b93fddccae7b498954e5755631b55" id="r_ga5f9b93fddccae7b498954e5755631b55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga5f9b93fddccae7b498954e5755631b55.html#ga5f9b93fddccae7b498954e5755631b55">anonymous_namespace{validateConfig.cpp}::validateAllowedMethods</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:ga5f9b93fddccae7b498954e5755631b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates that all HTTP methods declared in <code>methods</code> directives are allowed.  <br /></td></tr>
+<tr class="separator:ga5f9b93fddccae7b498954e5755631b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8773798b0a389bef797ff186c90c1687" id="r_ga8773798b0a389bef797ff186c90c1687"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga8773798b0a389bef797ff186c90c1687.html#ga8773798b0a389bef797ff186c90c1687">anonymous_namespace{validateConfig.cpp}::validateClientMaxBodySize</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:ga8773798b0a389bef797ff186c90c1687"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates that <code>client_max_body_size</code> is set to a positive value.  <br /></td></tr>
+<tr class="separator:ga8773798b0a389bef797ff186c90c1687"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaafeab76c24e87c8a4c544d6fda03eeef" id="r_gaafeab76c24e87c8a4c544d6fda03eeef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_gaafeab76c24e87c8a4c544d6fda03eeef.html#gaafeab76c24e87c8a4c544d6fda03eeef">anonymous_namespace{validateConfig.cpp}::validateCgiExtensions</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:gaafeab76c24e87c8a4c544d6fda03eeef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates the format of <a class="el" href="namespaceCGI.html">CGI</a> extensions in all server locations.  <br /></td></tr>
+<tr class="separator:gaafeab76c24e87c8a4c544d6fda03eeef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafe24e6c100602717b9bf973271d616cc" id="r_gafe24e6c100602717b9bf973271d616cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_gafe24e6c100602717b9bf973271d616cc.html#gafe24e6c100602717b9bf973271d616cc">anonymous_namespace{validateConfig.cpp}::validateIndexFiles</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:gafe24e6c100602717b9bf973271d616cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates <code>index</code> directives in all server locations.  <br /></td></tr>
+<tr class="separator:gafe24e6c100602717b9bf973271d616cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf9538197f92c18176cc1e663baffc537" id="r_gaf9538197f92c18176cc1e663baffc537"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_gaf9538197f92c18176cc1e663baffc537.html#gaf9538197f92c18176cc1e663baffc537">anonymous_namespace{validateConfig.cpp}::validateCgiInterpreters</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:gaf9538197f92c18176cc1e663baffc537"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates consistency between <code>cgi_extension</code> and <code>cgi_interpreter</code> directives.  <br /></td></tr>
+<tr class="separator:gaf9538197f92c18176cc1e663baffc537"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7be5313a6e6b1f7f66e19b973f1a2ec9" id="r_ga7be5313a6e6b1f7f66e19b973f1a2ec9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_ga7be5313a6e6b1f7f66e19b973f1a2ec9.html#ga7be5313a6e6b1f7f66e19b973f1a2ec9">anonymous_namespace{validateConfig.cpp}::validateRootsExist</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:ga7be5313a6e6b1f7f66e19b973f1a2ec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates that all <code>root</code> directives point to existing directories.  <br /></td></tr>
+<tr class="separator:ga7be5313a6e6b1f7f66e19b973f1a2ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae5ff71bb88be7518f895eeafff19bf3b" id="r_gae5ff71bb88be7518f895eeafff19bf3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__validation_gae5ff71bb88be7518f895eeafff19bf3b.html#gae5ff71bb88be7518f895eeafff19bf3b">anonymous_namespace{validateConfig.cpp}::validateUploadStores</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
+<tr class="memdesc:gae5ff71bb88be7518f895eeafff19bf3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates upload store directories for all servers and locations.  <br /></td></tr>
+<tr class="separator:gae5ff71bb88be7518f895eeafff19bf3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3da4407495bdbfabadd421d999918810" id="r_a3da4407495bdbfabadd421d999918810"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="validateConfig_8cpp_a3da4407495bdbfabadd421d999918810.html#a3da4407495bdbfabadd421d999918810">validateConfig</a> (const <a class="el" href="classConfig.html">Config</a> &amp;config)</td></tr>
 <tr class="separator:a3da4407495bdbfabadd421d999918810"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88f7e5cf89755cd4f3401f550c4393e3" id="r_a88f7e5cf89755cd4f3401f550c4393e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a88f7e5cf89755cd4f3401f550c4393e3">anonymous_namespace{validateConfig.cpp}::validateErrorPageCodes</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:a88f7e5cf89755cd4f3401f550c4393e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e5561606bc2bc3d4f6732b178be5c54" id="r_a9e5561606bc2bc3d4f6732b178be5c54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a9e5561606bc2bc3d4f6732b178be5c54">anonymous_namespace{validateConfig.cpp}::validateHasLocation</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:a9e5561606bc2bc3d4f6732b178be5c54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe24e6c100602717b9bf973271d616cc" id="r_afe24e6c100602717b9bf973271d616cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#afe24e6c100602717b9bf973271d616cc">anonymous_namespace{validateConfig.cpp}::validateIndexFiles</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:afe24e6c100602717b9bf973271d616cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79806660af905db58f0450525ace9758" id="r_a79806660af905db58f0450525ace9758"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a79806660af905db58f0450525ace9758">anonymous_namespace{validateConfig.cpp}::validateLocationDefaults</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:a79806660af905db58f0450525ace9758"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50216933b964db6da5cffd2991cd02e2" id="r_a50216933b964db6da5cffd2991cd02e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a50216933b964db6da5cffd2991cd02e2">anonymous_namespace{validateConfig.cpp}::validateLocationPaths</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:a50216933b964db6da5cffd2991cd02e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9789c78fd1902b5042bc98f5e36848ca" id="r_a9789c78fd1902b5042bc98f5e36848ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a9789c78fd1902b5042bc98f5e36848ca">anonymous_namespace{validateConfig.cpp}::validateRedirectCodes</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:a9789c78fd1902b5042bc98f5e36848ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7be5313a6e6b1f7f66e19b973f1a2ec9" id="r_a7be5313a6e6b1f7f66e19b973f1a2ec9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a7be5313a6e6b1f7f66e19b973f1a2ec9">anonymous_namespace{validateConfig.cpp}::validateRootsExist</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:a7be5313a6e6b1f7f66e19b973f1a2ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42ca79ba2c93b1435422557dbcf5ac33" id="r_a42ca79ba2c93b1435422557dbcf5ac33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a42ca79ba2c93b1435422557dbcf5ac33">anonymous_namespace{validateConfig.cpp}::validateServerNameFormat</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:a42ca79ba2c93b1435422557dbcf5ac33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5974e83d9c8278534c1bfe30d48eb279" id="r_a5974e83d9c8278534c1bfe30d48eb279"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a5974e83d9c8278534c1bfe30d48eb279">anonymous_namespace{validateConfig.cpp}::validateUniquePorts</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:a5974e83d9c8278534c1bfe30d48eb279"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72aa384294bcaf6612355e863fbdf76c" id="r_a72aa384294bcaf6612355e863fbdf76c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#a72aa384294bcaf6612355e863fbdf76c">anonymous_namespace{validateConfig.cpp}::validateUniqueServerNames</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:a72aa384294bcaf6612355e863fbdf76c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5ff71bb88be7518f895eeafff19bf3b" id="r_ae5ff71bb88be7518f895eeafff19bf3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02validateConfig_8cpp_03.html#ae5ff71bb88be7518f895eeafff19bf3b">anonymous_namespace{validateConfig.cpp}::validateUploadStores</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers)</td></tr>
-<tr class="separator:ae5ff71bb88be7518f895eeafff19bf3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a3da4407495bdbfabadd421d999918810" name="a3da4407495bdbfabadd421d999918810"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3da4407495bdbfabadd421d999918810">&#9670;&#160;</a></span>validateConfig()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements validation logic for parsed configuration objects. </p>
+<p>This file defines the validation pipeline for the Webserv configuration after parsing and normalization. It enforces semantic correctness of <code><a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a></code> and <code><a class="el" href="classLocation.html" title="Encapsulates configuration for a single URL path.">Location</a></code> blocks, ensuring that directives are consistent, non-conflicting, and point to valid filesystem resources.</p>
+<p>The validation routines cover:</p><ul>
+<li>Presence of at least one location per server</li>
+<li>Correct syntax and uniqueness of location paths</li>
+<li>Required defaults (root or return directive)</li>
+<li>Validity of <code>server_name</code> (format, duplicates, uniqueness per host:port)</li>
+<li>Port and host binding conflicts</li>
+<li>Error page code ranges</li>
+<li>Redirect codes restricted to standard 3xx values</li>
+<li>Allowed HTTP methods (<code>GET</code>, <code>POST</code>, <code>DELETE</code>)</li>
+<li>Non-zero client body size limits</li>
+<li><a class="el" href="namespaceCGI.html">CGI</a> extensions and interpreter mappings</li>
+<li>Existence and type of root and upload directories</li>
+<li>Index file usage with valid roots</li>
+</ul>
+<p>Together, these checks guarantee that the configuration is safe to use at runtime, preventing invalid states and improving user feedback with actionable error messages. </p>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void validateConfig </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classConfig.html">Config</a> &amp;&#160;</td>
-          <td class="paramname"><em>config</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="validateConfig_8cpp_source.html#l00507">507</a> of file <a class="el" href="validateConfig_8cpp_source.html">validateConfig.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="Config_8cpp_source.html#l00026">Config::getServers()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00275">anonymous_namespace{validateConfig.cpp}::validateAllowedMethods()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00309">anonymous_namespace{validateConfig.cpp}::validateCgiExtensions()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00401">anonymous_namespace{validateConfig.cpp}::validateCgiInterpreters()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00295">anonymous_namespace{validateConfig.cpp}::validateClientMaxBodySize()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00238">anonymous_namespace{validateConfig.cpp}::validateErrorPageCodes()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00034">anonymous_namespace{validateConfig.cpp}::validateHasLocation()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00330">anonymous_namespace{validateConfig.cpp}::validateIndexFiles()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00076">anonymous_namespace{validateConfig.cpp}::validateLocationDefaults()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00044">anonymous_namespace{validateConfig.cpp}::validateLocationPaths()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00257">anonymous_namespace{validateConfig.cpp}::validateRedirectCodes()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00437">anonymous_namespace{validateConfig.cpp}::validateRootsExist()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00148">anonymous_namespace{validateConfig.cpp}::validateServerNameFormat()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00205">anonymous_namespace{validateConfig.cpp}::validateUniquePorts()</a>, <a class="el" href="validateConfig_8cpp_source.html#l00190">anonymous_namespace{validateConfig.cpp}::validateUniqueServerNames()</a>, and <a class="el" href="validateConfig_8cpp_source.html#l00472">anonymous_namespace{validateConfig.cpp}::validateUploadStores()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="webserv_8cpp_source.html#l00058">runWebserv()</a>.</p>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="validateConfig_8cpp_a3da4407495bdbfabadd421d999918810_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="validateConfig_8cpp_a3da4407495bdbfabadd421d999918810_icgraph.svg" width="376" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="validateConfig_8cpp_source.html">validateConfig.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Declares the Config aggregate for parsed virtual servers.">
 <polygon fill="#999999" stroke="#666666" points="378.43,-184 239.43,-184 239.43,-165 378.43,-165 378.43,-184"/>
 <text text-anchor="middle" x="308.93" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">include/config/Config.hpp</text>
 </a>
@@ -56,7 +56,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="282.43,-74 179.43,-74 179.43,-55 282.43,-55 282.43,-74"/>
 <text text-anchor="middle" x="230.93" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>

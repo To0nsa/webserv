@@ -95,6 +95,9 @@ $(document).ready(function(){initNavTree('server__utils_8cpp.html',''); initResi
   <div class="headertitle"><div class="title">server_utils.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements server selection utilities for virtual host resolution.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="server__utils_8hpp_source.html">core/server_utils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
 <code>#include &lt;stdexcept&gt;</code><br />
@@ -110,68 +113,16 @@ $(document).ready(function(){initNavTree('server__utils_8cpp.html',''); initResi
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a17a639c336e020497b162c8a46505c34" id="r_a17a639c336e020497b162c8a46505c34"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="server__utils_8cpp.html#a17a639c336e020497b162c8a46505c34">findMatchingServer</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers, int port, const std::string &amp;host_name)</td></tr>
+<tr class="memitem:a17a639c336e020497b162c8a46505c34" id="r_a17a639c336e020497b162c8a46505c34"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="server__utils_8cpp_a17a639c336e020497b162c8a46505c34.html#a17a639c336e020497b162c8a46505c34">findMatchingServer</a> (const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers, int port, const std::string &amp;host_name)</td></tr>
 <tr class="memdesc:a17a639c336e020497b162c8a46505c34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Selects the best matching <a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a> for a given port and Host header.  <br /></td></tr>
 <tr class="separator:a17a639c336e020497b162c8a46505c34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a17a639c336e020497b162c8a46505c34" name="a17a639c336e020497b162c8a46505c34"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17a639c336e020497b162c8a46505c34">&#9670;&#160;</a></span>findMatchingServer()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements server selection utilities for virtual host resolution. </p>
+<p>Provides helper function for matching an incoming connection to the appropriate <code><a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a></code> instance based on the listening port and the HTTP <code>Host</code> header. This util is part of the core request-routing mechanism in Webserv. </p>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classServer.html">Server</a> &amp; findMatchingServer </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>servers</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>port</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>host_name</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Selects the best matching <a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a> for a given port and Host header. </p>
-<p>Selects the best matching server for a given port and Host header.</p>
-<p>This function implements name-based virtual host resolution. It searches for a server block that matches both the listening port and the requested <code>Host:</code> header. If no exact match is found, it falls back to the first server configured on the target port.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">servers</td><td>All parsed <a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a> instances. </td></tr>
-    <tr><td class="paramname">port</td><td>The port the connection was accepted on. </td></tr>
-    <tr><td class="paramname">host_name</td><td>The Host header from the HTTP request (e.g. "example.com"). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A reference to the matching <a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a> instance.</dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::runtime_error</td><td>If no <a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a> listens on the given port.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section warning"><dt>Warning</dt><dd>When using this function in unit tests, avoid passing string literals like <code>"example.com"</code> directly to <code>host_name</code> — this may trigger <code>-Werror=dangling-reference</code> with strict compilers. Use a <code>std::string</code> variable instead. This is not an issue in production code, where the Host header is always stored in a string variable. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="server__utils_8cpp_source.html#l00038">38</a> of file <a class="el" href="server__utils_8cpp_source.html">server_utils.cpp</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="server__utils_8cpp_source.html">server_utils.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

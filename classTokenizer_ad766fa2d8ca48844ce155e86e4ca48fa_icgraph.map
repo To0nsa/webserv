@@ -1,9 +1,0 @@
-<map id="Tokenizer::skipHashComment" name="Tokenizer::skipHashComment">
-<area shape="rect" id="Node000001" title=" " alt="" coords="683,13,897,38"/>
-<area shape="rect" id="Node000002" href="$classTokenizer.html#a7d070f27222fc3297b38c9d2f87f0b57" title=" " alt="" coords="440,5,635,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="669,28,635,28,635,23,669,23"/>
-<area shape="rect" id="Node000003" href="$classTokenizer.html#a535ed2343bd999378d3295edc150e746" title=" " alt="" coords="245,13,392,38"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="426,28,393,28,393,23,426,23"/>
-<area shape="rect" id="Node000004" href="$classConfigParser.html#a41f286ebab54d57477b7ff2964dba61e" title=" " alt="" coords="5,13,197,38"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="232,28,197,28,197,23,232,23"/>
-</map>

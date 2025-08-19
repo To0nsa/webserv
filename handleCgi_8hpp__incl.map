@@ -1,6 +1,6 @@
 <map id="include/http/handleCgi.hpp" name="include/http/handleCgi.hpp">
 <area shape="rect" id="Node000001" title=" " alt="" coords="201,5,397,31"/>
-<area shape="rect" id="Node000002" href="$HttpResponse_8hpp.html" title=" " alt="" coords="21,79,192,104"/>
+<area shape="rect" id="Node000002" href="$HttpResponse_8hpp.html" title="Declares the HttpResponse class." alt="" coords="21,79,192,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="269,33,152,76,150,71,267,28"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="189,152,248,177"/>
 <area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="291,33,257,80,230,140,225,138,252,77,287,29"/>

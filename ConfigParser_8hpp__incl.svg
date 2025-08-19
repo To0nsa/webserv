@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Declares the ConfigParser for syntactic/semantic directive parsing.">
 <polygon fill="#999999" stroke="#666666" points="559,-250 441,-250 441,-220 559,-220 559,-250"/>
 <text text-anchor="start" x="449" y="-238" font-family="Helvetica,sans-Serif" font-size="10.00">include/config/parser</text>
 <text text-anchor="middle" x="500" y="-227" font-family="Helvetica,sans-Serif" font-size="10.00">/ConfigParser.hpp</text>
@@ -67,7 +67,7 @@ var sectionId = 'dynsection-0';
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="Config_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="Config_8hpp.html" target="_top" xlink:title="Declares the Config aggregate for parsed virtual servers.">
 <polygon fill="white" stroke="#666666" points="378.5,-184 277.5,-184 277.5,-165 378.5,-165 378.5,-184"/>
 <text text-anchor="middle" x="328" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">config/Config.hpp</text>
 </a>
@@ -103,7 +103,7 @@ var sectionId = 'dynsection-0';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="136.5,-74 33.5,-74 33.5,-55 136.5,-55 136.5,-74"/>
 <text text-anchor="middle" x="85" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>
@@ -157,7 +157,7 @@ var sectionId = 'dynsection-0';
 <!-- Node11 -->
 <g id="Node000011" class="node">
 <title>Node11</title>
-<g id="a_Node000011"><a xlink:href="Tokenizer_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000011"><a xlink:href="Tokenizer_8hpp.html" target="_top" xlink:title="Declares the Tokenizer for config lexical analysis.">
 <polygon fill="white" stroke="#666666" points="636.5,-184 473.5,-184 473.5,-165 636.5,-165 636.5,-184"/>
 <text text-anchor="middle" x="555" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">config/tokenizer/Tokenizer.hpp</text>
 </a>
@@ -175,7 +175,7 @@ var sectionId = 'dynsection-0';
 <!-- Node12 -->
 <g id="Node000012" class="node">
 <title>Node12</title>
-<g id="a_Node000012"><a xlink:href="token_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000012"><a xlink:href="token_8hpp.html" target="_top" xlink:title="Token and TokenType declarations for the config lexer.">
 <polygon fill="white" stroke="#666666" points="746.5,-129 681.5,-129 681.5,-110 746.5,-110 746.5,-129"/>
 <text text-anchor="middle" x="714" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">token.hpp</text>
 </a>

@@ -1,6 +1,6 @@
 <map id="include/http/responseBuilder.hpp" name="include/http/responseBuilder.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="23,5,257,31"/>
-<area shape="rect" id="Node000002" href="$HttpResponse_8hpp.html" title=" " alt="" coords="55,79,225,104"/>
+<area shape="rect" id="Node000001" title="Declarations of helper functions for constructing HTTP responses." alt="" coords="23,5,257,31"/>
+<area shape="rect" id="Node000002" href="$HttpResponse_8hpp.html" title="Declares the HttpResponse class." alt="" coords="55,79,225,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,31,143,65,137,65,137,31"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="5,152,69,177"/>
 <area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="107,33,73,52,57,65,45,80,36,109,36,139,30,139,31,108,40,77,53,61,70,47,104,28"/>

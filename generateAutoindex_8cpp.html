@@ -94,9 +94,12 @@ $(document).ready(function(){initNavTree('generateAutoindex_8cpp.html',''); init
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">generateAutoindex.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">generateAutoindex.cpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a> &raquo; <a class="el" href="group__request__handler.html">Request Handling</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements directory autoindex (HTML listing) generation.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="HttpRequest_8hpp_source.html">http/HttpRequest.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="HttpResponse_8hpp_source.html">http/HttpResponse.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="responseBuilder_8hpp_source.html">http/responseBuilder.hpp</a>&quot;</code><br />
@@ -128,6 +131,7 @@ $(document).ready(function(){initNavTree('generateAutoindex_8cpp.html',''); init
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structanonymous__namespace_02generateAutoindex_8cpp_03_1_1DirEntry.html">anonymous_namespace{generateAutoindex.cpp}::DirEntry</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a single entry in a directory for autoindexing.  <a href="structanonymous__namespace_02generateAutoindex_8cpp_03_1_1DirEntry.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -137,83 +141,57 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a88d4b3bb1d68c8200a34c9015658aba1" id="r_a88d4b3bb1d68c8200a34c9015658aba1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02generateAutoindex_8cpp_03.html#a88d4b3bb1d68c8200a34c9015658aba1">anonymous_namespace{generateAutoindex.cpp}::escapeUriComponent</a> (const std::string &amp;s)</td></tr>
-<tr class="separator:a88d4b3bb1d68c8200a34c9015658aba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a098eeee42fbe96f8a9b748efd4f61ed5" id="r_a098eeee42fbe96f8a9b748efd4f61ed5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02generateAutoindex_8cpp_03.html#a098eeee42fbe96f8a9b748efd4f61ed5">anonymous_namespace{generateAutoindex.cpp}::formatMTimeUTC</a> (std::time_t t)</td></tr>
-<tr class="separator:a098eeee42fbe96f8a9b748efd4f61ed5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d9d7661dca49eecdb3644beb981b18d" id="r_a8d9d7661dca49eecdb3644beb981b18d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="generateAutoindex_8cpp.html#a8d9d7661dca49eecdb3644beb981b18d">generateAutoindex</a> (const std::string &amp;filepath, const std::string &amp;uri, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
-<tr class="separator:a8d9d7661dca49eecdb3644beb981b18d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad46dadf2a46aedd0bfde87fcc9f3d8c2" id="r_ad46dadf2a46aedd0bfde87fcc9f3d8c2"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02generateAutoindex_8cpp_03.html#ad46dadf2a46aedd0bfde87fcc9f3d8c2">anonymous_namespace{generateAutoindex.cpp}::htmlFooter</a> ()</td></tr>
-<tr class="separator:ad46dadf2a46aedd0bfde87fcc9f3d8c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b4dec793164502283883d5b8f8d9ddb" id="r_a4b4dec793164502283883d5b8f8d9ddb"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02generateAutoindex_8cpp_03.html#a4b4dec793164502283883d5b8f8d9ddb">anonymous_namespace{generateAutoindex.cpp}::htmlHeader</a> (const std::string &amp;uri)</td></tr>
-<tr class="separator:a4b4dec793164502283883d5b8f8d9ddb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cdc6c7635242f3cd880addfe67b6f2e" id="r_a7cdc6c7635242f3cd880addfe67b6f2e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structanonymous__namespace_02generateAutoindex_8cpp_03_1_1DirEntry.html">DirEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02generateAutoindex_8cpp_03.html#a7cdc6c7635242f3cd880addfe67b6f2e">anonymous_namespace{generateAutoindex.cpp}::listDirectoryEntries</a> (const std::string &amp;path, bool &amp;ok)</td></tr>
-<tr class="separator:a7cdc6c7635242f3cd880addfe67b6f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bdeefb06f44752cd5cba05b75b601e0" id="r_a8bdeefb06f44752cd5cba05b75b601e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02generateAutoindex_8cpp_03.html#a8bdeefb06f44752cd5cba05b75b601e0">anonymous_namespace{generateAutoindex.cpp}::renderRow</a> (std::ostringstream &amp;body, const <a class="el" href="structanonymous__namespace_02generateAutoindex_8cpp_03_1_1DirEntry.html">DirEntry</a> &amp;entry, const std::string &amp;baseUri)</td></tr>
-<tr class="separator:a8bdeefb06f44752cd5cba05b75b601e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7cdc6c7635242f3cd880addfe67b6f2e" id="r_ga7cdc6c7635242f3cd880addfe67b6f2e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structanonymous__namespace_02generateAutoindex_8cpp_03_1_1DirEntry.html">DirEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga7cdc6c7635242f3cd880addfe67b6f2e.html#ga7cdc6c7635242f3cd880addfe67b6f2e">anonymous_namespace{generateAutoindex.cpp}::listDirectoryEntries</a> (const std::string &amp;path, bool &amp;ok)</td></tr>
+<tr class="memdesc:ga7cdc6c7635242f3cd880addfe67b6f2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lists and sorts directory entries for autoindex generation.  <br /></td></tr>
+<tr class="separator:ga7cdc6c7635242f3cd880addfe67b6f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga88d4b3bb1d68c8200a34c9015658aba1" id="r_ga88d4b3bb1d68c8200a34c9015658aba1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga88d4b3bb1d68c8200a34c9015658aba1.html#ga88d4b3bb1d68c8200a34c9015658aba1">anonymous_namespace{generateAutoindex.cpp}::escapeUriComponent</a> (const std::string &amp;s)</td></tr>
+<tr class="memdesc:ga88d4b3bb1d68c8200a34c9015658aba1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Percent-encodes a string for safe inclusion in a URI component.  <br /></td></tr>
+<tr class="separator:ga88d4b3bb1d68c8200a34c9015658aba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga098eeee42fbe96f8a9b748efd4f61ed5" id="r_ga098eeee42fbe96f8a9b748efd4f61ed5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga098eeee42fbe96f8a9b748efd4f61ed5.html#ga098eeee42fbe96f8a9b748efd4f61ed5">anonymous_namespace{generateAutoindex.cpp}::formatMTimeUTC</a> (std::time_t t)</td></tr>
+<tr class="memdesc:ga098eeee42fbe96f8a9b748efd4f61ed5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats a file modification time into a human-readable UTC string.  <br /></td></tr>
+<tr class="separator:ga098eeee42fbe96f8a9b748efd4f61ed5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8bdeefb06f44752cd5cba05b75b601e0" id="r_ga8bdeefb06f44752cd5cba05b75b601e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga8bdeefb06f44752cd5cba05b75b601e0.html#ga8bdeefb06f44752cd5cba05b75b601e0">anonymous_namespace{generateAutoindex.cpp}::renderRow</a> (std::ostringstream &amp;body, const <a class="el" href="structanonymous__namespace_02generateAutoindex_8cpp_03_1_1DirEntry.html">DirEntry</a> &amp;entry, const std::string &amp;baseUri)</td></tr>
+<tr class="memdesc:ga8bdeefb06f44752cd5cba05b75b601e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders a single <code>&lt;tr&gt;</code> row in the autoindex HTML table.  <br /></td></tr>
+<tr class="separator:ga8bdeefb06f44752cd5cba05b75b601e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4b4dec793164502283883d5b8f8d9ddb" id="r_ga4b4dec793164502283883d5b8f8d9ddb"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga4b4dec793164502283883d5b8f8d9ddb.html#ga4b4dec793164502283883d5b8f8d9ddb">anonymous_namespace{generateAutoindex.cpp}::htmlHeader</a> (const std::string &amp;uri)</td></tr>
+<tr class="memdesc:ga4b4dec793164502283883d5b8f8d9ddb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates the opening HTML markup for an autoindex page.  <br /></td></tr>
+<tr class="separator:ga4b4dec793164502283883d5b8f8d9ddb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad46dadf2a46aedd0bfde87fcc9f3d8c2" id="r_gad46dadf2a46aedd0bfde87fcc9f3d8c2"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_gad46dadf2a46aedd0bfde87fcc9f3d8c2.html#gad46dadf2a46aedd0bfde87fcc9f3d8c2">anonymous_namespace{generateAutoindex.cpp}::htmlFooter</a> ()</td></tr>
+<tr class="memdesc:gad46dadf2a46aedd0bfde87fcc9f3d8c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates the closing HTML markup for an autoindex page.  <br /></td></tr>
+<tr class="separator:gad46dadf2a46aedd0bfde87fcc9f3d8c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8d9d7661dca49eecdb3644beb981b18d" id="r_ga8d9d7661dca49eecdb3644beb981b18d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga8d9d7661dca49eecdb3644beb981b18d.html#ga8d9d7661dca49eecdb3644beb981b18d">generateAutoindex</a> (const std::string &amp;filepath, const std::string &amp;uri, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
+<tr class="memdesc:ga8d9d7661dca49eecdb3644beb981b18d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates an HTML autoindex page for a directory listing.  <br /></td></tr>
+<tr class="separator:ga8d9d7661dca49eecdb3644beb981b18d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a8d9d7661dca49eecdb3644beb981b18d" name="a8d9d7661dca49eecdb3644beb981b18d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d9d7661dca49eecdb3644beb981b18d">&#9670;&#160;</a></span>generateAutoindex()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements directory autoindex (HTML listing) generation. </p>
+<p>This file provides nginx-like autoindex functionality for HTTP GET requests on directories when no index file is found and autoindexing is enabled in the location block.</p>
+<p>Main responsibilities:</p><ul>
+<li><b>Directory scanning</b> (listDirectoryEntries): Collects entries, separates directories from files, preserves <code>..</code>.</li>
+<li><b>Escaping utilities</b>:<ul>
+<li>escapeUriComponent for safe URIs.</li>
+<li><a class="el" href="group__html__utils_gaf5ddafc8d1e304df95c0aee1984b2682.html#gaf5ddafc8d1e304df95c0aee1984b2682">htmlEscape</a> (from utils/htmlUtils) for HTML-safe output.</li>
+</ul>
+</li>
+<li><b>Formatting helpers</b>:<ul>
+<li>formatMTimeUTC for human-readable UTC timestamps.</li>
+<li>renderRow for HTML table rows with icons and metadata.</li>
+</ul>
+</li>
+<li><b>HTML layout</b>:<ul>
+<li>htmlHeader and htmlFooter wrap the index table.</li>
+</ul>
+</li>
+<li><b>Entrypoint</b>: <a class="el" href="group__request__handler_ga8d9d7661dca49eecdb3644beb981b18d.html#ga8d9d7661dca49eecdb3644beb981b18d">generateAutoindex</a> assembles the full HTML directory listing and returns a <a class="el" href="classHttpResponse.html">HttpResponse</a>.</li>
+</ul>
+<p>Errors (nonexistent or inaccessible directories) result in 403 responses. Valid directories produce a simple HTML table with:</p><ul>
+<li>File/directory name (with 📄/📁 icons).</li>
+<li>Last modified timestamp (UTC).</li>
+<li>File size (bytes). </li>
+</ul>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> generateAutoindex </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>filepath</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>uri</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td>
-          <td class="paramname"><em>server</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="generateAutoindex_8cpp_source.html#l00208">208</a> of file <a class="el" href="generateAutoindex_8cpp_source.html">generateAutoindex.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00105">ResponseBuilder::generateSuccess()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00078">HttpRequest::getPath()</a>, <a class="el" href="generateAutoindex_8cpp_source.html#l00192">anonymous_namespace{generateAutoindex.cpp}::htmlFooter()</a>, <a class="el" href="generateAutoindex_8cpp_source.html#l00184">anonymous_namespace{generateAutoindex.cpp}::htmlHeader()</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">INFO</a>, <a class="el" href="generateAutoindex_8cpp_source.html#l00047">anonymous_namespace{generateAutoindex.cpp}::listDirectoryEntries()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="generateAutoindex_8cpp_source.html#l00158">anonymous_namespace{generateAutoindex.cpp}::renderRow()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="handleGet_8cpp_source.html#l00096">anonymous_namespace{handleGet.cpp}::processDirectory()</a>.</p>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="generateAutoindex_8cpp_a8d9d7661dca49eecdb3644beb981b18d_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="generateAutoindex_8cpp_a8d9d7661dca49eecdb3644beb981b18d_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="generateAutoindex_8cpp_source.html">generateAutoindex.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

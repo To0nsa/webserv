@@ -1,0 +1,31 @@
+<map id="SocketManager::isHeaderTimeout" name="SocketManager::isHeaderTimeout">
+<area shape="rect" id="Node000001" title="Detects header read timeout for a client connection." alt="" coords="5,139,248,164"/>
+<area shape="rect" id="Node000002" href="$classLogger_a23f092a06cc63628beb87a1a54f9ea59.html#a23f092a06cc63628beb87a1a54f9ea59" title=" " alt="" coords="339,81,466,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,136,327,107,328,112,189,141"/>
+<area shape="rect" id="Node000006" href="$classSocketManager_a48aae27bf96445da5b39b042e7528c67.html#a48aae27bf96445da5b39b042e7528c67" title="Queues an HTTP error response for a client." alt="" coords="296,163,509,188"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="249,159,282,162,282,168,248,165"/>
+<area shape="rect" id="Node000003" href="$Logger_8cpp_a2c56a9a25fc1f2a14162f4df7ce936ff.html#a2c56a9a25fc1f2a14162f4df7ce936ff" title=" " alt="" coords="863,5,951,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="434,79,491,58,557,41,636,28,715,21,849,15,849,21,715,26,636,34,558,46,492,64,436,84"/>
+<area shape="rect" id="Node000004" href="$Logger_8cpp_afc799b96df6ffe84b57bcce18820bc43.html#afc799b96df6ffe84b57bcce18820bc43" title=" " alt="" coords="853,56,960,81"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="466,94,599,96,754,90,840,79,840,84,755,95,599,101,466,99"/>
+<area shape="rect" id="Node000005" href="$classLogger_a3d3f0801eeaf39b33a906ea8569c19b2.html#a3d3f0801eeaf39b33a906ea8569c19b2" title=" " alt="" coords="609,56,703,81"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="466,85,595,72,595,77,467,90"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="703,57,849,27,850,32,704,62"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="703,66,840,66,840,71,703,71"/>
+<area shape="rect" id="Node000007" href="$group__http_ga1f8eaecab62a277ca49584495da022fc.html#ga1f8eaecab62a277ca49584495da022fc" title="Builds an HTTP error response, optionally using a custom error page." alt="" coords="557,237,755,277"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="444,186,581,230,579,235,442,191"/>
+<area shape="rect" id="Node000008" href="$group__http_ga064a5d8be8de9234f362e73d9bb68b6b.html#ga064a5d8be8de9234f362e73d9bb68b6b" title="Returns the default reason phrase for a given HTTP status code." alt="" coords="803,106,1011,146"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="681,234,734,195,801,156,817,149,820,153,804,160,737,199,684,239"/>
+<area shape="rect" id="Node000009" href="$group__server__component_ga53fb46a6288fcdc4270ad5900f50736e.html#ga53fb46a6288fcdc4270ad5900f50736e" title="Returns the mapping of HTTP error codes to custom error pages." alt="" coords="825,171,988,196"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="711,234,802,205,833,197,834,202,803,210,713,239"/>
+<area shape="rect" id="Node000010" href="$group__server__component_ga06b6c9af45443180a65bcc145e1b2f1e.html#ga06b6c9af45443180a65bcc145e1b2f1e" title="Returns the list of location blocks defined for this server." alt="" coords="829,220,984,245"/>
+<area shape="poly" id="edge11_Node000007_Node000010" title=" " alt="" coords="755,245,816,239,816,244,755,250"/>
+<area shape="rect" id="Node000011" href="$group__html__utils_gaf5ddafc8d1e304df95c0aee1984b2682.html#gaf5ddafc8d1e304df95c0aee1984b2682" title="Escapes special HTML characters in a string." alt="" coords="857,269,956,295"/>
+<area shape="poly" id="edge12_Node000007_Node000011" title=" " alt="" coords="755,264,844,273,843,278,755,269"/>
+<area shape="rect" id="Node000012" href="$group__filesystem__utils_ga60cb34db186e7da050316400c820c815.html#ga60cb34db186e7da050316400c820c815" title="Concatenates a base path and a suffix with a single &#39;/&#39; separator." alt="" coords="869,319,944,344"/>
+<area shape="poly" id="edge13_Node000007_Node000012" title=" " alt="" coords="714,274,803,303,857,317,855,323,802,309,712,279"/>
+<area shape="rect" id="Node000013" href="$group__http_ga3e83ff074d5f7a6de514a4edcb02ab4d.html#ga3e83ff074d5f7a6de514a4edcb02ab4d" title="Sets the body of the response." alt="" coords="819,368,994,393"/>
+<area shape="poly" id="edge14_Node000007_Node000013" title=" " alt="" coords="683,275,737,315,804,353,827,362,825,367,802,358,734,319,680,279"/>
+<area shape="rect" id="Node000014" href="$group__http_ga7efa3ab17ead358609d80b55db164867.html#ga7efa3ab17ead358609d80b55db164867" title="Adds or replaces a header in the response." alt="" coords="813,417,1001,443"/>
+<area shape="poly" id="edge15_Node000007_Node000014" title=" " alt="" coords="673,275,726,340,763,374,804,404,817,410,815,415,801,408,759,379,722,343,669,279"/>
+</map>

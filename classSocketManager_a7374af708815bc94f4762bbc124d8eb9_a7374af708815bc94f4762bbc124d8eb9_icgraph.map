@@ -1,0 +1,13 @@
+<map id="SocketManager::resetRequestState" name="SocketManager::resetRequestState">
+<area shape="rect" id="Node000001" title="Resets the parsing state of a client’s current HTTP request." alt="" coords="1025,5,1241,45"/>
+<area shape="rect" id="Node000002" href="$classSocketManager_a7a715e7548319f0e572a5fc3b050d5ed.html#a7a715e7548319f0e572a5fc3b050d5ed" title="Parses buffered client data into HTTP requests and queues them." alt="" coords="744,5,977,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1012,28,978,28,978,23,1012,23"/>
+<area shape="rect" id="Node000003" href="$classSocketManager_aabb964db3a12fa5d3668646c4ed80b25.html#aabb964db3a12fa5d3668646c4ed80b25" title="Processes incoming data for a client connection." alt="" coords="453,13,696,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="730,28,696,28,696,23,730,23"/>
+<area shape="rect" id="Node000004" href="$classSocketManager_a6dd1b927ab5d7d761cae7044c6fcea37.html#a6dd1b927ab5d7d761cae7044c6fcea37" title="Runs the main event loop of the server." alt="" coords="255,13,405,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="439,28,406,28,406,23,439,23"/>
+<area shape="rect" id="Node000005" href="$group__entrypoint_ga6e58dbe6eab2d4b12d65b7b0e7297be8.html#ga6e58dbe6eab2d4b12d65b7b0e7297be8" title="Runs the Webserv server." alt="" coords="108,13,207,38"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="241,28,207,28,207,23,241,23"/>
+<area shape="rect" id="Node000006" href="$group__entrypoint_ga3c04138a5bfe5d72780bb7e82a18e627.html#ga3c04138a5bfe5d72780bb7e82a18e627" title="Program entry point." alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

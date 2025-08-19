@@ -94,9 +94,12 @@ $(document).ready(function(){initNavTree('token_8hpp.html',''); initResizable();
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">token.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">token.hpp File Reference<div class="ingroups"><a class="el" href="group__config.html">Configuration Parsing</a> &raquo; <a class="el" href="group__config__tokenizing.html">Tokenizing</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="structToken.html" title="Plain-old-data token with source coordinates.">Token</a> and TokenType declarations for the config lexer.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cstddef&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -111,7 +114,7 @@ $(document).ready(function(){initNavTree('token_8hpp.html',''); initResizable();
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="token_8hpp__dep__incl.svg" width="592" height="315"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="token_8hpp__dep__incl.svg" width="614" height="315"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <p><a href="token_8hpp_source.html">Go to the source code of this file.</a></p>
@@ -119,179 +122,58 @@ $(document).ready(function(){initNavTree('token_8hpp.html',''); initResizable();
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structToken.html">Token</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plain-old-data token with source coordinates.  <a href="structToken.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:aa520fbf142ba1e7e659590c07da31921" id="r_aa520fbf142ba1e7e659590c07da31921"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> { <br />
-&#160;&#160;<a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a6fcc416051346daca31c571646af127a">IDENTIFIER</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a34f55eca38e0605a84f169ff61a2a396">NUMBER</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a63b588d5559f64f89a416e656880b949">STRING</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ad5e4de54911c050245979d940dc65c3a">LBRACE</a>
+<tr class="memitem:gaa520fbf142ba1e7e659590c07da31921" id="r_gaa520fbf142ba1e7e659590c07da31921"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#gaa520fbf142ba1e7e659590c07da31921">TokenType</a> { <br />
+&#160;&#160;<a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a6fcc416051346daca31c571646af127a">TokenType::IDENTIFIER</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a34f55eca38e0605a84f169ff61a2a396">TokenType::NUMBER</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a63b588d5559f64f89a416e656880b949">TokenType::STRING</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921ad5e4de54911c050245979d940dc65c3a">TokenType::LBRACE</a>
 , <br />
-&#160;&#160;<a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a7907975edd3cb3611c6808f3ea6bd290">RBRACE</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921abaaceccc27b1d4e0968c999583f97de5">SEMICOLON</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a4d9b3e9fc12849d060371eb65154c751">COMMA</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a581953f6b20ad7f993b64b1dc632032e">END_OF_FILE</a>
+&#160;&#160;<a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a7907975edd3cb3611c6808f3ea6bd290">TokenType::RBRACE</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921abaaceccc27b1d4e0968c999583f97de5">TokenType::SEMICOLON</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a4d9b3e9fc12849d060371eb65154c751">TokenType::COMMA</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a581953f6b20ad7f993b64b1dc632032e">TokenType::END_OF_FILE</a>
 , <br />
-&#160;&#160;<a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ab4e08be3fe89a79b4231ed0627dc27ee">KEYWORD_SERVER</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ac5c53979872c4f30a57dfd2cf1329497">KEYWORD_LOCATION</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a8bc22f3bc1aa38b5741d5ca404343738">KEYWORD_LISTEN</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a3ff6ea963e45f4563b499a419f9c876d">KEYWORD_HOST</a>
+&#160;&#160;<a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921ab4e08be3fe89a79b4231ed0627dc27ee">TokenType::KEYWORD_SERVER</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921ac5c53979872c4f30a57dfd2cf1329497">TokenType::KEYWORD_LOCATION</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a8bc22f3bc1aa38b5741d5ca404343738">TokenType::KEYWORD_LISTEN</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a3ff6ea963e45f4563b499a419f9c876d">TokenType::KEYWORD_HOST</a>
 , <br />
-&#160;&#160;<a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921aff3bf073eff3c9d496caffcdbbe101b0">KEYWORD_ROOT</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a556ad939ce6f7e1180b0390cdc99d64e">KEYWORD_INDEX</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a26797e33ddc578694a5a524ea7e4259e">KEYWORD_AUTOINDEX</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a241e8e361ed7ad55262ef4930d087868">KEYWORD_METHODS</a>
+&#160;&#160;<a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921aff3bf073eff3c9d496caffcdbbe101b0">TokenType::KEYWORD_ROOT</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a556ad939ce6f7e1180b0390cdc99d64e">TokenType::KEYWORD_INDEX</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a26797e33ddc578694a5a524ea7e4259e">TokenType::KEYWORD_AUTOINDEX</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a241e8e361ed7ad55262ef4930d087868">TokenType::KEYWORD_METHODS</a>
 , <br />
-&#160;&#160;<a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921aca3efb3a82956a8f24f5ff9f85126cde">KEYWORD_UPLOAD_STORE</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a502256438de6e09a98bb9b61c0ec5ae5">KEYWORD_RETURN</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a4ddf89086df97602ed96b5c9fc054d5e">KEYWORD_ERROR_PAGE</a>
-, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a9c409a04b026d34cfd52f28108fa17c9">KEYWORD_CLIENT_MAX_BODY_SIZE</a>
+&#160;&#160;<a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921aca3efb3a82956a8f24f5ff9f85126cde">TokenType::KEYWORD_UPLOAD_STORE</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a502256438de6e09a98bb9b61c0ec5ae5">TokenType::KEYWORD_RETURN</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a4ddf89086df97602ed96b5c9fc054d5e">TokenType::KEYWORD_ERROR_PAGE</a>
+, <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a9c409a04b026d34cfd52f28108fa17c9">TokenType::KEYWORD_CLIENT_MAX_BODY_SIZE</a>
 , <br />
-&#160;&#160;<a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a1c396a0a5778b66fb246071d33522596">KEYWORD_CGI_EXTENSION</a>
+&#160;&#160;<a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#ggaa520fbf142ba1e7e659590c07da31921a1c396a0a5778b66fb246071d33522596">TokenType::KEYWORD_CGI_EXTENSION</a>
 <br />
  }</td></tr>
-<tr class="separator:aa520fbf142ba1e7e659590c07da31921"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:gaa520fbf142ba1e7e659590c07da31921"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structToken.html" title="Plain-old-data token with source coordinates.">Token</a> categories recognized by the configuration lexer.  <a href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#gaa520fbf142ba1e7e659590c07da31921">More...</a><br /></td></tr>
+<tr class="separator:gaa520fbf142ba1e7e659590c07da31921"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a2c02e64aa159060dee7c0a5c04748a8b" id="r_a2c02e64aa159060dee7c0a5c04748a8b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="token_8hpp.html#a2c02e64aa159060dee7c0a5c04748a8b">debugToken</a> (const <a class="el" href="structToken.html">Token</a> &amp;token)</td></tr>
-<tr class="separator:a2c02e64aa159060dee7c0a5c04748a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc400438cf001605249fa16cb13f45bb" id="r_afc400438cf001605249fa16cb13f45bb"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="token_8hpp.html#afc400438cf001605249fa16cb13f45bb">debugTokenType</a> (<a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> type)</td></tr>
-<tr class="separator:afc400438cf001605249fa16cb13f45bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafc400438cf001605249fa16cb13f45bb" id="r_gafc400438cf001605249fa16cb13f45bb"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__tokenizing_gafc400438cf001605249fa16cb13f45bb.html#gafc400438cf001605249fa16cb13f45bb">debugTokenType</a> (<a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#gaa520fbf142ba1e7e659590c07da31921">TokenType</a> type)</td></tr>
+<tr class="memdesc:gafc400438cf001605249fa16cb13f45bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a compact string name for a TokenType.  <br /></td></tr>
+<tr class="separator:gafc400438cf001605249fa16cb13f45bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2c02e64aa159060dee7c0a5c04748a8b" id="r_ga2c02e64aa159060dee7c0a5c04748a8b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__tokenizing_ga2c02e64aa159060dee7c0a5c04748a8b.html#ga2c02e64aa159060dee7c0a5c04748a8b">debugToken</a> (const <a class="el" href="structToken.html">Token</a> &amp;token)</td></tr>
+<tr class="memdesc:ga2c02e64aa159060dee7c0a5c04748a8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a human-readable token string (for logs and errors).  <br /></td></tr>
+<tr class="separator:ga2c02e64aa159060dee7c0a5c04748a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="aa520fbf142ba1e7e659590c07da31921" name="aa520fbf142ba1e7e659590c07da31921"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa520fbf142ba1e7e659590c07da31921">&#9670;&#160;</a></span>TokenType</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="structToken.html" title="Plain-old-data token with source coordinates.">Token</a> and TokenType declarations for the config lexer. </p>
+<p>Defines the token enum and POD struct used by the <a class="el" href="classTokenizer.html" title="Stateful lexer for the configuration language.">Tokenizer</a> to represent lexemes with their source location (line/column/offset). </p>
 
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum class <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a6fcc416051346daca31c571646af127a" name="aa520fbf142ba1e7e659590c07da31921a6fcc416051346daca31c571646af127a"></a>IDENTIFIER&#160;</td><td class="fielddoc"><p>A generic identifier (directive name or argument) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a34f55eca38e0605a84f169ff61a2a396" name="aa520fbf142ba1e7e659590c07da31921a34f55eca38e0605a84f169ff61a2a396"></a>NUMBER&#160;</td><td class="fielddoc"><p>A numeric literal (may include optional size suffix) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a63b588d5559f64f89a416e656880b949" name="aa520fbf142ba1e7e659590c07da31921a63b588d5559f64f89a416e656880b949"></a>STRING&#160;</td><td class="fielddoc"><p>A quoted string literal. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921ad5e4de54911c050245979d940dc65c3a" name="aa520fbf142ba1e7e659590c07da31921ad5e4de54911c050245979d940dc65c3a"></a>LBRACE&#160;</td><td class="fielddoc"><p><code>{</code> — begins a block </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a7907975edd3cb3611c6808f3ea6bd290" name="aa520fbf142ba1e7e659590c07da31921a7907975edd3cb3611c6808f3ea6bd290"></a>RBRACE&#160;</td><td class="fielddoc"><p><code>}</code> — ends a block </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921abaaceccc27b1d4e0968c999583f97de5" name="aa520fbf142ba1e7e659590c07da31921abaaceccc27b1d4e0968c999583f97de5"></a>SEMICOLON&#160;</td><td class="fielddoc"><p><code>;</code> — terminates a directive </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a4d9b3e9fc12849d060371eb65154c751" name="aa520fbf142ba1e7e659590c07da31921a4d9b3e9fc12849d060371eb65154c751"></a>COMMA&#160;</td><td class="fielddoc"><p><code>,</code> — separates arguments </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a581953f6b20ad7f993b64b1dc632032e" name="aa520fbf142ba1e7e659590c07da31921a581953f6b20ad7f993b64b1dc632032e"></a>END_OF_FILE&#160;</td><td class="fielddoc"><p>Special token marking the end of the input. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921ab4e08be3fe89a79b4231ed0627dc27ee" name="aa520fbf142ba1e7e659590c07da31921ab4e08be3fe89a79b4231ed0627dc27ee"></a>KEYWORD_SERVER&#160;</td><td class="fielddoc"><p><code>server</code> block keyword </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921ac5c53979872c4f30a57dfd2cf1329497" name="aa520fbf142ba1e7e659590c07da31921ac5c53979872c4f30a57dfd2cf1329497"></a>KEYWORD_LOCATION&#160;</td><td class="fielddoc"><p><code>location</code> block keyword </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a8bc22f3bc1aa38b5741d5ca404343738" name="aa520fbf142ba1e7e659590c07da31921a8bc22f3bc1aa38b5741d5ca404343738"></a>KEYWORD_LISTEN&#160;</td><td class="fielddoc"><p><code>listen</code> directive </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a3ff6ea963e45f4563b499a419f9c876d" name="aa520fbf142ba1e7e659590c07da31921a3ff6ea963e45f4563b499a419f9c876d"></a>KEYWORD_HOST&#160;</td><td class="fielddoc"><p><code>host</code> directive </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921aff3bf073eff3c9d496caffcdbbe101b0" name="aa520fbf142ba1e7e659590c07da31921aff3bf073eff3c9d496caffcdbbe101b0"></a>KEYWORD_ROOT&#160;</td><td class="fielddoc"><p><code>root</code> directive </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a556ad939ce6f7e1180b0390cdc99d64e" name="aa520fbf142ba1e7e659590c07da31921a556ad939ce6f7e1180b0390cdc99d64e"></a>KEYWORD_INDEX&#160;</td><td class="fielddoc"><p><code>index</code> directive </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a26797e33ddc578694a5a524ea7e4259e" name="aa520fbf142ba1e7e659590c07da31921a26797e33ddc578694a5a524ea7e4259e"></a>KEYWORD_AUTOINDEX&#160;</td><td class="fielddoc"><p><code>autoindex</code> directive </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a241e8e361ed7ad55262ef4930d087868" name="aa520fbf142ba1e7e659590c07da31921a241e8e361ed7ad55262ef4930d087868"></a>KEYWORD_METHODS&#160;</td><td class="fielddoc"><p><code>methods</code> directive </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921aca3efb3a82956a8f24f5ff9f85126cde" name="aa520fbf142ba1e7e659590c07da31921aca3efb3a82956a8f24f5ff9f85126cde"></a>KEYWORD_UPLOAD_STORE&#160;</td><td class="fielddoc"><p><code>upload_store</code> directive </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a502256438de6e09a98bb9b61c0ec5ae5" name="aa520fbf142ba1e7e659590c07da31921a502256438de6e09a98bb9b61c0ec5ae5"></a>KEYWORD_RETURN&#160;</td><td class="fielddoc"><p><code>return</code> directive (for redirection) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a4ddf89086df97602ed96b5c9fc054d5e" name="aa520fbf142ba1e7e659590c07da31921a4ddf89086df97602ed96b5c9fc054d5e"></a>KEYWORD_ERROR_PAGE&#160;</td><td class="fielddoc"><p><code>error_page</code> directive </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a9c409a04b026d34cfd52f28108fa17c9" name="aa520fbf142ba1e7e659590c07da31921a9c409a04b026d34cfd52f28108fa17c9"></a>KEYWORD_CLIENT_MAX_BODY_SIZE&#160;</td><td class="fielddoc"><p><code>client_max_body_size</code> directive </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a1c396a0a5778b66fb246071d33522596" name="aa520fbf142ba1e7e659590c07da31921a1c396a0a5778b66fb246071d33522596"></a>KEYWORD_CGI_EXTENSION&#160;</td><td class="fielddoc"><p><code>cgi_extension</code> directive </p>
-</td></tr>
-</table>
-
-<p class="definition">Definition at line <a class="el" href="token_8hpp_source.html#l00018">18</a> of file <a class="el" href="token_8hpp_source.html">token.hpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a2c02e64aa159060dee7c0a5c04748a8b" name="a2c02e64aa159060dee7c0a5c04748a8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c02e64aa159060dee7c0a5c04748a8b">&#9670;&#160;</a></span>debugToken()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string debugToken </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structToken.html">Token</a> &amp;&#160;</td>
-          <td class="paramname"><em>token</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="token_8cpp_source.html#l00070">70</a> of file <a class="el" href="token_8cpp_source.html">token.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="token_8hpp_source.html#l00047">Token::column</a>, <a class="el" href="token_8cpp_source.html#l00021">debugTokenType()</a>, <a class="el" href="token_8hpp_source.html#l00046">Token::line</a>, <a class="el" href="token_8hpp_source.html#l00044">Token::type</a>, and <a class="el" href="token_8hpp_source.html#l00045">Token::value</a>.</p>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="token_8hpp_a2c02e64aa159060dee7c0a5c04748a8b_cgraph.svg" width="287" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<a id="afc400438cf001605249fa16cb13f45bb" name="afc400438cf001605249fa16cb13f45bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc400438cf001605249fa16cb13f45bb">&#9670;&#160;</a></span>debugTokenType()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string debugTokenType </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a>&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="token_8cpp_source.html#l00021">21</a> of file <a class="el" href="token_8cpp_source.html">token.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a581953f6b20ad7f993b64b1dc632032e">END_OF_FILE</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a6fcc416051346daca31c571646af127a">IDENTIFIER</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a26797e33ddc578694a5a524ea7e4259e">KEYWORD_AUTOINDEX</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a1c396a0a5778b66fb246071d33522596">KEYWORD_CGI_EXTENSION</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a9c409a04b026d34cfd52f28108fa17c9">KEYWORD_CLIENT_MAX_BODY_SIZE</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a4ddf89086df97602ed96b5c9fc054d5e">KEYWORD_ERROR_PAGE</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a3ff6ea963e45f4563b499a419f9c876d">KEYWORD_HOST</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a556ad939ce6f7e1180b0390cdc99d64e">KEYWORD_INDEX</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a8bc22f3bc1aa38b5741d5ca404343738">KEYWORD_LISTEN</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ac5c53979872c4f30a57dfd2cf1329497">KEYWORD_LOCATION</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a241e8e361ed7ad55262ef4930d087868">KEYWORD_METHODS</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a502256438de6e09a98bb9b61c0ec5ae5">KEYWORD_RETURN</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921aff3bf073eff3c9d496caffcdbbe101b0">KEYWORD_ROOT</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ab4e08be3fe89a79b4231ed0627dc27ee">KEYWORD_SERVER</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921aca3efb3a82956a8f24f5ff9f85126cde">KEYWORD_UPLOAD_STORE</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921ad5e4de54911c050245979d940dc65c3a">LBRACE</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a34f55eca38e0605a84f169ff61a2a396">NUMBER</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a7907975edd3cb3611c6808f3ea6bd290">RBRACE</a>, <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921abaaceccc27b1d4e0968c999583f97de5">SEMICOLON</a>, and <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921a63b588d5559f64f89a416e656880b949">STRING</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="token_8cpp_source.html#l00070">debugToken()</a>, <a class="el" href="ConfigParser_8cpp_source.html#l00251">ConfigParser::expect()</a>, and <a class="el" href="ConfigParser_8cpp_source.html#l00272">ConfigParser::expectOneOf()</a>.</p>
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="token_8hpp_afc400438cf001605249fa16cb13f45bb_icgraph.svg" width="100%" height="445"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="token_8hpp_source.html">token.hpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

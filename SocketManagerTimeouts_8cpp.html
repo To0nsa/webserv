@@ -90,9 +90,12 @@ $(document).ready(function(){initNavTree('SocketManagerTimeouts_8cpp.html',''); 
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">SocketManagerTimeouts.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">SocketManagerTimeouts.cpp File Reference<div class="ingroups"><a class="el" href="group__socket__manager.html">Network &amp; Socket Abstraction</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements timeout and limit enforcement for <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a>.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="HttpResponse_8hpp_source.html">http/HttpResponse.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="handleCgi_8hpp_source.html">http/handleCgi.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="SocketManager_8hpp_source.html">network/SocketManager.hpp</a>&quot;</code><br />
@@ -114,7 +117,25 @@ $(document).ready(function(){initNavTree('SocketManagerTimeouts_8cpp.html',''); 
 </div>
 </div>
 <p><a href="SocketManagerTimeouts_8cpp_source.html">Go to the source code of this file.</a></p>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements timeout and limit enforcement for <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a>. </p>
+<p>This file contains helper routines used by the poll-driven event loop to detect stalled or abusive connections and enforce request limits:</p><ul>
+<li>isHeaderTimeout: header phase exceeded <code>HEADER_TIMEOUT_SECONDS</code>.</li>
+<li>isBodyTimeout: body phase exceeded <code>TIMEOUT</code>.</li>
+<li>isSendTimeout: no progress while sending for longer than <code>TIMEOUT</code>.</li>
+<li>isIdleTimeout: idle connection (no header bytes) exceeded <code>TIMEOUT</code>.</li>
+<li>checkClientTimeouts: orchestrates per-FD timeout checks and applies cleanup / event-mask adjustments.</li>
+<li>checkRequestLimits: enforces header length cap (<code>HEADER_MAX_LENGTH</code>) and queues a 431 if exceeded.</li>
+</ul>
+<p>Responsibilities:</p><ul>
+<li>Decide when to close connections vs. temporarily disable POLLIN.</li>
+<li>Queue appropriate HTTP error responses (e.g., 408, 431).</li>
+<li>Avoid interfering with active <a class="el" href="namespaceCGI.html">CGI</a> executions.</li>
+</ul>
+<p>These functions are invoked from the main event loop to keep the server responsive, fair, and resilient under slowloris-style behavior or network stalls. </p>
+
+<p class="definition">Definition in file <a class="el" href="SocketManagerTimeouts_8cpp_source.html">SocketManagerTimeouts.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

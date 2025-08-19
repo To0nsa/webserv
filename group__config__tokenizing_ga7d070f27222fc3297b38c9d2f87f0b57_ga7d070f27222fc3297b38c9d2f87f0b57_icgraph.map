@@ -1,0 +1,7 @@
+<map id="Tokenizer::skipWhitespaceAndComments" name="Tokenizer::skipWhitespaceAndComments">
+<area shape="rect" id="Node000001" title="Skips whitespace and hash (#) comments." alt="" coords="440,5,635,45"/>
+<area shape="rect" id="Node000002" href="$group__config__tokenizing_ga535ed2343bd999378d3295edc150e746.html#ga535ed2343bd999378d3295edc150e746" title="Converts the input buffer into a sequence of tokens." alt="" coords="245,13,392,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="426,28,393,28,393,23,426,23"/>
+<area shape="rect" id="Node000003" href="$classConfigParser_a41f286ebab54d57477b7ff2964dba61e.html#a41f286ebab54d57477b7ff2964dba61e" title="Constructs a ConfigParser instance from raw configuration text." alt="" coords="5,13,197,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="232,28,197,28,197,23,232,23"/>
+</map>

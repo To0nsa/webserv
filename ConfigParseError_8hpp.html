@@ -93,9 +93,12 @@ $(document).ready(function(){initNavTree('ConfigParseError_8hpp.html',''); initR
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a>  </div>
-  <div class="headertitle"><div class="title">ConfigParseError.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">ConfigParseError.hpp File Reference<div class="ingroups"><a class="el" href="group__config.html">Configuration Parsing</a> &raquo; <a class="el" href="group__config__parse__error.html">Parsing Errors</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Declares parse/validation error types for the config subsystem.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;exception&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -118,85 +121,30 @@ $(document).ready(function(){initNavTree('ConfigParseError_8hpp.html',''); initR
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classConfigParseError.html">ConfigParseError</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base exception for configuration processing errors.  <a href="classConfigParseError.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ad7269a7ff18103ee2428cdc5fab835ea" id="r_ad7269a7ff18103ee2428cdc5fab835ea"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ConfigParseError_8hpp.html#ad7269a7ff18103ee2428cdc5fab835ea">SyntaxError</a> = <a class="el" href="classConfigParseError.html">ConfigParseError</a></td></tr>
-<tr class="separator:ad7269a7ff18103ee2428cdc5fab835ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c59aebeb00d913b17bb4f1d24888b60" id="r_a2c59aebeb00d913b17bb4f1d24888b60"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ConfigParseError_8hpp.html#a2c59aebeb00d913b17bb4f1d24888b60">TokenizerError</a> = <a class="el" href="classConfigParseError.html">ConfigParseError</a></td></tr>
-<tr class="separator:a2c59aebeb00d913b17bb4f1d24888b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5606f9f12713604797f09db0aa82114d" id="r_a5606f9f12713604797f09db0aa82114d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ConfigParseError_8hpp.html#a5606f9f12713604797f09db0aa82114d">UnexpectedToken</a> = <a class="el" href="classConfigParseError.html">ConfigParseError</a></td></tr>
-<tr class="separator:a5606f9f12713604797f09db0aa82114d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c5ea644660346d6a60a23e56a338519" id="r_a5c5ea644660346d6a60a23e56a338519"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ConfigParseError_8hpp.html#a5c5ea644660346d6a60a23e56a338519">ValidationError</a> = <a class="el" href="classConfigParseError.html">ConfigParseError</a></td></tr>
-<tr class="separator:a5c5ea644660346d6a60a23e56a338519"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad7269a7ff18103ee2428cdc5fab835ea" id="r_gad7269a7ff18103ee2428cdc5fab835ea"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parse__error_gad7269a7ff18103ee2428cdc5fab835ea.html#gad7269a7ff18103ee2428cdc5fab835ea">SyntaxError</a> = <a class="el" href="classConfigParseError.html">ConfigParseError</a></td></tr>
+<tr class="memdesc:gad7269a7ff18103ee2428cdc5fab835ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias for syntax errors (tokenizer/parser).  <br /></td></tr>
+<tr class="separator:gad7269a7ff18103ee2428cdc5fab835ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5606f9f12713604797f09db0aa82114d" id="r_ga5606f9f12713604797f09db0aa82114d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parse__error_ga5606f9f12713604797f09db0aa82114d.html#ga5606f9f12713604797f09db0aa82114d">UnexpectedToken</a> = <a class="el" href="classConfigParseError.html">ConfigParseError</a></td></tr>
+<tr class="memdesc:ga5606f9f12713604797f09db0aa82114d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias for unexpected token errors.  <br /></td></tr>
+<tr class="separator:ga5606f9f12713604797f09db0aa82114d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2c59aebeb00d913b17bb4f1d24888b60" id="r_ga2c59aebeb00d913b17bb4f1d24888b60"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parse__error_ga2c59aebeb00d913b17bb4f1d24888b60.html#ga2c59aebeb00d913b17bb4f1d24888b60">TokenizerError</a> = <a class="el" href="classConfigParseError.html">ConfigParseError</a></td></tr>
+<tr class="memdesc:ga2c59aebeb00d913b17bb4f1d24888b60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias for tokenizer-specific errors.  <br /></td></tr>
+<tr class="separator:ga2c59aebeb00d913b17bb4f1d24888b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5c5ea644660346d6a60a23e56a338519" id="r_ga5c5ea644660346d6a60a23e56a338519"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parse__error_ga5c5ea644660346d6a60a23e56a338519.html#ga5c5ea644660346d6a60a23e56a338519">ValidationError</a> = <a class="el" href="classConfigParseError.html">ConfigParseError</a></td></tr>
+<tr class="memdesc:ga5c5ea644660346d6a60a23e56a338519"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias for configuration validation errors.  <br /></td></tr>
+<tr class="separator:ga5c5ea644660346d6a60a23e56a338519"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Typedef Documentation</h2>
-<a id="ad7269a7ff18103ee2428cdc5fab835ea" name="ad7269a7ff18103ee2428cdc5fab835ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7269a7ff18103ee2428cdc5fab835ea">&#9670;&#160;</a></span>SyntaxError</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Declares parse/validation error types for the config subsystem. </p>
+<p>Provides a single exception class used for tokenizer, parser, and validator errors. The class formats a human-friendly message and optionally appends a contextual source line for diagnostics. </p>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="ConfigParseError_8hpp.html#ad7269a7ff18103ee2428cdc5fab835ea">SyntaxError</a> =  <a class="el" href="classConfigParseError.html">ConfigParseError</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParseError_8hpp_source.html#l00029">29</a> of file <a class="el" href="ConfigParseError_8hpp_source.html">ConfigParseError.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a2c59aebeb00d913b17bb4f1d24888b60" name="a2c59aebeb00d913b17bb4f1d24888b60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c59aebeb00d913b17bb4f1d24888b60">&#9670;&#160;</a></span>TokenizerError</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="ConfigParseError_8hpp.html#a2c59aebeb00d913b17bb4f1d24888b60">TokenizerError</a> =  <a class="el" href="classConfigParseError.html">ConfigParseError</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParseError_8hpp_source.html#l00031">31</a> of file <a class="el" href="ConfigParseError_8hpp_source.html">ConfigParseError.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a5606f9f12713604797f09db0aa82114d" name="a5606f9f12713604797f09db0aa82114d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5606f9f12713604797f09db0aa82114d">&#9670;&#160;</a></span>UnexpectedToken</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="ConfigParseError_8hpp.html#a5606f9f12713604797f09db0aa82114d">UnexpectedToken</a> =  <a class="el" href="classConfigParseError.html">ConfigParseError</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParseError_8hpp_source.html#l00030">30</a> of file <a class="el" href="ConfigParseError_8hpp_source.html">ConfigParseError.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a5c5ea644660346d6a60a23e56a338519" name="a5c5ea644660346d6a60a23e56a338519"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c5ea644660346d6a60a23e56a338519">&#9670;&#160;</a></span>ValidationError</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="ConfigParseError_8hpp.html#a5c5ea644660346d6a60a23e56a338519">ValidationError</a> =  <a class="el" href="classConfigParseError.html">ConfigParseError</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ConfigParseError_8hpp_source.html#l00032">32</a> of file <a class="el" href="ConfigParseError_8hpp_source.html">ConfigParseError.hpp</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="ConfigParseError_8hpp_source.html">ConfigParseError.hpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

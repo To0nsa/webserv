@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Implements filesystem utility functions for Webserv.">
 <polygon fill="#999999" stroke="#666666" points="777.3,-184 625.3,-184 625.3,-165 777.3,-165 777.3,-184"/>
 <text text-anchor="middle" x="701.3" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">src/utils/filesystemUtils.cpp</text>
 </a>
@@ -56,7 +56,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="439.8,-129 336.8,-129 336.8,-110 439.8,-110 439.8,-129"/>
 <text text-anchor="middle" x="388.3" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>
@@ -92,7 +92,7 @@
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000009"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL.">
 <polygon fill="white" stroke="#666666" points="318.8,-129 197.8,-129 197.8,-110 318.8,-110 318.8,-129"/>
 <text text-anchor="middle" x="258.3" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">http/HttpRequest.hpp</text>
 </a>
@@ -389,7 +389,7 @@
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
-<g id="a_Node000010"><a xlink:href="Url_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000010"><a xlink:href="Url_8hpp.html" target="_top" xlink:title="Declares the Url POD for parsed URL components.">
 <polygon fill="white" stroke="#666666" points="232.3,-74 158.3,-74 158.3,-55 232.3,-55 232.3,-74"/>
 <text text-anchor="middle" x="195.3" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/Url.hpp</text>
 </a>

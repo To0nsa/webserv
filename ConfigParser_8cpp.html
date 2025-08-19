@@ -94,9 +94,12 @@ $(document).ready(function(){initNavTree('ConfigParser_8cpp.html',''); initResiz
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
-  <div class="headertitle"><div class="title">ConfigParser.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">ConfigParser.cpp File Reference<div class="ingroups"><a class="el" href="group__config.html">Configuration Parsing</a> &raquo; <a class="el" href="group__config__parsing.html">Parsing</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements parsing of servers, locations, and directives.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="ConfigParser_8hpp_source.html">config/parser/ConfigParser.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Config_8hpp_source.html">config/Config.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ConfigParseError_8hpp_source.html">config/parser/ConfigParseError.hpp</a>&quot;</code><br />
@@ -130,22 +133,32 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aa209e8139e4e3fdc744f66569dee85bc" id="r_aa209e8139e4e3fdc744f66569dee85bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02ConfigParser_8cpp_03.html#aa209e8139e4e3fdc744f66569dee85bc">anonymous_namespace{ConfigParser.cpp}::checkDuplicateDirective</a> (const std::string &amp;name, std::unordered_set&lt; std::string &gt; &amp;seen, const std::unordered_set&lt; std::string &gt; &amp;repeatable)</td></tr>
+<tr class="memitem:aa209e8139e4e3fdc744f66569dee85bc" id="r_aa209e8139e4e3fdc744f66569dee85bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02ConfigParser_8cpp_03_aa209e8139e4e3fdc744f66569dee85bc.html#aa209e8139e4e3fdc744f66569dee85bc">anonymous_namespace{ConfigParser.cpp}::checkDuplicateDirective</a> (const std::string &amp;name, std::unordered_set&lt; std::string &gt; &amp;seen, const std::unordered_set&lt; std::string &gt; &amp;repeatable)</td></tr>
+<tr class="memdesc:aa209e8139e4e3fdc744f66569dee85bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a directive name is allowed (not duplicated).  <br /></td></tr>
 <tr class="separator:aa209e8139e4e3fdc744f66569dee85bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78387fc5ca311812bfbf94a0dd76d0e3" id="r_a78387fc5ca311812bfbf94a0dd76d0e3"><td class="memTemplParams" colspan="2">template&lt;typename T , typename HandlerMap &gt; </td></tr>
-<tr class="memitem:a78387fc5ca311812bfbf94a0dd76d0e3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02ConfigParser_8cpp_03.html#a78387fc5ca311812bfbf94a0dd76d0e3">anonymous_namespace{ConfigParser.cpp}::parseDirective</a> (T &amp;target, const <a class="el" href="structToken.html">Token</a> &amp;token, std::vector&lt; std::string &gt; &amp;values, const HandlerMap &amp;handlers, int line, int column, const std::string &amp;ctx)</td></tr>
+<tr class="memitem:a78387fc5ca311812bfbf94a0dd76d0e3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02ConfigParser_8cpp_03_a78387fc5ca311812bfbf94a0dd76d0e3.html#a78387fc5ca311812bfbf94a0dd76d0e3">anonymous_namespace{ConfigParser.cpp}::parseDirective</a> (T &amp;target, const <a class="el" href="structToken.html">Token</a> &amp;token, std::vector&lt; std::string &gt; &amp;values, const HandlerMap &amp;handlers, int line, int column, const std::string &amp;ctx)</td></tr>
+<tr class="memdesc:a78387fc5ca311812bfbf94a0dd76d0e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatches a configuration directive to its registered handler.  <br /></td></tr>
 <tr class="separator:a78387fc5ca311812bfbf94a0dd76d0e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:aed05a2d666295f4e1eeaeffcc71a71f6" id="r_aed05a2d666295f4e1eeaeffcc71a71f6"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; <a class="el" href="token_8hpp.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a>, 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02ConfigParser_8cpp_03.html#aed05a2d666295f4e1eeaeffcc71a71f6">anonymous_namespace{ConfigParser.cpp}::kArgTokenTypes</a></td></tr>
-<tr class="separator:aed05a2d666295f4e1eeaeffcc71a71f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb37bf13106562d2fd7bc3be56d8bd5c" id="r_aeb37bf13106562d2fd7bc3be56d8bd5c"><td class="memItemLeft" align="right" valign="top">static const std::unordered_set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02ConfigParser_8cpp_03.html#aeb37bf13106562d2fd7bc3be56d8bd5c">anonymous_namespace{ConfigParser.cpp}::kRepeatableLocationDirectives</a></td></tr>
-<tr class="separator:aeb37bf13106562d2fd7bc3be56d8bd5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac282f9ce1204c87e2d751e65ee192656" id="r_ac282f9ce1204c87e2d751e65ee192656"><td class="memItemLeft" align="right" valign="top">static const std::unordered_set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02ConfigParser_8cpp_03.html#ac282f9ce1204c87e2d751e65ee192656">anonymous_namespace{ConfigParser.cpp}::kRepeatableServerDirectives</a> = {&quot;error_page&quot;}</td></tr>
-<tr class="separator:ac282f9ce1204c87e2d751e65ee192656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac282f9ce1204c87e2d751e65ee192656" id="r_gac282f9ce1204c87e2d751e65ee192656"><td class="memItemLeft" align="right" valign="top">static const std::unordered_set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_gac282f9ce1204c87e2d751e65ee192656.html#gac282f9ce1204c87e2d751e65ee192656">anonymous_namespace{ConfigParser.cpp}::kRepeatableServerDirectives</a> = {&quot;error_page&quot;}</td></tr>
+<tr class="memdesc:gac282f9ce1204c87e2d751e65ee192656"><td class="mdescLeft">&#160;</td><td class="mdescRight">Directives allowed multiple times inside a server block.  <br /></td></tr>
+<tr class="separator:gac282f9ce1204c87e2d751e65ee192656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaeb37bf13106562d2fd7bc3be56d8bd5c" id="r_gaeb37bf13106562d2fd7bc3be56d8bd5c"><td class="memItemLeft" align="right" valign="top">static const std::unordered_set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_gaeb37bf13106562d2fd7bc3be56d8bd5c.html#gaeb37bf13106562d2fd7bc3be56d8bd5c">anonymous_namespace{ConfigParser.cpp}::kRepeatableLocationDirectives</a></td></tr>
+<tr class="memdesc:gaeb37bf13106562d2fd7bc3be56d8bd5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Directives allowed multiple times inside a location block.  <br /></td></tr>
+<tr class="separator:gaeb37bf13106562d2fd7bc3be56d8bd5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaed05a2d666295f4e1eeaeffcc71a71f6" id="r_gaed05a2d666295f4e1eeaeffcc71a71f6"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; <a class="el" href="group__config__tokenizing_gaa520fbf142ba1e7e659590c07da31921.html#gaa520fbf142ba1e7e659590c07da31921">TokenType</a>, 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__parsing_gaed05a2d666295f4e1eeaeffcc71a71f6.html#gaed05a2d666295f4e1eeaeffcc71a71f6">anonymous_namespace{ConfigParser.cpp}::kArgTokenTypes</a></td></tr>
+<tr class="memdesc:gaed05a2d666295f4e1eeaeffcc71a71f6"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structToken.html" title="Plain-old-data token with source coordinates.">Token</a> types accepted as directive arguments (ordered by frequency).  <br /></td></tr>
+<tr class="separator:gaed05a2d666295f4e1eeaeffcc71a71f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements parsing of servers, locations, and directives. </p>
+<p>Walks the token stream, enforces grammar, and dispatches each directive to handler maps to populate <a class="el" href="classServer.html">Server</a> and <a class="el" href="classLocation.html">Location</a>. Provides precise diagnostics with contextual line snippets. </p>
+
+<p class="definition">Definition in file <a class="el" href="ConfigParser_8cpp_source.html">ConfigParser.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

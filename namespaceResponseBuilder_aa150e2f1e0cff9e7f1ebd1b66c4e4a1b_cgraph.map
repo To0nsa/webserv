@@ -1,7 +1,0 @@
-<map id="ResponseBuilder::generateRedirect" name="ResponseBuilder::generateRedirect">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,35,203,75"/>
-<area shape="rect" id="Node000002" href="$namespaceMessageHandler.html#a064a5d8be8de9234f362e73d9bb68b6b" title=" " alt="" coords="251,5,459,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,40,237,36,237,42,203,46"/>
-<area shape="rect" id="Node000003" href="$classHttpResponse.html#a7efa3ab17ead358609d80b55db164867" title=" " alt="" coords="261,70,449,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="203,63,248,68,247,73,203,68"/>
-</map>

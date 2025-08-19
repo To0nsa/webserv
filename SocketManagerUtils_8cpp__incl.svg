@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Utility methods for connection lifecycle management in SocketManager.">
 <polygon fill="#999999" stroke="#666666" points="1155.5,-250 1003.5,-250 1003.5,-220 1155.5,-220 1155.5,-250"/>
 <text text-anchor="start" x="1011.5" y="-238" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
 <text text-anchor="middle" x="1079.5" y="-227" font-family="Helvetica,sans-Serif" font-size="10.00">Utils.cpp</text>
@@ -139,7 +139,7 @@ var sectionId = 'dynsection-0';
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
-<g id="a_Node000010"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000010"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL.">
 <polygon fill="white" stroke="#666666" points="828,-129 707,-129 707,-110 828,-110 828,-129"/>
 <text text-anchor="middle" x="767.5" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">http/HttpRequest.hpp</text>
 </a>
@@ -157,7 +157,7 @@ var sectionId = 'dynsection-0';
 <!-- Node13 -->
 <g id="Node000013" class="node">
 <title>Node13</title>
-<g id="a_Node000013"><a xlink:href="HttpResponse_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000013"><a xlink:href="HttpResponse_8hpp.html" target="_top" xlink:title="Declares the HttpResponse class.">
 <polygon fill="white" stroke="#666666" points="1112.5,-74 984.5,-74 984.5,-55 1112.5,-55 1112.5,-74"/>
 <text text-anchor="middle" x="1048.5" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/HttpResponse.hpp</text>
 </a>
@@ -211,7 +211,7 @@ var sectionId = 'dynsection-0';
 <!-- Node18 -->
 <g id="Node000018" class="node">
 <title>Node18</title>
-<g id="a_Node000018"><a xlink:href="responseBuilder_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000018"><a xlink:href="responseBuilder_8hpp.html" target="_top" xlink:title="Declarations of helper functions for constructing HTTP responses.">
 <polygon fill="white" stroke="#666666" points="1533.5,-129 1395.5,-129 1395.5,-110 1533.5,-110 1533.5,-129"/>
 <text text-anchor="middle" x="1464.5" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">http/responseBuilder.hpp</text>
 </a>
@@ -229,7 +229,7 @@ var sectionId = 'dynsection-0';
 <!-- Node19 -->
 <g id="Node000019" class="node">
 <title>Node19</title>
-<g id="a_Node000019"><a xlink:href="SocketManager_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000019"><a xlink:href="SocketManager_8hpp.html" target="_top" xlink:title="Declares the SocketManager and per&#45;client state for non&#45;blocking I/O.">
 <polygon fill="white" stroke="#666666" points="1001,-184 846,-184 846,-165 1001,-165 1001,-184"/>
 <text text-anchor="middle" x="923.5" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">network/SocketManager.hpp</text>
 </a>
@@ -355,7 +355,7 @@ var sectionId = 'dynsection-0';
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="320,-74 217,-74 217,-55 320,-55 320,-74"/>
 <text text-anchor="middle" x="268.5" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>
@@ -499,7 +499,7 @@ var sectionId = 'dynsection-0';
 <!-- Node11 -->
 <g id="Node000011" class="node">
 <title>Node11</title>
-<g id="a_Node000011"><a xlink:href="Url_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000011"><a xlink:href="Url_8hpp.html" target="_top" xlink:title="Declares the Url POD for parsed URL components.">
 <polygon fill="white" stroke="#666666" points="928.5,-74 854.5,-74 854.5,-55 928.5,-55 928.5,-74"/>
 <text text-anchor="middle" x="891.5" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/Url.hpp</text>
 </a>

@@ -1,0 +1,17 @@
+<map id="anonymous_namespace{responseBuilder::cpp}::initializeResponse" name="anonymous_namespace{responseBuilder::cpp}::initializeResponse">
+<area shape="rect" id="Node000001" title="Initializes a new HTTP response with status and connection metadata." alt="" coords="5,115,185,169"/>
+<area shape="rect" id="Node000002" href="$group__http_gab537cb11b054734695ee4889d88aec6d.html#gab537cb11b054734695ee4889d88aec6d" title="Returns the value of a header." alt="" coords="257,5,436,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,112,173,74,232,40,252,32,254,37,234,44,176,79,128,117"/>
+<area shape="rect" id="Node000004" href="$group__http_ga5bd35289a97c367827dbd823d41276f0.html#ga5bd35289a97c367827dbd823d41276f0" title="Returns the HTTP version string (e.g. &quot;HTTP/1.1&quot;)." alt="" coords="257,55,437,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="164,112,233,89,264,81,265,86,234,94,165,117"/>
+<area shape="rect" id="Node000005" href="$group__http_ga7efa3ab17ead358609d80b55db164867.html#ga7efa3ab17ead358609d80b55db164867" title="Adds or replaces a header in the response." alt="" coords="253,104,441,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="185,130,239,125,239,130,186,136"/>
+<area shape="rect" id="Node000006" href="$group__http_ga5460361fdec25ae63ff2afbfc634a59b.html#ga5460361fdec25ae63ff2afbfc634a59b" title="Stores HTTP version and connection header metadata." alt="" coords="233,153,460,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="186,148,220,151,219,157,185,153"/>
+<area shape="rect" id="Node000007" href="$group__http_ga3fd95706ba0be451092bcc0ccb84d267.html#ga3fd95706ba0be451092bcc0ccb84d267" title="Sets the status code and reason phrase of the response." alt="" coords="255,203,438,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="170,167,234,187,271,197,269,202,233,193,169,172"/>
+<area shape="rect" id="Node000008" href="$group__http_gac92dc857b1f22af7c8074ffe44436234.html#gac92dc857b1f22af7c8074ffe44436234" title="Determines whether the TCP connection should be kept alive based on HTTP version and the Connection h..." alt="" coords="257,252,437,307"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="131,167,179,203,235,237,249,244,247,249,232,242,176,207,128,172"/>
+<area shape="rect" id="Node000003" href="$stringUtils_8cpp_a0d2414ad61e591a6b14cd96c306b59e4.html#a0d2414ad61e591a6b14cd96c306b59e4" title=" " alt="" coords="508,5,583,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="436,15,494,15,494,21,436,21"/>
+</map>

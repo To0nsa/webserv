@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['message_20formatting_0',['Error message formatting',['../group__ErrorUtils.html',1,'']]]
+  ['entrypoint_0',['Application Entrypoint',['../group__entrypoint.html',1,'']]],
+  ['errors_1',['Parsing Errors',['../group__config__parse__error.html',1,'']]]
 ];

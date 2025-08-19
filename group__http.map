@@ -1,0 +1,4 @@
+<map id="HTTP Protocol" name="HTTP Protocol">
+<area shape="rect" id="Node000001" title="HTTP request/response parsing and handling." alt="" coords="5,5,119,31"/>
+<area shape="rect" id="Node000002" href="$group__request__handler.html" title="Functions and utilities for handling HTTP requests." alt="" coords="167,5,304,31"/>
+</map>

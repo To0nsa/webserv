@@ -90,9 +90,12 @@ $(document).ready(function(){initNavTree('SocketManagerResponse_8cpp.html',''); 
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">SocketManagerResponse.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">SocketManagerResponse.cpp File Reference<div class="ingroups"><a class="el" href="group__socket__manager.html">Network &amp; Socket Abstraction</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements response sending logic for <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a>.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="HttpResponse_8hpp_source.html">http/HttpResponse.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="handleCgi_8hpp_source.html">http/handleCgi.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="SocketManager_8hpp_source.html">network/SocketManager.hpp</a>&quot;</code><br />
@@ -121,7 +124,25 @@ $(document).ready(function(){initNavTree('SocketManagerResponse_8cpp.html',''); 
 </div>
 </div>
 <p><a href="SocketManagerResponse_8cpp_source.html">Go to the source code of this file.</a></p>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements response sending logic for <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a>. </p>
+<p>This file contains all methods of <a class="el" href="classSocketManager.html">SocketManager</a> related to <b>writing HTTP responses back to clients</b>:</p><ul>
+<li>Logging response status codes (logResponseStatus).</li>
+<li>Sending file-backed responses in chunks (sendFileResponse).</li>
+<li>Sending in-memory/raw responses (sendRawResponse).</li>
+<li>Driving the high-level send path for a client (sendResponse).</li>
+</ul>
+<p>Responsibilities:</p><ul>
+<li>Stream headers and body data over non-blocking sockets.</li>
+<li>Support both static files and CGI-generated temporary files.</li>
+<li>Handle partial writes (tracking progress via <code>bytes_sent</code>).</li>
+<li>Manage connection lifecycle (<code>keep-alive</code> vs <code>close</code>).</li>
+<li>Ensure resource cleanup (closing file streams, unlinking <a class="el" href="namespaceCGI.html">CGI</a> temp files).</li>
+</ul>
+<p>This file implements the <b>write-path</b> of the event loop, complementing <a class="el" href="SocketManagerRequest_8cpp.html">SocketManagerRequest.cpp</a> which handles the read-path. </p>
+
+<p class="definition">Definition in file <a class="el" href="SocketManagerResponse_8cpp_source.html">SocketManagerResponse.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

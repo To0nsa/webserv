@@ -1,0 +1,9 @@
+<map id="anonymous_namespace{validateConfig::cpp}::validateServerNameFormat" name="anonymous_namespace{validateConfig::cpp}::validateServerNameFormat">
+<area shape="rect" id="Node000001" title="Validates the format of all server_name directives across servers." alt="" coords="5,45,216,100"/>
+<area shape="rect" id="Node000002" href="$group__config__validation_ga74c6e43efabb8dbf3a8da16cff4c3f36.html#ga74c6e43efabb8dbf3a8da16cff4c3f36" title="Validates a full server name against domain format rules." alt="" coords="264,45,444,100"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,70,250,70,250,75,216,75"/>
+<area shape="rect" id="Node000003" href="$group__config__validation_ga5208c2ce108fba5927b1264c66a9d966.html#ga5208c2ce108fba5927b1264c66a9d966" title="Validates a single domain label according to RFC 1035." alt="" coords="492,5,672,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="444,54,478,48,479,53,445,59"/>
+<area shape="rect" id="Node000004" href="$group__config__validation_ga22d7f5b2b0fac2c483debec0d9238b48.html#ga22d7f5b2b0fac2c483debec0d9238b48" title="Splits a domain name into its individual labels." alt="" coords="492,84,672,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="445,85,479,91,478,96,444,91"/>
+</map>

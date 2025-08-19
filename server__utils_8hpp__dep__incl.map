@@ -1,5 +1,5 @@
 <map id="include/core/server_utils.hpp" name="include/core/server_utils.hpp">
-<area shape="rect" id="Node000001" title="Provides utility functions for selecting the correct Server instance." alt="" coords="22,5,169,45"/>
-<area shape="rect" id="Node000002" href="$server__utils_8cpp.html" title=" " alt="" coords="5,93,185,119"/>
+<area shape="rect" id="Node000001" title="Declares server selection util for virtual host resolution." alt="" coords="22,5,169,45"/>
+<area shape="rect" id="Node000002" href="$server__utils_8cpp.html" title="Implements server selection utilities for virtual host resolution." alt="" coords="5,93,185,119"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,59,98,93,93,93,93,59"/>
 </map>

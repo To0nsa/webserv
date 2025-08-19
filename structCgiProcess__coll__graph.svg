@@ -25,19 +25,19 @@
 <polygon fill="#999999" stroke="transparent" points="82,-139 0,-139 0,0 82,0 82,-139"/>
 <text text-anchor="start" x="14" y="-126.5" font-family="Helvetica,sans-Serif" font-size="10.00">CgiProcess</text>
 <text text-anchor="start" x="4" y="-111.5" font-family="Helvetica,sans-Serif" font-size="10.00">+</text>
-<text text-anchor="start" x="17" y="-111.5" font-family="Helvetica,sans-Serif" font-size="10.00">input_path</text>
+<text text-anchor="start" x="17" y="-111.5" font-family="Helvetica,sans-Serif" font-size="10.00">pid</text>
 <text text-anchor="start" x="4" y="-96.5" font-family="Helvetica,sans-Serif" font-size="10.00">+</text>
-<text text-anchor="start" x="17" y="-96.5" font-family="Helvetica,sans-Serif" font-size="10.00">interpreter</text>
+<text text-anchor="start" x="17" y="-96.5" font-family="Helvetica,sans-Serif" font-size="10.00">start_time</text>
 <text text-anchor="start" x="4" y="-81.5" font-family="Helvetica,sans-Serif" font-size="10.00">+</text>
 <text text-anchor="start" x="17" y="-81.5" font-family="Helvetica,sans-Serif" font-size="10.00">last_activity</text>
 <text text-anchor="start" x="4" y="-66.5" font-family="Helvetica,sans-Serif" font-size="10.00">+</text>
-<text text-anchor="start" x="17" y="-66.5" font-family="Helvetica,sans-Serif" font-size="10.00">output_path</text>
+<text text-anchor="start" x="17" y="-66.5" font-family="Helvetica,sans-Serif" font-size="10.00">script_path</text>
 <text text-anchor="start" x="4" y="-51.5" font-family="Helvetica,sans-Serif" font-size="10.00">+</text>
-<text text-anchor="start" x="17" y="-51.5" font-family="Helvetica,sans-Serif" font-size="10.00">pid</text>
+<text text-anchor="start" x="17" y="-51.5" font-family="Helvetica,sans-Serif" font-size="10.00">interpreter</text>
 <text text-anchor="start" x="4" y="-36.5" font-family="Helvetica,sans-Serif" font-size="10.00">+</text>
-<text text-anchor="start" x="17" y="-36.5" font-family="Helvetica,sans-Serif" font-size="10.00">script_path</text>
+<text text-anchor="start" x="17" y="-36.5" font-family="Helvetica,sans-Serif" font-size="10.00">output_path</text>
 <text text-anchor="start" x="4" y="-21.5" font-family="Helvetica,sans-Serif" font-size="10.00">+</text>
-<text text-anchor="start" x="17" y="-21.5" font-family="Helvetica,sans-Serif" font-size="10.00">start_time</text>
+<text text-anchor="start" x="17" y="-21.5" font-family="Helvetica,sans-Serif" font-size="10.00">input_path</text>
 <text text-anchor="start" x="39" y="-6.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
 <polygon fill="#666666" stroke="#666666" points="0,-121.5 0,-121.5 82,-121.5 82,-121.5 0,-121.5"/>
 <polygon fill="#666666" stroke="#666666" points="0,-16.5 0,-16.5 15,-16.5 15,-16.5 0,-16.5"/>

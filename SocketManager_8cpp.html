@@ -93,9 +93,12 @@ $(document).ready(function(){initNavTree('SocketManager_8cpp.html',''); initResi
   <div class="summary">
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
-  <div class="headertitle"><div class="title">SocketManager.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">SocketManager.cpp File Reference<div class="ingroups"><a class="el" href="group__socket__manager.html">Network &amp; Socket Abstraction</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements the <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a> core loop and server socket setup.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="SocketManager_8hpp_source.html">network/SocketManager.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Logger_8hpp_source.html">utils/Logger.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="filesystemUtils_8hpp_source.html">utils/filesystemUtils.hpp</a>&quot;</code><br />
@@ -122,82 +125,26 @@ $(document).ready(function(){initNavTree('SocketManager_8cpp.html',''); initResi
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad816ed0d00f6e01f0bc5a5dea2787dfa" id="r_ad816ed0d00f6e01f0bc5a5dea2787dfa"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8cpp.html#ad816ed0d00f6e01f0bc5a5dea2787dfa">signalHandler</a> (int signum)</td></tr>
+<tr class="memitem:ad816ed0d00f6e01f0bc5a5dea2787dfa" id="r_ad816ed0d00f6e01f0bc5a5dea2787dfa"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8cpp_ad816ed0d00f6e01f0bc5a5dea2787dfa.html#ad816ed0d00f6e01f0bc5a5dea2787dfa">signalHandler</a> (int signum)</td></tr>
 <tr class="separator:ad816ed0d00f6e01f0bc5a5dea2787dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:af3270a6e782fe74a057a44a74d4b29f9" id="r_af3270a6e782fe74a057a44a74d4b29f9"><td class="memItemLeft" align="right" valign="top">static volatile sig_atomic_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8cpp.html#af3270a6e782fe74a057a44a74d4b29f9">running</a> = 1</td></tr>
+<tr class="memitem:af3270a6e782fe74a057a44a74d4b29f9" id="r_af3270a6e782fe74a057a44a74d4b29f9"><td class="memItemLeft" align="right" valign="top">static volatile sig_atomic_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SocketManager_8cpp_af3270a6e782fe74a057a44a74d4b29f9.html#af3270a6e782fe74a057a44a74d4b29f9">running</a> = 1</td></tr>
 <tr class="separator:af3270a6e782fe74a057a44a74d4b29f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="ad816ed0d00f6e01f0bc5a5dea2787dfa" name="ad816ed0d00f6e01f0bc5a5dea2787dfa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad816ed0d00f6e01f0bc5a5dea2787dfa">&#9670;&#160;</a></span>signalHandler()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements the <a class="el" href="classSocketManager.html" title="Poll-driven socket and CGI orchestrator.">SocketManager</a> core loop and server socket setup. </p>
+<p>Provides the main event-driven networking logic of Webserv.</p><ul>
+<li>Sets up listening sockets for configured servers.</li>
+<li>Runs the non-blocking poll() loop to multiplex all I/O.</li>
+<li>Handles new connections, client requests, and responses.</li>
+<li>Integrates <a class="el" href="namespaceCGI.html">CGI</a> handling, timeout checks, and error recovery.</li>
+</ul>
+<p>This file contains the <b>control flow backbone</b> of the web server: it ties together sockets, HTTP parsing, response building, <a class="el" href="namespaceCGI.html">CGI</a> execution, and cleanup into a single poll-driven loop. </p>
 
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void signalHandler </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>signum</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8cpp_source.html#l00030">30</a> of file <a class="el" href="SocketManager_8cpp_source.html">SocketManager.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="SocketManager_8cpp_source.html#l00028">running</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManager_8cpp_source.html#l00036">SocketManager::SocketManager()</a>.</p>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="SocketManager_8cpp_ad816ed0d00f6e01f0bc5a5dea2787dfa_icgraph.svg" width="402" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="af3270a6e782fe74a057a44a74d4b29f9" name="af3270a6e782fe74a057a44a74d4b29f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af3270a6e782fe74a057a44a74d4b29f9">&#9670;&#160;</a></span>running</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">volatile sig_atomic_t running = 1</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SocketManager_8cpp_source.html#l00028">28</a> of file <a class="el" href="SocketManager_8cpp_source.html">SocketManager.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManager_8cpp_source.html#l00127">SocketManager::run()</a>, and <a class="el" href="SocketManager_8cpp_source.html#l00030">signalHandler()</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="SocketManager_8cpp_source.html">SocketManager.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

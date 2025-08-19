@@ -1,0 +1,22 @@
+<map id="Tokenizer::parseNumberOrUnit" name="Tokenizer::parseNumberOrUnit">
+<area shape="rect" id="Node000001" title="Parses a NUMBER token with optional single&#45;letter suffix." alt="" coords="5,55,227,80"/>
+<area shape="rect" id="Node000002" href="$group__config__tokenizing_ga507c90c0e852845bb26142c482864e25.html#ga507c90c0e852845bb26142c482864e25" title="Creates a token with current source coordinates." alt="" coords="294,5,458,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,52,294,31,295,36,184,57"/>
+<area shape="rect" id="Node000003" href="$group__config__tokenizing_ga72ddfff726551ec4af08a7a70995bf46.html#ga72ddfff726551ec4af08a7a70995bf46" title="Consumes consecutive decimal digits." alt="" coords="297,55,455,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,65,283,65,283,70,227,70"/>
+<area shape="rect" id="Node000007" href="$group__config__tokenizing_gaee3735b01289546812d2180ee9355ff1.html#gaee3735b01289546812d2180ee9355ff1" title="Optionally consumes a single&#45;letter size suffix." alt="" coords="275,105,477,145"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="175,77,272,99,271,104,174,83"/>
+<area shape="rect" id="Node000004" href="$group__config__tokenizing_gac2386c92405b58ea06660287d2146b84.html#gac2386c92405b58ea06660287d2146b84" title="Advances by one character, updating line/column." alt="" coords="534,9,681,35"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="441,52,528,35,529,40,442,57"/>
+<area shape="rect" id="Node000005" href="$group__config__tokenizing_ga0eb3b50597e00c5b298a0928e4cc683e.html#ga0eb3b50597e00c5b298a0928e4cc683e" title="Tests if the cursor reached the end of the input." alt="" coords="537,59,677,84"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="455,66,524,67,523,73,455,71"/>
+<area shape="rect" id="Node000006" href="$group__config__tokenizing_ga1f0151fc9f4abe60041f7ace3fd6dc45.html#ga1f0151fc9f4abe60041f7ace3fd6dc45" title="Peeks the current character without consuming it." alt="" coords="546,108,669,133"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="433,78,539,102,538,108,431,83"/>
+<area shape="poly" id="edge7_Node000007_Node000004" title=" " alt="" coords="449,102,476,89,490,78,499,67,509,55,524,44,537,37,539,42,527,48,512,59,503,70,494,82,479,94,451,107"/>
+<area shape="poly" id="edge10_Node000007_Node000005" title=" " alt="" coords="463,102,538,85,539,90,464,107"/>
+<area shape="poly" id="edge11_Node000007_Node000006" title=" " alt="" coords="478,120,532,119,532,125,478,126"/>
+<area shape="rect" id="Node000008" href="$group__config__tokenizing_gaa7daa721fdeeb87cd3da853c2886dd96.html#gaa7daa721fdeeb87cd3da853c2886dd96" title="Extracts the full source line containing a given byte offset." alt="" coords="525,207,689,232"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="417,143,526,193,546,200,545,205,524,198,414,147"/>
+<area shape="rect" id="Node000009" href="$errorUtils_8cpp_a3a83368b4a479591239a5a9c8740a587.html#a3a83368b4a479591239a5a9c8740a587" title=" " alt="" coords="559,157,656,183"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="478,142,546,155,545,161,477,147"/>
+</map>

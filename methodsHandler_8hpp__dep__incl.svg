@@ -21,7 +21,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Declares HTTP method handlers for GET, POST, and DELETE.">
 <polygon fill="#999999" stroke="#666666" points="326,-85 147,-85 147,-66 326,-66 326,-85"/>
 <text text-anchor="middle" x="236.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">include/http/methodsHandler.hpp</text>
 </a>
@@ -30,7 +30,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="handleGet_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="handleGet_8cpp.html" target="_top" xlink:title="Implements the HTTP GET request handler.">
 <polygon fill="white" stroke="#666666" points="143,-30 0,-30 0,0 143,0 143,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="71.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handleGet/handleGet.cpp</text>
@@ -49,7 +49,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="handlePost_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="handlePost_8cpp.html" target="_top" xlink:title="Implements HTTP POST request handling logic.">
 <polygon fill="white" stroke="#666666" points="312,-30 161,-30 161,0 312,0 312,-30"/>
 <text text-anchor="start" x="169" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="236.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handlePost/handlePost.cpp</text>
@@ -68,7 +68,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="requestRouter_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="requestRouter_8cpp.html" target="_top" xlink:title="Routes parsed HTTP requests to the appropriate handler.">
 <polygon fill="white" stroke="#666666" points="475,-24.5 330,-24.5 330,-5.5 475,-5.5 475,-24.5"/>
 <text text-anchor="middle" x="402.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/requestRouter.cpp</text>
 </a>

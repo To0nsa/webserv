@@ -1,0 +1,13 @@
+<map id="CGI::unlinkWithErrorLog" name="CGI::unlinkWithErrorLog">
+<area shape="rect" id="Node000001" title="Remove a temporary CGI file and log an error if the deletion fails." alt="" coords="5,29,183,55"/>
+<area shape="rect" id="Node000002" href="$classLogger_a23f092a06cc63628beb87a1a54f9ea59.html#a23f092a06cc63628beb87a1a54f9ea59" title=" " alt="" coords="231,29,357,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,39,217,39,217,45,183,45"/>
+<area shape="rect" id="Node000003" href="$Logger_8cpp_a2c56a9a25fc1f2a14162f4df7ce936ff.html#a2c56a9a25fc1f2a14162f4df7ce936ff" title=" " alt="" coords="557,5,645,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,27,405,14,453,12,500,14,543,14,543,20,500,19,453,17,406,19,340,32"/>
+<area shape="rect" id="Node000004" href="$Logger_8cpp_afc799b96df6ffe84b57bcce18820bc43.html#afc799b96df6ffe84b57bcce18820bc43" title=" " alt="" coords="548,55,655,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="340,52,406,65,472,69,534,68,534,74,472,74,405,70,339,57"/>
+<area shape="rect" id="Node000005" href="$classLogger_a3d3f0801eeaf39b33a906ea8569c19b2.html#a3d3f0801eeaf39b33a906ea8569c19b2" title=" " alt="" coords="405,29,500,55"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="357,39,392,39,392,45,357,45"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="500,32,543,25,544,30,501,37"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="501,47,535,53,534,59,500,53"/>
+</map>

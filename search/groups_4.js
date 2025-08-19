@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['string_20parsing_20utilities_0',['String parsing utilities',['../group__StringUtils.html',1,'']]]
+  ['handling_0',['Request Handling',['../group__request__handler.html',1,'']]],
+  ['html_20utilities_1',['HTML Utilities',['../group__html__utils.html',1,'']]],
+  ['http_20protocol_2',['HTTP Protocol',['../group__http.html',1,'']]]
 ];

@@ -10,6 +10,5 @@ var searchData=
   ['anonymous_5fnamespace_7bhttprequestparser_2ecpp_7d_7',['anonymous_namespace{HttpRequestParser.cpp}',['../namespaceanonymous__namespace_02HttpRequestParser_8cpp_03.html',1,'']]],
   ['anonymous_5fnamespace_7brequestrouter_2ecpp_7d_8',['anonymous_namespace{requestRouter.cpp}',['../namespaceanonymous__namespace_02requestRouter_8cpp_03.html',1,'']]],
   ['anonymous_5fnamespace_7bresponsebuilder_2ecpp_7d_9',['anonymous_namespace{responseBuilder.cpp}',['../namespaceanonymous__namespace_02responseBuilder_8cpp_03.html',1,'']]],
-  ['anonymous_5fnamespace_7bvalidateconfig_2ecpp_7d_10',['anonymous_namespace{validateConfig.cpp}',['../namespaceanonymous__namespace_02validateConfig_8cpp_03.html',1,'']]],
-  ['anonymous_5fnamespace_7bwebserv_2ecpp_7d_11',['anonymous_namespace{webserv.cpp}',['../namespaceanonymous__namespace_02webserv_8cpp_03.html',1,'']]]
+  ['anonymous_5fnamespace_7bvalidateconfig_2ecpp_7d_10',['anonymous_namespace{validateConfig.cpp}',['../namespaceanonymous__namespace_02validateConfig_8cpp_03.html',1,'']]]
 ];

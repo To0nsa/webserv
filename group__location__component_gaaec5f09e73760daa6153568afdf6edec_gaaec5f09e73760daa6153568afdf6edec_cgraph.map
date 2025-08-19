@@ -1,0 +1,5 @@
+<map id="Location::setAllowedMethods" name="Location::setAllowedMethods">
+<area shape="rect" id="Node000001" title="Replaces the set of allowed HTTP methods." alt="" coords="5,5,219,31"/>
+<area shape="rect" id="Node000002" href="$group__location__component_gafd791778b218b915053a3b4ff39c796a.html#gafd791778b218b915053a3b4ff39c796a" title="Adds a single allowed HTTP method." alt="" coords="267,5,425,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,15,253,15,253,21,219,21"/>
+</map>

@@ -1,0 +1,124 @@
+<map id="handlePost" name="handlePost">
+<area shape="rect" id="Node000001" title="Handles an HTTP POST request end&#45;to&#45;end." alt="" coords="5,911,100,936"/>
+<area shape="rect" id="Node000002" href="$group__request__handler_gaf184a4a0bb09e11c8184a99496fd62f0.html#gaf184a4a0bb09e11c8184a99496fd62f0" title="Dispatch POST handling based on the request&#39;s Content&#45;Type." alt="" coords="148,753,351,779"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="68,908,220,786,223,790,72,913"/>
+<area shape="rect" id="Node000037" href="$group__request__handler_ga9ff313dc02727ea9ee8185084f3db538.html#ga9ff313dc02727ea9ee8185084f3db538" title="Resolve and validate the filesystem path for a POST upload target." alt="" coords="442,1201,610,1227"/>
+<area shape="poly" id="edge54_Node000001_Node000037" title=" " alt="" coords="76,934,494,1192,491,1196,73,938"/>
+<area shape="rect" id="Node000047" href="$group__request__handler_ga99c270438eea87f6b2054e2c7224183f.html#ga99c270438eea87f6b2054e2c7224183f" title="Validate the prerequisites for processing a POST request." alt="" coords="448,911,604,936"/>
+<area shape="poly" id="edge69_Node000001_Node000047" title=" " alt="" coords="100,921,434,921,434,926,100,926"/>
+<area shape="rect" id="Node000003" href="$group__http_gab537cb11b054734695ee4889d88aec6d.html#gab537cb11b054734695ee4889d88aec6d" title="Returns the value of a header." alt="" coords="721,295,900,320"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="257,752,313,676,412,560,475,496,544,434,620,377,700,329,716,322,718,327,703,334,623,381,548,438,478,500,416,563,317,680,261,755"/>
+<area shape="rect" id="Node000005" href="$group__request__handler_ga17f2fba88ab8919ca4bc75a7b63110c6.html#ga17f2fba88ab8919ca4bc75a7b63110c6" title="Handle a multipart/form&#45;data POST request and persist the uploaded file." alt="" coords="447,611,605,636"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="274,751,487,640,489,645,277,755"/>
+<area shape="rect" id="Node000032" href="$group__request__handler_ga180e5fb1a4a618496ec1597a023a9c5c.html#ga180e5fb1a4a618496ec1597a023a9c5c" title="Handle a POST request with a raw body (no specific content type)." alt="" coords="399,746,653,786"/>
+<area shape="poly" id="edge39_Node000002_Node000032" title=" " alt="" coords="351,763,385,763,385,769,351,769"/>
+<area shape="rect" id="Node000033" href="$group__request__handler_ga9ac3362c96da141e1eace42920d590e3.html#ga9ac3362c96da141e1eace42920d590e3" title="Handle a application/x&#45;www&#45;form&#45;urlencoded POST request." alt="" coords="420,811,632,865"/>
+<area shape="poly" id="edge45_Node000002_Node000033" title=" " alt="" coords="300,776,408,805,407,810,298,781"/>
+<area shape="rect" id="Node000004" href="$stringUtils_8cpp_a0d2414ad61e591a6b14cd96c306b59e4.html#a0d2414ad61e591a6b14cd96c306b59e4" title=" " alt="" coords="1038,5,1113,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="813,293,829,245,859,176,880,139,905,102,933,69,967,40,994,26,1024,18,1025,23,996,31,969,44,937,72,909,106,885,142,864,178,834,247,818,295"/>
+<area shape="poly" id="edge20_Node000005_Node000003" title=" " alt="" coords="538,609,591,546,622,503,651,458,664,422,669,390,676,360,685,344,700,329,707,324,710,328,703,333,689,348,681,362,674,391,669,423,656,461,627,507,595,549,542,612"/>
+<area shape="rect" id="Node000006" href="$group__http_ga1f8eaecab62a277ca49584495da022fc.html#ga1f8eaecab62a277ca49584495da022fc" title="Builds an HTTP error response, optionally using a custom error page." alt="" coords="712,811,909,851"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="546,634,597,676,655,732,669,751,678,767,687,781,703,796,715,803,712,808,700,800,683,785,673,769,665,754,651,736,593,680,543,638"/>
+<area shape="rect" id="Node000010" href="$group__html__utils_gaf5ddafc8d1e304df95c0aee1984b2682.html#gaf5ddafc8d1e304df95c0aee1984b2682" title="Escapes special HTML characters in a string." alt="" coords="1026,769,1125,795"/>
+<area shape="poly" id="edge21_Node000005_Node000010" title=" " alt="" coords="556,608,627,584,673,572,723,564,775,560,827,565,876,578,922,603,939,620,947,639,949,678,949,718,956,737,970,755,990,768,1013,776,1012,781,988,773,966,759,951,739,944,719,943,678,942,640,934,623,918,607,874,583,826,570,775,566,724,569,674,577,629,589,558,613"/>
+<area shape="rect" id="Node000011" href="$group__filesystem__utils_ga60cb34db186e7da050316400c820c815.html#ga60cb34db186e7da050316400c820c815" title="Concatenates a base path and a suffix with a single &#39;/&#39; separator." alt="" coords="1038,819,1113,844"/>
+<area shape="poly" id="edge22_Node000005_Node000011" title=" " alt="" coords="606,616,679,618,762,629,804,639,846,654,885,673,922,697,934,710,942,724,947,752,952,779,958,792,970,804,996,819,1025,826,1023,831,994,823,966,808,954,795,947,781,942,753,937,726,930,713,918,701,883,678,844,659,803,645,761,634,678,623,606,621"/>
+<area shape="rect" id="Node000014" href="$group__http_ga822d078e27118227ea36e32830724915.html#ga822d078e27118227ea36e32830724915" title="Builds a successful HTTP response with an inline body." alt="" coords="712,495,909,535"/>
+<area shape="poly" id="edge13_Node000005_Node000014" title=" " alt="" coords="558,608,700,552,738,538,740,543,702,556,560,613"/>
+<area shape="rect" id="Node000015" href="$group__http_gab30e8ad147999e3dc043302f81e7fef9.html#gab30e8ad147999e3dc043302f81e7fef9" title="Returns the request body string." alt="" coords="728,761,893,787"/>
+<area shape="poly" id="edge17_Node000005_Node000015" title=" " alt="" coords="543,634,608,689,654,720,702,746,725,755,723,760,700,751,651,724,605,693,539,638"/>
+<area shape="rect" id="Node000016" href="$group__server__component_ga7ad9b923d766c82b58bcca01146cb375.html#ga7ad9b923d766c82b58bcca01146cb375" title="Returns the maximum allowed size for the request body." alt="" coords="701,712,920,737"/>
+<area shape="poly" id="edge18_Node000005_Node000016" title=" " alt="" coords="564,634,762,705,760,710,562,639"/>
+<area shape="rect" id="Node000017" href="$filesystemUtils_8cpp_a2293ab4b3de5994471e981e4d63fa973.html#a2293ab4b3de5994471e981e4d63fa973" title=" " alt="" coords="749,344,873,369"/>
+<area shape="poly" id="edge19_Node000005_Node000017" title=" " alt="" coords="536,609,587,545,651,458,664,435,671,415,681,397,700,378,734,362,737,367,703,383,685,400,676,417,668,437,656,461,591,548,540,612"/>
+<area shape="rect" id="Node000018" href="$classLogger_a23f092a06cc63628beb87a1a54f9ea59.html#a23f092a06cc63628beb87a1a54f9ea59" title=" " alt="" coords="747,927,874,952"/>
+<area shape="poly" id="edge23_Node000005_Node000018" title=" " alt="" coords="549,634,601,674,630,701,656,733,673,768,679,799,685,829,703,862,736,894,772,918,769,922,733,898,699,865,680,831,674,800,668,770,651,735,626,705,598,678,545,638"/>
+<area shape="rect" id="Node000022" href="$namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_aa1aac800609853913d5d4564612c8a90.html#aa1aac800609853913d5d4564612c8a90" title="Parse a multipart/form&#45;data body and extract the first file part." alt="" coords="712,393,909,448"/>
+<area shape="poly" id="edge29_Node000005_Node000022" title=" " alt="" coords="540,609,607,551,700,481,745,453,748,457,703,486,611,555,543,613"/>
+<area shape="rect" id="Node000007" href="$group__http_ga064a5d8be8de9234f362e73d9bb68b6b.html#ga064a5d8be8de9234f362e73d9bb68b6b" title="Returns the default reason phrase for a given HTTP status code." alt="" coords="971,705,1179,745"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="890,809,919,796,933,786,942,775,952,765,967,754,981,748,983,752,969,759,955,769,946,779,936,790,921,800,892,814"/>
+<area shape="rect" id="Node000008" href="$group__server__component_ga53fb46a6288fcdc4270ad5900f50736e.html#ga53fb46a6288fcdc4270ad5900f50736e" title="Returns the mapping of HTTP error codes to custom error pages." alt="" coords="994,917,1157,943"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="851,849,906,876,969,902,999,911,997,916,967,907,904,881,848,854"/>
+<area shape="rect" id="Node000009" href="$group__server__component_ga06b6c9af45443180a65bcc145e1b2f1e.html#ga06b6c9af45443180a65bcc145e1b2f1e" title="Returns the list of location blocks defined for this server." alt="" coords="998,868,1153,893"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="910,847,994,863,993,868,909,852"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="909,810,1012,791,1013,796,910,816"/>
+<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="910,829,1024,829,1024,834,910,834"/>
+<area shape="rect" id="Node000012" href="$group__http_ga3e83ff074d5f7a6de514a4edcb02ab4d.html#ga3e83ff074d5f7a6de514a4edcb02ab4d" title="Sets the body of the response." alt="" coords="988,605,1163,631"/>
+<area shape="poly" id="edge11_Node000006_Node000012" title=" " alt="" coords="901,809,918,796,932,777,939,758,941,719,943,679,950,659,966,640,974,633,978,638,970,644,955,662,948,681,946,719,944,759,937,780,922,800,904,813"/>
+<area shape="rect" id="Node000013" href="$group__http_ga7efa3ab17ead358609d80b55db164867.html#ga7efa3ab17ead358609d80b55db164867" title="Adds or replaces a header in the response." alt="" coords="981,655,1169,680"/>
+<area shape="poly" id="edge12_Node000006_Node000013" title=" " alt="" coords="899,809,918,796,929,784,936,771,941,744,947,717,954,704,966,691,975,684,978,689,970,695,958,707,952,719,946,745,941,773,934,787,922,800,902,813"/>
+<area shape="poly" id="edge14_Node000014_Node000007" title=" " alt="" coords="896,533,922,552,936,570,943,588,946,623,950,657,957,673,970,689,976,695,972,699,966,693,952,676,945,658,941,623,938,589,931,573,918,556,892,538"/>
+<area shape="poly" id="edge15_Node000014_Node000012" title=" " alt="" coords="880,533,921,552,946,572,955,581,969,590,990,599,988,604,967,595,952,586,942,576,919,556,878,538"/>
+<area shape="poly" id="edge16_Node000014_Node000013" title=" " alt="" coords="892,533,922,552,939,575,946,598,953,620,970,640,980,647,977,651,966,644,948,622,941,599,934,577,918,556,889,538"/>
+<area shape="rect" id="Node000019" href="$Logger_8cpp_a2c56a9a25fc1f2a14162f4df7ce936ff.html#a2c56a9a25fc1f2a14162f4df7ce936ff" title=" " alt="" coords="1275,1119,1363,1144"/>
+<area shape="poly" id="edge24_Node000018_Node000019" title=" " alt="" coords="875,940,900,947,922,961,936,979,944,998,945,1036,948,1072,955,1088,970,1104,1003,1125,1040,1139,1079,1148,1119,1153,1196,1151,1261,1142,1262,1147,1196,1157,1118,1158,1078,1154,1038,1144,1001,1129,966,1108,951,1091,943,1073,940,1036,938,999,932,982,918,965,897,952,873,945"/>
+<area shape="rect" id="Node000020" href="$Logger_8cpp_afc799b96df6ffe84b57bcce18820bc43.html#afc799b96df6ffe84b57bcce18820bc43" title=" " alt="" coords="1266,1019,1373,1044"/>
+<area shape="poly" id="edge25_Node000018_Node000020" title=" " alt="" coords="875,948,1253,1017,1252,1022,874,953"/>
+<area shape="rect" id="Node000021" href="$classLogger_a3d3f0801eeaf39b33a906ea8569c19b2.html#a3d3f0801eeaf39b33a906ea8569c19b2" title=" " alt="" coords="1028,1068,1123,1093"/>
+<area shape="poly" id="edge26_Node000018_Node000021" title=" " alt="" coords="875,941,899,949,922,961,933,973,940,985,947,1009,953,1033,959,1044,970,1055,991,1067,1015,1074,1013,1079,989,1071,966,1059,955,1047,948,1035,941,1011,935,987,929,976,918,965,897,953,874,946"/>
+<area shape="poly" id="edge27_Node000021_Node000019" title=" " alt="" coords="1124,1088,1263,1117,1262,1122,1123,1093"/>
+<area shape="poly" id="edge28_Node000021_Node000020" title=" " alt="" coords="1123,1069,1252,1042,1253,1047,1124,1074"/>
+<area shape="rect" id="Node000023" href="$namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a7a388e9ecc1706e2abbf96741988d331.html#a7a388e9ecc1706e2abbf96741988d331" title="Extract and sanitize the filename from a part&#39;s headers." alt="" coords="985,527,1165,581"/>
+<area shape="poly" id="edge30_Node000022_Node000023" title=" " alt="" coords="862,446,921,481,969,512,984,519,982,524,967,516,919,486,859,451"/>
+<area shape="rect" id="Node000026" href="$namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a0e3cbb85c890854e8714bf8640bd8d5a.html#a0e3cbb85c890854e8714bf8640bd8d5a" title="Find the next occurrence of a delimiter in a multipart body." alt="" coords="983,55,1168,109"/>
+<area shape="poly" id="edge33_Node000022_Node000026" title=" " alt="" coords="905,391,918,379,938,346,946,314,946,283,941,251,937,219,936,186,945,153,966,119,970,115,974,118,970,122,950,155,942,187,942,218,947,250,951,282,951,315,943,348,922,382,908,395"/>
+<area shape="rect" id="Node000027" href="$namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a79cf300d28df2d14033279ccc05d48c9.html#a79cf300d28df2d14033279ccc05d48c9" title="Check if the body contains the closing delimiter at the given position." alt="" coords="985,133,1165,188"/>
+<area shape="poly" id="edge34_Node000022_Node000027" title=" " alt="" coords="904,391,918,379,933,357,941,335,941,290,942,245,950,221,966,198,973,191,976,195,970,201,954,223,947,245,947,290,946,335,938,359,922,382,907,395"/>
+<area shape="rect" id="Node000028" href="$namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a715752ba4fb2eef8db8e8369373a9b38.html#a715752ba4fb2eef8db8e8369373a9b38" title="Construct the closing delimiter for a multipart body." alt="" coords="974,212,1177,267"/>
+<area shape="poly" id="edge35_Node000022_Node000028" title=" " alt="" coords="901,391,918,379,929,366,935,354,941,329,948,303,955,289,966,276,970,273,973,277,970,280,959,292,953,305,947,330,940,356,933,369,922,383,905,395"/>
+<area shape="rect" id="Node000029" href="$namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a1c457898d46828c595d6f40f3cf031de.html#a1c457898d46828c595d6f40f3cf031de" title="Construct the opening delimiter for a multipart part." alt="" coords="980,291,1171,345"/>
+<area shape="poly" id="edge36_Node000022_Node000029" title=" " alt="" coords="888,391,919,378,967,354,982,348,984,353,969,359,921,383,890,396"/>
+<area shape="rect" id="Node000030" href="$namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a6d0565a8e69959a7243d7040d4f1daba.html#a6d0565a8e69959a7243d7040d4f1daba" title="Split a raw part into headers and data sections." alt="" coords="968,369,1183,424"/>
+<area shape="poly" id="edge37_Node000022_Node000030" title=" " alt="" coords="909,409,954,405,954,410,910,414"/>
+<area shape="rect" id="Node000031" href="$namespaceanonymous__namespace_02handleMultipartForm_8cpp_03_a97cca721ef601f48a167045b7f25489c.html#a97cca721ef601f48a167045b7f25489c" title="Strip a trailing CRLF sequence from data if present." alt="" coords="985,448,1165,503"/>
+<area shape="poly" id="edge38_Node000022_Node000031" title=" " alt="" coords="910,438,972,451,971,457,909,444"/>
+<area shape="rect" id="Node000024" href="$group__filesystem__utils_ga22a224ea6d75056313024fedf64dd6b4.html#ga22a224ea6d75056313024fedf64dd6b4" title="Produces a safe filename from untrusted input." alt="" coords="1253,731,1386,756"/>
+<area shape="poly" id="edge31_Node000023_Node000024" title=" " alt="" coords="1165,579,1184,590,1222,621,1255,655,1304,718,1300,721,1251,659,1218,625,1181,595,1162,584"/>
+<area shape="rect" id="Node000025" href="$group__filesystem__utils_ga0f26334fa81c376898a717eb94ef31f0.html#ga0f26334fa81c376898a717eb94ef31f0" title="Generates a timestamp&#45;based fallback filename for uploads." alt="" coords="1456,731,1607,756"/>
+<area shape="poly" id="edge32_Node000024_Node000025" title=" " alt="" coords="1386,741,1442,741,1442,746,1386,746"/>
+<area shape="poly" id="edge40_Node000032_Node000006" title=" " alt="" coords="614,783,710,806,709,811,613,789"/>
+<area shape="poly" id="edge43_Node000032_Node000010" title=" " alt="" coords="563,743,632,713,723,685,773,677,824,675,873,681,921,697,938,710,947,725,955,741,970,754,990,765,1013,772,1012,777,988,770,966,759,951,744,942,728,934,714,919,702,872,686,823,680,773,682,724,690,634,718,566,748"/>
+<area shape="poly" id="edge41_Node000032_Node000014" title=" " alt="" coords="548,744,775,542,778,546,552,748"/>
+<area shape="poly" id="edge42_Node000032_Node000015" title=" " alt="" coords="654,767,714,769,714,774,653,772"/>
+<area shape="poly" id="edge44_Node000032_Node000018" title=" " alt="" coords="633,784,655,796,672,811,681,827,689,844,703,861,740,892,777,917,774,922,737,896,699,865,685,847,677,830,668,815,652,800,630,789"/>
+<area shape="poly" id="edge46_Node000033_Node000006" title=" " alt="" coords="632,833,698,831,698,837,632,838"/>
+<area shape="poly" id="edge49_Node000033_Node000010" title=" " alt="" coords="610,863,679,879,759,888,800,888,841,884,881,875,919,861,934,849,942,835,951,819,966,804,989,793,1012,786,1013,791,990,798,970,808,955,822,947,837,938,853,921,866,882,880,842,889,800,893,758,893,678,884,609,868"/>
+<area shape="poly" id="edge47_Node000033_Node000014" title=" " alt="" coords="631,810,652,796,671,774,680,752,687,728,699,698,787,546,792,549,704,701,692,729,685,754,675,777,655,800,634,815"/>
+<area shape="poly" id="edge48_Node000033_Node000015" title=" " alt="" coords="632,812,739,787,740,792,633,817"/>
+<area shape="poly" id="edge50_Node000033_Node000018" title=" " alt="" coords="593,863,702,905,751,920,749,925,700,910,591,868"/>
+<area shape="rect" id="Node000034" href="$group__url__utils_gaa9b5e301867c352ac3162072a5e8be3b.html#gaa9b5e301867c352ac3162072a5e8be3b" title="Parses an application/x&#45;www&#45;form&#45;urlencoded body into key/value pairs." alt="" coords="728,976,893,1001"/>
+<area shape="poly" id="edge51_Node000033_Node000034" title=" " alt="" coords="602,863,630,878,655,896,671,914,679,931,687,946,703,961,717,969,714,973,700,965,683,950,674,933,666,917,652,900,627,883,600,868"/>
+<area shape="rect" id="Node000035" href="$group__url__utils_ga3f80e0f614b83f018e5398b1b2df93b0.html#ga3f80e0f614b83f018e5398b1b2df93b0" title="Decodes application/x&#45;www&#45;form&#45;urlencoded field content." alt="" coords="999,1253,1152,1279"/>
+<area shape="poly" id="edge52_Node000034_Node000035" title=" " alt="" coords="895,996,922,1012,937,1028,946,1045,952,1077,956,1111,961,1129,970,1149,1010,1201,1051,1242,1047,1246,1006,1205,966,1151,956,1131,951,1112,947,1078,940,1046,932,1031,918,1016,892,1001"/>
+<area shape="rect" id="Node000036" href="$group__url__utils_gabf2641feed820a4fcaf2699a86d1a4f7.html#gabf2641feed820a4fcaf2699a86d1a4f7" title="Decodes percent&#45;encoded octets in a string." alt="" coords="1231,1337,1408,1363"/>
+<area shape="poly" id="edge53_Node000035_Node000036" title=" " alt="" coords="1114,1276,1269,1330,1268,1335,1112,1281"/>
+<area shape="poly" id="edge56_Node000037_Node000006" title=" " alt="" coords="530,1200,552,1150,590,1076,639,992,699,912,731,882,764,857,767,861,734,886,703,916,644,995,594,1079,557,1152,535,1202"/>
+<area shape="poly" id="edge63_Node000037_Node000011" title=" " alt="" coords="565,1199,701,1158,735,1152,766,1150,821,1151,845,1150,869,1144,893,1132,918,1111,940,1080,948,1049,947,1017,941,985,936,952,935,919,944,886,966,853,993,836,1024,829,1025,834,995,841,970,857,949,888,940,919,941,951,947,984,952,1016,953,1049,944,1082,922,1114,896,1136,871,1149,846,1155,821,1157,766,1155,736,1157,702,1163,567,1204"/>
+<area shape="poly" id="edge64_Node000037_Node000018" title=" " alt="" coords="530,1200,550,1154,585,1089,635,1020,666,988,700,961,733,946,735,951,703,966,670,992,640,1023,590,1092,555,1156,535,1202"/>
+<area shape="poly" id="edge55_Node000037_Node000036" title=" " alt="" coords="533,1226,550,1279,583,1353,605,1392,633,1430,665,1463,703,1489,742,1507,782,1519,824,1525,866,1526,952,1516,1037,1494,1115,1463,1186,1429,1288,1368,1290,1373,1188,1433,1118,1468,1038,1499,953,1522,867,1531,823,1530,781,1524,740,1512,700,1494,662,1467,629,1433,601,1395,578,1356,545,1281,528,1228"/>
+<area shape="rect" id="Node000038" href="$group__request__handler_ga1f1e28ca7655266fabc0a1e504ea1220.html#ga1f1e28ca7655266fabc0a1e504ea1220" title="Generate a unique filename for uploaded files." alt="" coords="707,1375,914,1429"/>
+<area shape="poly" id="edge57_Node000037_Node000038" title=" " alt="" coords="541,1225,606,1289,652,1327,703,1361,712,1366,710,1371,700,1366,649,1331,603,1293,537,1229"/>
+<area shape="rect" id="Node000039" href="$group__location__component_ga0e5f51972e02ed954426e0222215484b.html#ga0e5f51972e02ed954426e0222215484b" title="Returns the path this location matches." alt="" coords="743,1453,878,1479"/>
+<area shape="poly" id="edge58_Node000037_Node000039" title=" " alt="" coords="535,1226,557,1268,593,1326,642,1388,671,1416,703,1440,731,1453,729,1458,700,1444,668,1420,638,1392,589,1329,552,1270,531,1228"/>
+<area shape="rect" id="Node000040" href="$group__http_ga02743663bb8998bd7450640035f5f6c0.html#ga02743663bb8998bd7450640035f5f6c0" title="Returns the normalized request path." alt="" coords="731,1025,891,1051"/>
+<area shape="poly" id="edge59_Node000037_Node000040" title=" " alt="" coords="536,1199,601,1133,648,1094,700,1061,720,1053,722,1057,703,1066,651,1098,604,1137,540,1203"/>
+<area shape="rect" id="Node000041" href="$group__location__component_ga16546e5661036b8cd9dc12532a4d82f2.html#ga16546e5661036b8cd9dc12532a4d82f2" title="Returns the root directory path." alt="" coords="743,1555,879,1580"/>
+<area shape="poly" id="edge60_Node000037_Node000041" title=" " alt="" coords="533,1226,550,1282,582,1365,605,1411,633,1455,665,1497,703,1533,731,1549,729,1554,700,1537,662,1501,629,1458,601,1413,578,1367,545,1284,528,1227"/>
+<area shape="rect" id="Node000042" href="$group__location__component_gaf0f6e7f96f5a26e3e64e38a44ff82bd4.html#gaf0f6e7f96f5a26e3e64e38a44ff82bd4" title="Returns the upload store directory." alt="" coords="717,1075,904,1100"/>
+<area shape="poly" id="edge61_Node000037_Node000042" title=" " alt="" coords="546,1199,613,1160,700,1117,744,1101,746,1107,702,1122,616,1164,549,1203"/>
+<area shape="rect" id="Node000043" href="$filesystemUtils_8cpp_ab15541f5b09bc6ca4db980a9e6b6aeb5.html#ab15541f5b09bc6ca4db980a9e6b6aeb5" title=" " alt="" coords="783,1227,839,1252"/>
+<area shape="poly" id="edge62_Node000037_Node000043" title=" " alt="" coords="610,1219,769,1233,769,1238,610,1224"/>
+<area shape="rect" id="Node000044" href="$group__filesystem__utils_gac2bd72a316d163f375ffba9801542d41.html#gac2bd72a316d163f375ffba9801542d41" title="Resolves a safe absolute path for an uploaded file." alt="" coords="995,1019,1156,1044"/>
+<area shape="poly" id="edge65_Node000037_Node000044" title=" " alt="" coords="610,1208,694,1203,784,1192,865,1177,896,1166,918,1155,930,1144,936,1132,942,1107,947,1080,954,1067,966,1055,981,1045,984,1050,970,1059,959,1070,952,1082,947,1108,941,1134,934,1147,922,1159,898,1171,866,1182,785,1198,694,1208,610,1214"/>
+<area shape="rect" id="Node000045" href="$group__filesystem__utils_ga114db7b785fefcba4012faa22b67ab90.html#ga114db7b785fefcba4012faa22b67ab90" title="Ensures that a directory exists, creating missing parents as needed." alt="" coords="749,1276,873,1301"/>
+<area shape="poly" id="edge67_Node000037_Node000045" title=" " alt="" coords="569,1224,702,1262,736,1270,735,1275,701,1267,568,1229"/>
+<area shape="rect" id="Node000046" href="$group__filesystem__utils_gab31d472cab5ab15a13c3f5df7b349185.html#gab31d472cab5ab15a13c3f5df7b349185" title="Canonicalizes a URI&#45;style path and rejects traversal." alt="" coords="753,1325,868,1351"/>
+<area shape="poly" id="edge68_Node000037_Node000046" title=" " alt="" coords="547,1224,613,1267,657,1291,702,1312,740,1323,739,1328,700,1316,654,1296,611,1272,544,1229"/>
+<area shape="poly" id="edge66_Node000044_Node000024" title=" " alt="" coords="1097,1016,1138,989,1181,952,1220,905,1255,854,1303,767,1308,770,1259,856,1224,908,1185,956,1141,993,1100,1021"/>
+<area shape="poly" id="edge70_Node000047_Node000006" title=" " alt="" coords="566,908,734,853,736,858,567,913"/>
+<area shape="poly" id="edge71_Node000047_Node000015" title=" " alt="" coords="584,908,619,895,652,875,667,856,674,836,682,816,700,797,714,789,717,793,703,801,687,819,679,838,672,858,655,879,622,899,586,913"/>
+<area shape="poly" id="edge72_Node000047_Node000016" title=" " alt="" coords="592,908,624,895,651,875,664,859,670,844,674,811,678,779,686,762,699,747,705,743,708,747,703,751,690,765,683,780,679,812,675,845,668,862,655,879,626,899,594,913"/>
+<area shape="poly" id="edge75_Node000047_Node000018" title=" " alt="" coords="604,925,733,932,733,938,604,930"/>
+<area shape="poly" id="edge73_Node000047_Node000040" title=" " alt="" coords="549,934,615,972,702,1012,727,1019,725,1024,700,1016,613,977,546,938"/>
+<area shape="poly" id="edge74_Node000047_Node000042" title=" " alt="" coords="541,934,606,996,652,1031,703,1061,720,1068,718,1073,700,1066,649,1035,602,1000,537,938"/>
+</map>

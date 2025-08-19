@@ -1,0 +1,8 @@
+<map id="Configuration Parsing" name="Configuration Parsing">
+<area shape="rect" id="Node000001" title="Configuration structures, parsing, normalization, and validation." alt="" coords="5,104,165,129"/>
+<area shape="rect" id="Node000002" href="$group__config__normalizing.html" title="Post&#45;parse defaulting and canonicalization." alt="" coords="218,5,319,31"/>
+<area shape="rect" id="Node000004" href="$group__config__parse__error.html" title="Error types and helpers for tokenizer/parser diagnostics." alt="" coords="213,55,324,80"/>
+<area shape="rect" id="Node000003" href="$group__config__parsing.html" title="Syntactic parsing and directive dispatch." alt="" coords="234,104,303,129"/>
+<area shape="rect" id="Node000005" href="$group__config__tokenizing.html" title="Lexical analysis of configuration text into tokens." alt="" coords="223,153,314,179"/>
+<area shape="rect" id="Node000006" href="$group__config__validation.html" title="Configuration validation passes." alt="" coords="225,203,312,228"/>
+</map>

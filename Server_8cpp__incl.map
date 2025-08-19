@@ -4,13 +4,13 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="581,33,387,78,386,73,580,28"/>
 <area shape="rect" id="Node000009" title=" " alt="" coords="413,152,510,177"/>
 <area shape="poly" id="edge19_Node000001_Node000009" title=" " alt="" coords="612,33,544,81,482,143,478,139,541,77,609,29"/>
-<area shape="rect" id="Node000010" href="$stringUtils_8hpp.html" title="Utility functions for parsing numeric string values." alt="" coords="555,79,704,104"/>
+<area shape="rect" id="Node000010" href="$stringUtils_8hpp.html" title=" " alt="" coords="555,79,704,104"/>
 <area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="632,31,632,65,627,65,627,31"/>
 <area shape="rect" id="Node000011" title=" " alt="" coords="749,152,819,177"/>
 <area shape="poly" id="edge18_Node000001_Node000011" title=" " alt="" coords="651,29,683,49,718,77,747,108,770,139,766,142,743,112,714,81,680,54,648,33"/>
 <area shape="rect" id="Node000013" title=" " alt="" coords="779,79,864,104"/>
 <area shape="poly" id="edge17_Node000001_Node000013" title=" " alt="" coords="661,28,778,71,776,76,659,33"/>
-<area shape="rect" id="Node000003" href="$Location_8hpp.html" title=" " alt="" coords="50,152,187,177"/>
+<area shape="rect" id="Node000003" href="$Location_8hpp.html" title="Declares the Location class for route&#45;specific configuration." alt="" coords="50,152,187,177"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="292,107,166,150,164,145,290,101"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="5,225,56,251"/>
 <area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="263,100,200,106,133,117,75,133,54,143,39,154,32,167,28,181,28,212,23,212,22,181,27,164,35,150,51,138,73,128,132,112,199,101,262,94"/>

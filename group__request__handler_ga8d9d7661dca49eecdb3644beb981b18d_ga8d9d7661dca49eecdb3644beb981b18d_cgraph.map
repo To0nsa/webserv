@@ -1,0 +1,56 @@
+<map id="generateAutoindex" name="generateAutoindex">
+<area shape="rect" id="Node000001" title="Generates an HTML autoindex page for a directory listing." alt="" coords="5,427,152,453"/>
+<area shape="rect" id="Node000002" href="$group__http_ga1f8eaecab62a277ca49584495da022fc.html#ga1f8eaecab62a277ca49584495da022fc" title="Builds an HTTP error response, optionally using a custom error page." alt="" coords="200,171,397,211"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,426,98,391,122,342,156,288,198,239,232,215,235,219,202,243,160,291,127,344,102,393,87,428"/>
+<area shape="rect" id="Node000010" href="$group__http_ga822d078e27118227ea36e32830724915.html#ga822d078e27118227ea36e32830724915" title="Builds a successful HTTP response with an inline body." alt="" coords="200,89,397,129"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="80,426,91,378,112,307,147,228,171,191,198,157,228,134,231,138,202,161,175,194,152,231,117,309,96,379,85,428"/>
+<area shape="rect" id="Node000011" href="$group__http_ga02743663bb8998bd7450640035f5f6c0.html#ga02743663bb8998bd7450640035f5f6c0" title="Returns the normalized request path." alt="" coords="219,459,379,485"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="153,448,206,456,205,461,152,453"/>
+<area shape="rect" id="Node000012" href="$group__request__handler_gad46dadf2a46aedd0bfde87fcc9f3d8c2.html#gad46dadf2a46aedd0bfde87fcc9f3d8c2" title="Generates the closing HTML markup for an autoindex page." alt="" coords="209,533,389,587"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="105,451,237,524,234,528,102,455"/>
+<area shape="rect" id="Node000013" href="$group__request__handler_ga4b4dec793164502283883d5b8f8d9ddb.html#ga4b4dec793164502283883d5b8f8d9ddb" title="Generates the opening HTML markup for an autoindex page." alt="" coords="209,278,389,333"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="92,425,137,385,199,342,208,336,211,341,201,346,140,389,95,429"/>
+<area shape="rect" id="Node000014" href="$group__request__handler_ga7cdc6c7635242f3cd880addfe67b6f2e.html#ga7cdc6c7635242f3cd880addfe67b6f2e" title="Lists and sorts directory entries for autoindex generation." alt="" coords="205,635,392,690"/>
+<area shape="poly" id="edge19_Node000001_Node000014" title=" " alt="" coords="90,451,133,517,166,558,202,597,239,626,236,630,198,601,162,562,129,520,85,454"/>
+<area shape="rect" id="Node000015" href="$classLogger_a23f092a06cc63628beb87a1a54f9ea59.html#a23f092a06cc63628beb87a1a54f9ea59" title=" " alt="" coords="235,714,362,739"/>
+<area shape="poly" id="edge21_Node000001_Node000015" title=" " alt="" coords="85,453,95,500,116,567,131,603,150,638,174,671,202,699,224,712,221,717,198,703,170,674,146,641,126,605,111,569,89,501,79,454"/>
+<area shape="rect" id="Node000019" href="$group__request__handler_ga8bdeefb06f44752cd5cba05b75b601e0.html#ga8bdeefb06f44752cd5cba05b75b601e0" title="Renders a single &lt;tr&gt; row in the autoindex HTML table." alt="" coords="209,381,389,435"/>
+<area shape="poly" id="edge27_Node000001_Node000019" title=" " alt="" coords="152,427,195,420,196,426,153,432"/>
+<area shape="rect" id="Node000003" href="$group__http_ga064a5d8be8de9234f362e73d9bb68b6b.html#ga064a5d8be8de9234f362e73d9bb68b6b" title="Returns the default reason phrase for a given HTTP status code." alt="" coords="445,5,653,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="352,168,375,155,395,139,411,118,418,97,426,76,444,55,450,50,454,55,447,59,430,79,423,99,416,121,399,143,378,160,354,173"/>
+<area shape="rect" id="Node000004" href="$group__server__component_ga53fb46a6288fcdc4270ad5900f50736e.html#ga53fb46a6288fcdc4270ad5900f50736e" title="Returns the mapping of HTTP error codes to custom error pages." alt="" coords="468,169,631,194"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="398,184,454,182,454,188,398,190"/>
+<area shape="rect" id="Node000005" href="$group__server__component_ga06b6c9af45443180a65bcc145e1b2f1e.html#ga06b6c9af45443180a65bcc145e1b2f1e" title="Returns the list of location blocks defined for this server." alt="" coords="472,218,627,243"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="398,204,459,214,458,219,397,209"/>
+<area shape="rect" id="Node000006" href="$group__html__utils_gaf5ddafc8d1e304df95c0aee1984b2682.html#gaf5ddafc8d1e304df95c0aee1984b2682" title="Escapes special HTML characters in a string." alt="" coords="500,317,599,342"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="350,209,399,239,414,256,423,273,431,288,447,302,466,312,488,319,486,324,464,317,444,306,427,291,418,275,410,259,396,243,347,213"/>
+<area shape="rect" id="Node000007" href="$group__filesystem__utils_ga60cb34db186e7da050316400c820c815.html#ga60cb34db186e7da050316400c820c815" title="Concatenates a base path and a suffix with a single &#39;/&#39; separator." alt="" coords="512,267,587,293"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="342,208,446,252,499,267,498,272,444,257,340,213"/>
+<area shape="rect" id="Node000008" href="$group__http_ga3e83ff074d5f7a6de514a4edcb02ab4d.html#ga3e83ff074d5f7a6de514a4edcb02ab4d" title="Sets the body of the response." alt="" coords="462,70,637,95"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="342,168,396,139,419,121,444,104,463,97,465,102,447,109,422,125,399,144,345,173"/>
+<area shape="rect" id="Node000009" href="$group__http_ga7efa3ab17ead358609d80b55db164867.html#ga7efa3ab17ead358609d80b55db164867" title="Adds or replaces a header in the response." alt="" coords="455,119,643,145"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="383,168,445,153,479,145,480,150,446,159,384,173"/>
+<area shape="poly" id="edge10_Node000010_Node000003" title=" " alt="" coords="353,87,444,55,469,47,470,52,446,60,355,92"/>
+<area shape="poly" id="edge11_Node000010_Node000008" title=" " alt="" coords="397,96,448,91,449,96,398,101"/>
+<area shape="poly" id="edge12_Node000010_Node000009" title=" " alt="" coords="398,116,442,120,442,125,397,121"/>
+<area shape="poly" id="edge15_Node000012_Node000012" title=" " alt="" coords="256,533,256,522,264,514,278,508,299,506,324,509,338,517,335,522,322,514,299,511,279,513,267,518,261,524,261,533"/>
+<area shape="poly" id="edge17_Node000013_Node000006" title=" " alt="" coords="389,311,487,321,486,326,389,317"/>
+<area shape="poly" id="edge18_Node000013_Node000013" title=" " alt="" coords="256,278,256,268,264,259,278,253,299,251,324,254,338,262,335,267,322,260,299,257,279,259,267,263,261,270,261,278"/>
+<area shape="poly" id="edge20_Node000014_Node000014" title=" " alt="" coords="256,635,256,625,264,616,278,611,299,609,324,612,338,620,335,624,322,617,299,614,279,616,267,621,261,627,261,635"/>
+<area shape="rect" id="Node000016" href="$Logger_8cpp_a2c56a9a25fc1f2a14162f4df7ce936ff.html#a2c56a9a25fc1f2a14162f4df7ce936ff" title=" " alt="" coords="711,690,799,715"/>
+<area shape="poly" id="edge22_Node000015_Node000016" title=" " alt="" coords="359,711,445,699,549,695,653,699,697,699,697,704,653,704,549,701,446,704,359,717"/>
+<area shape="rect" id="Node000017" href="$Logger_8cpp_afc799b96df6ffe84b57bcce18820bc43.html#afc799b96df6ffe84b57bcce18820bc43" title=" " alt="" coords="701,739,808,765"/>
+<area shape="poly" id="edge23_Node000015_Node000017" title=" " alt="" coords="359,737,446,749,574,755,687,753,687,758,574,760,445,755,359,742"/>
+<area shape="rect" id="Node000018" href="$classLogger_a3d3f0801eeaf39b33a906ea8569c19b2.html#a3d3f0801eeaf39b33a906ea8569c19b2" title=" " alt="" coords="502,714,597,739"/>
+<area shape="poly" id="edge24_Node000015_Node000018" title=" " alt="" coords="363,724,488,724,488,729,363,729"/>
+<area shape="poly" id="edge25_Node000018_Node000016" title=" " alt="" coords="597,719,697,707,697,712,597,724"/>
+<area shape="poly" id="edge26_Node000018_Node000017" title=" " alt="" coords="597,730,688,741,687,746,597,735"/>
+<area shape="poly" id="edge32_Node000019_Node000006" title=" " alt="" coords="367,378,445,351,486,340,487,345,446,356,368,383"/>
+<area shape="poly" id="edge33_Node000019_Node000019" title=" " alt="" coords="256,381,256,370,264,362,278,356,299,354,324,357,338,365,335,370,322,362,299,359,279,361,267,366,261,372,261,381"/>
+<area shape="rect" id="Node000020" href="$group__request__handler_ga88d4b3bb1d68c8200a34c9015658aba1.html#ga88d4b3bb1d68c8200a34c9015658aba1" title="Percent&#45;encodes a string for safe inclusion in a URI component." alt="" coords="449,390,650,445"/>
+<area shape="poly" id="edge28_Node000019_Node000020" title=" " alt="" coords="389,409,435,410,435,416,389,414"/>
+<area shape="rect" id="Node000021" href="$group__request__handler_ga098eeee42fbe96f8a9b748efd4f61ed5.html#ga098eeee42fbe96f8a9b748efd4f61ed5" title="Formats a file modification time into a human&#45;readable UTC string." alt="" coords="459,493,639,547"/>
+<area shape="poly" id="edge30_Node000019_Node000021" title=" " alt="" coords="372,433,398,444,483,484,481,489,396,449,370,438"/>
+<area shape="poly" id="edge29_Node000020_Node000020" title=" " alt="" coords="509,390,509,380,516,371,530,365,549,363,573,366,586,374,583,379,571,371,549,369,531,371,520,375,514,382,514,390"/>
+<area shape="poly" id="edge31_Node000021_Node000021" title=" " alt="" coords="509,493,509,483,516,474,530,468,549,466,573,469,586,477,583,482,571,474,549,471,531,473,520,478,514,484,514,493"/>
+</map>

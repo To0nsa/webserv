@@ -1,12 +1,12 @@
 <map id="src/config/tokenizer/Tokenizer.cpp" name="src/config/tokenizer/Tokenizer.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="483,5,631,45"/>
-<area shape="rect" id="Node000002" href="$Tokenizer_8hpp.html" title=" " alt="" coords="5,101,223,126"/>
+<area shape="rect" id="Node000001" title="Implements the Tokenizer used for config lexical analysis." alt="" coords="483,5,631,45"/>
+<area shape="rect" id="Node000002" href="$Tokenizer_8hpp.html" title="Declares the Tokenizer for config lexical analysis." alt="" coords="5,101,223,126"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="483,44,187,101,186,95,482,38"/>
-<area shape="rect" id="Node000003" href="$token_8hpp.html" title=" " alt="" coords="195,181,281,207"/>
+<area shape="rect" id="Node000003" href="$token_8hpp.html" title="Token and TokenType declarations for the config lexer." alt="" coords="195,181,281,207"/>
 <area shape="poly" id="edge11_Node000001_Node000003" title=" " alt="" coords="483,31,435,37,384,48,333,67,288,95,273,111,261,130,246,169,241,167,256,128,268,108,284,91,331,62,382,43,434,31,482,26"/>
-<area shape="rect" id="Node000007" href="$ConfigParseError_8hpp.html" title=" " alt="" coords="298,93,485,133"/>
+<area shape="rect" id="Node000007" href="$ConfigParseError_8hpp.html" title="Declares parse/validation error types for the config subsystem." alt="" coords="298,93,485,133"/>
 <area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="522,48,441,89,438,85,519,43"/>
-<area shape="rect" id="Node000009" href="$errorUtils_8hpp.html" title="Error formatting utilities." alt="" coords="468,181,611,207"/>
+<area shape="rect" id="Node000009" href="$errorUtils_8hpp.html" title=" " alt="" coords="468,181,611,207"/>
 <area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="557,46,551,94,544,168,539,167,546,93,552,46"/>
 <area shape="rect" id="Node000010" title=" " alt="" coords="560,101,625,126"/>
 <area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="567,45,585,87,580,89,562,47"/>

@@ -1,0 +1,9 @@
+<map id="printServerHeader" name="printServerHeader">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,147,80"/>
+<area shape="rect" id="Node000002" href="$group__server__component_gadf710c8edb72e8e72e6a684329592335.html#gadf710c8edb72e8e72e6a684329592335" title="Returns the configured host IP address for this server." alt="" coords="224,5,347,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,52,217,31,218,36,131,57"/>
+<area shape="rect" id="Node000003" href="$group__server__component_ga69d6c7fb2d3f04cfc62779b26c455259.html#ga69d6c7fb2d3f04cfc62779b26c455259" title="Returns the port number this server listens on." alt="" coords="226,55,345,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="147,65,212,65,212,70,147,70"/>
+<area shape="rect" id="Node000004" href="$group__server__component_ga84bf08659470d466bf953403a4894dc7.html#ga84bf08659470d466bf953403a4894dc7" title="Returns the list of server name aliases for this virtual host." alt="" coords="195,104,376,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="131,77,218,98,217,103,130,83"/>
+</map>

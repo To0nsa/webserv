@@ -93,9 +93,12 @@ $(document).ready(function(){initNavTree('requestRouter_8cpp.html',''); initResi
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">requestRouter.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">requestRouter.cpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a> &raquo; <a class="el" href="group__request__handler.html">Request Handling</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Routes parsed HTTP requests to the appropriate handler.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="Location_8hpp_source.html">core/Location.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="HttpRequest_8hpp_source.html">http/HttpRequest.hpp</a>&quot;</code><br />
@@ -127,69 +130,33 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:abb57bdb8b4765f3f76efe0ce336b6550" id="r_abb57bdb8b4765f3f76efe0ce336b6550"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02requestRouter_8cpp_03.html#abb57bdb8b4765f3f76efe0ce336b6550">anonymous_namespace{requestRouter.cpp}::dispatchByMethod</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classLocation.html">Location</a> &amp;loc)</td></tr>
-<tr class="separator:abb57bdb8b4765f3f76efe0ce336b6550"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f80d692f900d311cb6babef05ea3daa" id="r_a4f80d692f900d311cb6babef05ea3daa"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classLocation.html">Location</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02requestRouter_8cpp_03.html#a4f80d692f900d311cb6babef05ea3daa">anonymous_namespace{requestRouter.cpp}::findLocation</a> (const std::string &amp;uri, const <a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
-<tr class="separator:a4f80d692f900d311cb6babef05ea3daa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43204497282094b6dac91b946d5648ba" id="r_a43204497282094b6dac91b946d5648ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="requestRouter_8cpp.html#a43204497282094b6dac91b946d5648ba">handleRequest</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
-<tr class="separator:a43204497282094b6dac91b946d5648ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4ba4c3c4f5000a90f0c0490a1051755" id="r_ad4ba4c3c4f5000a90f0c0490a1051755"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02requestRouter_8cpp_03.html#ad4ba4c3c4f5000a90f0c0490a1051755">anonymous_namespace{requestRouter.cpp}::redirectOnConfigured</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classLocation.html">Location</a> &amp;loc)</td></tr>
-<tr class="separator:ad4ba4c3c4f5000a90f0c0490a1051755"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29cdec36da3c3995a8fd235c8f6b31b9" id="r_a29cdec36da3c3995a8fd235c8f6b31b9"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02requestRouter_8cpp_03.html#a29cdec36da3c3995a8fd235c8f6b31b9">anonymous_namespace{requestRouter.cpp}::redirectOnDirectorySlash</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const <a class="el" href="classServer.html">Server</a> &amp;server, const std::string &amp;uri)</td></tr>
+<tr class="memitem:a29cdec36da3c3995a8fd235c8f6b31b9" id="r_a29cdec36da3c3995a8fd235c8f6b31b9"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02requestRouter_8cpp_03_a29cdec36da3c3995a8fd235c8f6b31b9.html#a29cdec36da3c3995a8fd235c8f6b31b9">anonymous_namespace{requestRouter.cpp}::redirectOnDirectorySlash</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const <a class="el" href="classServer.html">Server</a> &amp;server, const std::string &amp;uri)</td></tr>
+<tr class="memdesc:a29cdec36da3c3995a8fd235c8f6b31b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redirects to a slash-terminated URI when the target is a real directory.  <br /></td></tr>
 <tr class="separator:a29cdec36da3c3995a8fd235c8f6b31b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad156bba9d3d1f03d4678237ca3287bd2" id="r_ad156bba9d3d1f03d4678237ca3287bd2"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02requestRouter_8cpp_03.html#ad156bba9d3d1f03d4678237ca3287bd2">anonymous_namespace{requestRouter.cpp}::validateRequestMethod</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classLocation.html">Location</a> &amp;loc, const <a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
+<tr class="memitem:a4f80d692f900d311cb6babef05ea3daa" id="r_a4f80d692f900d311cb6babef05ea3daa"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classLocation.html">Location</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02requestRouter_8cpp_03_a4f80d692f900d311cb6babef05ea3daa.html#a4f80d692f900d311cb6babef05ea3daa">anonymous_namespace{requestRouter.cpp}::findLocation</a> (const std::string &amp;uri, const <a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
+<tr class="memdesc:a4f80d692f900d311cb6babef05ea3daa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Selects the best-matching <a class="el" href="classLocation.html" title="Encapsulates configuration for a single URL path.">Location</a> for a normalized request URI.  <br /></td></tr>
+<tr class="separator:a4f80d692f900d311cb6babef05ea3daa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4ba4c3c4f5000a90f0c0490a1051755" id="r_ad4ba4c3c4f5000a90f0c0490a1051755"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02requestRouter_8cpp_03_ad4ba4c3c4f5000a90f0c0490a1051755.html#ad4ba4c3c4f5000a90f0c0490a1051755">anonymous_namespace{requestRouter.cpp}::redirectOnConfigured</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classLocation.html">Location</a> &amp;loc)</td></tr>
+<tr class="memdesc:ad4ba4c3c4f5000a90f0c0490a1051755"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a location-scoped redirect, if configured.  <br /></td></tr>
+<tr class="separator:ad4ba4c3c4f5000a90f0c0490a1051755"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad156bba9d3d1f03d4678237ca3287bd2" id="r_ad156bba9d3d1f03d4678237ca3287bd2"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classHttpResponse.html">HttpResponse</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02requestRouter_8cpp_03_ad156bba9d3d1f03d4678237ca3287bd2.html#ad156bba9d3d1f03d4678237ca3287bd2">anonymous_namespace{requestRouter.cpp}::validateRequestMethod</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classLocation.html">Location</a> &amp;loc, const <a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
+<tr class="memdesc:ad156bba9d3d1f03d4678237ca3287bd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates the HTTP method against server support and location policy.  <br /></td></tr>
 <tr class="separator:ad156bba9d3d1f03d4678237ca3287bd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb57bdb8b4765f3f76efe0ce336b6550" id="r_abb57bdb8b4765f3f76efe0ce336b6550"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02requestRouter_8cpp_03_abb57bdb8b4765f3f76efe0ce336b6550.html#abb57bdb8b4765f3f76efe0ce336b6550">anonymous_namespace{requestRouter.cpp}::dispatchByMethod</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, const <a class="el" href="classLocation.html">Location</a> &amp;loc)</td></tr>
+<tr class="memdesc:abb57bdb8b4765f3f76efe0ce336b6550"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatches a validated request to the concrete method handler.  <br /></td></tr>
+<tr class="separator:abb57bdb8b4765f3f76efe0ce336b6550"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga43204497282094b6dac91b946d5648ba" id="r_ga43204497282094b6dac91b946d5648ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga43204497282094b6dac91b946d5648ba.html#ga43204497282094b6dac91b946d5648ba">handleRequest</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
+<tr class="memdesc:ga43204497282094b6dac91b946d5648ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Top-level router entrypoint for processing an HTTP request.  <br /></td></tr>
+<tr class="separator:ga43204497282094b6dac91b946d5648ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a43204497282094b6dac91b946d5648ba" name="a43204497282094b6dac91b946d5648ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43204497282094b6dac91b946d5648ba">&#9670;&#160;</a></span>handleRequest()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Routes parsed HTTP requests to the appropriate handler. </p>
+<p>Implements the routing pipeline that maps an incoming <a class="el" href="classHttpRequest.html">HttpRequest</a> to a <a class="el" href="classHttpResponse.html">HttpResponse</a> using the active <a class="el" href="classServer.html">Server</a> configuration and its <a class="el" href="classLocation.html">Location</a> blocks.</p>
+<p>Workflow: 1) <b>Directory slash redirect:</b> If a request targets a physical directory without a trailing slash, issue a 301 to the slash-terminated URI (see redirectOnDirectorySlash). 2) <b><a class="el" href="classLocation.html" title="Encapsulates configuration for a single URL path.">Location</a> resolution:</b> Find the best matching <a class="el" href="classLocation.html">Location</a> by exact match or longest-prefix (see findLocation). 3) <b>Configured redirects:</b> Apply <code>return</code>-based redirects if present in the matched location (see redirectOnConfigured). 4) <b>Method validation:</b> Check supported/allowed methods, returning 501 or 405 as appropriate (see validateRequestMethod). 5) <b>Dispatch:</b> Call the concrete method handler (GET/POST/DELETE) (see dispatchByMethod).</p>
+<p>Errors are rendered via <a class="el" href="namespaceResponseBuilder.html">ResponseBuilder</a> helpers. Utilities from <code>filesystemUtils</code> are used to normalize URIs and resolve physical paths. </p>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> handleRequest </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td>
-          <td class="paramname"><em>server</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="requestRouter_8cpp_source.html#l00139">139</a> of file <a class="el" href="requestRouter_8cpp_source.html">requestRouter.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="requestRouter_8cpp_source.html#l00125">anonymous_namespace{requestRouter.cpp}::dispatchByMethod()</a>, <a class="el" href="requestRouter_8cpp_source.html#l00066">anonymous_namespace{requestRouter.cpp}::findLocation()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00078">HttpRequest::getPath()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00084">normalizePath()</a>, <a class="el" href="requestRouter_8cpp_source.html#l00091">anonymous_namespace{requestRouter.cpp}::redirectOnConfigured()</a>, <a class="el" href="requestRouter_8cpp_source.html#l00029">anonymous_namespace{requestRouter.cpp}::redirectOnDirectorySlash()</a>, <a class="el" href="requestRouter_8cpp_source.html#l00102">anonymous_namespace{requestRouter.cpp}::validateRequestMethod()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="SocketManagerRequest_8cpp_source.html#l00096">SocketManager::processPendingRequests()</a>.</p>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="requestRouter_8cpp_a43204497282094b6dac91b946d5648ba_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="requestRouter_8cpp_a43204497282094b6dac91b946d5648ba_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="requestRouter_8cpp_source.html">requestRouter.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

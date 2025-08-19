@@ -67,7 +67,7 @@ var sectionId = 'dynsection-1';
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="Location_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="Location_8cpp.html" target="_top" xlink:title="Implements the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="119,-24.5 0,-24.5 0,-5.5 119,-5.5 119,-24.5"/>
 <text text-anchor="middle" x="59.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/core/Location.cpp</text>
 </a>
@@ -85,7 +85,7 @@ var sectionId = 'dynsection-1';
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="HttpRequestParser_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="HttpRequestParser_8cpp.html" target="_top" xlink:title="Implements the HttpRequestParser class and HTTP request parsing logic.">
 <polygon fill="white" stroke="#666666" points="304,-24.5 137,-24.5 137,-5.5 304,-5.5 304,-24.5"/>
 <text text-anchor="middle" x="220.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/HttpRequestParser.cpp</text>
 </a>
@@ -103,7 +103,7 @@ var sectionId = 'dynsection-1';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="handleCgi_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="handleCgi_8cpp.html" target="_top" xlink:title="Implements CGI (Common Gateway Interface) request handling.">
 <polygon fill="white" stroke="#666666" points="447,-24.5 322,-24.5 322,-5.5 447,-5.5 447,-24.5"/>
 <text text-anchor="middle" x="384.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/handleCgi.cpp</text>
 </a>
@@ -140,7 +140,7 @@ var sectionId = 'dynsection-1';
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="handleGet_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="handleGet_8cpp.html" target="_top" xlink:title="Implements the HTTP GET request handler.">
 <polygon fill="white" stroke="#666666" points="763,-30 620,-30 620,0 763,0 763,-30"/>
 <text text-anchor="start" x="628" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="691.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handleGet/handleGet.cpp</text>
@@ -159,7 +159,7 @@ var sectionId = 'dynsection-1';
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="handleMultipartForm_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="handleMultipartForm_8cpp.html" target="_top" xlink:title="Handles multipart/form&#45;data POST uploads and persists the first file part to disk.">
 <polygon fill="white" stroke="#666666" points="980,-30 781,-30 781,0 980,0 980,-30"/>
 <text text-anchor="start" x="789" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="880.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handlePost/handleMultipartForm.cpp</text>
@@ -178,7 +178,7 @@ var sectionId = 'dynsection-1';
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="handlePost_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000008"><a xlink:href="handlePost_8cpp.html" target="_top" xlink:title="Implements HTTP POST request handling logic.">
 <polygon fill="white" stroke="#666666" points="1149,-30 998,-30 998,0 1149,0 1149,-30"/>
 <text text-anchor="start" x="1006" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/methodsHandler</text>
 <text text-anchor="middle" x="1073.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">/handlePost/handlePost.cpp</text>
@@ -197,7 +197,7 @@ var sectionId = 'dynsection-1';
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="requestRouter_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000009"><a xlink:href="requestRouter_8cpp.html" target="_top" xlink:title="Routes parsed HTTP requests to the appropriate handler.">
 <polygon fill="white" stroke="#666666" points="1312,-24.5 1167,-24.5 1167,-5.5 1312,-5.5 1312,-24.5"/>
 <text text-anchor="middle" x="1239.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/requestRouter.cpp</text>
 </a>
@@ -215,7 +215,7 @@ var sectionId = 'dynsection-1';
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
-<g id="a_Node000010"><a xlink:href="responseBuilder_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000010"><a xlink:href="responseBuilder_8cpp.html" target="_top" xlink:title="Implements the ResponseBuilder utilities for constructing HTTP responses.">
 <polygon fill="white" stroke="#666666" points="1485,-24.5 1330,-24.5 1330,-5.5 1485,-5.5 1485,-24.5"/>
 <text text-anchor="middle" x="1407.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/responseBuilder.cpp</text>
 </a>
@@ -233,7 +233,7 @@ var sectionId = 'dynsection-1';
 <!-- Node11 -->
 <g id="Node000011" class="node">
 <title>Node11</title>
-<g id="a_Node000011"><a xlink:href="SocketManager_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000011"><a xlink:href="SocketManager_8cpp.html" target="_top" xlink:title="Implements the SocketManager core loop and server socket setup.">
 <polygon fill="white" stroke="#666666" points="1674,-24.5 1503,-24.5 1503,-5.5 1674,-5.5 1674,-24.5"/>
 <text text-anchor="middle" x="1588.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager.cpp</text>
 </a>
@@ -251,7 +251,7 @@ var sectionId = 'dynsection-1';
 <!-- Node12 -->
 <g id="Node000012" class="node">
 <title>Node12</title>
-<g id="a_Node000012"><a xlink:href="SocketManagerRequest_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000012"><a xlink:href="SocketManagerRequest_8cpp.html" target="_top" xlink:title="Implements request handling logic for SocketManager.">
 <polygon fill="white" stroke="#666666" points="1844.5,-30 1692.5,-30 1692.5,0 1844.5,0 1844.5,-30"/>
 <text text-anchor="start" x="1700.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
 <text text-anchor="middle" x="1768.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Request.cpp</text>
@@ -270,7 +270,7 @@ var sectionId = 'dynsection-1';
 <!-- Node13 -->
 <g id="Node000013" class="node">
 <title>Node13</title>
-<g id="a_Node000013"><a xlink:href="SocketManagerResponse_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000013"><a xlink:href="SocketManagerResponse_8cpp.html" target="_top" xlink:title="Implements response sending logic for SocketManager.">
 <polygon fill="white" stroke="#666666" points="2014.5,-30 1862.5,-30 1862.5,0 2014.5,0 2014.5,-30"/>
 <text text-anchor="start" x="1870.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
 <text text-anchor="middle" x="1938.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Response.cpp</text>
@@ -289,7 +289,7 @@ var sectionId = 'dynsection-1';
 <!-- Node14 -->
 <g id="Node000014" class="node">
 <title>Node14</title>
-<g id="a_Node000014"><a xlink:href="SocketManagerTimeouts_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000014"><a xlink:href="SocketManagerTimeouts_8cpp.html" target="_top" xlink:title="Implements timeout and limit enforcement for SocketManager.">
 <polygon fill="white" stroke="#666666" points="2184.5,-30 2032.5,-30 2032.5,0 2184.5,0 2184.5,-30"/>
 <text text-anchor="start" x="2040.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
 <text text-anchor="middle" x="2108.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Timeouts.cpp</text>
@@ -308,7 +308,7 @@ var sectionId = 'dynsection-1';
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
-<g id="a_Node000015"><a xlink:href="filesystemUtils_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000015"><a xlink:href="filesystemUtils_8cpp.html" target="_top" xlink:title="Implements filesystem utility functions for Webserv.">
 <polygon fill="white" stroke="#666666" points="2354.5,-24.5 2202.5,-24.5 2202.5,-5.5 2354.5,-5.5 2354.5,-24.5"/>
 <text text-anchor="middle" x="2278.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">src/utils/filesystemUtils.cpp</text>
 </a>

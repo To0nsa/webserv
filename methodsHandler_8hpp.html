@@ -92,9 +92,12 @@ $(document).ready(function(){initNavTree('methodsHandler_8hpp.html',''); initRes
 <div class="header">
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">methodsHandler.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">methodsHandler.hpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a> &raquo; <a class="el" href="group__request__handler.html">Request Handling</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Declares HTTP method handlers for GET, POST, and DELETE.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;string&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for methodsHandler.hpp:</div>
@@ -115,295 +118,47 @@ $(document).ready(function(){initNavTree('methodsHandler_8hpp.html',''); initRes
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8d9d7661dca49eecdb3644beb981b18d" id="r_a8d9d7661dca49eecdb3644beb981b18d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="methodsHandler_8hpp.html#a8d9d7661dca49eecdb3644beb981b18d">generateAutoindex</a> (const std::string &amp;filepath, const std::string &amp;uri, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
-<tr class="separator:a8d9d7661dca49eecdb3644beb981b18d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe31f0e791a6793a66bbe7cf5321d3fe" id="r_abe31f0e791a6793a66bbe7cf5321d3fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="methodsHandler_8hpp.html#abe31f0e791a6793a66bbe7cf5321d3fe">handleDelete</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;, const <a class="el" href="classServer.html">Server</a> &amp;, const <a class="el" href="classLocation.html">Location</a> &amp;)</td></tr>
-<tr class="separator:abe31f0e791a6793a66bbe7cf5321d3fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c30827800381f813fc4d487cdb4fb93" id="r_a5c30827800381f813fc4d487cdb4fb93"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="methodsHandler_8hpp.html#a5c30827800381f813fc4d487cdb4fb93">handleGet</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;, const <a class="el" href="classServer.html">Server</a> &amp;, const <a class="el" href="classLocation.html">Location</a> &amp;)</td></tr>
-<tr class="separator:a5c30827800381f813fc4d487cdb4fb93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17f2fba88ab8919ca4bc75a7b63110c6" id="r_a17f2fba88ab8919ca4bc75a7b63110c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="methodsHandler_8hpp.html#a17f2fba88ab8919ca4bc75a7b63110c6">handleMultipartForm</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, const std::string &amp;fullDirPath)</td></tr>
-<tr class="separator:a17f2fba88ab8919ca4bc75a7b63110c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30884ec37597eb416f5ec56aa18523d7" id="r_a30884ec37597eb416f5ec56aa18523d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="methodsHandler_8hpp.html#a30884ec37597eb416f5ec56aa18523d7">handlePost</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;, const <a class="el" href="classServer.html">Server</a> &amp;, const <a class="el" href="classLocation.html">Location</a> &amp;)</td></tr>
-<tr class="separator:a30884ec37597eb416f5ec56aa18523d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga58b82fdef553c71ee2b3486efd914319" id="r_ga58b82fdef553c71ee2b3486efd914319"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga58b82fdef553c71ee2b3486efd914319.html#ga58b82fdef553c71ee2b3486efd914319">handleGet</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;, const <a class="el" href="classServer.html">Server</a> &amp;, const <a class="el" href="classLocation.html">Location</a> &amp;)</td></tr>
+<tr class="memdesc:ga58b82fdef553c71ee2b3486efd914319"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles an HTTP GET request for a resource.  <br /></td></tr>
+<tr class="separator:ga58b82fdef553c71ee2b3486efd914319"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8d9d7661dca49eecdb3644beb981b18d" id="r_ga8d9d7661dca49eecdb3644beb981b18d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga8d9d7661dca49eecdb3644beb981b18d.html#ga8d9d7661dca49eecdb3644beb981b18d">generateAutoindex</a> (const std::string &amp;filepath, const std::string &amp;uri, const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
+<tr class="memdesc:ga8d9d7661dca49eecdb3644beb981b18d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates an HTML autoindex page for a directory listing.  <br /></td></tr>
+<tr class="separator:ga8d9d7661dca49eecdb3644beb981b18d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab04155bc2520cd5a1a910077ae2805f9" id="r_gab04155bc2520cd5a1a910077ae2805f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_gab04155bc2520cd5a1a910077ae2805f9.html#gab04155bc2520cd5a1a910077ae2805f9">handlePost</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;, const <a class="el" href="classServer.html">Server</a> &amp;, const <a class="el" href="classLocation.html">Location</a> &amp;)</td></tr>
+<tr class="memdesc:gab04155bc2520cd5a1a910077ae2805f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles an HTTP POST request end-to-end.  <br /></td></tr>
+<tr class="separator:gab04155bc2520cd5a1a910077ae2805f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga17f2fba88ab8919ca4bc75a7b63110c6" id="r_ga17f2fba88ab8919ca4bc75a7b63110c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga17f2fba88ab8919ca4bc75a7b63110c6.html#ga17f2fba88ab8919ca4bc75a7b63110c6">handleMultipartForm</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;request, const <a class="el" href="classServer.html">Server</a> &amp;server, const std::string &amp;fullDirPath)</td></tr>
+<tr class="memdesc:ga17f2fba88ab8919ca4bc75a7b63110c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle a multipart/form-data POST request and persist the uploaded file.  <br /></td></tr>
+<tr class="separator:ga17f2fba88ab8919ca4bc75a7b63110c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1650db59e4fe0954c080fa46c4bd84ab" id="r_ga1650db59e4fe0954c080fa46c4bd84ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHttpResponse.html">HttpResponse</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__request__handler_ga1650db59e4fe0954c080fa46c4bd84ab.html#ga1650db59e4fe0954c080fa46c4bd84ab">handleDelete</a> (const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;, const <a class="el" href="classServer.html">Server</a> &amp;, const <a class="el" href="classLocation.html">Location</a> &amp;)</td></tr>
+<tr class="memdesc:ga1650db59e4fe0954c080fa46c4bd84ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles an HTTP DELETE request for a given resource.  <br /></td></tr>
+<tr class="separator:ga1650db59e4fe0954c080fa46c4bd84ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a8d9d7661dca49eecdb3644beb981b18d" name="a8d9d7661dca49eecdb3644beb981b18d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d9d7661dca49eecdb3644beb981b18d">&#9670;&#160;</a></span>generateAutoindex()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Declares HTTP method handlers for GET, POST, and DELETE. </p>
+<p>Declares handlers for supported HTTP request methods.</p>
+<p>This header defines the public entrypoints for handling HTTP request methods within Webserv. Each function maps an incoming <a class="el" href="classHttpRequest.html">HttpRequest</a> to an <a class="el" href="classHttpResponse.html">HttpResponse</a>, using the active <a class="el" href="classServer.html">Server</a> context and the matched <a class="el" href="classLocation.html">Location</a> configuration.</p>
+<p>Supported methods:</p><ul>
+<li><b>GET</b>: Serves static files or generates autoindex listings (see <a class="el" href="group__request__handler_ga8d9d7661dca49eecdb3644beb981b18d.html#ga8d9d7661dca49eecdb3644beb981b18d">generateAutoindex</a>).</li>
+<li><b>POST</b>: Handles uploads (raw body, URL-encoded, multipart forms).</li>
+<li><b>DELETE</b>: Removes existing files if permitted.</li>
+</ul>
+<p>Helper:</p><ul>
+<li>generateAutoindex: builds a directory listing response in HTML.</li>
+</ul>
+<p>This header exposes the top-level functions used by the request router to process method-specific logic:</p><ul>
+<li>handleGet: serve static files, run <a class="el" href="namespaceCGI.html">CGI</a>, or generate autoindex listings.</li>
+<li>handlePost: handle client uploads (raw body, URL-encoded forms, multipart forms).</li>
+<li>handleDelete: remove existing resources from the server filesystem.</li>
+</ul>
+<p>Additionally, it provides:</p><ul>
+<li>generateAutoindex: build a directory listing page when autoindexing is enabled.</li>
+<li>handleMultipartForm: internal helper for parsing multipart form-data uploads.</li>
+</ul>
+<p>These functions are invoked by the router after method validation (see <a class="el" href="requestRouter_8cpp.html">requestRouter.cpp</a>). </p>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> generateAutoindex </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>filepath</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>uri</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td>
-          <td class="paramname"><em>server</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="generateAutoindex_8cpp_source.html#l00208">208</a> of file <a class="el" href="generateAutoindex_8cpp_source.html">generateAutoindex.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00105">ResponseBuilder::generateSuccess()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00078">HttpRequest::getPath()</a>, <a class="el" href="generateAutoindex_8cpp_source.html#l00192">anonymous_namespace{generateAutoindex.cpp}::htmlFooter()</a>, <a class="el" href="generateAutoindex_8cpp_source.html#l00184">anonymous_namespace{generateAutoindex.cpp}::htmlHeader()</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">INFO</a>, <a class="el" href="generateAutoindex_8cpp_source.html#l00047">anonymous_namespace{generateAutoindex.cpp}::listDirectoryEntries()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="generateAutoindex_8cpp_source.html#l00158">anonymous_namespace{generateAutoindex.cpp}::renderRow()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="handleGet_8cpp_source.html#l00096">anonymous_namespace{handleGet.cpp}::processDirectory()</a>.</p>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="methodsHandler_8hpp_a8d9d7661dca49eecdb3644beb981b18d_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="methodsHandler_8hpp_a8d9d7661dca49eecdb3644beb981b18d_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="abe31f0e791a6793a66bbe7cf5321d3fe" name="abe31f0e791a6793a66bbe7cf5321d3fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe31f0e791a6793a66bbe7cf5321d3fe">&#9670;&#160;</a></span>handleDelete()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> handleDelete </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>req</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td>
-          <td class="paramname"><em>server</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classLocation.html">Location</a> &amp;&#160;</td>
-          <td class="paramname"><em>loc</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="handleDelete_8cpp_source.html#l00098">98</a> of file <a class="el" href="handleDelete_8cpp_source.html">handleDelete.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="urlUtils_8cpp_source.html#l00084">extractFilenameFromUri()</a>, <a class="el" href="handleDelete_8cpp_source.html#l00076">anonymous_namespace{handleDelete.cpp}::generateDeleteHtml()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00105">ResponseBuilder::generateSuccess()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00078">HttpRequest::getPath()</a>, <a class="el" href="htmlUtils_8cpp_source.html#l00017">htmlEscape()</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">INFO</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00187">isSymlink()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00031">resolvePhysicalPath()</a>, <a class="el" href="handleDelete_8cpp_source.html#l00031">anonymous_namespace{handleDelete.cpp}::unlinkFile()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="requestRouter_8cpp_source.html#l00125">anonymous_namespace{requestRouter.cpp}::dispatchByMethod()</a>.</p>
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="methodsHandler_8hpp_abe31f0e791a6793a66bbe7cf5321d3fe_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-5-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="methodsHandler_8hpp_abe31f0e791a6793a66bbe7cf5321d3fe_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a5c30827800381f813fc4d487cdb4fb93" name="a5c30827800381f813fc4d487cdb4fb93"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c30827800381f813fc4d487cdb4fb93">&#9670;&#160;</a></span>handleGet()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> handleGet </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td>
-          <td class="paramname"><em>server</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classLocation.html">Location</a> &amp;&#160;</td>
-          <td class="paramname"><em>loc</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="handleGet_8cpp_source.html#l00139">139</a> of file <a class="el" href="handleGet_8cpp_source.html">handleGet.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00078">HttpRequest::getPath()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00065">isFile()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00187">isSymlink()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="handleGet_8cpp_source.html#l00096">anonymous_namespace{handleGet.cpp}::processDirectory()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00031">resolvePhysicalPath()</a>, <a class="el" href="handleGet_8cpp_source.html#l00059">anonymous_namespace{handleGet.cpp}::serveFile()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="requestRouter_8cpp_source.html#l00125">anonymous_namespace{requestRouter.cpp}::dispatchByMethod()</a>.</p>
-<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-6-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="methodsHandler_8hpp_a5c30827800381f813fc4d487cdb4fb93_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-7-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="methodsHandler_8hpp_a5c30827800381f813fc4d487cdb4fb93_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a17f2fba88ab8919ca4bc75a7b63110c6" name="a17f2fba88ab8919ca4bc75a7b63110c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17f2fba88ab8919ca4bc75a7b63110c6">&#9670;&#160;</a></span>handleMultipartForm()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> handleMultipartForm </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td>
-          <td class="paramname"><em>server</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>fullDirPath</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="handleMultipartForm_8cpp_source.html#l00184">184</a> of file <a class="el" href="handleMultipartForm_8cpp_source.html">handleMultipartForm.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00138">ResponseBuilder::generateError()</a>, <a class="el" href="responseBuilder_8cpp_source.html#l00105">ResponseBuilder::generateSuccess()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00099">HttpRequest::getBody()</a>, <a class="el" href="Server_8cpp_source.html#l00096">Server::getClientMaxBodySize()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00191">getCurrentTime()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00086">HttpRequest::getHeader()</a>, <a class="el" href="htmlUtils_8cpp_source.html#l00017">htmlEscape()</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">INFO</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00134">joinPath()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="handleMultipartForm_8cpp_source.html#l00114">anonymous_namespace{handleMultipartForm.cpp}::parseMultipartForm()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="handlePost_8cpp_source.html#l00235">dispatchPostByContentType()</a>.</p>
-<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-8-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="methodsHandler_8hpp_a17f2fba88ab8919ca4bc75a7b63110c6_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-9-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="methodsHandler_8hpp_a17f2fba88ab8919ca4bc75a7b63110c6_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a30884ec37597eb416f5ec56aa18523d7" name="a30884ec37597eb416f5ec56aa18523d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30884ec37597eb416f5ec56aa18523d7">&#9670;&#160;</a></span>handlePost()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classHttpResponse.html">HttpResponse</a> handlePost </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>request</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td>
-          <td class="paramname"><em>server</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classLocation.html">Location</a> &amp;&#160;</td>
-          <td class="paramname"><em>location</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="handlePost_8cpp_source.html#l00252">252</a> of file <a class="el" href="handlePost_8cpp_source.html">handlePost.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="handlePost_8cpp_source.html#l00235">dispatchPostByContentType()</a>, <a class="el" href="handlePost_8cpp_source.html#l00141">preparePostTargetPath()</a>, and <a class="el" href="handlePost_8cpp_source.html#l00113">validatePostRequest()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="requestRouter_8cpp_source.html#l00125">anonymous_namespace{requestRouter.cpp}::dispatchByMethod()</a>.</p>
-<div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-10-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="methodsHandler_8hpp_a30884ec37597eb416f5ec56aa18523d7_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-11-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-11-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="methodsHandler_8hpp_a30884ec37597eb416f5ec56aa18523d7_icgraph.svg" width="100%" height="376"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="methodsHandler_8hpp_source.html">methodsHandler.hpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

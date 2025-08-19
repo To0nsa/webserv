@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Implements validation logic for parsed configuration objects.">
 <polygon fill="#999999" stroke="#666666" points="902.5,-250 745.5,-250 745.5,-231 902.5,-231 902.5,-250"/>
 <text text-anchor="middle" x="824" y="-238" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/validateConfig.cpp</text>
 </a>
@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="validateConfig_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="validateConfig_8hpp.html" target="_top" xlink:title="Declares validation for normalized configuration.">
 <polygon fill="white" stroke="#666666" points="140,-189.5 0,-189.5 0,-170.5 140,-170.5 140,-189.5"/>
 <text text-anchor="middle" x="70" y="-177.5" font-family="Helvetica,sans-Serif" font-size="10.00">config/validateConfig.hpp</text>
 </a>
@@ -38,7 +38,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="Config_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="Config_8hpp.html" target="_top" xlink:title="Declares the Config aggregate for parsed virtual servers.">
 <polygon fill="white" stroke="#666666" points="599.5,-189.5 498.5,-189.5 498.5,-170.5 599.5,-170.5 599.5,-189.5"/>
 <text text-anchor="middle" x="549" y="-177.5" font-family="Helvetica,sans-Serif" font-size="10.00">config/Config.hpp</text>
 </a>
@@ -74,7 +74,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="337.5,-74 234.5,-74 234.5,-55 337.5,-55 337.5,-74"/>
 <text text-anchor="middle" x="286" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>
@@ -164,7 +164,7 @@
 <!-- Node12 -->
 <g id="Node000012" class="node">
 <title>Node12</title>
-<g id="a_Node000012"><a xlink:href="ConfigParseError_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000012"><a xlink:href="ConfigParseError_8hpp.html" target="_top" xlink:title="Declares parse/validation error types for the config subsystem.">
 <polygon fill="white" stroke="#666666" points="796,-195 656,-195 656,-165 796,-165 796,-195"/>
 <text text-anchor="start" x="664" y="-183" font-family="Helvetica,sans-Serif" font-size="10.00">config/parser/ConfigParse</text>
 <text text-anchor="middle" x="726" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">Error.hpp</text>

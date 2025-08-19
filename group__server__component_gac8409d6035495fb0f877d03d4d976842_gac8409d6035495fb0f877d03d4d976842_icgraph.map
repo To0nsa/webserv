@@ -1,0 +1,22 @@
+<map id="Server::setClientMaxBodySize" name="Server::setClientMaxBodySize">
+<area shape="rect" id="Node000001" title="Sets the maximum allowed size for the HTTP request body." alt="" coords="1409,33,1628,59"/>
+<area shape="rect" id="Node000002" href="$group__config__normalizing_ga6d073a523d9b1121fb6e86eeb2a0f00f.html#ga6d073a523d9b1121fb6e86eeb2a0f00f" title="Normalizes a single server and its locations." alt="" coords="1203,7,1333,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1395,36,1333,29,1333,24,1396,30"/>
+<area shape="rect" id="Node000006" href="$namespacedirective_a3338d7904396548486d9d2dce2367c06.html#a3338d7904396548486d9d2dce2367c06" title="Returns the mapping of server&#45;level directives to their handler functions." alt="" coords="1175,57,1361,83"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1396,60,1362,64,1361,58,1396,55"/>
+<area shape="rect" id="Node000003" href="$group__config__normalizing_ga424745e39c183e79968502e3070343fa.html#ga424745e39c183e79968502e3070343fa" title="Applies normalization to all servers/locations in the config." alt="" coords="731,5,859,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1189,22,859,21,859,16,1189,16"/>
+<area shape="rect" id="Node000004" href="$group__entrypoint_ga6e58dbe6eab2d4b12d65b7b0e7297be8.html#ga6e58dbe6eab2d4b12d65b7b0e7297be8" title="Runs the Webserv server." alt="" coords="108,31,207,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="717,24,207,44,207,39,717,18"/>
+<area shape="rect" id="Node000005" href="$group__entrypoint_ga3c04138a5bfe5d72780bb7e82a18e627.html#ga3c04138a5bfe5d72780bb7e82a18e627" title="Program entry point." alt="" coords="5,31,60,56"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,46,60,46,60,41,94,41"/>
+<area shape="rect" id="Node000007" href="$classConfigParser_a65dee8490851a65fb3d80ab1677c4a5d.html#a65dee8490851a65fb3d80ab1677c4a5d" title="Parses and applies a single directive inside a server block." alt="" coords="937,54,1127,94"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1161,74,1127,75,1127,70,1161,69"/>
+<area shape="rect" id="Node000008" href="$classConfigParser_aec05768b15f77f3908738fba4237d2a8.html#aec05768b15f77f3908738fba4237d2a8" title="Parses a single server block into a Server object." alt="" coords="700,59,889,84"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="924,75,889,75,890,70,924,70"/>
+<area shape="rect" id="Node000009" href="$classConfigParser_a3b983e072038482de7698c091f5c8a99.html#a3b983e072038482de7698c091f5c8a99" title="Parses the full configuration input into a Config object." alt="" coords="464,57,652,83"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="686,73,652,73,652,68,686,68"/>
+<area shape="rect" id="Node000010" href="$namespacebootstrap_a6788c3d01506cbf268f74a60be16385c.html#a6788c3d01506cbf268f74a60be16385c" title="Parses a configuration string into a Config object." alt="" coords="255,56,416,81"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="450,72,416,72,416,66,450,67"/>
+<area shape="poly" id="edge10_Node000010_Node000004" title=" " alt="" coords="241,58,206,53,207,48,242,53"/>
+</map>

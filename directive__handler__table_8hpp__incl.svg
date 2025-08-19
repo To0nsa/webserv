@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Declares handler maps for server/location directives.">
 <polygon fill="#999999" stroke="#666666" points="453,-195 298,-195 298,-165 453,-165 453,-195"/>
 <text text-anchor="start" x="306" y="-183" font-family="Helvetica,sans-Serif" font-size="10.00">include/config/parser</text>
 <text text-anchor="middle" x="375.5" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">/directive_handler_table.hpp</text>
@@ -139,7 +139,7 @@ var sectionId = 'dynsection-0';
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="467,-74 364,-74 364,-55 467,-55 467,-74"/>
 <text text-anchor="middle" x="415.5" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>

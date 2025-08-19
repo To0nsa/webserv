@@ -1,39 +1,39 @@
 <map id="include/core/Location.hpp" name="include/core/Location.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="2720,5,2908,31"/>
-<area shape="rect" id="Node000002" href="$ConfigParser_8hpp.html" title=" " alt="" coords="1568,255,1725,295"/>
+<area shape="rect" id="Node000001" title="Declares the Location class for route&#45;specific configuration." alt="" coords="2720,5,2908,31"/>
+<area shape="rect" id="Node000002" href="$ConfigParser_8hpp.html" title="Declares the ConfigParser for syntactic/semantic directive parsing." alt="" coords="1568,255,1725,295"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="2707,22,2298,28,2031,36,1754,48,1490,67,1260,92,1165,108,1089,126,1032,146,1012,157,999,168,993,178,991,187,993,196,999,205,1011,212,1031,219,1094,230,1269,242,1448,247,1556,252,1568,254,1567,259,1555,257,1448,253,1269,247,1093,235,1030,224,1008,217,995,209,988,198,986,187,988,176,995,165,1009,153,1030,141,1087,121,1164,103,1259,87,1489,62,1754,43,2031,31,2298,23,2706,17"/>
-<area shape="rect" id="Node000003" href="$ConfigParser_8cpp.html" title=" " alt="" coords="232,343,407,383"/>
+<area shape="rect" id="Node000003" href="$ConfigParser_8cpp.html" title="Implements parsing of servers, locations, and directives." alt="" coords="232,343,407,383"/>
 <area shape="poly" id="edge41_Node000001_Node000003" title=" " alt="" coords="2707,22,2132,25,1322,34,924,41,581,52,329,65,250,73,209,81,121,121,81,145,47,170,22,198,9,227,8,242,11,259,18,275,30,293,42,304,61,313,111,330,172,342,232,351,232,356,171,347,110,335,59,318,39,308,26,296,13,278,6,260,3,243,4,226,18,195,44,166,78,140,119,117,207,76,249,67,329,59,580,46,924,36,1322,29,2132,20,2707,17"/>
-<area shape="rect" id="Node000005" href="$directive__handler__table_8hpp.html" title=" " alt="" coords="174,167,380,207"/>
+<area shape="rect" id="Node000005" href="$directive__handler__table_8hpp.html" title="Declares handler maps for server/location directives." alt="" coords="174,167,380,207"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="2707,23,2170,27,1424,37,742,55,512,67,439,74,401,81,368,99,338,122,294,168,290,164,334,118,365,94,399,76,438,68,511,61,742,49,1424,32,2170,22,2707,17"/>
-<area shape="rect" id="Node000006" href="$directive__handler__table_8cpp.html" title=" " alt="" coords="40,255,231,295"/>
+<area shape="rect" id="Node000006" href="$directive__handler__table_8cpp.html" title="Implements directive handler maps for server and location blocks." alt="" coords="40,255,231,295"/>
 <area shape="poly" id="edge42_Node000001_Node000006" title=" " alt="" coords="2707,22,2181,23,1441,30,1070,37,741,47,486,62,396,71,336,81,281,94,238,107,201,129,163,168,151,189,144,212,138,255,133,254,138,211,146,187,159,165,198,125,236,103,280,89,335,76,395,66,486,57,741,42,1070,32,1441,24,2181,17,2707,16"/>
 <area shape="rect" id="Node000007" href="$Server_8hpp.html" title="Declares the Server class for virtual host configuration." alt="" coords="1718,86,1892,111"/>
 <area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="2707,30,1893,93,1893,88,2707,25"/>
-<area shape="rect" id="Node000010" href="$normalizeConfig_8cpp.html" title=" " alt="" coords="2032,262,2253,287"/>
+<area shape="rect" id="Node000010" href="$normalizeConfig_8cpp.html" title="Implements post&#45;parse normalization of configuration objects." alt="" coords="2032,262,2253,287"/>
 <area shape="poly" id="edge40_Node000001_Node000010" title=" " alt="" coords="2923,28,3052,49,3118,64,3177,84,3225,107,3242,121,3255,136,3262,152,3262,170,3254,189,3239,209,3221,216,3187,222,3077,233,2758,246,2267,257,2210,265,2210,259,2266,252,2758,241,3077,227,3187,217,3220,211,3235,205,3250,186,3256,169,3256,153,3250,138,3239,125,3222,112,3175,88,3116,69,3051,54,2922,33"/>
-<area shape="rect" id="Node000011" href="$validateConfig_8cpp.html" title=" " alt="" coords="2278,262,2487,287"/>
+<area shape="rect" id="Node000011" href="$validateConfig_8cpp.html" title="Implements validation logic for parsed configuration objects." alt="" coords="2278,262,2487,287"/>
 <area shape="poly" id="edge43_Node000001_Node000011" title=" " alt="" coords="2922,23,3142,43,3234,58,3265,67,3283,77,3305,110,3312,143,3305,176,3283,209,3265,220,3235,229,3146,242,3031,250,2901,254,2650,255,2500,257,2447,265,2446,259,2500,252,2650,249,2900,248,3030,245,3146,237,3233,224,3262,215,3279,205,3300,174,3307,143,3300,112,3279,81,3263,72,3233,63,3141,48,2922,28"/>
-<area shape="rect" id="Node000012" href="$printInfo_8cpp.html" title=" " alt="" coords="2511,262,2670,287"/>
+<area shape="rect" id="Node000012" href="$printInfo_8cpp.html" title="Human&#45;readable printing helpers for Webserv configuration and servers." alt="" coords="2511,262,2670,287"/>
 <area shape="poly" id="edge52_Node000001_Node000012" title=" " alt="" coords="2923,22,3043,29,3171,40,3277,56,3313,66,3334,77,3356,110,3363,143,3356,176,3334,209,3320,218,3299,226,3236,239,3151,250,3053,259,2844,270,2670,275,2670,269,2844,264,3052,253,3151,245,3235,234,3297,221,3318,213,3330,205,3351,174,3358,143,3351,112,3330,81,3311,71,3276,61,3171,46,3043,34,2922,27"/>
-<area shape="rect" id="Node000015" href="$SocketManagerRequest_8cpp.html" title=" " alt="" coords="357,255,560,295"/>
+<area shape="rect" id="Node000015" href="$SocketManagerRequest_8cpp.html" title="Implements request handling logic for SocketManager." alt="" coords="357,255,560,295"/>
 <area shape="poly" id="edge50_Node000001_Node000015" title=" " alt="" coords="2706,21,2428,22,2034,29,1577,47,1343,62,1113,81,1028,87,955,89,830,92,771,98,710,112,643,134,566,169,537,188,512,211,473,256,469,253,508,207,534,184,564,164,641,129,708,106,770,93,829,87,955,84,1028,82,1113,76,1343,57,1577,42,2034,24,2428,16,2706,16"/>
-<area shape="rect" id="Node000022" href="$handleCgi_8cpp.html" title=" " alt="" coords="2384,174,2551,199"/>
+<area shape="rect" id="Node000022" href="$handleCgi_8cpp.html" title="Implements CGI (Common Gateway Interface) request handling." alt="" coords="2384,174,2551,199"/>
 <area shape="poly" id="edge45_Node000001_Node000022" title=" " alt="" coords="2780,39,2493,176,2491,171,2777,34"/>
-<area shape="rect" id="Node000024" href="$handlePost_8cpp.html" title=" " alt="" coords="2575,167,2776,207"/>
+<area shape="rect" id="Node000024" href="$handlePost_8cpp.html" title="Implements HTTP POST request handling logic." alt="" coords="2575,167,2776,207"/>
 <area shape="poly" id="edge47_Node000001_Node000024" title=" " alt="" coords="2798,43,2694,168,2689,165,2794,39"/>
-<area shape="rect" id="Node000025" href="$requestRouter_8cpp.html" title=" " alt="" coords="2800,174,2994,199"/>
+<area shape="rect" id="Node000025" href="$requestRouter_8cpp.html" title="Routes parsed HTTP requests to the appropriate handler." alt="" coords="2800,174,2994,199"/>
 <area shape="poly" id="edge48_Node000001_Node000025" title=" " alt="" coords="2829,42,2894,173,2889,175,2824,44"/>
-<area shape="rect" id="Node000026" href="$responseBuilder_8cpp.html" title=" " alt="" coords="3018,174,3224,199"/>
+<area shape="rect" id="Node000026" href="$responseBuilder_8cpp.html" title="Implements the ResponseBuilder utilities for constructing HTTP responses." alt="" coords="3018,174,3224,199"/>
 <area shape="poly" id="edge49_Node000001_Node000026" title=" " alt="" coords="2849,35,3101,171,3099,176,2846,40"/>
-<area shape="rect" id="Node000027" href="$Location_8cpp.html" title=" " alt="" coords="3402,86,3560,111"/>
+<area shape="rect" id="Node000027" href="$Location_8cpp.html" title="Implements the Location class for route&#45;specific configuration." alt="" coords="3402,86,3560,111"/>
 <area shape="poly" id="edge44_Node000001_Node000027" title=" " alt="" coords="2923,25,3136,46,3383,76,3426,83,3425,89,3382,81,3135,51,2922,31"/>
-<area shape="rect" id="Node000028" href="$handleGet_8cpp.html" title=" " alt="" coords="3584,79,3775,119"/>
+<area shape="rect" id="Node000028" href="$handleGet_8cpp.html" title="Implements the HTTP GET request handler." alt="" coords="3584,79,3775,119"/>
 <area shape="poly" id="edge46_Node000001_Node000028" title=" " alt="" coords="2922,22,3216,41,3395,56,3573,76,3584,77,3584,83,3573,81,3394,62,3216,46,2922,27"/>
-<area shape="rect" id="Node000029" href="$filesystemUtils_8cpp.html" title=" " alt="" coords="3800,86,4002,111"/>
+<area shape="rect" id="Node000029" href="$filesystemUtils_8cpp.html" title="Implements filesystem utility functions for Webserv." alt="" coords="3800,86,4002,111"/>
 <area shape="poly" id="edge51_Node000001_Node000029" title=" " alt="" coords="2922,20,3305,37,3546,53,3788,76,3839,83,3839,89,3787,81,3546,58,3305,42,2922,25"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1554,297,1388,316,1219,331,892,351,610,361,408,364,407,358,610,355,892,345,1219,326,1387,311,1554,292"/>
-<area shape="rect" id="Node000004" href="$webserv_8cpp.html" title=" " alt="" coords="1567,350,1726,375"/>
+<area shape="rect" id="Node000004" href="$runWebserv_8cpp.html" title="Webserv bootstrap and runtime orchestration." alt="" coords="1556,350,1736,375"/>
 <area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="1649,309,1649,350,1644,350,1644,309"/>
 <area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="287,220,304,294,317,341,312,343,299,295,281,221"/>
 <area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="236,216,168,257,165,252,233,211"/>
@@ -41,43 +41,43 @@
 <area shape="poly" id="edge26_Node000007_Node000003" title=" " alt="" coords="1704,104,1449,109,1120,120,799,140,666,153,566,169,347,257,335,277,327,300,322,343,317,342,322,299,330,274,343,253,564,164,665,148,798,134,1120,115,1449,104,1704,99"/>
 <area shape="poly" id="edge17_Node000007_Node000005" title=" " alt="" coords="1704,106,1168,126,812,145,451,169,381,176,380,171,450,164,812,140,1168,121,1704,100"/>
 <area shape="poly" id="edge27_Node000007_Node000006" title=" " alt="" coords="1704,104,1437,109,1089,121,749,140,608,153,502,169,470,178,447,187,393,209,217,257,215,252,391,204,445,182,469,173,501,164,608,148,748,135,1089,115,1437,104,1704,99"/>
-<area shape="rect" id="Node000008" href="$Config_8hpp.html" title=" " alt="" coords="1647,174,1832,199"/>
+<area shape="rect" id="Node000008" href="$Config_8hpp.html" title="Declares the Config aggregate for parsed virtual servers." alt="" coords="1647,174,1832,199"/>
 <area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="1790,124,1751,175,1747,172,1786,121"/>
 <area shape="poly" id="edge25_Node000007_Node000010" title=" " alt="" coords="1822,122,1857,164,1879,186,1904,204,1941,224,1981,239,2060,259,2058,265,1980,244,1939,229,1901,209,1876,190,1853,168,1818,125"/>
 <area shape="poly" id="edge28_Node000007_Node000011" title=" " alt="" coords="1835,117,1900,165,1924,187,1949,204,1994,222,2033,233,2103,241,2175,243,2265,252,2312,259,2311,265,2265,257,2174,249,2102,247,2032,238,1992,227,1947,209,1920,191,1897,169,1832,122"/>
 <area shape="poly" id="edge39_Node000007_Node000012" title=" " alt="" coords="1907,104,2135,126,2244,143,2322,164,2339,174,2349,184,2360,194,2374,204,2457,238,2535,259,2534,265,2455,243,2372,209,2356,198,2346,188,2335,178,2320,169,2243,149,2134,132,1906,109"/>
-<area shape="rect" id="Node000013" href="$SocketManager_8hpp.html" title=" " alt="" coords="676,174,934,199"/>
+<area shape="rect" id="Node000013" href="$SocketManager_8hpp.html" title="Declares the SocketManager and per&#45;client state for non&#45;blocking I/O." alt="" coords="676,174,934,199"/>
 <area shape="poly" id="edge18_Node000007_Node000013" title=" " alt="" coords="1704,111,997,169,920,177,919,171,997,164,1704,105"/>
 <area shape="poly" id="edge37_Node000007_Node000015" title=" " alt="" coords="1704,103,1467,107,1166,117,875,137,755,151,664,169,613,187,564,211,487,257,484,252,562,206,611,182,663,164,754,146,874,131,1166,112,1467,102,1704,98"/>
-<area shape="rect" id="Node000018" href="$SocketManagerUtils_8cpp.html" title=" " alt="" coords="1341,255,1544,295"/>
+<area shape="rect" id="Node000018" href="$SocketManagerUtils_8cpp.html" title="Utility methods for connection lifecycle management in SocketManager." alt="" coords="1341,255,1544,295"/>
 <area shape="poly" id="edge38_Node000007_Node000018" title=" " alt="" coords="1755,118,1690,140,1621,169,1538,214,1471,257,1468,252,1535,210,1619,164,1688,135,1753,113"/>
 <area shape="rect" id="Node000019" href="$Server_8cpp.html" title="Implements the Server class used for virtual host configuration." alt="" coords="1959,174,2104,199"/>
 <area shape="poly" id="edge29_Node000007_Node000019" title=" " alt="" coords="1849,114,2002,171,2000,176,1847,119"/>
-<area shape="rect" id="Node000020" href="$server__utils_8cpp.html" title=" " alt="" coords="2128,174,2308,199"/>
+<area shape="rect" id="Node000020" href="$server__utils_8cpp.html" title="Implements server selection utilities for virtual host resolution." alt="" coords="2128,174,2308,199"/>
 <area shape="poly" id="edge30_Node000007_Node000020" title=" " alt="" coords="1875,112,2164,171,2163,177,1873,117"/>
-<area shape="rect" id="Node000021" href="$HttpRequestParser_8cpp.html" title=" " alt="" coords="1008,174,1231,199"/>
+<area shape="rect" id="Node000021" href="$HttpRequestParser_8cpp.html" title="Implements the HttpRequestParser class and HTTP request parsing logic." alt="" coords="1008,174,1231,199"/>
 <area shape="poly" id="edge31_Node000007_Node000021" title=" " alt="" coords="1704,114,1244,169,1193,177,1192,171,1243,164,1704,108"/>
 <area shape="poly" id="edge32_Node000007_Node000022" title=" " alt="" coords="1906,107,2118,131,2365,164,2409,171,2408,177,2365,169,2117,136,1906,113"/>
-<area shape="rect" id="Node000023" href="$handleMultipartForm_8cpp.html" title=" " alt="" coords="1255,167,1520,207"/>
+<area shape="rect" id="Node000023" href="$handleMultipartForm_8cpp.html" title="Handles multipart/form&#45;data POST uploads and persists the first file part to disk." alt="" coords="1255,167,1520,207"/>
 <area shape="poly" id="edge33_Node000007_Node000023" title=" " alt="" coords="1737,117,1480,169,1479,164,1736,111"/>
 <area shape="poly" id="edge34_Node000007_Node000024" title=" " alt="" coords="1907,104,2202,126,2383,143,2564,164,2575,166,2575,171,2563,169,2382,149,2202,132,1906,109"/>
 <area shape="poly" id="edge35_Node000007_Node000025" title=" " alt="" coords="1906,101,2294,120,2541,139,2789,164,2838,171,2837,177,2789,169,2541,144,2294,126,1906,106"/>
 <area shape="poly" id="edge36_Node000007_Node000026" title=" " alt="" coords="1907,99,2109,105,2382,117,2693,136,3007,164,3059,171,3058,177,3006,169,2692,141,2382,122,2109,111,1907,105"/>
 <area shape="poly" id="edge9_Node000008_Node000002" title=" " alt="" coords="1719,211,1669,256,1665,253,1715,207"/>
 <area shape="poly" id="edge12_Node000008_Node000003" title=" " alt="" coords="1750,213,1755,255,1751,277,1739,297,1719,306,1679,314,1552,327,1376,338,1168,347,736,358,407,363,407,358,736,353,1168,341,1375,333,1552,322,1679,308,1717,301,1735,293,1746,275,1750,255,1745,213"/>
-<area shape="poly" id="edge14_Node000008_Node000004" title=" " alt="" coords="1826,199,1913,221,1949,236,1971,253,1980,275,1971,296,1955,310,1931,321,1869,339,1796,351,1726,359,1726,353,1796,346,1868,334,1930,316,1952,305,1967,293,1975,275,1967,256,1946,240,1911,226,1825,204"/>
-<area shape="rect" id="Node000009" href="$Config_8cpp.html" title=" " alt="" coords="1800,262,1956,287"/>
+<area shape="poly" id="edge14_Node000008_Node000004" title=" " alt="" coords="1826,199,1913,221,1949,236,1971,253,1980,275,1971,296,1956,309,1934,320,1875,338,1805,350,1737,358,1736,353,1804,345,1873,333,1932,315,1953,305,1967,293,1975,275,1967,256,1946,240,1911,226,1825,204"/>
+<area shape="rect" id="Node000009" href="$Config_8cpp.html" title="Implements the Config aggregate for parsed servers." alt="" coords="1800,262,1956,287"/>
 <area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="1771,204,1861,259,1858,264,1769,209"/>
 <area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="1807,200,2089,259,2088,265,1806,205"/>
 <area shape="poly" id="edge13_Node000008_Node000011" title=" " alt="" coords="1847,198,2265,252,2313,259,2313,265,2265,257,1846,203"/>
 <area shape="poly" id="edge15_Node000008_Node000012" title=" " alt="" coords="1847,195,1948,204,2225,223,2345,233,2500,252,2541,259,2540,265,2499,257,2345,238,2224,228,1948,209,1846,200"/>
-<area shape="poly" id="edge19_Node000013_Node000004" title=" " alt="" coords="908,198,1137,229,1279,252,1295,262,1306,272,1316,283,1330,292,1390,315,1452,333,1567,352,1566,357,1451,338,1388,321,1328,297,1312,287,1302,276,1292,266,1278,257,1137,234,908,204"/>
-<area shape="rect" id="Node000014" href="$SocketManager_8cpp.html" title=" " alt="" coords="584,262,812,287"/>
+<area shape="poly" id="edge19_Node000013_Node000004" title=" " alt="" coords="908,198,1137,229,1279,252,1295,262,1306,272,1316,283,1330,292,1387,314,1446,331,1557,351,1556,356,1445,336,1385,320,1328,297,1312,287,1302,276,1292,266,1278,257,1137,234,908,204"/>
+<area shape="rect" id="Node000014" href="$SocketManager_8cpp.html" title="Implements the SocketManager core loop and server socket setup." alt="" coords="584,262,812,287"/>
 <area shape="poly" id="edge20_Node000013_Node000014" title=" " alt="" coords="782,210,715,264,711,260,778,206"/>
 <area shape="poly" id="edge21_Node000013_Node000015" title=" " alt="" coords="746,205,535,257,534,252,745,200"/>
-<area shape="rect" id="Node000016" href="$SocketManagerResponse_8cpp.html" title=" " alt="" coords="837,255,1040,295"/>
+<area shape="rect" id="Node000016" href="$SocketManagerResponse_8cpp.html" title="Implements response sending logic for SocketManager." alt="" coords="837,255,1040,295"/>
 <area shape="poly" id="edge22_Node000013_Node000016" title=" " alt="" coords="836,205,910,252,908,257,833,209"/>
-<area shape="rect" id="Node000017" href="$SocketManagerTimeouts_8cpp.html" title=" " alt="" coords="1064,255,1266,295"/>
+<area shape="rect" id="Node000017" href="$SocketManagerTimeouts_8cpp.html" title="Implements timeout and limit enforcement for SocketManager." alt="" coords="1064,255,1266,295"/>
 <area shape="poly" id="edge23_Node000013_Node000017" title=" " alt="" coords="867,200,1087,252,1086,257,866,205"/>
 <area shape="poly" id="edge24_Node000013_Node000018" title=" " alt="" coords="908,198,1323,252,1341,255,1341,260,1322,257,908,204"/>
 </map>

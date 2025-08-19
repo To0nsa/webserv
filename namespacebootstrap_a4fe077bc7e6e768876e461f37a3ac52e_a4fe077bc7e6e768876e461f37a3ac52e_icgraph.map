@@ -1,0 +1,7 @@
+<map id="bootstrap::resolveConfigPath" name="bootstrap::resolveConfigPath">
+<area shape="rect" id="Node000001" title="Resolves the configuration file path from CLI arguments." alt="" coords="255,5,464,31"/>
+<area shape="rect" id="Node000002" href="$group__entrypoint_ga6e58dbe6eab2d4b12d65b7b0e7297be8.html#ga6e58dbe6eab2d4b12d65b7b0e7297be8" title="Runs the Webserv server." alt="" coords="108,5,207,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="241,21,207,21,207,15,241,15"/>
+<area shape="rect" id="Node000003" href="$group__entrypoint_ga3c04138a5bfe5d72780bb7e82a18e627.html#ga3c04138a5bfe5d72780bb7e82a18e627" title="Program entry point." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

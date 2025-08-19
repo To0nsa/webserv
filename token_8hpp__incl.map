@@ -1,5 +1,5 @@
 <map id="include/config/tokenizer/token.hpp" name="include/config/tokenizer/token.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,181,45"/>
+<area shape="rect" id="Node000001" title="Token and TokenType declarations for the config lexer." alt="" coords="5,5,181,45"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="14,93,85,119"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,47,65,83,60,80,80,44"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="109,93,168,119"/>

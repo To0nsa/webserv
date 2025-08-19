@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Provides utility functions for selecting the correct Server instance.">
+<g id="a_Node000001"><a xlink:title="Declares server selection util for virtual host resolution.">
 <polygon fill="#999999" stroke="#666666" points="110,-85 0,-85 0,-55 110,-55 110,-85"/>
 <text text-anchor="start" x="8" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">include/core/server</text>
 <text text-anchor="middle" x="55" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">_utils.hpp</text>

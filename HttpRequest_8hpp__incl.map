@@ -1,6 +1,6 @@
 <map id="include/http/HttpRequest.hpp" name="include/http/HttpRequest.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="71,5,283,31"/>
-<area shape="rect" id="Node000002" href="$Url_8hpp.html" title=" " alt="" coords="5,79,104,104"/>
+<area shape="rect" id="Node000001" title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL." alt="" coords="71,5,283,31"/>
+<area shape="rect" id="Node000002" href="$Url_8hpp.html" title="Declares the Url POD for parsed URL components." alt="" coords="5,79,104,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,33,88,74,85,69,156,28"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="68,152,127,177"/>
 <area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="173,32,113,141,108,139,168,30"/>

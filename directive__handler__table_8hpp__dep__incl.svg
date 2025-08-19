@@ -21,7 +21,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Declares handler maps for server/location directives.">
 <polygon fill="#999999" stroke="#666666" points="220,-96 65,-96 65,-66 220,-66 220,-96"/>
 <text text-anchor="start" x="73" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">include/config/parser</text>
 <text text-anchor="middle" x="142.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">/directive_handler_table.hpp</text>
@@ -31,7 +31,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="ConfigParser_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="ConfigParser_8cpp.html" target="_top" xlink:title="Implements parsing of servers, locations, and directives.">
 <polygon fill="white" stroke="#666666" points="131,-30 0,-30 0,0 131,0 131,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/parser/Config</text>
 <text text-anchor="middle" x="65.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Parser.cpp</text>
@@ -50,7 +50,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="directive__handler__table_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="directive__handler__table_8cpp.html" target="_top" xlink:title="Implements directive handler maps for server and location blocks.">
 <polygon fill="white" stroke="#666666" points="292,-30 149,-30 149,0 292,0 292,-30"/>
 <text text-anchor="start" x="157" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">src/config/parser/directive</text>
 <text text-anchor="middle" x="220.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">_handler_table.cpp</text>

@@ -93,9 +93,12 @@ $(document).ready(function(){initNavTree('HttpRequestParser_8cpp.html',''); init
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">HttpRequestParser.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">HttpRequestParser.cpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements the <a class="el" href="classHttpRequestParser.html" title="Utility class for parsing raw HTTP requests.">HttpRequestParser</a> class and HTTP request parsing logic.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="HttpRequestParser_8hpp_source.html">http/HttpRequestParser.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="HttpRequest_8hpp_source.html">http/HttpRequest.hpp</a>&quot;</code><br />
@@ -132,413 +135,59 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1ac91f2d8bac0e65356cf9ec57f61ef9" id="r_a1ac91f2d8bac0e65356cf9ec57f61ef9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HttpRequestParser_8cpp.html#a1ac91f2d8bac0e65356cf9ec57f61ef9">chunkReqHandler</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const std::string &amp;bodyPart, std::size_t clientMaxBodySize, int &amp;errorCode, std::size_t &amp;consumedBytes)</td></tr>
-<tr class="separator:a1ac91f2d8bac0e65356cf9ec57f61ef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9be3342adac43a0909adcd3e6db4761" id="r_ac9be3342adac43a0909adcd3e6db4761"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HttpRequestParser_8cpp.html#ac9be3342adac43a0909adcd3e6db4761">insertValidatedHeader</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const std::string &amp;key, const std::string &amp;value, int &amp;errorCode)</td></tr>
-<tr class="separator:ac9be3342adac43a0909adcd3e6db4761"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af44828c16180347a59692726efede495" id="r_af44828c16180347a59692726efede495"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HttpRequestParser_8cpp.html#af44828c16180347a59692726efede495">isChunkedBodyComplete</a> (const std::string &amp;bodyPart)</td></tr>
-<tr class="separator:af44828c16180347a59692726efede495"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a29bcd9289fdb2e8d27e7d0a6924057" id="r_a1a29bcd9289fdb2e8d27e7d0a6924057"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HttpRequestParser_8cpp.html#a1a29bcd9289fdb2e8d27e7d0a6924057">isLikelyStartLine</a> (const std::string &amp;s)</td></tr>
-<tr class="separator:a1a29bcd9289fdb2e8d27e7d0a6924057"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf6a0818c5f6d38685768c2f82f4a3c4" id="r_adf6a0818c5f6d38685768c2f82f4a3c4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02HttpRequestParser_8cpp_03.html#adf6a0818c5f6d38685768c2f82f4a3c4">anonymous_namespace{HttpRequestParser.cpp}::isValidHttpMethodToken</a> (const std::string &amp;method)</td></tr>
+<tr class="memitem:adf6a0818c5f6d38685768c2f82f4a3c4" id="r_adf6a0818c5f6d38685768c2f82f4a3c4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02HttpRequestParser_8cpp_03_adf6a0818c5f6d38685768c2f82f4a3c4.html#adf6a0818c5f6d38685768c2f82f4a3c4">anonymous_namespace{HttpRequestParser.cpp}::isValidHttpMethodToken</a> (const std::string &amp;method)</td></tr>
+<tr class="memdesc:adf6a0818c5f6d38685768c2f82f4a3c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates whether a string is a valid HTTP method token.  <br /></td></tr>
 <tr class="separator:adf6a0818c5f6d38685768c2f82f4a3c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43f393da49f2be40bec77b2430a9e517" id="r_a43f393da49f2be40bec77b2430a9e517"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02HttpRequestParser_8cpp_03.html#a43f393da49f2be40bec77b2430a9e517">anonymous_namespace{HttpRequestParser.cpp}::isValidPath</a> (const std::string &amp;rawPath)</td></tr>
+<tr class="memitem:a43f393da49f2be40bec77b2430a9e517" id="r_a43f393da49f2be40bec77b2430a9e517"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02HttpRequestParser_8cpp_03_a43f393da49f2be40bec77b2430a9e517.html#a43f393da49f2be40bec77b2430a9e517">anonymous_namespace{HttpRequestParser.cpp}::isValidPath</a> (const std::string &amp;rawPath)</td></tr>
+<tr class="memdesc:a43f393da49f2be40bec77b2430a9e517"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates that a normalized request path is safe and well-formed.  <br /></td></tr>
 <tr class="separator:a43f393da49f2be40bec77b2430a9e517"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58635c86ff83b8a131bc50d6cd9bc52e" id="r_a58635c86ff83b8a131bc50d6cd9bc52e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HttpRequestParser_8cpp.html#a58635c86ff83b8a131bc50d6cd9bc52e">parseReqBody</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const std::string &amp;bodyPart, std::size_t clientMaxBodySize, int &amp;errorCode, std::size_t &amp;consumedBytes)</td></tr>
-<tr class="separator:a58635c86ff83b8a131bc50d6cd9bc52e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d14784d1293d04a8e000c27ad72426e" id="r_a6d14784d1293d04a8e000c27ad72426e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HttpRequestParser_8cpp.html#a6d14784d1293d04a8e000c27ad72426e">parseReqHeader</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const std::string &amp;headerPart, int &amp;errorCode, std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; servers, size_t &amp;clientMaxBodySize)</td></tr>
-<tr class="separator:a6d14784d1293d04a8e000c27ad72426e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac1a50d20c34394b0f2c54842dd3f2d0" id="r_aac1a50d20c34394b0f2c54842dd3f2d0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structUrl.html">Url</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02HttpRequestParser_8cpp_03.html#aac1a50d20c34394b0f2c54842dd3f2d0">anonymous_namespace{HttpRequestParser.cpp}::parseUrl</a> (const std::string &amp;url)</td></tr>
-<tr class="separator:aac1a50d20c34394b0f2c54842dd3f2d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad602d37f8ea421c311eca6356fa2b643" id="r_ad602d37f8ea421c311eca6356fa2b643"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structUrl.html">Url</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02HttpRequestParser_8cpp_03.html#ad602d37f8ea421c311eca6356fa2b643">anonymous_namespace{HttpRequestParser.cpp}::parseUrlHttpVersion1_1</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const std::string &amp;url)</td></tr>
+<tr class="memitem:ad602d37f8ea421c311eca6356fa2b643" id="r_ad602d37f8ea421c311eca6356fa2b643"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structUrl.html">Url</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02HttpRequestParser_8cpp_03_ad602d37f8ea421c311eca6356fa2b643.html#ad602d37f8ea421c311eca6356fa2b643">anonymous_namespace{HttpRequestParser.cpp}::parseUrlHttpVersion1_1</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const std::string &amp;url)</td></tr>
+<tr class="memdesc:ad602d37f8ea421c311eca6356fa2b643"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a full URL string into its components (HTTP/1.1 version).  <br /></td></tr>
 <tr class="separator:ad602d37f8ea421c311eca6356fa2b643"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a389dd882df851a3ca29a1eb93cdb38cb" id="r_a389dd882df851a3ca29a1eb93cdb38cb"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanonymous__namespace_02HttpRequestParser_8cpp_03.html#a389dd882df851a3ca29a1eb93cdb38cb">anonymous_namespace{HttpRequestParser.cpp}::searchBestMatchedServers</a> (std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers, const std::string &amp;hostHeader)</td></tr>
-<tr class="separator:a389dd882df851a3ca29a1eb93cdb38cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf4caa5571f8655a279cebb6938ffdb1" id="r_aaf4caa5571f8655a279cebb6938ffdb1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HttpRequestParser_8cpp.html#aaf4caa5571f8655a279cebb6938ffdb1">validateReq</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, int &amp;errorCode)</td></tr>
-<tr class="separator:aaf4caa5571f8655a279cebb6938ffdb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaac1a50d20c34394b0f2c54842dd3f2d0" id="r_gaac1a50d20c34394b0f2c54842dd3f2d0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structUrl.html">Url</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_gaac1a50d20c34394b0f2c54842dd3f2d0.html#gaac1a50d20c34394b0f2c54842dd3f2d0">anonymous_namespace{HttpRequestParser.cpp}::parseUrl</a> (const std::string &amp;url)</td></tr>
+<tr class="memdesc:gaac1a50d20c34394b0f2c54842dd3f2d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a generic URL string into its structured components.  <br /></td></tr>
+<tr class="separator:gaac1a50d20c34394b0f2c54842dd3f2d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga389dd882df851a3ca29a1eb93cdb38cb" id="r_ga389dd882df851a3ca29a1eb93cdb38cb"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="classServer.html">Server</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga389dd882df851a3ca29a1eb93cdb38cb.html#ga389dd882df851a3ca29a1eb93cdb38cb">anonymous_namespace{HttpRequestParser.cpp}::searchBestMatchedServers</a> (std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; &amp;servers, const std::string &amp;hostHeader)</td></tr>
+<tr class="memdesc:ga389dd882df851a3ca29a1eb93cdb38cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Selects the best-matching server configuration for a given Host header.  <br /></td></tr>
+<tr class="separator:ga389dd882df851a3ca29a1eb93cdb38cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac9be3342adac43a0909adcd3e6db4761" id="r_gac9be3342adac43a0909adcd3e6db4761"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_gac9be3342adac43a0909adcd3e6db4761.html#gac9be3342adac43a0909adcd3e6db4761">insertValidatedHeader</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const std::string &amp;key, const std::string &amp;value, int &amp;errorCode)</td></tr>
+<tr class="memdesc:gac9be3342adac43a0909adcd3e6db4761"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates and inserts a single HTTP header into the request.  <br /></td></tr>
+<tr class="separator:gac9be3342adac43a0909adcd3e6db4761"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6d14784d1293d04a8e000c27ad72426e" id="r_ga6d14784d1293d04a8e000c27ad72426e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga6d14784d1293d04a8e000c27ad72426e.html#ga6d14784d1293d04a8e000c27ad72426e">parseReqHeader</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const std::string &amp;headerPart, int &amp;errorCode, std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt; servers, size_t &amp;clientMaxBodySize)</td></tr>
+<tr class="memdesc:ga6d14784d1293d04a8e000c27ad72426e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses and validates the request line and headers of an HTTP request.  <br /></td></tr>
+<tr class="separator:ga6d14784d1293d04a8e000c27ad72426e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf44828c16180347a59692726efede495" id="r_gaf44828c16180347a59692726efede495"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_gaf44828c16180347a59692726efede495.html#gaf44828c16180347a59692726efede495">isChunkedBodyComplete</a> (const std::string &amp;bodyPart)</td></tr>
+<tr class="memdesc:gaf44828c16180347a59692726efede495"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a chunked HTTP request body is complete.  <br /></td></tr>
+<tr class="separator:gaf44828c16180347a59692726efede495"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1ac91f2d8bac0e65356cf9ec57f61ef9" id="r_ga1ac91f2d8bac0e65356cf9ec57f61ef9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga1ac91f2d8bac0e65356cf9ec57f61ef9.html#ga1ac91f2d8bac0e65356cf9ec57f61ef9">chunkReqHandler</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const std::string &amp;bodyPart, std::size_t clientMaxBodySize, int &amp;errorCode, std::size_t &amp;consumedBytes)</td></tr>
+<tr class="memdesc:ga1ac91f2d8bac0e65356cf9ec57f61ef9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a chunked HTTP request body and assembles it into the request.  <br /></td></tr>
+<tr class="separator:ga1ac91f2d8bac0e65356cf9ec57f61ef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1a29bcd9289fdb2e8d27e7d0a6924057" id="r_ga1a29bcd9289fdb2e8d27e7d0a6924057"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga1a29bcd9289fdb2e8d27e7d0a6924057.html#ga1a29bcd9289fdb2e8d27e7d0a6924057">isLikelyStartLine</a> (const std::string &amp;s)</td></tr>
+<tr class="memdesc:ga1a29bcd9289fdb2e8d27e7d0a6924057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Heuristically checks if a string looks like the start line of an HTTP request.  <br /></td></tr>
+<tr class="separator:ga1a29bcd9289fdb2e8d27e7d0a6924057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga58635c86ff83b8a131bc50d6cd9bc52e" id="r_ga58635c86ff83b8a131bc50d6cd9bc52e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_ga58635c86ff83b8a131bc50d6cd9bc52e.html#ga58635c86ff83b8a131bc50d6cd9bc52e">parseReqBody</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, const std::string &amp;bodyPart, std::size_t clientMaxBodySize, int &amp;errorCode, std::size_t &amp;consumedBytes)</td></tr>
+<tr class="memdesc:ga58635c86ff83b8a131bc50d6cd9bc52e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses and validates the HTTP request body according to Content-Length or Transfer-Encoding.  <br /></td></tr>
+<tr class="separator:ga58635c86ff83b8a131bc50d6cd9bc52e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaaf4caa5571f8655a279cebb6938ffdb1" id="r_gaaf4caa5571f8655a279cebb6938ffdb1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__http_gaaf4caa5571f8655a279cebb6938ffdb1.html#gaaf4caa5571f8655a279cebb6938ffdb1">validateReq</a> (<a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;req, int &amp;errorCode)</td></tr>
+<tr class="memdesc:gaaf4caa5571f8655a279cebb6938ffdb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs final validation of a parsed HTTP request.  <br /></td></tr>
+<tr class="separator:gaaf4caa5571f8655a279cebb6938ffdb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a1ac91f2d8bac0e65356cf9ec57f61ef9" name="a1ac91f2d8bac0e65356cf9ec57f61ef9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ac91f2d8bac0e65356cf9ec57f61ef9">&#9670;&#160;</a></span>chunkReqHandler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void chunkReqHandler </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>req</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>bodyPart</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>clientMaxBodySize</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>errorCode</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t &amp;&#160;</td>
-          <td class="paramname"><em>consumedBytes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="HttpRequestParser_8cpp_source.html#l00450">450</a> of file <a class="el" href="HttpRequestParser_8cpp_source.html">HttpRequestParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00128">HttpRequest::setBody()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00132">HttpRequest::setContentLength()</a>, and <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a32bd8a1db2275458673903bdb84cb277">WARN</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="HttpRequestParser_8cpp_source.html#l00533">parseReqBody()</a>.</p>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_a1ac91f2d8bac0e65356cf9ec57f61ef9_cgraph.svg" width="100%" height="419"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_a1ac91f2d8bac0e65356cf9ec57f61ef9_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="ac9be3342adac43a0909adcd3e6db4761" name="ac9be3342adac43a0909adcd3e6db4761"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac9be3342adac43a0909adcd3e6db4761">&#9670;&#160;</a></span>insertValidatedHeader()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool insertValidatedHeader </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>req</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>key</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>errorCode</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Centralized header validation &amp; insertion.</p><ul>
-<li>CONTENT-LENGTH → numeric check (411) + req.setContentLength</li>
-<li>TRANSFER-ENCODING → only “chunked” (501), disallow on GET (400)</li>
-<li>CL ↔ TE conflict (400)</li>
-<li>Duplicate HOST/CONTENT-TYPE (400)</li>
-<li>Duplicate CONTENT-LENGTH: only identical allowed (400)</li>
-<li>Mergeable headers appended, others rejected (400) </li>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements the <a class="el" href="classHttpRequestParser.html" title="Utility class for parsing raw HTTP requests.">HttpRequestParser</a> class and HTTP request parsing logic. </p>
+<p>This file defines the parsing pipeline that converts raw client input into structured <a class="el" href="classHttpRequest.html">HttpRequest</a> objects:</p>
+<ul>
+<li><b>Request line parsing</b>: method, request-target, and HTTP version.</li>
+<li><b>Header validation</b>: validates and inserts headers, handling conflicts between <code>Content-Length</code> and <code>Transfer-Encoding</code>.</li>
+<li><b>Path normalization</b>: decodes percent-encoding, strips fragments, validates against traversal attempts, and normalizes paths.</li>
+<li><b><a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a> matching</b>: selects the most appropriate <a class="el" href="classServer.html">Server</a> configuration from the available virtual hosts, based on the Host header.</li>
+<li><b>Body parsing</b>: supports both fixed-length bodies (via <code>Content-Length</code>) and chunked transfer encoding, enforcing <code>client_max_body_size</code> limits.</li>
+<li><b>Validation</b>: ensures method support, mandatory headers, and content type restrictions for POST requests.</li>
 </ul>
+<p>Utility functions inside anonymous namespaces support RFC-compliant token validation, path checking, URL parsing, and body handling.</p>
+<p>The main entry point is <a class="el" href="group__http_ga7f2ad87f24b3a0059cc3aa217be1f2af.html#ga7f2ad87f24b3a0059cc3aa217be1f2af">HttpRequestParser::parse</a>, which integrates all steps to safely parse complete requests, handle errors, and detect pipelined requests. </p>
 
-<p class="definition">Definition at line <a class="el" href="HttpRequestParser_8cpp_source.html#l00144">144</a> of file <a class="el" href="HttpRequestParser_8cpp_source.html">HttpRequestParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00103">HttpRequest::getContentLength()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00086">HttpRequest::getHeader()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00074">HttpRequest::getMethod()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00144">HttpRequest::hasHeader()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00132">HttpRequest::setContentLength()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00123">HttpRequest::setHeader()</a>, <a class="el" href="stringUtils_8cpp_source.html#l00083">toLower()</a>, and <a class="el" href="stringUtils_8cpp_source.html#l00094">toUpper()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="HttpRequestParser_8cpp_source.html#l00258">parseReqHeader()</a>.</p>
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_ac9be3342adac43a0909adcd3e6db4761_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_ac9be3342adac43a0909adcd3e6db4761_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="af44828c16180347a59692726efede495" name="af44828c16180347a59692726efede495"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af44828c16180347a59692726efede495">&#9670;&#160;</a></span>isChunkedBodyComplete()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool isChunkedBodyComplete </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>bodyPart</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="HttpRequestParser_8cpp_source.html#l00439">439</a> of file <a class="el" href="HttpRequestParser_8cpp_source.html">HttpRequestParser.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="HttpRequestParser_8cpp_source.html#l00533">parseReqBody()</a>.</p>
-<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-5-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_af44828c16180347a59692726efede495_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a1a29bcd9289fdb2e8d27e7d0a6924057" name="a1a29bcd9289fdb2e8d27e7d0a6924057"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a29bcd9289fdb2e8d27e7d0a6924057">&#9670;&#160;</a></span>isLikelyStartLine()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool isLikelyStartLine </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>s</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="HttpRequestParser_8cpp_source.html#l00522">522</a> of file <a class="el" href="HttpRequestParser_8cpp_source.html">HttpRequestParser.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="HttpRequestParser_8cpp_source.html#l00533">parseReqBody()</a>.</p>
-<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-6-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_a1a29bcd9289fdb2e8d27e7d0a6924057_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a58635c86ff83b8a131bc50d6cd9bc52e" name="a58635c86ff83b8a131bc50d6cd9bc52e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a58635c86ff83b8a131bc50d6cd9bc52e">&#9670;&#160;</a></span>parseReqBody()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool parseReqBody </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>req</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>bodyPart</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>clientMaxBodySize</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>errorCode</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t &amp;&#160;</td>
-          <td class="paramname"><em>consumedBytes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="HttpRequestParser_8cpp_source.html#l00533">533</a> of file <a class="el" href="HttpRequestParser_8cpp_source.html">HttpRequestParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="HttpRequestParser_8cpp_source.html#l00450">chunkReqHandler()</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00103">HttpRequest::getContentLength()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00086">HttpRequest::getHeader()</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">INFO</a>, <a class="el" href="HttpRequestParser_8cpp_source.html#l00439">isChunkedBodyComplete()</a>, <a class="el" href="HttpRequestParser_8cpp_source.html#l00522">isLikelyStartLine()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, and <a class="el" href="HttpRequest_8cpp_source.html#l00128">HttpRequest::setBody()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="HttpRequestParser_8cpp_source.html#l00672">HttpRequestParser::parse()</a>.</p>
-<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-7-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_a58635c86ff83b8a131bc50d6cd9bc52e_cgraph.svg" width="100%" height="569"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-8-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_a58635c86ff83b8a131bc50d6cd9bc52e_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="a6d14784d1293d04a8e000c27ad72426e" name="a6d14784d1293d04a8e000c27ad72426e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d14784d1293d04a8e000c27ad72426e">&#9670;&#160;</a></span>parseReqHeader()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool parseReqHeader </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>req</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>headerPart</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>errorCode</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classServer.html">Server</a> &gt;&#160;</td>
-          <td class="paramname"><em>servers</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t &amp;&#160;</td>
-          <td class="paramname"><em>clientMaxBodySize</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="HttpRequestParser_8cpp_source.html#l00258">258</a> of file <a class="el" href="HttpRequestParser_8cpp_source.html">HttpRequestParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="urlUtils_8cpp_source.html#l00022">decodePercentEncoding()</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>, <a class="el" href="Server_8cpp_source.html#l00096">Server::getClientMaxBodySize()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00086">HttpRequest::getHeader()</a>, <a class="el" href="Server_8cpp_source.html#l00080">Server::getHost()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00078">HttpRequest::getPath()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00082">HttpRequest::getVersion()</a>, <a class="el" href="Url_8hpp_source.html#l00009">Url::host</a>, <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">INFO</a>, <a class="el" href="HttpRequestParser_8cpp_source.html#l00144">insertValidatedHeader()</a>, <a class="el" href="HttpRequestParser_8cpp_source.html#l00037">anonymous_namespace{HttpRequestParser.cpp}::isValidHttpMethodToken()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="filesystemUtils_8cpp_source.html#l00084">normalizePath()</a>, <a class="el" href="HttpRequestParser_8cpp_source.html#l00090">anonymous_namespace{HttpRequestParser.cpp}::parseUrl()</a>, <a class="el" href="HttpRequestParser_8cpp_source.html#l00067">anonymous_namespace{HttpRequestParser.cpp}::parseUrlHttpVersion1_1()</a>, <a class="el" href="HttpRequestParser_8cpp_source.html#l00110">anonymous_namespace{HttpRequestParser.cpp}::searchBestMatchedServers()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00164">HttpRequest::setHost()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00111">HttpRequest::setMethod()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00115">HttpRequest::setPath()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00140">HttpRequest::setQuery()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00136">HttpRequest::setUrl()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00119">HttpRequest::setVersion()</a>, and <a class="el" href="stringUtils_8cpp_source.html#l00127">trim()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="HttpRequestParser_8cpp_source.html#l00672">HttpRequestParser::parse()</a>.</p>
-<div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-9-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_a6d14784d1293d04a8e000c27ad72426e_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-10-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_a6d14784d1293d04a8e000c27ad72426e_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="aaf4caa5571f8655a279cebb6938ffdb1" name="aaf4caa5571f8655a279cebb6938ffdb1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf4caa5571f8655a279cebb6938ffdb1">&#9670;&#160;</a></span>validateReq()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool validateReq </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classHttpRequest.html">HttpRequest</a> &amp;&#160;</td>
-          <td class="paramname"><em>req</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>errorCode</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="HttpRequestParser_8cpp_source.html#l00596">596</a> of file <a class="el" href="HttpRequestParser_8cpp_source.html">HttpRequestParser.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="Logger_8hpp.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00103">HttpRequest::getContentLength()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00086">HttpRequest::getHeader()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00074">HttpRequest::getMethod()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00078">HttpRequest::getPath()</a>, <a class="el" href="HttpRequestParser_8cpp_source.html#l00052">anonymous_namespace{HttpRequestParser.cpp}::isValidPath()</a>, <a class="el" href="Logger_8cpp_source.html#l00063">Logger::logFrom()</a>, <a class="el" href="HttpRequest_8cpp_source.html#l00123">HttpRequest::setHeader()</a>, and <a class="el" href="stringUtils_8cpp_source.html#l00083">toLower()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="HttpRequestParser_8cpp_source.html#l00672">HttpRequestParser::parse()</a>.</p>
-<div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-11-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-11-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_aaf4caa5571f8655a279cebb6938ffdb1_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-<div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-12-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-12-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-12-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="HttpRequestParser_8cpp_aaf4caa5571f8655a279cebb6938ffdb1_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="HttpRequestParser_8cpp_source.html">HttpRequestParser.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

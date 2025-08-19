@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Implements the ResponseBuilder utilities for constructing HTTP responses.">
 <polygon fill="#999999" stroke="#666666" points="795.5,-184 640.5,-184 640.5,-165 795.5,-165 795.5,-184"/>
 <text text-anchor="middle" x="718" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">src/http/responseBuilder.cpp</text>
 </a>
@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="responseBuilder_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="responseBuilder_8hpp.html" target="_top" xlink:title="Declarations of helper functions for constructing HTTP responses.">
 <polygon fill="white" stroke="#666666" points="713,-129 575,-129 575,-110 713,-110 713,-129"/>
 <text text-anchor="middle" x="644" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">http/responseBuilder.hpp</text>
 </a>
@@ -38,7 +38,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="HttpResponse_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="HttpResponse_8hpp.html" target="_top" xlink:title="Declares the HttpResponse class.">
 <polygon fill="white" stroke="#666666" points="620,-74 492,-74 492,-55 620,-55 620,-74"/>
 <text text-anchor="middle" x="556" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/HttpResponse.hpp</text>
 </a>
@@ -74,7 +74,7 @@
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="155.5,-74 52.5,-74 52.5,-55 155.5,-55 155.5,-74"/>
 <text text-anchor="middle" x="104" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>
@@ -146,7 +146,7 @@
 <!-- Node13 -->
 <g id="Node000013" class="node">
 <title>Node13</title>
-<g id="a_Node000013"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000013"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL.">
 <polygon fill="white" stroke="#666666" points="852.5,-129 731.5,-129 731.5,-110 852.5,-110 852.5,-129"/>
 <text text-anchor="middle" x="792" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">http/HttpRequest.hpp</text>
 </a>
@@ -470,7 +470,7 @@
 <!-- Node14 -->
 <g id="Node000014" class="node">
 <title>Node14</title>
-<g id="a_Node000014"><a xlink:href="Url_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000014"><a xlink:href="Url_8hpp.html" target="_top" xlink:title="Declares the Url POD for parsed URL components.">
 <polygon fill="white" stroke="#666666" points="826,-74 752,-74 752,-55 826,-55 826,-74"/>
 <text text-anchor="middle" x="789" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/Url.hpp</text>
 </a>

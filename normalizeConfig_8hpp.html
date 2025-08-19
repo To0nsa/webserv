@@ -92,9 +92,12 @@ $(document).ready(function(){initNavTree('normalizeConfig_8hpp.html',''); initRe
 <div class="header">
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">normalizeConfig.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">normalizeConfig.hpp File Reference<div class="ingroups"><a class="el" href="group__config.html">Configuration Parsing</a> &raquo; <a class="el" href="group__config__normalizing.html">Normalizing</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Declares normalization utilities for parsed configuration.  
+<a href="#details">More...</a></p>
 <div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -107,49 +110,16 @@ $(document).ready(function(){initNavTree('normalizeConfig_8hpp.html',''); initRe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a424745e39c183e79968502e3070343fa" id="r_a424745e39c183e79968502e3070343fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8hpp.html#a424745e39c183e79968502e3070343fa">normalizeConfig</a> (<a class="el" href="classConfig.html">Config</a> &amp;config)</td></tr>
-<tr class="separator:a424745e39c183e79968502e3070343fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga424745e39c183e79968502e3070343fa" id="r_ga424745e39c183e79968502e3070343fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__normalizing_ga424745e39c183e79968502e3070343fa.html#ga424745e39c183e79968502e3070343fa">normalizeConfig</a> (<a class="el" href="classConfig.html">Config</a> &amp;config)</td></tr>
+<tr class="memdesc:ga424745e39c183e79968502e3070343fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies normalization to all servers/locations in the config.  <br /></td></tr>
+<tr class="separator:ga424745e39c183e79968502e3070343fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a424745e39c183e79968502e3070343fa" name="a424745e39c183e79968502e3070343fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a424745e39c183e79968502e3070343fa">&#9670;&#160;</a></span>normalizeConfig()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Declares normalization utilities for parsed configuration. </p>
+<p>Applies canonical defaults and fills in missing values after parsing, so downstream components can rely on predictable, complete settings. Typical defaults include body size limits, error pages, roots, indices, and allowed methods. </p>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void normalizeConfig </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classConfig.html">Config</a> &amp;&#160;</td>
-          <td class="paramname"><em>config</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="normalizeConfig_8cpp_source.html#l00054">54</a> of file <a class="el" href="normalizeConfig_8cpp_source.html">normalizeConfig.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="Config_8cpp_source.html#l00026">Config::getServers()</a>, and <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="webserv_8cpp_source.html#l00058">runWebserv()</a>.</p>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="normalizeConfig_8hpp_a424745e39c183e79968502e3070343fa_cgraph.svg" width="595" height="234"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="normalizeConfig_8hpp_a424745e39c183e79968502e3070343fa_icgraph.svg" width="388" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="normalizeConfig_8hpp_source.html">normalizeConfig.hpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

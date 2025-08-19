@@ -1,0 +1,46 @@
+<map id="CGI::unlinkWithErrorLog" name="CGI::unlinkWithErrorLog">
+<area shape="rect" id="Node000001" title="Remove a temporary CGI file and log an error if the deletion fails." alt="" coords="1751,188,1928,214"/>
+<area shape="rect" id="Node000002" href="$namespaceCGI_a1c43ca81105ee1c019c6a4de7b1f392d.html#a1c43ca81105ee1c019c6a4de7b1f392d" title="Clean up resources of a finished CGI process." alt="" coords="1577,99,1703,124"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1797,185,1668,127,1671,122,1799,180"/>
+<area shape="rect" id="Node000008" href="$classSocketManager_a3e84a30d670b1603cede77e34b066f60.html#a3e84a30d670b1603cede77e34b066f60" title="Cleans up all state associated with a client connection." alt="" coords="1311,206,1529,246"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="1737,210,1530,222,1530,217,1737,204"/>
+<area shape="rect" id="Node000014" href="$classSocketManager_acc75e54c492ae3ff25b07cbbd171cd21.html#acc75e54c492ae3ff25b07cbbd171cd21" title="Sends a file&#45;based HTTP response to a client." alt="" coords="747,371,993,396"/>
+<area shape="poly" id="edge27_Node000001_Node000014" title=" " alt="" coords="1758,219,939,374,938,368,1757,214"/>
+<area shape="rect" id="Node000017" href="$namespaceCGI_a96e4b50990676c6e74a57b85bba037d3.html#a96e4b50990676c6e74a57b85bba037d3" title="Forcefully terminate a CGI process and clean up its resources." alt="" coords="1579,163,1701,188"/>
+<area shape="poly" id="edge24_Node000001_Node000017" title=" " alt="" coords="1737,191,1701,186,1702,181,1738,185"/>
+<area shape="rect" id="Node000003" href="$classSocketManager_a40634fffa7969d5ac21e9393fd2dc19b.html#a40634fffa7969d5ac21e9393fd2dc19b" title="Cleans up and resets CGI state for a specific client." alt="" coords="1319,92,1521,132"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1563,114,1521,114,1521,109,1563,109"/>
+<area shape="rect" id="Node000004" href="$classSocketManager_aea2b8fd5461352e0ae2da64cfcc4b2eb.html#aea2b8fd5461352e0ae2da64cfcc4b2eb" title="Monitors and manages active CGI processes for all clients." alt="" coords="1056,64,1251,104"/>
+<area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="1590,97,1529,82,1457,75,1383,73,1251,77,1251,72,1383,67,1457,70,1530,77,1592,92"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1305,102,1251,96,1251,91,1305,97"/>
+<area shape="rect" id="Node000005" href="$classSocketManager_a6dd1b927ab5d7d761cae7044c6fcea37.html#a6dd1b927ab5d7d761cae7044c6fcea37" title="Runs the main event loop of the server." alt="" coords="255,142,405,167"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1074,62,952,34,876,21,794,12,709,8,622,12,536,25,454,49,418,68,387,94,343,143,339,140,383,90,415,64,452,44,535,20,622,7,709,3,795,6,877,16,953,28,1076,57"/>
+<area shape="rect" id="Node000006" href="$group__entrypoint_ga6e58dbe6eab2d4b12d65b7b0e7297be8.html#ga6e58dbe6eab2d4b12d65b7b0e7297be8" title="Runs the Webserv server." alt="" coords="108,142,207,167"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="241,157,207,157,207,152,241,152"/>
+<area shape="rect" id="Node000007" href="$group__entrypoint_ga3c04138a5bfe5d72780bb7e82a18e627.html#ga3c04138a5bfe5d72780bb7e82a18e627" title="Program entry point." alt="" coords="5,142,60,167"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="94,157,60,157,60,152,94,152"/>
+<area shape="rect" id="Node000009" href="$classSocketManager_ae622f8c244b7be8cf62a911ef9f100ef.html#ae622f8c244b7be8cf62a911ef9f100ef" title="Gracefully closes a client connection and cleans up its state." alt="" coords="1044,206,1263,246"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="1297,229,1263,229,1263,224,1297,224"/>
+<area shape="poly" id="edge17_Node000009_Node000005" title=" " alt="" coords="1114,200,1059,165,995,134,847,85,786,70,727,62,668,59,605,64,535,75,454,93,424,103,396,116,350,144,347,139,393,111,422,98,453,88,534,70,605,58,668,54,728,56,787,65,849,80,997,129,1062,160,1117,196"/>
+<area shape="rect" id="Node000010" href="$classSocketManager_ad3853a81bb9eb7b2c6365017bee14539.html#ad3853a81bb9eb7b2c6365017bee14539" title="Checks and applies timeout rules for a client connection." alt="" coords="471,102,678,142"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="1093,204,1046,186,995,172,913,155,829,143,678,129,678,124,830,138,914,150,997,166,1048,181,1095,199"/>
+<area shape="rect" id="Node000011" href="$classSocketManager_a7690d254d6e138010c1a7f458621284d.html#a7690d254d6e138010c1a7f458621284d" title="Handles error or hangup events reported by poll()." alt="" coords="475,166,674,206"/>
+<area shape="poly" id="edge12_Node000009_Node000011" title=" " alt="" coords="1055,206,996,197,826,186,674,186,674,180,826,181,996,192,1056,201"/>
+<area shape="rect" id="Node000012" href="$classSocketManager_a1b2e9f2cb02408359cb0280b1d0e2a64.html#a1b2e9f2cb02408359cb0280b1d0e2a64" title="Receives raw data from a client socket." alt="" coords="765,206,975,246"/>
+<area shape="poly" id="edge14_Node000009_Node000012" title=" " alt="" coords="1030,229,976,229,976,224,1030,224"/>
+<area shape="poly" id="edge18_Node000009_Node000014" title=" " alt="" coords="1117,257,1046,316,1023,341,1013,352,997,362,969,373,967,368,995,357,1010,348,1020,337,1042,312,1114,253"/>
+<area shape="rect" id="Node000015" href="$classSocketManager_a24e0386dc1b8a919fc52b3c89d6e9588.html#a24e0386dc1b8a919fc52b3c89d6e9588" title="Dispatches sending of the next queued response for a client." alt="" coords="463,299,687,324"/>
+<area shape="poly" id="edge23_Node000009_Node000015" title=" " alt="" coords="1047,252,996,261,834,285,687,303,687,297,834,279,996,256,1046,246"/>
+<area shape="rect" id="Node000016" href="$classSocketManager_a3df9ba3a07cc4a29d4a1a8b47e1a289b.html#a3df9ba3a07cc4a29d4a1a8b47e1a289b" title="Sends an in&#45;memory (raw) HTTP response to a client." alt="" coords="744,322,996,347"/>
+<area shape="poly" id="edge21_Node000009_Node000016" title=" " alt="" coords="1105,255,1054,281,997,305,932,324,930,319,995,300,1051,276,1103,251"/>
+<area shape="poly" id="edge11_Node000010_Node000005" title=" " alt="" coords="458,140,406,147,405,142,457,135"/>
+<area shape="poly" id="edge13_Node000011_Node000005" title=" " alt="" coords="462,174,405,167,406,161,462,169"/>
+<area shape="rect" id="Node000013" href="$classSocketManager_aabb964db3a12fa5d3668646c4ed80b25.html#aabb964db3a12fa5d3668646c4ed80b25" title="Processes incoming data for a client connection." alt="" coords="453,231,696,256"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="751,236,696,239,696,234,751,231"/>
+<area shape="poly" id="edge16_Node000013_Node000005" title=" " alt="" coords="484,230,452,221,396,195,350,170,353,165,398,191,454,216,485,225"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="783,371,743,362,616,327,618,322,745,357,784,366"/>
+<area shape="poly" id="edge20_Node000015_Node000005" title=" " alt="" coords="509,297,452,271,417,246,385,218,340,169,344,165,389,214,420,242,455,267,512,292"/>
+<area shape="poly" id="edge22_Node000016_Node000015" title=" " alt="" coords="730,326,686,323,687,318,731,321"/>
+<area shape="poly" id="edge26_Node000017_Node000004" title=" " alt="" coords="1565,177,1445,168,1377,159,1310,146,1250,128,1196,106,1198,101,1252,123,1311,141,1378,154,1445,163,1565,171"/>
+<area shape="poly" id="edge25_Node000017_Node000008" title=" " alt="" coords="1571,194,1508,209,1507,204,1570,189"/>
+</map>

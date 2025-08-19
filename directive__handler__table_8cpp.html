@@ -93,9 +93,12 @@ $(document).ready(function(){initNavTree('directive__handler__table_8cpp.html','
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">directive_handler_table.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">directive_handler_table.cpp File Reference<div class="ingroups"><a class="el" href="group__config.html">Configuration Parsing</a> &raquo; <a class="el" href="group__config__parsing.html">Parsing</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements directive handler maps for <code>server</code> and <code>location</code> blocks.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="directive__handler__table_8hpp_source.html">config/parser/directive_handler_table.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ConfigParseError_8hpp_source.html">config/parser/ConfigParseError.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Location_8hpp_source.html">core/Location.hpp</a>&quot;</code><br />
@@ -125,22 +128,40 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a4167e9343de67ad75b94d04a0ee62577" id="r_a4167e9343de67ad75b94d04a0ee62577"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="namespacedirective.html#acbf2d747b7dc7c47c0c4989ab2853c6b">LocationHandler</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective.html#a4167e9343de67ad75b94d04a0ee62577">directive::locationHandlers</a> ()</td></tr>
-<tr class="separator:a4167e9343de67ad75b94d04a0ee62577"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab413e7282a09df0d3339f88ce6d423ff" id="r_ab413e7282a09df0d3339f88ce6d423ff"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective.html#ab413e7282a09df0d3339f88ce6d423ff">directive::requireArgCount</a> (const std::vector&lt; std::string &gt; &amp;args, std::size_t expected, const std::string &amp;directive, int line, int column, const std::string &amp;ctx)</td></tr>
-<tr class="separator:ab413e7282a09df0d3339f88ce6d423ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a168b6924c56f46b36e98b6020a19945b" id="r_a168b6924c56f46b36e98b6020a19945b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective.html#a168b6924c56f46b36e98b6020a19945b">directive::requireMinArgCount</a> (const std::vector&lt; std::string &gt; &amp;args, std::size_t min, const std::string &amp;directive, int line, int column, const std::string &amp;ctx)</td></tr>
-<tr class="separator:a168b6924c56f46b36e98b6020a19945b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63bafa886cdbf3a1131c232aa1a2f8af" id="r_a63bafa886cdbf3a1131c232aa1a2f8af"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective.html#a63bafa886cdbf3a1131c232aa1a2f8af">directive::resolveToAbsolute</a> (const std::string &amp;rawPath)</td></tr>
+<tr class="memitem:a63bafa886cdbf3a1131c232aa1a2f8af" id="r_a63bafa886cdbf3a1131c232aa1a2f8af"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective_a63bafa886cdbf3a1131c232aa1a2f8af.html#a63bafa886cdbf3a1131c232aa1a2f8af">directive::resolveToAbsolute</a> (const std::string &amp;rawPath)</td></tr>
+<tr class="memdesc:a63bafa886cdbf3a1131c232aa1a2f8af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolves a filesystem path to its absolute, normalized form.  <br /></td></tr>
 <tr class="separator:a63bafa886cdbf3a1131c232aa1a2f8af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3338d7904396548486d9d2dce2367c06" id="r_a3338d7904396548486d9d2dce2367c06"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="namespacedirective.html#af0e12e108ebe1eed97742d22f5424b42">ServerHandler</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective.html#a3338d7904396548486d9d2dce2367c06">directive::serverHandlers</a> ()</td></tr>
-<tr class="separator:a3338d7904396548486d9d2dce2367c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0d35b6ad2c2f8d0eea5231b431187b6" id="r_ab0d35b6ad2c2f8d0eea5231b431187b6"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective.html#ab0d35b6ad2c2f8d0eea5231b431187b6">directive::validateCgiExtension</a> (const std::string &amp;ext, int line, int column, const std::function&lt; std::string()&gt; &amp;context_provider)</td></tr>
-<tr class="separator:ab0d35b6ad2c2f8d0eea5231b431187b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88f8d5330b2461bd038b66acd16f1f01" id="r_a88f8d5330b2461bd038b66acd16f1f01"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective.html#a88f8d5330b2461bd038b66acd16f1f01">directive::validateIPv4Address</a> (const std::string &amp;ip, int line, int column, const std::function&lt; std::string()&gt; &amp;context_provider)</td></tr>
+<tr class="memitem:ab413e7282a09df0d3339f88ce6d423ff" id="r_ab413e7282a09df0d3339f88ce6d423ff"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective_ab413e7282a09df0d3339f88ce6d423ff.html#ab413e7282a09df0d3339f88ce6d423ff">directive::requireArgCount</a> (const std::vector&lt; std::string &gt; &amp;args, std::size_t expected, const std::string &amp;directive, int line, int column, const std::string &amp;ctx)</td></tr>
+<tr class="memdesc:ab413e7282a09df0d3339f88ce6d423ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensures that a directive has exactly the expected number of arguments.  <br /></td></tr>
+<tr class="separator:ab413e7282a09df0d3339f88ce6d423ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a168b6924c56f46b36e98b6020a19945b" id="r_a168b6924c56f46b36e98b6020a19945b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective_a168b6924c56f46b36e98b6020a19945b.html#a168b6924c56f46b36e98b6020a19945b">directive::requireMinArgCount</a> (const std::vector&lt; std::string &gt; &amp;args, std::size_t min, const std::string &amp;directive, int line, int column, const std::string &amp;ctx)</td></tr>
+<tr class="memdesc:a168b6924c56f46b36e98b6020a19945b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensures that a directive has at least the required number of arguments.  <br /></td></tr>
+<tr class="separator:a168b6924c56f46b36e98b6020a19945b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88f8d5330b2461bd038b66acd16f1f01" id="r_a88f8d5330b2461bd038b66acd16f1f01"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective_a88f8d5330b2461bd038b66acd16f1f01.html#a88f8d5330b2461bd038b66acd16f1f01">directive::validateIPv4Address</a> (const std::string &amp;ip, int line, int column, const std::function&lt; std::string()&gt; &amp;context_provider)</td></tr>
+<tr class="memdesc:a88f8d5330b2461bd038b66acd16f1f01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates that a given string is a valid IPv4 address.  <br /></td></tr>
 <tr class="separator:a88f8d5330b2461bd038b66acd16f1f01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0d35b6ad2c2f8d0eea5231b431187b6" id="r_ab0d35b6ad2c2f8d0eea5231b431187b6"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective_ab0d35b6ad2c2f8d0eea5231b431187b6.html#ab0d35b6ad2c2f8d0eea5231b431187b6">directive::validateCgiExtension</a> (const std::string &amp;ext, int line, int column, const std::function&lt; std::string()&gt; &amp;context_provider)</td></tr>
+<tr class="memdesc:ab0d35b6ad2c2f8d0eea5231b431187b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates the syntax of a <a class="el" href="namespaceCGI.html">CGI</a> file extension.  <br /></td></tr>
+<tr class="separator:ab0d35b6ad2c2f8d0eea5231b431187b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3338d7904396548486d9d2dce2367c06" id="r_a3338d7904396548486d9d2dce2367c06"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="group__config__parsing_ga1a6204ee3ff462d788c258418495bc14.html#ga1a6204ee3ff462d788c258418495bc14">ServerHandler</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective_a3338d7904396548486d9d2dce2367c06.html#a3338d7904396548486d9d2dce2367c06">directive::serverHandlers</a> ()</td></tr>
+<tr class="memdesc:a3338d7904396548486d9d2dce2367c06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the mapping of server-level directives to their handler functions.  <br /></td></tr>
+<tr class="separator:a3338d7904396548486d9d2dce2367c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4167e9343de67ad75b94d04a0ee62577" id="r_a4167e9343de67ad75b94d04a0ee62577"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="group__config__parsing_gab957d8f147c96cf7e6e5a7ae9dec2be4.html#gab957d8f147c96cf7e6e5a7ae9dec2be4">LocationHandler</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedirective_a4167e9343de67ad75b94d04a0ee62577.html#a4167e9343de67ad75b94d04a0ee62577">directive::locationHandlers</a> ()</td></tr>
+<tr class="memdesc:a4167e9343de67ad75b94d04a0ee62577"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the mapping of location-level directives to their handler functions.  <br /></td></tr>
+<tr class="separator:a4167e9343de67ad75b94d04a0ee62577"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements directive handler maps for <code>server</code> and <code>location</code> blocks. </p>
+<p>Defines the concrete handler tables returned by <a class="el" href="namespacedirective_a3338d7904396548486d9d2dce2367c06.html#a3338d7904396548486d9d2dce2367c06" title="Returns the mapping of server-level directives to their handler functions.">directive::serverHandlers</a> and <a class="el" href="namespacedirective_a4167e9343de67ad75b94d04a0ee62577.html#a4167e9343de67ad75b94d04a0ee62577" title="Returns the mapping of location-level directives to their handler functions.">directive::locationHandlers</a>. Each handler validates its arguments, reports precise diagnostics (line/column + contextual snippet), and mutates the target configuration object (<a class="el" href="classServer.html" title="Represents a virtual server block.">Server</a> or <a class="el" href="classLocation.html" title="Encapsulates configuration for a single URL path.">Location</a>).</p>
+<p>This file also contains small internal helpers used by handlers:</p><ul>
+<li><code>resolveToAbsolute()</code> — canonicalizes filesystem paths.</li>
+<li><code>requireArgCount()</code> / <code>requireMinArgCount()</code> — arity checks.</li>
+<li><code>validateIPv4Address()</code> — IPv4 format validation (with <code>localhost</code> allowed).</li>
+<li><code>validateCgiExtension()</code> — enforces dot-prefixed alnum extensions. </li>
+</ul>
+
+<p class="definition">Definition in file <a class="el" href="directive__handler__table_8cpp_source.html">directive_handler_table.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

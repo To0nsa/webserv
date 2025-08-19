@@ -1,0 +1,27 @@
+<map id="ConfigParser::advance" name="ConfigParser::advance">
+<area shape="rect" id="Node000001" title="Advances to the next token and returns it." alt="" coords="1683,83,1849,108"/>
+<area shape="rect" id="Node000002" href="$group__config__parsing_ga582320b084ecf84703cb959d07696095.html#ga582320b084ecf84703cb959d07696095" title="Collects a list of argument values following a directive." alt="" coords="1445,83,1628,108"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1669,98,1628,98,1628,93,1669,93"/>
+<area shape="rect" id="Node000003" href="$classConfigParser_ad27019103306be3877608677c5615a61.html#ad27019103306be3877608677c5615a61" title="Parses a single directive inside a location block." alt="" coords="1188,32,1391,72"/>
+<area shape="poly" id="edge13_Node000001_Node000003" title=" " alt="" coords="1691,83,1634,74,1508,63,1391,57,1391,52,1508,58,1635,69,1692,78"/>
+<area shape="rect" id="Node000004" href="$classConfigParser_ab14af2f633e98e6182e1fce25c74f9e9.html#ab14af2f633e98e6182e1fce25c74f9e9" title="Parses a single location block inside a server block." alt="" coords="937,39,1140,64"/>
+<area shape="poly" id="edge12_Node000001_Node000004" title=" " alt="" coords="1725,80,1682,62,1634,48,1511,21,1413,10,1314,11,1188,22,1136,31,1087,41,1086,36,1135,25,1188,17,1314,6,1413,4,1512,16,1635,42,1683,57,1727,75"/>
+<area shape="rect" id="Node000010" href="$classConfigParser_a65dee8490851a65fb3d80ab1677c4a5d.html#a65dee8490851a65fb3d80ab1677c4a5d" title="Parses and applies a single directive inside a server block." alt="" coords="1195,96,1384,136"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="1699,114,1635,124,1504,129,1384,125,1384,120,1504,124,1634,118,1698,108"/>
+<area shape="rect" id="Node000011" href="$group__config__parsing_ga48ee49c90c0dfe42b85c008e31aa81d2.html#ga48ee49c90c0dfe42b85c008e31aa81d2" title="Ensures the current token matches one of several expected types." alt="" coords="1439,184,1635,210"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="1733,118,1636,167,1583,187,1581,182,1634,163,1731,113"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1451,83,1390,72,1391,67,1452,78"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="1432,107,1384,111,1384,105,1431,102"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1174,54,1140,54,1140,49,1174,49"/>
+<area shape="rect" id="Node000005" href="$classConfigParser_aec05768b15f77f3908738fba4237d2a8.html#aec05768b15f77f3908738fba4237d2a8" title="Parses a single server block into a Server object." alt="" coords="700,71,889,96"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="929,69,890,74,889,69,928,64"/>
+<area shape="rect" id="Node000006" href="$classConfigParser_a3b983e072038482de7698c091f5c8a99.html#a3b983e072038482de7698c091f5c8a99" title="Parses the full configuration input into a Config object." alt="" coords="464,71,652,96"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="686,86,652,86,652,81,686,81"/>
+<area shape="rect" id="Node000007" href="$namespacebootstrap_a6788c3d01506cbf268f74a60be16385c.html#a6788c3d01506cbf268f74a60be16385c" title="Parses a configuration string into a Config object." alt="" coords="255,71,416,96"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="450,86,416,86,416,81,450,81"/>
+<area shape="rect" id="Node000008" href="$group__entrypoint_ga6e58dbe6eab2d4b12d65b7b0e7297be8.html#ga6e58dbe6eab2d4b12d65b7b0e7297be8" title="Runs the Webserv server." alt="" coords="108,71,207,96"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="241,86,207,86,207,81,241,81"/>
+<area shape="rect" id="Node000009" href="$group__entrypoint_ga3c04138a5bfe5d72780bb7e82a18e627.html#ga3c04138a5bfe5d72780bb7e82a18e627" title="Program entry point." alt="" coords="5,71,60,96"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="94,86,60,86,60,81,94,81"/>
+<area shape="poly" id="edge10_Node000010_Node000005" title=" " alt="" coords="1180,111,889,92,890,87,1181,106"/>
+</map>

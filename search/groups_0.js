@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['error_20message_20formatting_0',['Error message formatting',['../group__ErrorUtils.html',1,'']]]
+  ['abstraction_0',['Network &amp; Socket Abstraction',['../group__socket__manager.html',1,'']]],
+  ['application_20entrypoint_1',['Application Entrypoint',['../group__entrypoint.html',1,'']]]
 ];

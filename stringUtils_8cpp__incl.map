@@ -1,12 +1,12 @@
 <map id="src/utils/stringUtils.cpp" name="src/utils/stringUtils.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="631,5,802,31"/>
-<area shape="rect" id="Node000002" href="$stringUtils_8hpp.html" title="Utility functions for parsing numeric string values." alt="" coords="71,86,221,111"/>
+<area shape="rect" id="Node000001" title="Utility functions for string parsing, formatting, and case conversion." alt="" coords="631,5,802,31"/>
+<area shape="rect" id="Node000002" href="$stringUtils_8hpp.html" title=" " alt="" coords="71,86,221,111"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="631,31,451,52,240,81,213,86,212,81,239,76,450,46,631,25"/>
 <area shape="rect" id="Node000006" title=" " alt="" coords="221,167,284,192"/>
 <area shape="poly" id="edge16_Node000001_Node000006" title=" " alt="" coords="631,23,537,28,436,37,345,55,311,66,286,81,273,96,264,115,256,154,251,152,259,113,269,93,283,77,309,62,344,49,435,32,537,22,631,18"/>
-<area shape="rect" id="Node000007" href="$ConfigParseError_8hpp.html" title=" " alt="" coords="463,79,650,119"/>
+<area shape="rect" id="Node000007" href="$ConfigParseError_8hpp.html" title="Declares parse/validation error types for the config subsystem." alt="" coords="463,79,650,119"/>
 <area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="695,33,609,75,607,70,692,28"/>
-<area shape="rect" id="Node000009" href="$errorUtils_8hpp.html" title="Error formatting utilities." alt="" coords="296,86,439,111"/>
+<area shape="rect" id="Node000009" href="$errorUtils_8hpp.html" title=" " alt="" coords="296,86,439,111"/>
 <area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="666,33,432,86,431,80,665,28"/>
 <area shape="rect" id="Node000010" title=" " alt="" coords="674,86,759,111"/>
 <area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="719,31,719,72,714,72,714,31"/>

@@ -1,0 +1,13 @@
+<map id="HttpResponse::toHttpString" name="HttpResponse::toHttpString">
+<area shape="rect" id="Node000001" title="Serializes the response into HTTP wire format." alt="" coords="1025,5,1225,31"/>
+<area shape="rect" id="Node000002" href="$classSocketManager_a3df9ba3a07cc4a29d4a1a8b47e1a289b.html#a3df9ba3a07cc4a29d4a1a8b47e1a289b" title="Sends an in&#45;memory (raw) HTTP response to a client." alt="" coords="725,5,977,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1012,21,978,21,978,15,1012,15"/>
+<area shape="rect" id="Node000003" href="$classSocketManager_a24e0386dc1b8a919fc52b3c89d6e9588.html#a24e0386dc1b8a919fc52b3c89d6e9588" title="Dispatches sending of the next queued response for a client." alt="" coords="453,5,677,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="712,21,678,21,678,15,712,15"/>
+<area shape="rect" id="Node000004" href="$classSocketManager_a6dd1b927ab5d7d761cae7044c6fcea37.html#a6dd1b927ab5d7d761cae7044c6fcea37" title="Runs the main event loop of the server." alt="" coords="255,5,405,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="439,21,405,21,405,15,439,15"/>
+<area shape="rect" id="Node000005" href="$group__entrypoint_ga6e58dbe6eab2d4b12d65b7b0e7297be8.html#ga6e58dbe6eab2d4b12d65b7b0e7297be8" title="Runs the Webserv server." alt="" coords="108,5,207,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="241,21,207,21,207,15,241,15"/>
+<area shape="rect" id="Node000006" href="$group__entrypoint_ga3c04138a5bfe5d72780bb7e82a18e627.html#ga3c04138a5bfe5d72780bb7e82a18e627" title="Program entry point." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

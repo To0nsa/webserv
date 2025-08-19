@@ -1,18 +1,18 @@
 <map id="src/http/methodsHandler/handlePost/handlePost.cpp" name="src/http/methodsHandler/handlePost/handlePost.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1615,5,1817,45"/>
-<area shape="rect" id="Node000002" href="$Location_8hpp.html" title=" " alt="" coords="329,167,466,192"/>
+<area shape="rect" id="Node000001" title="Implements HTTP POST request handling logic." alt="" coords="1615,5,1817,45"/>
+<area shape="rect" id="Node000002" href="$Location_8hpp.html" title="Declares the Location class for route&#45;specific configuration." alt="" coords="329,167,466,192"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1615,31,1381,36,1084,47,796,66,677,80,587,96,543,109,500,127,429,162,427,158,498,122,541,104,586,91,676,74,795,61,1084,42,1381,30,1615,25"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="1081,240,1140,265"/>
 <area shape="poly" id="edge46_Node000001_Node000005" title=" " alt="" coords="1615,29,1464,31,1270,41,1056,61,947,77,842,96,776,105,722,110,698,116,676,126,654,143,633,168,628,180,632,190,642,199,660,208,713,223,782,233,939,245,1068,248,1068,254,938,250,782,238,712,228,658,213,639,204,627,193,623,180,628,165,650,139,673,122,696,111,721,105,775,99,841,91,947,71,1055,56,1270,36,1464,26,1615,23"/>
 <area shape="rect" id="Node000007" href="$Server_8hpp.html" title="Declares the Server class for virtual host configuration." alt="" coords="229,93,352,119"/>
 <area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1615,34,1118,59,457,96,366,102,366,97,457,91,1118,54,1615,29"/>
-<area shape="rect" id="Node000010" href="$HttpRequest_8hpp.html" title=" " alt="" coords="987,93,1149,119"/>
+<area shape="rect" id="Node000010" href="$HttpRequest_8hpp.html" title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL." alt="" coords="987,93,1149,119"/>
 <area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="1615,41,1163,96,1162,91,1615,36"/>
-<area shape="rect" id="Node000013" href="$HttpResponse_8hpp.html" title=" " alt="" coords="1777,167,1948,192"/>
+<area shape="rect" id="Node000013" href="$HttpResponse_8hpp.html" title="Declares the HttpResponse class." alt="" coords="1777,167,1948,192"/>
 <area shape="poly" id="edge19_Node000001_Node000013" title=" " alt="" coords="1719,45,1726,81,1733,100,1743,117,1773,142,1807,159,1805,164,1770,147,1739,120,1728,102,1721,83,1714,46"/>
-<area shape="rect" id="Node000015" href="$methodsHandler_8hpp.html" title=" " alt="" coords="1367,167,1553,192"/>
+<area shape="rect" id="Node000015" href="$methodsHandler_8hpp.html" title="Declares HTTP method handlers for GET, POST, and DELETE." alt="" coords="1367,167,1553,192"/>
 <area shape="poly" id="edge23_Node000001_Node000015" title=" " alt="" coords="1632,48,1579,67,1528,95,1498,125,1475,156,1471,153,1494,121,1525,91,1577,62,1631,43"/>
-<area shape="rect" id="Node000016" href="$responseBuilder_8hpp.html" title=" " alt="" coords="1753,93,1937,119"/>
+<area shape="rect" id="Node000016" href="$responseBuilder_8hpp.html" title="Declarations of helper functions for constructing HTTP responses." alt="" coords="1753,93,1937,119"/>
 <area shape="poly" id="edge25_Node000001_Node000016" title=" " alt="" coords="1749,43,1816,84,1813,88,1746,48"/>
 <area shape="rect" id="Node000017" href="$Logger_8hpp.html" title=" " alt="" coords="643,167,768,192"/>
 <area shape="poly" id="edge29_Node000001_Node000017" title=" " alt="" coords="1615,29,1478,32,1305,42,1116,62,1020,77,927,96,876,110,825,128,742,163,740,158,823,123,874,105,926,91,1019,72,1115,57,1305,37,1477,27,1615,24"/>
@@ -59,7 +59,7 @@
 <area shape="poly" id="edge11_Node000007_Node000009" title=" " alt="" coords="270,121,189,163,187,158,267,116"/>
 <area shape="poly" id="edge17_Node000010_Node000003" title=" " alt="" coords="987,109,910,113,820,123,724,140,632,169,578,199,536,232,533,228,575,194,630,164,723,135,819,117,910,108,987,104"/>
 <area shape="poly" id="edge18_Node000010_Node000005" title=" " alt="" coords="1074,118,1106,226,1101,227,1069,120"/>
-<area shape="rect" id="Node000011" href="$Url_8hpp.html" title=" " alt="" coords="1105,167,1204,192"/>
+<area shape="rect" id="Node000011" href="$Url_8hpp.html" title="Declares the Url POD for parsed URL components." alt="" coords="1105,167,1204,192"/>
 <area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="1084,117,1132,156,1128,160,1080,121"/>
 <area shape="rect" id="Node000012" title=" " alt="" coords="959,167,1030,192"/>
 <area shape="poly" id="edge16_Node000010_Node000012" title=" " alt="" coords="1058,121,1018,159,1015,155,1054,117"/>

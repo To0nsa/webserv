@@ -92,9 +92,12 @@ $(document).ready(function(){initNavTree('HttpResponse_8hpp.html',''); initResiz
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a>  </div>
-  <div class="headertitle"><div class="title">HttpResponse.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">HttpResponse.hpp File Reference<div class="ingroups"><a class="el" href="group__http.html">HTTP Protocol</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Declares the <a class="el" href="classHttpResponse.html" title="Represents an HTTP response to be sent back to the client.">HttpResponse</a> class.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;iosfwd&gt;</code><br />
 <code>#include &lt;map&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -118,9 +121,16 @@ $(document).ready(function(){initNavTree('HttpResponse_8hpp.html',''); initResiz
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHttpResponse.html">HttpResponse</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents an HTTP response to be sent back to the client.  <a href="classHttpResponse.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Declares the <a class="el" href="classHttpResponse.html" title="Represents an HTTP response to be sent back to the client.">HttpResponse</a> class. </p>
+<p>Represents an outgoing HTTP response, including status line, headers, body payload, and optional file-backed or CGI-generated content. Provides setters for constructing responses and utilities such as <code>toHttpString()</code> for serialization to the raw wire format.</p>
+<p>This class is produced by response builders (see <a class="el" href="namespaceResponseBuilder.html">ResponseBuilder</a>), handlers (GET/POST/DELETE/CGI), and consumed by the networking layer when writing responses back to clients. </p>
+
+<p class="definition">Definition in file <a class="el" href="HttpResponse_8hpp_source.html">HttpResponse.hpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

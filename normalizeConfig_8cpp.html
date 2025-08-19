@@ -93,9 +93,12 @@ $(document).ready(function(){initNavTree('normalizeConfig_8cpp.html',''); initRe
   <div class="summary">
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
-  <div class="headertitle"><div class="title">normalizeConfig.cpp File Reference</div></div>
+  <div class="headertitle"><div class="title">normalizeConfig.cpp File Reference<div class="ingroups"><a class="el" href="group__config.html">Configuration Parsing</a> &raquo; <a class="el" href="group__config__normalizing.html">Normalizing</a></div></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implements post-parse normalization of configuration objects.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="Config_8hpp_source.html">config/Config.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Location_8hpp_source.html">core/Location.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Server_8hpp_source.html">core/Server.hpp</a>&quot;</code><br />
@@ -115,209 +118,37 @@ $(document).ready(function(){initNavTree('normalizeConfig_8cpp.html',''); initRe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a424745e39c183e79968502e3070343fa" id="r_a424745e39c183e79968502e3070343fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp.html#a424745e39c183e79968502e3070343fa">normalizeConfig</a> (<a class="el" href="classConfig.html">Config</a> &amp;config)</td></tr>
-<tr class="separator:a424745e39c183e79968502e3070343fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d073a523d9b1121fb6e86eeb2a0f00f" id="r_a6d073a523d9b1121fb6e86eeb2a0f00f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp.html#a6d073a523d9b1121fb6e86eeb2a0f00f">normalizeServer</a> (<a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
-<tr class="separator:a6d073a523d9b1121fb6e86eeb2a0f00f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6d073a523d9b1121fb6e86eeb2a0f00f" id="r_ga6d073a523d9b1121fb6e86eeb2a0f00f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__normalizing_ga6d073a523d9b1121fb6e86eeb2a0f00f.html#ga6d073a523d9b1121fb6e86eeb2a0f00f">normalizeServer</a> (<a class="el" href="classServer.html">Server</a> &amp;server)</td></tr>
+<tr class="memdesc:ga6d073a523d9b1121fb6e86eeb2a0f00f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalizes a single server and its locations.  <br /></td></tr>
+<tr class="separator:ga6d073a523d9b1121fb6e86eeb2a0f00f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga424745e39c183e79968502e3070343fa" id="r_ga424745e39c183e79968502e3070343fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__config__normalizing_ga424745e39c183e79968502e3070343fa.html#ga424745e39c183e79968502e3070343fa">normalizeConfig</a> (<a class="el" href="classConfig.html">Config</a> &amp;config)</td></tr>
+<tr class="memdesc:ga424745e39c183e79968502e3070343fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies normalization to all servers/locations in the config.  <br /></td></tr>
+<tr class="separator:ga424745e39c183e79968502e3070343fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:aba24ae053bb6caf51d0dc6c8959a9db2" id="r_aba24ae053bb6caf51d0dc6c8959a9db2"><td class="memItemLeft" align="right" valign="top">constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp.html#aba24ae053bb6caf51d0dc6c8959a9db2">DEFAULT_CLIENT_MAX_BODY_SIZE</a> = 1 * 1024 * 1024</td></tr>
-<tr class="separator:aba24ae053bb6caf51d0dc6c8959a9db2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87b4a32fea42e9288ca2a35f05b9ae07" id="r_a87b4a32fea42e9288ca2a35f05b9ae07"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp.html#a87b4a32fea42e9288ca2a35f05b9ae07">DEFAULT_ERROR_PAGE_PATH</a> = &quot;/error.html&quot;</td></tr>
+<tr class="memitem:ac8d36467ca3773b05bfecdeb071718bc" id="r_ac8d36467ca3773b05bfecdeb071718bc"><td class="memItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp_ac8d36467ca3773b05bfecdeb071718bc.html#ac8d36467ca3773b05bfecdeb071718bc">DEFAULT_CLIENT_MAX_BODY_SIZE</a> = 1 * 1024 * 1024</td></tr>
+<tr class="memdesc:ac8d36467ca3773b05bfecdeb071718bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">1 MiB default for request body limit.  <br /></td></tr>
+<tr class="separator:ac8d36467ca3773b05bfecdeb071718bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87b4a32fea42e9288ca2a35f05b9ae07" id="r_a87b4a32fea42e9288ca2a35f05b9ae07"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp_a87b4a32fea42e9288ca2a35f05b9ae07.html#a87b4a32fea42e9288ca2a35f05b9ae07">DEFAULT_ERROR_PAGE_PATH</a> = &quot;/error.html&quot;</td></tr>
+<tr class="memdesc:a87b4a32fea42e9288ca2a35f05b9ae07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default error page path used for common error codes.  <br /></td></tr>
 <tr class="separator:a87b4a32fea42e9288ca2a35f05b9ae07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8575704d6f7826cc2686429aff9f9a7" id="r_af8575704d6f7826cc2686429aff9f9a7"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp.html#af8575704d6f7826cc2686429aff9f9a7">DEFAULT_INDEX</a> = &quot;index.html&quot;</td></tr>
-<tr class="separator:af8575704d6f7826cc2686429aff9f9a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf7fbd0b033387f627fa285b241ca10b" id="r_adf7fbd0b033387f627fa285b241ca10b"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp.html#adf7fbd0b033387f627fa285b241ca10b">DEFAULT_METHODS</a> = {&quot;GET&quot;, &quot;POST&quot;, &quot;DELETE&quot;}</td></tr>
-<tr class="separator:adf7fbd0b033387f627fa285b241ca10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a213d69c71f04e5e34b41d4e58dc5a2a5" id="r_a213d69c71f04e5e34b41d4e58dc5a2a5"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp.html#a213d69c71f04e5e34b41d4e58dc5a2a5">DEFAULT_ROOT</a> = &quot;/var/www&quot;</td></tr>
+<tr class="memitem:a213d69c71f04e5e34b41d4e58dc5a2a5" id="r_a213d69c71f04e5e34b41d4e58dc5a2a5"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp_a213d69c71f04e5e34b41d4e58dc5a2a5.html#a213d69c71f04e5e34b41d4e58dc5a2a5">DEFAULT_ROOT</a> = &quot;/var/www&quot;</td></tr>
+<tr class="memdesc:a213d69c71f04e5e34b41d4e58dc5a2a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default filesystem root for locations missing an explicit root.  <br /></td></tr>
 <tr class="separator:a213d69c71f04e5e34b41d4e58dc5a2a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8575704d6f7826cc2686429aff9f9a7" id="r_af8575704d6f7826cc2686429aff9f9a7"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp_af8575704d6f7826cc2686429aff9f9a7.html#af8575704d6f7826cc2686429aff9f9a7">DEFAULT_INDEX</a> = &quot;index.html&quot;</td></tr>
+<tr class="memdesc:af8575704d6f7826cc2686429aff9f9a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default index file for the root location if none provided.  <br /></td></tr>
+<tr class="separator:af8575704d6f7826cc2686429aff9f9a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf7fbd0b033387f627fa285b241ca10b" id="r_adf7fbd0b033387f627fa285b241ca10b"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="normalizeConfig_8cpp_adf7fbd0b033387f627fa285b241ca10b.html#adf7fbd0b033387f627fa285b241ca10b">DEFAULT_METHODS</a> = {&quot;GET&quot;, &quot;POST&quot;, &quot;DELETE&quot;}</td></tr>
+<tr class="memdesc:adf7fbd0b033387f627fa285b241ca10b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default allowed HTTP methods when none are specified.  <br /></td></tr>
+<tr class="separator:adf7fbd0b033387f627fa285b241ca10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a424745e39c183e79968502e3070343fa" name="a424745e39c183e79968502e3070343fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a424745e39c183e79968502e3070343fa">&#9670;&#160;</a></span>normalizeConfig()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implements post-parse normalization of configuration objects. </p>
+<p>Establishes default values and canonical forms for servers and locations so that runtime logic can assume non-empty, consistent configuration fields. </p>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void normalizeConfig </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classConfig.html">Config</a> &amp;&#160;</td>
-          <td class="paramname"><em>config</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="normalizeConfig_8cpp_source.html#l00054">54</a> of file <a class="el" href="normalizeConfig_8cpp_source.html">normalizeConfig.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="Config_8cpp_source.html#l00026">Config::getServers()</a>, and <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="webserv_8cpp_source.html#l00058">runWebserv()</a>.</p>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="normalizeConfig_8cpp_a424745e39c183e79968502e3070343fa_cgraph.svg" width="595" height="234"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="normalizeConfig_8cpp_a424745e39c183e79968502e3070343fa_icgraph.svg" width="388" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<a id="a6d073a523d9b1121fb6e86eeb2a0f00f" name="a6d073a523d9b1121fb6e86eeb2a0f00f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d073a523d9b1121fb6e86eeb2a0f00f">&#9670;&#160;</a></span>normalizeServer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void normalizeServer </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classServer.html">Server</a> &amp;&#160;</td>
-          <td class="paramname"><em>server</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="normalizeConfig_8cpp_source.html#l00027">27</a> of file <a class="el" href="normalizeConfig_8cpp_source.html">normalizeConfig.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="normalizeConfig_8cpp_source.html#l00021">DEFAULT_CLIENT_MAX_BODY_SIZE</a>, <a class="el" href="normalizeConfig_8cpp_source.html#l00022">DEFAULT_ERROR_PAGE_PATH</a>, <a class="el" href="normalizeConfig_8cpp_source.html#l00024">DEFAULT_INDEX</a>, <a class="el" href="normalizeConfig_8cpp_source.html#l00025">DEFAULT_METHODS</a>, <a class="el" href="normalizeConfig_8cpp_source.html#l00023">DEFAULT_ROOT</a>, <a class="el" href="Server_8cpp_source.html#l00096">Server::getClientMaxBodySize()</a>, <a class="el" href="Server_8cpp_source.html#l00092">Server::getErrorPages()</a>, <a class="el" href="Server_8cpp_source.html#l00100">Server::getLocations()</a>, <a class="el" href="Server_8cpp_source.html#l00064">Server::setClientMaxBodySize()</a>, and <a class="el" href="Server_8cpp_source.html#l00059">Server::setErrorPage()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="normalizeConfig_8cpp_source.html#l00054">normalizeConfig()</a>.</p>
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="normalizeConfig_8cpp_a6d073a523d9b1121fb6e86eeb2a0f00f_cgraph.svg" width="407" height="234"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="normalizeConfig_8cpp_a6d073a523d9b1121fb6e86eeb2a0f00f_icgraph.svg" width="566" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="aba24ae053bb6caf51d0dc6c8959a9db2" name="aba24ae053bb6caf51d0dc6c8959a9db2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba24ae053bb6caf51d0dc6c8959a9db2">&#9670;&#160;</a></span>DEFAULT_CLIENT_MAX_BODY_SIZE</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr size_t DEFAULT_CLIENT_MAX_BODY_SIZE = 1 * 1024 * 1024</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="normalizeConfig_8cpp_source.html#l00021">21</a> of file <a class="el" href="normalizeConfig_8cpp_source.html">normalizeConfig.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>.</p>
-
-</div>
-</div>
-<a id="a87b4a32fea42e9288ca2a35f05b9ae07" name="a87b4a32fea42e9288ca2a35f05b9ae07"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a87b4a32fea42e9288ca2a35f05b9ae07">&#9670;&#160;</a></span>DEFAULT_ERROR_PAGE_PATH</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string DEFAULT_ERROR_PAGE_PATH = &quot;/error.html&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="normalizeConfig_8cpp_source.html#l00022">22</a> of file <a class="el" href="normalizeConfig_8cpp_source.html">normalizeConfig.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>.</p>
-
-</div>
-</div>
-<a id="af8575704d6f7826cc2686429aff9f9a7" name="af8575704d6f7826cc2686429aff9f9a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8575704d6f7826cc2686429aff9f9a7">&#9670;&#160;</a></span>DEFAULT_INDEX</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string DEFAULT_INDEX = &quot;index.html&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="normalizeConfig_8cpp_source.html#l00024">24</a> of file <a class="el" href="normalizeConfig_8cpp_source.html">normalizeConfig.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>.</p>
-
-</div>
-</div>
-<a id="adf7fbd0b033387f627fa285b241ca10b" name="adf7fbd0b033387f627fa285b241ca10b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf7fbd0b033387f627fa285b241ca10b">&#9670;&#160;</a></span>DEFAULT_METHODS</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::vector&lt;std::string&gt; DEFAULT_METHODS = {&quot;GET&quot;, &quot;POST&quot;, &quot;DELETE&quot;}</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="normalizeConfig_8cpp_source.html#l00025">25</a> of file <a class="el" href="normalizeConfig_8cpp_source.html">normalizeConfig.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>.</p>
-
-</div>
-</div>
-<a id="a213d69c71f04e5e34b41d4e58dc5a2a5" name="a213d69c71f04e5e34b41d4e58dc5a2a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a213d69c71f04e5e34b41d4e58dc5a2a5">&#9670;&#160;</a></span>DEFAULT_ROOT</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string DEFAULT_ROOT = &quot;/var/www&quot;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="normalizeConfig_8cpp_source.html#l00023">23</a> of file <a class="el" href="normalizeConfig_8cpp_source.html">normalizeConfig.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="normalizeConfig_8cpp_source.html#l00027">normalizeServer()</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="normalizeConfig_8cpp_source.html">normalizeConfig.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Implements response sending logic for SocketManager.">
 <polygon fill="#999999" stroke="#666666" points="1224.01,-250 1072.01,-250 1072.01,-220 1224.01,-220 1224.01,-250"/>
 <text text-anchor="start" x="1080.01" y="-238" font-family="Helvetica,sans-Serif" font-size="10.00">src/network/SocketManager</text>
 <text text-anchor="middle" x="1148.01" y="-227" font-family="Helvetica,sans-Serif" font-size="10.00">Response.cpp</text>
@@ -67,7 +67,7 @@ var sectionId = 'dynsection-0';
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="HttpResponse_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="HttpResponse_8hpp.html" target="_top" xlink:title="Declares the HttpResponse class.">
 <polygon fill="white" stroke="#666666" points="469.01,-74 341.01,-74 341.01,-55 469.01,-55 469.01,-74"/>
 <text text-anchor="middle" x="405.01" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/HttpResponse.hpp</text>
 </a>
@@ -157,7 +157,7 @@ var sectionId = 'dynsection-0';
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
-<g id="a_Node000010"><a xlink:href="SocketManager_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000010"><a xlink:href="SocketManager_8hpp.html" target="_top" xlink:title="Declares the SocketManager and per&#45;client state for non&#45;blocking I/O.">
 <polygon fill="white" stroke="#666666" points="968.51,-184 813.51,-184 813.51,-165 968.51,-165 968.51,-184"/>
 <text text-anchor="middle" x="891.01" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">network/SocketManager.hpp</text>
 </a>
@@ -580,7 +580,7 @@ var sectionId = 'dynsection-0';
 <!-- Node16 -->
 <g id="Node000016" class="node">
 <title>Node16</title>
-<g id="a_Node000016"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000016"><a xlink:href="HttpRequest_8hpp.html" target="_top" xlink:title="Immutable&#45;ish HTTP/1.x request model with header map and parsed URL.">
 <polygon fill="white" stroke="#666666" points="760.51,-129 639.51,-129 639.51,-110 760.51,-110 760.51,-129"/>
 <text text-anchor="middle" x="700.01" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">http/HttpRequest.hpp</text>
 </a>
@@ -679,7 +679,7 @@ var sectionId = 'dynsection-0';
 <!-- Node12 -->
 <g id="Node000012" class="node">
 <title>Node12</title>
-<g id="a_Node000012"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000012"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="1020.51,-74 917.51,-74 917.51,-55 1020.51,-55 1020.51,-74"/>
 <text text-anchor="middle" x="969.01" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>
@@ -796,7 +796,7 @@ var sectionId = 'dynsection-0';
 <!-- Node17 -->
 <g id="Node000017" class="node">
 <title>Node17</title>
-<g id="a_Node000017"><a xlink:href="Url_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000017"><a xlink:href="Url_8hpp.html" target="_top" xlink:title="Declares the Url POD for parsed URL components.">
 <polygon fill="white" stroke="#666666" points="675.01,-74 601.01,-74 601.01,-55 675.01,-55 675.01,-74"/>
 <text text-anchor="middle" x="638.01" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">http/Url.hpp</text>
 </a>

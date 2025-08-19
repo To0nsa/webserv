@@ -1,18 +1,18 @@
 <map id="include/config/tokenizer/token.hpp" name="include/config/tokenizer/token.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="250,5,426,45"/>
-<area shape="rect" id="Node000002" href="$ConfigParser_8hpp.html" title=" " alt="" coords="75,181,233,221"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,53,205,70,177,95,165,115,159,138,155,181,150,181,153,137,161,113,173,92,202,66,236,48"/>
-<area shape="rect" id="Node000005" href="$Tokenizer_8hpp.html" title=" " alt="" coords="187,93,363,133"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="318,58,291,95,287,92,314,55"/>
-<area shape="rect" id="Node000006" href="$Tokenizer_8cpp.html" title=" " alt="" coords="320,181,468,221"/>
-<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="360,56,378,92,390,140,395,181,390,181,385,141,373,94,356,58"/>
-<area shape="rect" id="Node000007" href="$token_8cpp.html" title=" " alt="" coords="439,93,587,133"/>
-<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="390,49,476,91,473,96,387,54"/>
-<area shape="rect" id="Node000003" href="$ConfigParser_8cpp.html" title=" " alt="" coords="188,269,363,309"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="193,227,250,267,247,271,190,231"/>
-<area shape="rect" id="Node000004" href="$webserv_8cpp.html" title=" " alt="" coords="5,277,164,302"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="132,234,96,278,92,275,128,230"/>
-<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="239,143,182,183,179,179,236,139"/>
-<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="278,147,278,269,273,269,273,147"/>
-<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="314,139,369,179,366,183,311,144"/>
+<area shape="rect" id="Node000001" title="Token and TokenType declarations for the config lexer." alt="" coords="271,5,447,45"/>
+<area shape="rect" id="Node000002" href="$ConfigParser_8hpp.html" title="Declares the ConfigParser for syntactic/semantic directive parsing." alt="" coords="97,181,254,221"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="260,53,226,70,199,95,187,115,180,138,177,181,171,181,175,137,182,113,195,92,223,66,257,48"/>
+<area shape="rect" id="Node000005" href="$Tokenizer_8hpp.html" title="Declares the Tokenizer for config lexical analysis." alt="" coords="209,93,385,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="339,58,313,95,308,92,335,55"/>
+<area shape="rect" id="Node000006" href="$Tokenizer_8cpp.html" title="Implements the Tokenizer used for config lexical analysis." alt="" coords="341,181,489,221"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="382,56,399,92,411,140,417,181,411,181,406,141,394,94,377,58"/>
+<area shape="rect" id="Node000007" href="$token_8cpp.html" title="Implements Token helpers for the config lexer." alt="" coords="460,93,608,133"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="411,49,497,91,495,96,409,54"/>
+<area shape="rect" id="Node000003" href="$ConfigParser_8cpp.html" title="Implements parsing of servers, locations, and directives." alt="" coords="209,269,384,309"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="215,227,271,267,268,271,212,231"/>
+<area shape="rect" id="Node000004" href="$runWebserv_8cpp.html" title="Webserv bootstrap and runtime orchestration." alt="" coords="5,277,185,302"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="150,233,108,278,104,274,146,230"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="260,143,204,183,201,179,257,139"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="299,147,299,269,294,269,294,147"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="336,139,391,179,388,183,333,144"/>
 </map>

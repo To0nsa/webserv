@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Human&#45;readable printing helpers for Webserv configuration and servers.">
 <polygon fill="#999999" stroke="#666666" points="513.3,-239 394.3,-239 394.3,-220 513.3,-220 513.3,-239"/>
 <text text-anchor="middle" x="453.8" y="-227" font-family="Helvetica,sans-Serif" font-size="10.00">src/utils/printInfo.cpp</text>
 </a>
@@ -84,7 +84,7 @@ var sectionId = 'dynsection-0';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="Config_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="Config_8hpp.html" target="_top" xlink:title="Declares the Config aggregate for parsed virtual servers.">
 <polygon fill="white" stroke="#666666" points="406.3,-184 305.3,-184 305.3,-165 406.3,-165 406.3,-184"/>
 <text text-anchor="middle" x="355.8" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">config/Config.hpp</text>
 </a>
@@ -120,7 +120,7 @@ var sectionId = 'dynsection-0';
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="Location_8hpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="Location_8hpp.html" target="_top" xlink:title="Declares the Location class for route&#45;specific configuration.">
 <polygon fill="white" stroke="#666666" points="164.3,-74 61.3,-74 61.3,-55 164.3,-55 164.3,-74"/>
 <text text-anchor="middle" x="112.8" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">core/Location.hpp</text>
 </a>
@@ -210,7 +210,7 @@ var sectionId = 'dynsection-0';
 <!-- Node12 -->
 <g id="Node000012" class="node">
 <title>Node12</title>
-<g id="a_Node000012"><a xlink:href="stringUtils_8hpp.html" target="_top" xlink:title="Utility functions for parsing numeric string values.">
+<g id="a_Node000012"><a xlink:href="stringUtils_8hpp.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="650.8,-74 538.8,-74 538.8,-55 650.8,-55 650.8,-74"/>
 <text text-anchor="middle" x="594.8" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">utils/stringUtils.hpp</text>
 </a>
