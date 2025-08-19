@@ -10,6 +10,20 @@
 
 > A lightweight HTTP/1.1 server written in modern C++20, compliant with the Hive/42 webserv project specifications.
 
+**Webserv** is our first **large-scale C++ project** at Hive/42.
+The goal was to implement a lightweight, fully working HTTP/1.1 server from scratch, trying to use modern C++ standard libraries.
+
+The server is designed to be RFC-compliant (following HTTP/1.1 [RFC 7230–7235]) and supports essential features such as:
+
+* Parsing and validating configuration files (Nginx-style syntax).
+* Handling GET, POST, DELETE with static files, autoindex, and uploads.
+* Executing CGI scripts securely with proper environment and timeouts.
+* Multiplexing sockets and CGI pipes in a single poll-based event loop.
+* Graceful error handling, timeouts, and connection reuse (keep-alive).
+
+For reference and correctness, Nginx was used as a behavioral benchmark: routing, error responses, and edge cases were compared against it to ensure realistic and compliant behavior.
+
+This project was both a challenge in systems programming and a solid introduction to networking, concurrency, and protocol design in modern C++.
 ___
 
 ## Core of Webserv
@@ -120,7 +134,7 @@ This section describes how the configuration parsing logic of **Webserv** works,
 
 ___
 
-## Networking — `SocketManager`
+## Networking `SocketManager`
 
 The heart of Webserv’s I/O: a single `poll()` loop multiplexing **listening sockets**, **client sockets**, and **CGI pipes**, with strict timeouts and robust error recovery.
 
@@ -138,84 +152,228 @@ The heart of Webserv’s I/O: a single `poll()` loop multiplexing **listening so
 * **Timeouts**: enforce idle, header, body, and send deadlines.
 * **Errors**: generate accurate HTTP error responses, close cleanly.
 
+</details>
+
 ___
 
-### High-Level Flow
+## HTTP Handling
 
-```mermaid
-flowchart TD
-  %% =========================
-  %% Setup
-  %% =========================
-  subgraph Boot[Startup]
-    A[Load servers from config]
-    B[Create SocketManager]
-    C[setupSockets: bind listen register FDs]
-    A --> B --> C
-  end
+This section explains how **Webserv** processes HTTP/1.1 requests end‑to‑end, from bytes on a socket to fully formed responses, and how the server enforces protocol rules, timeouts, and connection reuse.
 
-  %% =========================
-  %% Main loop
-  %% =========================
-  C --> D{run poll}
-  D -->|EINTR| Z[Graceful shutdown] --> ZZ[Log shutting down server]
+<details>
+<summary><strong>See Details</strong></summary>
 
-  %% Loop tick
-  D --> E[handleCgiPollEvents]
-  E --> F{for each pfd reverse}
+### Request Lifecycle (High‑Level)
 
-  %% Skip CGI pipe FDs
-  F --> G{CGI pipe FD}
-  G -- yes --> F
+1. **Accept & Read**
+   `SocketManager` accepts client connections on non‑blocking sockets and collects incoming bytes. Per‑connection state tracks **read deadlines** (header/body) and **keep‑alive**.
 
-  %% Timeouts (per FD)
-  G -- no --> T{checkClientTimeouts}
-  T -- idle or send --> Close[cleanupClientConnectionClose] --> F
-  T -- header or body --> Halt[disable POLLIN then queue 408] --> H{ERR HUP NVAL}
-  T -- none --> H
+2. **Parse**
+   `HttpRequestParser` incrementally parses:
 
-  %% Socket errors
-  H -- yes --> H1[handlePollError then close] --> F
+   * **Start line**: method, request‑target (absolute‑path + optional query), HTTP version (HTTP/1.1).
+   * **Headers**: canonicalizes keys; enforces size limits and folding rules; detects `Connection`, `Host`, `Content-Length`, `Transfer-Encoding`, etc.
+   * **Body**: supports `Content-Length` and **chunked** transfer decoding. Body size is capped by `client_max_body_size`.
 
-  %% Reads
-  H -- no --> I{POLLIN}
-  I -- no --> O{POLLOUT and responses queued}
+3. **Route**
+   `requestRouter` selects a `Server` (host+SNI/server\_name) and the most specific `Location` (longest URI prefix match). It normalizes the filesystem target path and determines whether the request hits **static** content, **autoindex**, **redirect**, **upload**, or **CGI**.
 
-  I -- yes --> J{listen FD}
-  J -- yes --> J1[handleNewConnection] --> F
+4. **Dispatch**
+   Based on method and location rules, it calls `handleGet`, `handlePost`, or `handleDelete`. Unsupported or disallowed → **405** with `Allow` header.
 
-  J -- no --> Rcv[handleClientData]
-  Rcv -- queued --> K[enable POLLOUT] --> F
-  Rcv -- incomplete --> F
+5. **Build Response**
+   `responseBuilder` produces status line, headers, and body. It
 
-  %% Writes
-  O -- yes --> S[sendResponse]
-  S -->|file| SF[sendFileResponse]
-  S -->|raw| SR[sendRawResponse]
-  SF --> EndSend{response done}
-  SR --> EndSend
+   * Sets `Content-Type` (MIME by extension), `Content-Length` or `Transfer-Encoding: chunked`, `Connection` (keep‑alive vs close), and error pages.
+   * Streams file bodies (sendfile/read+write) with backpressure; can fall back to buffered I/O for CGI and dynamic content.
 
-  EndSend -- yes and close --> Close
-  EndSend -- yes and keep alive --> KA[disable POLLOUT] --> F
-  EndSend -- not yet --> F
+6. **Send & Reuse**
+   `SocketManager` writes the response, respecting **write timeouts** and TCP backpressure. If `Connection: keep-alive` and protocol rules allow, the connection stays open for subsequent pipelined requests.
 
-  %% Next tick
-  F --> D
-```
+### Static Files & Autoindex
+
+* **Static files**: Path is resolved from `root` + URI, protecting against traversal. If an **index** is configured and exists for a directory, it is served.
+* **Autoindex**: When enabled and no index present, `generateAutoindex` renders a minimal HTML directory listing.
+* **ETag/Last‑Modified** *(optional)*: If enabled, responses include validators; otherwise strong caching is avoided. Range requests are not served unless explicitly implemented.
+
+### Errors & Edge Cases
+
+* **400** malformed request, **413** body too large, **414** URI too long, **404/403** missing or forbidden paths, **405** method not allowed.
+* **408/504** on header/body/send timeouts. **431** for oversized header sections.
+* **5xx** on internal faults, filesystem errors, or CGI failures (see below).
 
 </details>
 
 ___
 
-## Flow Overview
+## Request & CGI Handling
 
-1. **Tokenizer** → breaks input into tokens.
-2. **ConfigParser** → builds in‑memory `Config` with `Server` & `Location` objects.
-3. **normalizeConfig** → fills missing defaults (sizes, error pages, roots, index, methods).
-4. **validateConfig** → applies semantic checks.
-5. **Runtime** → validated configuration is passed to the server for request routing.
+This section details how POST uploads, multipart forms, and CGI programs are handled, including sandboxing and timeout policy.
 
-The configuration pipeline guarantees that only syntactically valid, normalized, and semantically correct configurations are accepted. This ensures the server runs with predictable defaults, strong validation, and developer-friendly diagnostics.
+<details>
+<summary><strong>See Details</strong></summary>
+
+### POST Uploads & Multipart
+
+* **Content dispatch**: `handlePost` inspects `Content-Type` and forwards to specialized handlers.
+* **application/x-www-form-urlencoded**: Parsed into key/value pairs. Small payloads are buffered; oversized inputs fail fast with **413**.
+* **multipart/form-data**: `handleMultipartForm` parses parts lazily to disk, honoring per‑file and aggregate size limits. Saved files go to the `upload_store` defined on the matched `Location`.
+* **application/octet-stream / arbitrary media**: Stored as a single file in `upload_store` with a server‑generated filename when no name is provided.
+* **Overwrite policy**: Configurable (e.g., reject on conflict or rename). Errors yield **409** (conflict) or **500** depending on the cause.
+
+### CGI Execution Model
+
+* **When CGI triggers**: A request is routed to CGI when the target path matches a configured `cgi_extension` (e.g., `.py`, `.php`) and an interpreter is set, or when the `Location` forces CGI.
+
+* **Environment**: `handleCgi` constructs a POSIX environment per CGI/1.1:
+
+  * `REQUEST_METHOD`, `QUERY_STRING`, `CONTENT_LENGTH`, `CONTENT_TYPE`, `SCRIPT_FILENAME`, `PATH_INFO`, `SERVER_PROTOCOL`, `SERVER_NAME`, `SERVER_PORT`, `REMOTE_ADDR`, and `HTTP_*` for forwarded headers.
+  * Working directory is the script directory; stdin is the request body (streamed or buffered based on size).
+
+* **Process lifecycle**:
+
+  1. Create pipes for **stdin**/**stdout**, fork, exec interpreter + script.
+  2. Parent polls child pipes non‑blocking with **CPU/IO activity watchdogs**.
+  3. Enforces **hard timeouts** (startup, read, total runtime). On violation → terminate child.
+
+* **Output parsing**: CGI writes `Status: 200 OK\r\n`, arbitrary headers, blank line, then body. The server:
+
+  * Parses CGI headers (maps/filters hop‑by‑hop), merges with server headers.
+  * If `Location` header without body → treat as **redirect** per CGI spec.
+  * Otherwise body is streamed back to the client.
+
+* **Failure mapping**:
+
+  * Exec/spawn error → **502 Bad Gateway**.
+  * Timeout or premature exit → **504 Gateway Timeout**.
+  * Malformed CGI headers → **502**.
+  * Script wrote nothing (unexpected EOF) → **502**.
+
+* **Security & Limits**:
+
+  * Drop privileges/chroot *(if configured)*; never inherit ambient FDs; sanitize environment.
+  * Enforce **max body size**, **max headers**, **max response size** (protects RAM), and per‑request **open‑file caps**.
+
+### GET/DELETE Semantics
+
+* **GET**: Serves static files, autoindex pages, or dispatches to CGI. Conditional GETs (If‑Modified‑Since/If‑None‑Match) may be supported depending on build settings.
+* **DELETE**: Removes targeted file from the resolved root when allowed in `methods`. On success → **204 No Content**; on missing/forbidden → **404/403**.
+
+### Response Builder (Recap)
+
+* Centralizes status line + headers, error page selection, and body streaming. Ensures `Content-Length` vs `chunked` consistency and keeps **connection semantics** correct across errors and CGI boundaries.
+
+</details>
+
+___
+
+## Flow Overview - End‑to‑End Runtime
+
+This is the complete lifecycle from configuration to bytes on the wire, aligned with the current codebase.
+
+<details>
+<summary><strong>See Details</strong></summary>
+
+1. **Startup & Configuration**
+
+* **Tokenizer → ConfigParser → normalizeConfig → validateConfig**
+
+  * Tokenize config, build `Server`/`Location` graphs, apply defaults (client body size, methods, roots, index, error pages), and enforce semantic rules (paths, redirects, methods, CGI mapping).
+* **Bootstrap**
+
+  * Instantiate `Server` objects, bind/listen on configured host\:port pairs, pre‑compute route tables and error pages.
+
+2. **Event Loop (SocketManager)**
+
+* Single non‑blocking `poll()` loop over listening sockets, client sockets, and CGI pipes.
+* Per‑connection state tracks read/write buffers, deadlines (header/body/send), and keep‑alive.
+* **Accept** new connections ➜ initialize state.
+
+3. **Read → Parse (HttpRequestParser)**
+
+* Accumulate bytes until `"\r\n\r\n"` (header terminator) is found.
+* **Start line**: validate method token, request‑target, version.
+* **Headers**: normalize keys, reject duplicates where disallowed, check `Content‑Length`/`Transfer‑Encoding` (conflict, format), enforce `Host` on HTTP/1.1, cap header section size.
+* **URL/Host routing hint**: derive effective `Url` and matched server affinity; store `Host`, `Query`, `Content‑Length`.
+* **Body**:
+
+  * If `Transfer‑Encoding: chunked` ➜ incremental chunk decoding; forbid trailers; enforce `client_max_body_size`.
+  * Else if `Content‑Length` ➜ wait until full body; enforce size cap; detect pipelined next request beyond the declared length.
+  * GET/DELETE: treat any extra bytes as pipeline, not body.
+
+4. **Routing (requestRouter)**
+
+* **Directory‑slash redirect** when target resolves to a directory but URI lacks trailing `/`.
+* **Location selection**: exact match, else longest prefix.
+* **Configured redirect (`return` 301/302/307/308)** short‑circuit.
+* **Method gate**:
+
+  * 501 if method not implemented (only GET/POST/DELETE supported).
+  * 405 if not allowed by `Location`’s `methods`.
+
+5. **Dispatch (methodsHandler)**
+
+* **GET**
+
+  * Resolve physical path under `root` (no traversal, no symlinks).
+  * If directory:
+
+    * If index exists ➜ serve file.
+    * Else if `autoindex on` ➜ generate HTML listing.
+    * Else ➜ 403.
+  * If regular file ➜ serve with MIME type detection. Small files buffered, large files streamed.
+* **POST**
+
+  * Preconditions: non‑empty body, size ≤ `client_max_body_size`, `upload_store` configured.
+  * Determine safe target path under `upload_store` (percent‑decode, canonicalize, reject symlinks, mkdir ‑p).
+  * Content‑type switch:
+
+    * `multipart/form-data` ➜ stream first file part to disk (boundary parsing, per‑part size cap).
+    * `application/x‑www‑form‑urlencoded` ➜ parse kv pairs; persist rendered HTML summary.
+    * Other types ➜ raw body saved as a file.
+  * 201 on success with minimal HTML confirmation.
+* **DELETE**
+
+  * Resolve path; reject directories/symlinks; remove regular file; reply 200 with HTML confirmation.
+
+6. **CGI (handleCgi) - when location/extension triggers**
+
+* **Spawn**
+
+  * Write request body to temp file; create output temp file.
+  * Build `execve` argv (interpreter + script) and CGI/1.1 env (`REQUEST_METHOD`, `QUERY_STRING`, `SCRIPT_FILENAME`, `PATH_INFO`, `SERVER_*`, `HTTP_*`, etc.).
+  * `fork()` child ➜ `dup2(stdin/out)` to temp fds ➜ `chdir(script dir)` ➜ `execve()`.
+* **Supervision**
+
+  * Parent polls pipes/Fds with timeouts; on inactivity/overrun ➜ kill and 504/502.
+* **Finalize**
+
+  * Parse output file head for CGI headers (`Status:`, `Content‑Type:`) until `CRLF CRLF`.
+  * Compute body offset and size, then return a **file‑backed** response pointing at CGI output (no copy), with correct status and content type.
+  * Ensure temp files are unlinked/cleaned after send.
+
+7. **Response Building (responseBuilder/HttpResponse)**
+
+* Build status line + headers; choose reason phrase; select custom error page if configured.
+* Set `Content‑Type`, `Content‑Length` (or stream file length) and connection semantics.
+* **Keep‑alive policy**
+
+  * HTTP/1.1: keep‑alive by default unless `Connection: close` **or** fatal status (e.g., 400/408/413/500) forces close.
+  * HTTP/1.0: close by default unless `Connection: keep‑alive`.
+* For redirects: set `Location`; body often omitted/minimal.
+
+8. **Write → Reuse/Close**
+
+* Non‑blocking writes honor backpressure and send timeouts.
+* If `keep‑alive` and no close‑forcing status ➜ retain connection for next pipelined request (parser resumes at leftover bytes).
+* Else ➜ close socket and release all per‑connection resources.
+
+9. **Error Mapping & Hardening**
+
+* Parser/Router/FS/CGI errors mapped to precise HTTP codes (400/403/404/405/408/411/413/414/415/431/500/501/502/504/505).
+* Safeguards: normalized paths, no `..`, symlink denial, header/body caps, per‑request timeouts, upload store confinement, and strict header validation.
+
+</details>
 
 ___
 

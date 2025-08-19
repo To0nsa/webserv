@@ -6,7 +6,7 @@
 /*   By: nlouis <nlouis@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 12:23:37 by nlouis            #+#    #+#             */
-/*   Updated: 2025/08/19 11:32:52 by nlouis           ###   ########.fr       */
+/*   Updated: 2025/08/19 11:35:35 by nlouis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ namespace {
  *
  * @return A vector of strings representing the CGI environment, suitable for `execve()`.
  *
- * @ingroup http_component
+ * @ingroup request_handler
  */
 std::vector<std::string> prepareEnv(const HttpRequest& req, const Server& server,
                                     const Location& loc, const std::string& scriptPath) {

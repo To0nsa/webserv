@@ -35,18 +35,18 @@ Possible candidates:
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:40: warning: unable to resolve reference to 'handleDelete:' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:44: warning: unable to resolve reference to 'generateAutoindex:' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:46: warning: unable to resolve reference to 'handleMultipartForm:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:261: warning: unable to resolve reference to 'processDirectory' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:263: warning: unable to resolve reference to 'serveFile' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:271: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:371: warning: unable to resolve reference to 'listDirectoryEntries' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:381: warning: unable to resolve reference to 'htmlHeader' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:381: warning: unable to resolve reference to 'renderRow' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:382: warning: unable to resolve reference to 'htmlFooter' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:459: warning: unable to resolve reference to 'handleUrlEncodedForm' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:460: warning: unable to resolve reference to 'handleRawBody' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:179: warning: unable to resolve reference to 'unlinkFile' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:182: warning: unable to resolve reference to 'generateDeleteHtml' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:188: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:260: warning: unable to resolve reference to 'processDirectory' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:262: warning: unable to resolve reference to 'serveFile' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:270: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:372: warning: unable to resolve reference to 'listDirectoryEntries' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:382: warning: unable to resolve reference to 'htmlHeader' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:382: warning: unable to resolve reference to 'renderRow' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:383: warning: unable to resolve reference to 'htmlFooter' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:460: warning: unable to resolve reference to 'handleUrlEncodedForm' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:461: warning: unable to resolve reference to 'handleRawBody' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:181: warning: unable to resolve reference to 'unlinkFile' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:184: warning: unable to resolve reference to 'generateDeleteHtml' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:190: warning: unable to resolve reference to 'HttpResponse:' for \ref command
 /home/toonsa/myProjects/webserv/include/http/requestRouter.hpp:35: warning: unable to resolve reference to 'redirectOnDirectorySlash' for \ref command
 /home/toonsa/myProjects/webserv/include/http/requestRouter.hpp:39: warning: unable to resolve reference to 'redirectOnConfigured' for \ref command
 /home/toonsa/myProjects/webserv/include/http/requestRouter.hpp:41: warning: unable to resolve reference to 'validateRequestMethod' for \ref command
@@ -60,7 +60,6 @@ Possible candidates:
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:273: warning: unable to resolve reference to 'initializeResponse' for \ref command
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:327: warning: unable to resolve reference to 'initializeResponse' for \ref command
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:400: warning: unable to resolve reference to 'initializeResponse' for \ref command
-error: md5 hash does not match for two different runs of /home/toonsa/myProjects/webserv/docs/html/group__url__utils_gabf2641feed820a4fcaf2699a86d1a4f7_gabf2641feed820a4fcaf2699a86d1a4f7_icgraph.dot !
 /home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:247: warning: Unsupported xml/html tag <port> found
 /home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:249: warning: Unsupported xml/html tag <ip> found
 /home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:253: warning: Unsupported xml/html tag <size> found
@@ -80,9 +79,9 @@ error: md5 hash does not match for two different runs of /home/toonsa/myProjects
   parameter 'req'
   parameter 'bodyFd'
   parameter 'outputFd'
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:179: warning: unable to resolve reference to 'unlinkFile' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:182: warning: unable to resolve reference to 'generateDeleteHtml' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:188: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:181: warning: unable to resolve reference to 'unlinkFile' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:184: warning: unable to resolve reference to 'generateDeleteHtml' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:190: warning: unable to resolve reference to 'HttpResponse:' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:22: warning: unable to resolve reference to 'listDirectoryEntries' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:25: warning: unable to resolve reference to 'escapeUriComponent' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:28: warning: unable to resolve reference to 'formatMTimeUTC' for \ref command
@@ -91,27 +90,27 @@ error: md5 hash does not match for two different runs of /home/toonsa/myProjects
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:31: warning: unable to resolve reference to 'htmlFooter' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:103: warning: unable to resolve reference to 'DirEntry' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:119: warning: unable to resolve reference to 'DirEntry' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:283: warning: unable to resolve reference to 'escapeUriComponent' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:346: warning: unable to resolve reference to 'htmlHeader' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:346: warning: unable to resolve reference to 'renderRow' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:371: warning: unable to resolve reference to 'listDirectoryEntries' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:381: warning: unable to resolve reference to 'htmlHeader' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:381: warning: unable to resolve reference to 'renderRow' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:382: warning: unable to resolve reference to 'htmlFooter' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:287: warning: unable to resolve reference to 'escapeUriComponent' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:347: warning: unable to resolve reference to 'htmlHeader' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:347: warning: unable to resolve reference to 'renderRow' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:372: warning: unable to resolve reference to 'listDirectoryEntries' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:382: warning: unable to resolve reference to 'htmlHeader' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:382: warning: unable to resolve reference to 'renderRow' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:383: warning: unable to resolve reference to 'htmlFooter' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:19: warning: unable to resolve reference to 'detectMimeType' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:21: warning: unable to resolve reference to 'serveFile' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:23: warning: unable to resolve reference to 'processDirectory' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:108: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:112: warning: unable to resolve reference to 'detectMimeType' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:126: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:197: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:261: warning: unable to resolve reference to 'processDirectory' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:263: warning: unable to resolve reference to 'serveFile' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:271: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:409: warning: unable to resolve reference to 'handleUrlEncodedForm' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:107: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:111: warning: unable to resolve reference to 'detectMimeType' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:125: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:196: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:260: warning: unable to resolve reference to 'processDirectory' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:262: warning: unable to resolve reference to 'serveFile' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:270: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:408: warning: unable to resolve reference to 'handleUrlEncodedForm' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:410: warning: unable to resolve reference to 'handleRawBody' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:459: warning: unable to resolve reference to 'handleUrlEncodedForm' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:460: warning: unable to resolve reference to 'handleRawBody' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:460: warning: unable to resolve reference to 'handleUrlEncodedForm' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:461: warning: unable to resolve reference to 'handleRawBody' for \ref command
 /home/toonsa/myProjects/webserv/src/http/requestRouter.cpp:24: warning: unable to resolve reference to 'redirectOnDirectorySlash' for \ref command
 /home/toonsa/myProjects/webserv/src/http/requestRouter.cpp:26: warning: unable to resolve reference to 'findLocation' for \ref command
 /home/toonsa/myProjects/webserv/src/http/requestRouter.cpp:28: warning: unable to resolve reference to 'redirectOnConfigured' for \ref command
@@ -123,7 +122,6 @@ error: md5 hash does not match for two different runs of /home/toonsa/myProjects
 /home/toonsa/myProjects/webserv/include/http/requestRouter.hpp:39: warning: unable to resolve reference to 'redirectOnConfigured' for \ref command
 /home/toonsa/myProjects/webserv/include/http/requestRouter.hpp:41: warning: unable to resolve reference to 'validateRequestMethod' for \ref command
 /home/toonsa/myProjects/webserv/include/http/requestRouter.hpp:43: warning: unable to resolve reference to 'dispatchByMethod' for \ref command
-error: md5 hash does not match for two different runs of /home/toonsa/myProjects/webserv/docs/html/group__request__handler_ga43204497282094b6dac91b946d5648ba_ga43204497282094b6dac91b946d5648ba_cgraph.dot !
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:163: warning: unable to resolve reference to 'shouldKeepAlive' for \ref command
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:236: warning: unable to resolve reference to 'initializeResponse' for \ref command
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:273: warning: unable to resolve reference to 'initializeResponse' for \ref command
@@ -150,28 +148,27 @@ error: md5 hash does not match for two different runs of /home/toonsa/myProjects
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:273: warning: unable to resolve reference to 'initializeResponse' for \ref command
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:327: warning: unable to resolve reference to 'initializeResponse' for \ref command
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:400: warning: unable to resolve reference to 'initializeResponse' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:179: warning: unable to resolve reference to 'unlinkFile' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:182: warning: unable to resolve reference to 'generateDeleteHtml' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:188: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:371: warning: unable to resolve reference to 'listDirectoryEntries' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:381: warning: unable to resolve reference to 'htmlHeader' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:381: warning: unable to resolve reference to 'renderRow' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:382: warning: unable to resolve reference to 'htmlFooter' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:108: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:126: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:197: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:261: warning: unable to resolve reference to 'processDirectory' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:263: warning: unable to resolve reference to 'serveFile' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:271: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:409: warning: unable to resolve reference to 'handleUrlEncodedForm' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:181: warning: unable to resolve reference to 'unlinkFile' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:184: warning: unable to resolve reference to 'generateDeleteHtml' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleDelete.cpp:190: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:372: warning: unable to resolve reference to 'listDirectoryEntries' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:382: warning: unable to resolve reference to 'htmlHeader' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:382: warning: unable to resolve reference to 'renderRow' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/generateAutoindex.cpp:383: warning: unable to resolve reference to 'htmlFooter' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:107: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:125: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:196: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:260: warning: unable to resolve reference to 'processDirectory' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:262: warning: unable to resolve reference to 'serveFile' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:270: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:408: warning: unable to resolve reference to 'handleUrlEncodedForm' for \ref command
 /home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:410: warning: unable to resolve reference to 'handleRawBody' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:459: warning: unable to resolve reference to 'handleUrlEncodedForm' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:460: warning: unable to resolve reference to 'handleRawBody' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:460: warning: unable to resolve reference to 'handleUrlEncodedForm' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handlePost/handlePost.cpp:461: warning: unable to resolve reference to 'handleRawBody' for \ref command
 /home/toonsa/myProjects/webserv/include/http/requestRouter.hpp:35: warning: unable to resolve reference to 'redirectOnDirectorySlash' for \ref command
 /home/toonsa/myProjects/webserv/include/http/requestRouter.hpp:39: warning: unable to resolve reference to 'redirectOnConfigured' for \ref command
 /home/toonsa/myProjects/webserv/include/http/requestRouter.hpp:41: warning: unable to resolve reference to 'validateRequestMethod' for \ref command
 /home/toonsa/myProjects/webserv/include/http/requestRouter.hpp:43: warning: unable to resolve reference to 'dispatchByMethod' for \ref command
-error: md5 hash does not match for two different runs of /home/toonsa/myProjects/webserv/docs/html/group__request__handler_ga43204497282094b6dac91b946d5648ba_ga43204497282094b6dac91b946d5648ba_cgraph.dot !
 error: md5 hash does not match for two different runs of /home/toonsa/myProjects/webserv/docs/html/group__url__utils_gabf2641feed820a4fcaf2699a86d1a4f7_gabf2641feed820a4fcaf2699a86d1a4f7_icgraph.dot !
 /home/toonsa/myProjects/webserv/src/http/handleCgi.cpp:298: warning: argument 'path' of command @param is not found in the argument list of anonymous_namespace{handleCgi.cpp}::prepareCgiTempFiles(CgiProcess &cgi, const HttpRequest &req, int &bodyFd, int &outputFd)
 /home/toonsa/myProjects/webserv/src/http/handleCgi.cpp:298: warning: argument 'errorCode' of command @param is not found in the argument list of anonymous_namespace{handleCgi.cpp}::prepareCgiTempFiles(CgiProcess &cgi, const HttpRequest &req, int &bodyFd, int &outputFd)
@@ -180,9 +177,9 @@ error: md5 hash does not match for two different runs of /home/toonsa/myProjects
   parameter 'req'
   parameter 'bodyFd'
   parameter 'outputFd'
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:108: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:126: warning: unable to resolve reference to 'HttpResponse:' for \ref command
-/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:197: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:107: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:125: warning: unable to resolve reference to 'HttpResponse:' for \ref command
+/home/toonsa/myProjects/webserv/src/http/methodsHandler/handleGet/handleGet.cpp:196: warning: unable to resolve reference to 'HttpResponse:' for \ref command
 /home/toonsa/myProjects/webserv/src/http/requestRouter.cpp:137: warning: Found unknown command '@complexity'
 /home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:247: warning: Unsupported xml/html tag <port> found
 /home/toonsa/myProjects/webserv/src/config/parser/directive_handler_table.cpp:249: warning: Unsupported xml/html tag <ip> found
