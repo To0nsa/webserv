@@ -197,3 +197,5 @@ error: md5 hash does not match for two different runs of /home/toonsa/myProjects
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:273: warning: unable to resolve reference to 'initializeResponse' for \ref command
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:327: warning: unable to resolve reference to 'initializeResponse' for \ref command
 /home/toonsa/myProjects/webserv/src/http/responseBuilder.cpp:400: warning: unable to resolve reference to 'initializeResponse' for \ref command
+/home/toonsa/myProjects/webserv/README.md:294: warning: Found unknown command '\r'
+/home/toonsa/myProjects/webserv/README.md:294: warning: Found unknown command '\r'
