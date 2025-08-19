@@ -36,28 +36,36 @@ var NAVTREE =
       [ "5. Validation", "index.html#autotoc_md8", null ],
       [ "6. Error Handling", "index.html#autotoc_md9", null ]
     ] ],
-    [ "Networking Core — <tt>SocketManager</tt>", "index.html#autotoc_md10", [
-      [ "What it Does", "index.html#autotoc_md11", null ],
-      [ "High-Level Flow", "index.html#autotoc_md12", null ]
+    [ "Networking <tt>SocketManager</tt>", "index.html#autotoc_md10", null ],
+    [ "HTTP Handling", "index.html#autotoc_md11", [
+      [ "Request Lifecycle (High‑Level)", "index.html#autotoc_md12", null ],
+      [ "Static Files & Autoindex", "index.html#autotoc_md13", null ],
+      [ "Errors & Edge Cases", "index.html#autotoc_md14", null ]
     ] ],
-    [ "Flow Overview", "index.html#autotoc_md13", null ],
-    [ "Continuous Integration & Documentation", "index.html#autotoc_md14", [
-      [ "CI Pipeline", "index.html#autotoc_md15", null ]
+    [ "Request & CGI Handling", "index.html#autotoc_md15", [
+      [ "POST Uploads & Multipart", "index.html#autotoc_md16", null ],
+      [ "CGI Execution Model", "index.html#autotoc_md17", null ],
+      [ "GET/DELETE Semantics", "index.html#autotoc_md18", null ],
+      [ "Response Builder (Recap)", "index.html#autotoc_md19", null ]
     ] ],
-    [ "Documentation", "index.html#autotoc_md16", [
-      [ "1. Doxygen-Powered", "index.html#autotoc_md17", null ],
-      [ "2. Graphical Support", "index.html#autotoc_md18", null ],
-      [ "3. Navigation & Browsing", "index.html#autotoc_md19", null ],
-      [ "4. Deployment", "index.html#autotoc_md20", null ],
-      [ "5. Best Practices", "index.html#autotoc_md21", null ]
+    [ "Flow Overview - End‑to‑End Runtime", "index.html#autotoc_md20", null ],
+    [ "Continuous Integration & Documentation", "index.html#autotoc_md21", [
+      [ "CI Pipeline", "index.html#autotoc_md22", null ]
     ] ],
-    [ "Project Structure Overview", "index.html#autotoc_md22", null ],
-    [ "Build & Test Instructions", "index.html#autotoc_md23", [
-      [ "Build with Makefile", "index.html#autotoc_md24", null ],
-      [ "Available Makefile Targets", "index.html#autotoc_md25", null ],
-      [ "Notes", "index.html#autotoc_md26", null ]
+    [ "Documentation", "index.html#autotoc_md23", [
+      [ "1. Doxygen-Powered", "index.html#autotoc_md24", null ],
+      [ "2. Graphical Support", "index.html#autotoc_md25", null ],
+      [ "3. Navigation & Browsing", "index.html#autotoc_md26", null ],
+      [ "4. Deployment", "index.html#autotoc_md27", null ],
+      [ "5. Best Practices", "index.html#autotoc_md28", null ]
     ] ],
-    [ "License", "index.html#autotoc_md27", null ],
+    [ "Project Structure Overview", "index.html#autotoc_md29", null ],
+    [ "Build & Test Instructions", "index.html#autotoc_md30", [
+      [ "Build with Makefile", "index.html#autotoc_md31", null ],
+      [ "Available Makefile Targets", "index.html#autotoc_md32", null ],
+      [ "Notes", "index.html#autotoc_md33", null ]
+    ] ],
+    [ "License", "index.html#autotoc_md34", null ],
     [ "Topics", "topics.html", "topics" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -97,7 +105,7 @@ var NAVTREEINDEX =
 "ConfigParseError_8cpp.html",
 "classLocation.html#ad34794ff218bc1e3004eaed2642c98e0",
 "group__StringUtils.html",
-"requestRouter_8hpp.html"
+"requestRouter_8cpp.html#a29cdec36da3c3995a8fd235c8f6b31b9"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

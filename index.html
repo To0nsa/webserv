@@ -97,7 +97,17 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <blockquote class="doxtable">
 <p>&zwj;A lightweight HTTP/1.1 server written in modern C++20, compliant with the Hive/42 webserv project specifications. </p>
 </blockquote>
-<hr  />
+<p><b>Webserv</b> is our first <b>large-scale C++ project</b> at Hive/42. The goal was to implement a lightweight, fully working HTTP/1.1 server from scratch, trying to use modern C++ standard libraries.</p>
+<p>The server is designed to be RFC-compliant (following HTTP/1.1 [RFC 7230–7235]) and supports essential features such as:</p>
+<ul>
+<li>Parsing and validating configuration files (Nginx-style syntax).</li>
+<li>Handling GET, POST, DELETE with static files, autoindex, and uploads.</li>
+<li>Executing <a class="el" href="namespaceCGI.html">CGI</a> scripts securely with proper environment and timeouts.</li>
+<li>Multiplexing sockets and <a class="el" href="namespaceCGI.html">CGI</a> pipes in a single poll-based event loop.</li>
+<li>Graceful error handling, timeouts, and connection reuse (keep-alive).</li>
+</ul>
+<p>For reference and correctness, Nginx was used as a behavioral benchmark: routing, error responses, and edge cases were compared against it to ensure realistic and compliant behavior.</p>
+<p>This project was both a challenge in systems programming and a solid introduction to networking, concurrency, and protocol design in modern C++. </p><hr  />
 <h1><a class="anchor" id="autotoc_md1"></a>
 Core of Webserv</h1>
 <table class="markdownTable">
@@ -209,14 +219,12 @@ Configuration Parsing Flow</h1>
 
 &lt;hr&gt;
 
-@section autotoc_md10 Networking Core — &lt;tt&gt;SocketManager&lt;/tt&gt;
+@section autotoc_md10 Networking &lt;tt&gt;SocketManager&lt;/tt&gt;
 
 The heart of Webserv’s I/O: a single &lt;tt&gt;poll()&lt;/tt&gt; loop multiplexing &lt;strong&gt;listening sockets&lt;/strong&gt;, &lt;strong&gt;client sockets&lt;/strong&gt;, and &lt;strong&gt;CGI pipes&lt;/strong&gt;, with strict timeouts and robust error recovery.
 
 &lt;details&gt;
 &lt;summary&gt;&lt;strong&gt;See Details&lt;/strong&gt;&lt;/summary&gt;
-
-@subsection autotoc_md11 What it Does
 
 * &lt;strong&gt;Listening sockets&lt;/strong&gt;: set up &lt;tt&gt;bind()&lt;/tt&gt;/&lt;tt&gt;listen()&lt;/tt&gt; for each configured host\:port.
 * &lt;strong&gt;Event loop&lt;/strong&gt;: run non-blocking &lt;tt&gt;poll()&lt;/tt&gt; to monitor all descriptors.
@@ -229,95 +237,241 @@ The heart of Webserv’s I/O: a single &lt;tt&gt;poll()&lt;/tt&gt; loop multiple
 * &lt;strong&gt;Timeouts&lt;/strong&gt;: enforce idle, header, body, and send deadlines.
 * &lt;strong&gt;Errors&lt;/strong&gt;: generate accurate HTTP error responses, close cleanly.
 
+&lt;/details&gt;
+
 &lt;hr&gt;
 
-@subsection autotoc_md12 High-Level Flow
+@section autotoc_md11 HTTP Handling
 
-@icode{mermaid} 
-flowchart TD
-  %% =========================
-  %% Setup
-  %% =========================
-  subgraph Boot[Startup]
-    A[Load servers from config]
-    B[Create SocketManager]
-    C[setupSockets: bind listen register FDs]
-    A --&gt; B --&gt; C
-  end
+This section explains how &lt;strong&gt;Webserv&lt;/strong&gt; processes HTTP/1.1 requests end‑to‑end, from bytes on a socket to fully formed responses, and how the server enforces protocol rules, timeouts, and connection reuse.
 
-  %% =========================
-  %% Main loop
-  %% =========================
-  C --&gt; D{run poll}
-  D --&gt;|EINTR| Z[Graceful shutdown] --&gt; ZZ[Log shutting down server]
+&lt;details&gt;
+&lt;summary&gt;&lt;strong&gt;See Details&lt;/strong&gt;&lt;/summary&gt;
 
-  %% Loop tick
-  D --&gt; E[handleCgiPollEvents]
-  E --&gt; F{for each pfd reverse}
+@subsection autotoc_md12 Request Lifecycle (High‑Level)
 
-  %% Skip CGI pipe FDs
-  F --&gt; G{CGI pipe FD}
-  G -- yes --&gt; F
+1. &lt;strong&gt;Accept &amp; Read&lt;/strong&gt;
+   &lt;tt&gt;SocketManager&lt;/tt&gt; accepts client connections on non‑blocking sockets and collects incoming bytes. Per‑connection state tracks &lt;strong&gt;read deadlines&lt;/strong&gt; (header/body) and &lt;strong&gt;keep‑alive&lt;/strong&gt;.
 
-  %% Timeouts (per FD)
-  G -- no --&gt; T{checkClientTimeouts}
-  T -- idle or send --&gt; Close[cleanupClientConnectionClose] --&gt; F
-  T -- header or body --&gt; Halt[disable POLLIN then queue 408] --&gt; H{ERR HUP NVAL}
-  T -- none --&gt; H
+2. &lt;strong&gt;Parse&lt;/strong&gt;
+   &lt;tt&gt;HttpRequestParser&lt;/tt&gt; incrementally parses:
 
-  %% Socket errors
-  H -- yes --&gt; H1[handlePollError then close] --&gt; F
+   * &lt;strong&gt;Start line&lt;/strong&gt;: method, request‑target (absolute‑path + optional query), HTTP version (HTTP/1.1).
+   * &lt;strong&gt;Headers&lt;/strong&gt;: canonicalizes keys; enforces size limits and folding rules; detects &lt;tt&gt;Connection&lt;/tt&gt;, &lt;tt&gt;Host&lt;/tt&gt;, &lt;tt&gt;Content-Length&lt;/tt&gt;, &lt;tt&gt;Transfer-Encoding&lt;/tt&gt;, etc.
+   * &lt;strong&gt;Body&lt;/strong&gt;: supports &lt;tt&gt;Content-Length&lt;/tt&gt; and &lt;strong&gt;chunked&lt;/strong&gt; transfer decoding. Body size is capped by &lt;tt&gt;client_max_body_size&lt;/tt&gt;.
 
-  %% Reads
-  H -- no --&gt; I{POLLIN}
-  I -- no --&gt; O{POLLOUT and responses queued}
+3. &lt;strong&gt;Route&lt;/strong&gt;
+   &lt;tt&gt;requestRouter&lt;/tt&gt; selects a &lt;tt&gt;Server&lt;/tt&gt; (host+SNI/server_name) and the most specific &lt;tt&gt;Location&lt;/tt&gt; (longest URI prefix match). It normalizes the filesystem target path and determines whether the request hits &lt;strong&gt;static&lt;/strong&gt; content, &lt;strong&gt;autoindex&lt;/strong&gt;, &lt;strong&gt;redirect&lt;/strong&gt;, &lt;strong&gt;upload&lt;/strong&gt;, or &lt;strong&gt;CGI&lt;/strong&gt;.
 
-  I -- yes --&gt; J{listen FD}
-  J -- yes --&gt; J1[handleNewConnection] --&gt; F
+4. &lt;strong&gt;Dispatch&lt;/strong&gt;
+   Based on method and location rules, it calls &lt;tt&gt;handleGet&lt;/tt&gt;, &lt;tt&gt;handlePost&lt;/tt&gt;, or &lt;tt&gt;handleDelete&lt;/tt&gt;. Unsupported or disallowed → &lt;strong&gt;405&lt;/strong&gt; with &lt;tt&gt;Allow&lt;/tt&gt; header.
 
-  J -- no --&gt; Rcv[handleClientData]
-  Rcv -- queued --&gt; K[enable POLLOUT] --&gt; F
-  Rcv -- incomplete --&gt; F
+5. &lt;strong&gt;Build Response&lt;/strong&gt;
+   &lt;tt&gt;responseBuilder&lt;/tt&gt; produces status line, headers, and body. It
 
-  %% Writes
-  O -- yes --&gt; S[sendResponse]
-  S --&gt;|file| SF[sendFileResponse]
-  S --&gt;|raw| SR[sendRawResponse]
-  SF --&gt; EndSend{response done}
-  SR --&gt; EndSend
+   * Sets &lt;tt&gt;Content-Type&lt;/tt&gt; (MIME by extension), &lt;tt&gt;Content-Length&lt;/tt&gt; or &lt;tt&gt;Transfer-Encoding: chunked&lt;/tt&gt;, &lt;tt&gt;Connection&lt;/tt&gt; (keep‑alive vs close), and error pages.
+   * Streams file bodies (sendfile/read+write) with backpressure; can fall back to buffered I/O for CGI and dynamic content.
 
-  EndSend -- yes and close --&gt; Close
-  EndSend -- yes and keep alive --&gt; KA[disable POLLOUT] --&gt; F
-  EndSend -- not yet --&gt; F
+6. &lt;strong&gt;Send &amp; Reuse&lt;/strong&gt;
+   &lt;tt&gt;SocketManager&lt;/tt&gt; writes the response, respecting &lt;strong&gt;write timeouts&lt;/strong&gt; and TCP backpressure. If &lt;tt&gt;Connection: keep-alive&lt;/tt&gt; and protocol rules allow, the connection stays open for subsequent pipelined requests.
 
-  %% Next tick
-  F --&gt; D
-@endicode 
+@subsection autotoc_md13 Static Files &amp; Autoindex
+
+* &lt;strong&gt;Static files&lt;/strong&gt;: Path is resolved from &lt;tt&gt;root&lt;/tt&gt; + URI, protecting against traversal. If an &lt;strong&gt;index&lt;/strong&gt; is configured and exists for a directory, it is served.
+* &lt;strong&gt;Autoindex&lt;/strong&gt;: When enabled and no index present, &lt;tt&gt;generateAutoindex&lt;/tt&gt; renders a minimal HTML directory listing.
+* &lt;strong&gt;ETag/Last‑Modified&lt;/strong&gt; *(optional)*: If enabled, responses include validators; otherwise strong caching is avoided. Range requests are not served unless explicitly implemented.
+
+@subsection autotoc_md14 Errors &amp; Edge Cases
+
+* &lt;strong&gt;400&lt;/strong&gt; malformed request, &lt;strong&gt;413&lt;/strong&gt; body too large, &lt;strong&gt;414&lt;/strong&gt; URI too long, &lt;strong&gt;404/403&lt;/strong&gt; missing or forbidden paths, &lt;strong&gt;405&lt;/strong&gt; method not allowed.
+* &lt;strong&gt;408/504&lt;/strong&gt; on header/body/send timeouts. &lt;strong&gt;431&lt;/strong&gt; for oversized header sections.
+* &lt;strong&gt;5xx&lt;/strong&gt; on internal faults, filesystem errors, or CGI failures (see below).
 
 &lt;/details&gt;
 
 &lt;hr&gt;
 
-@section autotoc_md13 Flow Overview
+@section autotoc_md15 Request &amp; CGI Handling
 
-1. &lt;strong&gt;Tokenizer&lt;/strong&gt; → breaks input into tokens.
-2. &lt;strong&gt;ConfigParser&lt;/strong&gt; → builds in‑memory &lt;tt&gt;Config&lt;/tt&gt; with &lt;tt&gt;Server&lt;/tt&gt; &amp; &lt;tt&gt;Location&lt;/tt&gt; objects.
-3. &lt;strong&gt;normalizeConfig&lt;/strong&gt; → fills missing defaults (sizes, error pages, roots, index, methods).
-4. &lt;strong&gt;validateConfig&lt;/strong&gt; → applies semantic checks.
-5. &lt;strong&gt;Runtime&lt;/strong&gt; → validated configuration is passed to the server for request routing.
+This section details how POST uploads, multipart forms, and CGI programs are handled, including sandboxing and timeout policy.
 
-The configuration pipeline guarantees that only syntactically valid, normalized, and semantically correct configurations are accepted. This ensures the server runs with predictable defaults, strong validation, and developer-friendly diagnostics.
+&lt;details&gt;
+&lt;summary&gt;&lt;strong&gt;See Details&lt;/strong&gt;&lt;/summary&gt;
+
+@subsection autotoc_md16 POST Uploads &amp; Multipart
+
+* &lt;strong&gt;Content dispatch&lt;/strong&gt;: &lt;tt&gt;handlePost&lt;/tt&gt; inspects &lt;tt&gt;Content-Type&lt;/tt&gt; and forwards to specialized handlers.
+* &lt;strong&gt;application/x-www-form-urlencoded&lt;/strong&gt;: Parsed into key/value pairs. Small payloads are buffered; oversized inputs fail fast with &lt;strong&gt;413&lt;/strong&gt;.
+* &lt;strong&gt;multipart/form-data&lt;/strong&gt;: &lt;tt&gt;handleMultipartForm&lt;/tt&gt; parses parts lazily to disk, honoring per‑file and aggregate size limits. Saved files go to the &lt;tt&gt;upload_store&lt;/tt&gt; defined on the matched &lt;tt&gt;Location&lt;/tt&gt;.
+* &lt;strong&gt;application/octet-stream / arbitrary media&lt;/strong&gt;: Stored as a single file in &lt;tt&gt;upload_store&lt;/tt&gt; with a server‑generated filename when no name is provided.
+* &lt;strong&gt;Overwrite policy&lt;/strong&gt;: Configurable (e.g., reject on conflict or rename). Errors yield &lt;strong&gt;409&lt;/strong&gt; (conflict) or &lt;strong&gt;500&lt;/strong&gt; depending on the cause.
+
+@subsection autotoc_md17 CGI Execution Model
+
+* &lt;strong&gt;When CGI triggers&lt;/strong&gt;: A request is routed to CGI when the target path matches a configured &lt;tt&gt;cgi_extension&lt;/tt&gt; (e.g., &lt;tt&gt;.py&lt;/tt&gt;, &lt;tt&gt;.php&lt;/tt&gt;) and an interpreter is set, or when the &lt;tt&gt;Location&lt;/tt&gt; forces CGI.
+
+* &lt;strong&gt;Environment&lt;/strong&gt;: &lt;tt&gt;handleCgi&lt;/tt&gt; constructs a POSIX environment per CGI/1.1:
+
+  * &lt;tt&gt;REQUEST_METHOD&lt;/tt&gt;, &lt;tt&gt;QUERY_STRING&lt;/tt&gt;, &lt;tt&gt;CONTENT_LENGTH&lt;/tt&gt;, &lt;tt&gt;CONTENT_TYPE&lt;/tt&gt;, &lt;tt&gt;SCRIPT_FILENAME&lt;/tt&gt;, &lt;tt&gt;PATH_INFO&lt;/tt&gt;, &lt;tt&gt;SERVER_PROTOCOL&lt;/tt&gt;, &lt;tt&gt;SERVER_NAME&lt;/tt&gt;, &lt;tt&gt;SERVER_PORT&lt;/tt&gt;, &lt;tt&gt;REMOTE_ADDR&lt;/tt&gt;, and &lt;tt&gt;HTTP_*&lt;/tt&gt; for forwarded headers.
+  * Working directory is the script directory; stdin is the request body (streamed or buffered based on size).
+
+* &lt;strong&gt;Process lifecycle&lt;/strong&gt;:
+
+  1. Create pipes for &lt;strong&gt;stdin&lt;/strong&gt;/**stdout**, fork, exec interpreter + script.
+  2. Parent polls child pipes non‑blocking with &lt;strong&gt;CPU/IO activity watchdogs&lt;/strong&gt;.
+  3. Enforces &lt;strong&gt;hard timeouts&lt;/strong&gt; (startup, read, total runtime). On violation → terminate child.
+
+* &lt;strong&gt;Output parsing&lt;/strong&gt;: CGI writes &lt;tt&gt;Status: 200 OK\\r\\n&lt;/tt&gt;, arbitrary headers, blank line, then body. The server:
+
+  * Parses CGI headers (maps/filters hop‑by‑hop), merges with server headers.
+  * If &lt;tt&gt;Location&lt;/tt&gt; header without body → treat as &lt;strong&gt;redirect&lt;/strong&gt; per CGI spec.
+  * Otherwise body is streamed back to the client.
+
+* &lt;strong&gt;Failure mapping&lt;/strong&gt;:
+
+  * Exec/spawn error → &lt;strong&gt;502 Bad Gateway&lt;/strong&gt;.
+  * Timeout or premature exit → &lt;strong&gt;504 Gateway Timeout&lt;/strong&gt;.
+  * Malformed CGI headers → &lt;strong&gt;502&lt;/strong&gt;.
+  * Script wrote nothing (unexpected EOF) → &lt;strong&gt;502&lt;/strong&gt;.
+
+* &lt;strong&gt;Security &amp; Limits&lt;/strong&gt;:
+
+  * Drop privileges/chroot *(if configured)*; never inherit ambient FDs; sanitize environment.
+  * Enforce &lt;strong&gt;max body size&lt;/strong&gt;, &lt;strong&gt;max headers&lt;/strong&gt;, &lt;strong&gt;max response size&lt;/strong&gt; (protects RAM), and per‑request &lt;strong&gt;open‑file caps&lt;/strong&gt;.
+
+@subsection autotoc_md18 GET/DELETE Semantics
+
+* &lt;strong&gt;GET&lt;/strong&gt;: Serves static files, autoindex pages, or dispatches to CGI. Conditional GETs (If‑Modified‑Since/If‑None‑Match) may be supported depending on build settings.
+* &lt;strong&gt;DELETE&lt;/strong&gt;: Removes targeted file from the resolved root when allowed in &lt;tt&gt;methods&lt;/tt&gt;. On success → &lt;strong&gt;204 No Content&lt;/strong&gt;; on missing/forbidden → &lt;strong&gt;404/403&lt;/strong&gt;.
+
+@subsection autotoc_md19 Response Builder (Recap)
+
+* Centralizes status line + headers, error page selection, and body streaming. Ensures &lt;tt&gt;Content-Length&lt;/tt&gt; vs &lt;tt&gt;chunked&lt;/tt&gt; consistency and keeps &lt;strong&gt;connection semantics&lt;/strong&gt; correct across errors and CGI boundaries.
+
+&lt;/details&gt;
 
 &lt;hr&gt;
 
-@section autotoc_md14 Continuous Integration &amp; Documentation
+@section autotoc_md20 Flow Overview - End‑to‑End Runtime
+
+This is the complete lifecycle from configuration to bytes on the wire, aligned with the current codebase.
+
+&lt;details&gt;
+&lt;summary&gt;&lt;strong&gt;See Details&lt;/strong&gt;&lt;/summary&gt;
+
+1. &lt;strong&gt;Startup &amp; Configuration&lt;/strong&gt;
+
+* &lt;strong&gt;Tokenizer → ConfigParser → normalizeConfig → validateConfig&lt;/strong&gt;
+
+  * Tokenize config, build &lt;tt&gt;Server&lt;/tt&gt;/&lt;tt&gt;Location&lt;/tt&gt; graphs, apply defaults (client body size, methods, roots, index, error pages), and enforce semantic rules (paths, redirects, methods, CGI mapping).
+* &lt;strong&gt;Bootstrap&lt;/strong&gt;
+
+  * Instantiate &lt;tt&gt;Server&lt;/tt&gt; objects, bind/listen on configured host\:port pairs, pre‑compute route tables and error pages.
+
+2. &lt;strong&gt;Event Loop (SocketManager)&lt;/strong&gt;
+
+* Single non‑blocking &lt;tt&gt;poll()&lt;/tt&gt; loop over listening sockets, client sockets, and CGI pipes.
+* Per‑connection state tracks read/write buffers, deadlines (header/body/send), and keep‑alive.
+* &lt;strong&gt;Accept&lt;/strong&gt; new connections ➜ initialize state.
+
+3. &lt;strong&gt;Read → Parse (HttpRequestParser)&lt;/strong&gt;
+
+* Accumulate bytes until &lt;tt&gt;"\r<br  />
+\r<br  />
+"&lt;/tt&gt; (header terminator) is found.
+* &lt;strong&gt;Start line&lt;/strong&gt;: validate method token, request‑target, version.
+* &lt;strong&gt;Headers&lt;/strong&gt;: normalize keys, reject duplicates where disallowed, check &lt;tt&gt;Content‑Length&lt;/tt&gt;/&lt;tt&gt;Transfer‑Encoding&lt;/tt&gt; (conflict, format), enforce &lt;tt&gt;Host&lt;/tt&gt; on HTTP/1.1, cap header section size.
+* &lt;strong&gt;URL/Host routing hint&lt;/strong&gt;: derive effective &lt;tt&gt;Url&lt;/tt&gt; and matched server affinity; store &lt;tt&gt;Host&lt;/tt&gt;, &lt;tt&gt;Query&lt;/tt&gt;, &lt;tt&gt;Content‑Length&lt;/tt&gt;.
+* &lt;strong&gt;Body&lt;/strong&gt;:
+
+  * If &lt;tt&gt;Transfer‑Encoding: chunked&lt;/tt&gt; ➜ incremental chunk decoding; forbid trailers; enforce &lt;tt&gt;client_max_body_size&lt;/tt&gt;.
+  * Else if &lt;tt&gt;Content‑Length&lt;/tt&gt; ➜ wait until full body; enforce size cap; detect pipelined next request beyond the declared length.
+  * GET/DELETE: treat any extra bytes as pipeline, not body.
+
+4. &lt;strong&gt;Routing (requestRouter)&lt;/strong&gt;
+
+* &lt;strong&gt;Directory‑slash redirect&lt;/strong&gt; when target resolves to a directory but URI lacks trailing &lt;tt&gt;/&lt;/tt&gt;.
+* &lt;strong&gt;Location selection&lt;/strong&gt;: exact match, else longest prefix.
+* **Configured redirect (&lt;tt&gt;return&lt;/tt&gt; 301/302/307/308)** short‑circuit.
+* &lt;strong&gt;Method gate&lt;/strong&gt;:
+
+  * 501 if method not implemented (only GET/POST/DELETE supported).
+  * 405 if not allowed by &lt;tt&gt;Location&lt;/tt&gt;’s &lt;tt&gt;methods&lt;/tt&gt;.
+
+5. &lt;strong&gt;Dispatch (methodsHandler)&lt;/strong&gt;
+
+* &lt;strong&gt;GET&lt;/strong&gt;
+
+  * Resolve physical path under &lt;tt&gt;root&lt;/tt&gt; (no traversal, no symlinks).
+  * If directory:
+
+    * If index exists ➜ serve file.
+    * Else if &lt;tt&gt;autoindex on&lt;/tt&gt; ➜ generate HTML listing.
+    * Else ➜ 403.
+  * If regular file ➜ serve with MIME type detection. Small files buffered, large files streamed.
+* &lt;strong&gt;POST&lt;/strong&gt;
+
+  * Preconditions: non‑empty body, size ≤ &lt;tt&gt;client_max_body_size&lt;/tt&gt;, &lt;tt&gt;upload_store&lt;/tt&gt; configured.
+  * Determine safe target path under &lt;tt&gt;upload_store&lt;/tt&gt; (percent‑decode, canonicalize, reject symlinks, mkdir ‑p).
+  * Content‑type switch:
+
+    * &lt;tt&gt;multipart/form-data&lt;/tt&gt; ➜ stream first file part to disk (boundary parsing, per‑part size cap).
+    * &lt;tt&gt;application/x‑www‑form‑urlencoded&lt;/tt&gt; ➜ parse kv pairs; persist rendered HTML summary.
+    * Other types ➜ raw body saved as a file.
+  * 201 on success with minimal HTML confirmation.
+* &lt;strong&gt;DELETE&lt;/strong&gt;
+
+  * Resolve path; reject directories/symlinks; remove regular file; reply 200 with HTML confirmation.
+
+6. &lt;strong&gt;CGI (handleCgi) - when location/extension triggers&lt;/strong&gt;
+
+* &lt;strong&gt;Spawn&lt;/strong&gt;
+
+  * Write request body to temp file; create output temp file.
+  * Build &lt;tt&gt;execve&lt;/tt&gt; argv (interpreter + script) and CGI/1.1 env (&lt;tt&gt;REQUEST_METHOD&lt;/tt&gt;, &lt;tt&gt;QUERY_STRING&lt;/tt&gt;, &lt;tt&gt;SCRIPT_FILENAME&lt;/tt&gt;, &lt;tt&gt;PATH_INFO&lt;/tt&gt;, &lt;tt&gt;SERVER_*&lt;/tt&gt;, &lt;tt&gt;HTTP_*&lt;/tt&gt;, etc.).
+  * &lt;tt&gt;fork()&lt;/tt&gt; child ➜ &lt;tt&gt;dup2(stdin/out)&lt;/tt&gt; to temp fds ➜ &lt;tt&gt;chdir(script dir)&lt;/tt&gt; ➜ &lt;tt&gt;execve()&lt;/tt&gt;.
+* &lt;strong&gt;Supervision&lt;/strong&gt;
+
+  * Parent polls pipes/Fds with timeouts; on inactivity/overrun ➜ kill and 504/502.
+* &lt;strong&gt;Finalize&lt;/strong&gt;
+
+  * Parse output file head for CGI headers (&lt;tt&gt;Status:&lt;/tt&gt;, &lt;tt&gt;Content‑Type:&lt;/tt&gt;) until &lt;tt&gt;CRLF CRLF&lt;/tt&gt;.
+  * Compute body offset and size, then return a &lt;strong&gt;file‑backed&lt;/strong&gt; response pointing at CGI output (no copy), with correct status and content type.
+  * Ensure temp files are unlinked/cleaned after send.
+
+7. &lt;strong&gt;Response Building (responseBuilder/HttpResponse)&lt;/strong&gt;
+
+* Build status line + headers; choose reason phrase; select custom error page if configured.
+* Set &lt;tt&gt;Content‑Type&lt;/tt&gt;, &lt;tt&gt;Content‑Length&lt;/tt&gt; (or stream file length) and connection semantics.
+* &lt;strong&gt;Keep‑alive policy&lt;/strong&gt;
+
+  * HTTP/1.1: keep‑alive by default unless &lt;tt&gt;Connection: close&lt;/tt&gt; &lt;strong&gt;or&lt;/strong&gt; fatal status (e.g., 400/408/413/500) forces close.
+  * HTTP/1.0: close by default unless &lt;tt&gt;Connection: keep‑alive&lt;/tt&gt;.
+* For redirects: set &lt;tt&gt;Location&lt;/tt&gt;; body often omitted/minimal.
+
+8. &lt;strong&gt;Write → Reuse/Close&lt;/strong&gt;
+
+* Non‑blocking writes honor backpressure and send timeouts.
+* If &lt;tt&gt;keep‑alive&lt;/tt&gt; and no close‑forcing status ➜ retain connection for next pipelined request (parser resumes at leftover bytes).
+* Else ➜ close socket and release all per‑connection resources.
+
+9. &lt;strong&gt;Error Mapping &amp; Hardening&lt;/strong&gt;
+
+* Parser/Router/FS/CGI errors mapped to precise HTTP codes (400/403/404/405/408/411/413/414/415/431/500/501/502/504/505).
+* Safeguards: normalized paths, no &lt;tt&gt;..&lt;/tt&gt;, symlink denial, header/body caps, per‑request timeouts, upload store confinement, and strict header validation.
+
+&lt;/details&gt;
+
+&lt;hr&gt;
+
+@section autotoc_md21 Continuous Integration &amp; Documentation
 
 This project leverages &lt;strong&gt;GitHub Actions&lt;/strong&gt; to ensure code quality, stability, and up-to-date documentation.
 
 &lt;details&gt;
 &lt;summary&gt;&lt;strong&gt;See Details&lt;/strong&gt;&lt;/summary&gt;
 
-@subsection autotoc_md15 CI Pipeline
+@subsection autotoc_md22 CI Pipeline
 
 * Runs automatically on pushes and pull requests to &lt;tt&gt;main&lt;/tt&gt; and &lt;tt&gt;dev&lt;/tt&gt;.
 * Includes manual triggers (&lt;tt&gt;workflow_dispatch&lt;/tt&gt;) and dependency checks after successful builds.
@@ -340,7 +494,7 @@ This project leverages &lt;strong&gt;GitHub Actions&lt;/strong&gt; to ensure cod
 <p>Generates Doxygen documentation (with Graphviz diagrams) and deploys it to <b>GitHub Pages</b>.   </p>
 <p>Every code change is built, tested, and documented automatically, ensuring a robust development workflow and always-available reference docs.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md16"></a>
+<h1><a class="anchor" id="autotoc_md23"></a>
 Documentation</h1>
 <p>This section describes how project documentation is generated, structured, and published.</p>
 <details >
@@ -349,13 +503,13 @@ Documentation</h1>
 <p></p>
 <p></p>
 </details>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md24"></a>
 1. Doxygen-Powered</h2>
 <ul>
 <li>Documentation is generated automatically from <b>source code comments</b> and <b>Markdown files</b>.</li>
 <li><code><a class="el" href="README_8md.html">README.md</a></code> serves as the <b>entry point</b>, offering an overview and links to modules.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md25"></a>
 2. Graphical Support</h2>
 <ul>
 <li><b>Graphviz</b> integration produces:<ul>
@@ -366,21 +520,21 @@ Documentation</h1>
 </li>
 <li>These visuals improve comprehension of the server’s architecture.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md26"></a>
 3. Navigation &amp; Browsing</h2>
 <ul>
 <li>The source browser cross-references <b>functions, classes, and files</b>.</li>
 <li>Each documented entity links directly to its definition in the codebase.</li>
 <li>Groups (<code>\defgroup</code>, <code>\ingroup</code>) provide thematic navigation across modules (e.g., <code>config</code>, <code>core</code>, <code>http</code>).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md20"></a>
+<h2><a class="anchor" id="autotoc_md27"></a>
 4. Deployment</h2>
 <ul>
 <li>Documentation is built in <b>CI/CD pipelines</b>.</li>
 <li>Published automatically via <b>GitHub Pages</b> from the <code>docs/html</code> directory.</li>
 <li>Ensures the latest version is always available for contributors and maintainers.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md21"></a>
+<h2><a class="anchor" id="autotoc_md28"></a>
 5. Best Practices</h2>
 <ul>
 <li>Consistent <b>Doxygen-style headers</b> across <code>.hpp</code> and <code>.cpp</code> files.</li>
@@ -388,7 +542,7 @@ Documentation</h1>
 <li>Together, these guarantee both <b>low-level API reference</b> and <b>high-level architectural guidance</b>.</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md22"></a>
+<h1><a class="anchor" id="autotoc_md29"></a>
 Project Structure Overview</h1>
 <div class="fragment"><div class="line">webserv</div>
 <div class="line">├── 📁 .github/               # GitHub Actions CI workflows and PR/issue templates</div>
@@ -414,16 +568,16 @@ Project Structure Overview</h1>
 <div class="line">├── run_test.py                 # Entrypoint for python tests</div>
 <div class="line">├── webserv.subject.pdf         # Original subject specification for the project</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md23"></a>
+<h1><a class="anchor" id="autotoc_md30"></a>
 Build &amp; Test Instructions</h1>
-<h2><a class="anchor" id="autotoc_md24"></a>
+<h2><a class="anchor" id="autotoc_md31"></a>
 Build with Makefile</h2>
 <div class="fragment"><div class="line">make</div>
 <div class="line">./bin/webserv &lt;path-to-config.conf&gt;</div>
 </div><!-- fragment --><blockquote class="doxtable">
 <p>&zwj;The default goal is <code>all</code>. The binary is produced at <code>bin/webserv</code>. </p>
 </blockquote>
-<h2><a class="anchor" id="autotoc_md25"></a>
+<h2><a class="anchor" id="autotoc_md32"></a>
 Available Makefile Targets</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -445,7 +599,7 @@ Available Makefile Targets</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>make help</code>   </td><td class="markdownTableBodyNone">Print a categorized list of available targets.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md26"></a>
+<h2><a class="anchor" id="autotoc_md33"></a>
 Notes</h2>
 <ul>
 <li>Objects and auto-generated deps are stored under <code>objs/</code> (built via <code>-MMD -MP</code>).</li>
@@ -454,7 +608,7 @@ Notes</h2>
 <li>Ensure <code>python3-venv</code> and <code>clang-format</code> are installed on your system.</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md27"></a>
+<h1><a class="anchor" id="autotoc_md34"></a>
 License</h1>
 <p>This project is licensed under the terms of the [MIT License](LICENSE).</p>
 <hr  />

@@ -20,5 +20,6 @@ var searchData=
   ['anonymous_5fnamespace_7bresponsebuilder_2ecpp_7d_17',['anonymous_namespace{responseBuilder.cpp}',['../namespaceanonymous__namespace_02responseBuilder_8cpp_03.html',1,'']]],
   ['anonymous_5fnamespace_7bvalidateconfig_2ecpp_7d_18',['anonymous_namespace{validateConfig.cpp}',['../namespaceanonymous__namespace_02validateConfig_8cpp_03.html',1,'']]],
   ['anonymous_5fnamespace_7bwebserv_2ecpp_7d_19',['anonymous_namespace{webserv.cpp}',['../namespaceanonymous__namespace_02webserv_8cpp_03.html',1,'']]],
-  ['available_20makefile_20targets_20',['Available Makefile Targets',['../index.html#autotoc_md25',1,'']]]
+  ['autoindex_20',['Static Files &amp; Autoindex',['../index.html#autotoc_md13',1,'']]],
+  ['available_20makefile_20targets_21',['Available Makefile Targets',['../index.html#autotoc_md32',1,'']]]
 ];

@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['targets_0',['Available Makefile Targets',['../index.html#autotoc_md25',1,'']]],
-  ['test_20instructions_1',['Build &amp; Test Instructions',['../index.html#autotoc_md23',1,'']]],
+  ['targets_0',['Available Makefile Targets',['../index.html#autotoc_md32',1,'']]],
+  ['test_20instructions_1',['Build &amp; Test Instructions',['../index.html#autotoc_md30',1,'']]],
   ['throwunterminatedstring_2',['throwUnterminatedString',['../classTokenizer.html#a85e938ec2eba987c83bed60c6340cc40',1,'Tokenizer']]],
   ['timeout_3',['TIMEOUT',['../SocketManager_8hpp.html#a45ba202b05caf39795aeca91b0ae547e',1,'SocketManager.hpp']]],
   ['tocharptrarray_4',['toCharPtrArray',['../namespaceanonymous__namespace_02handleCgi_8cpp_03.html#a44659e51fb8934c51b45f14053af876a',1,'anonymous_namespace{handleCgi.cpp}']]],
@@ -21,6 +21,6 @@ var searchData=
   ['trim_18',['trim',['../group__StringUtils.html#ga5a01f705cc7b4a7317a57f6bf41aef25',1,'trim(const std::string &amp;str):&#160;stringUtils.cpp'],['../group__StringUtils.html#ga5a01f705cc7b4a7317a57f6bf41aef25',1,'trim(const std::string &amp;s):&#160;stringUtils.cpp']]],
   ['trimendingcrlf_19',['trimEndingCRLF',['../namespaceanonymous__namespace_02handleMultipartForm_8cpp_03.html#a97cca721ef601f48a167045b7f25489c',1,'anonymous_namespace{handleMultipartForm.cpp}']]],
   ['tryterminatecgi_20',['tryTerminateCgi',['../namespaceCGI.html#a537e8dc1f7f04a7af29d7a787a1605ce',1,'CGI']]],
-  ['tt_20socketmanager_20tt_21',['Networking Core — &lt;tt&gt;SocketManager&lt;/tt&gt;',['../index.html#autotoc_md10',1,'']]],
+  ['tt_20socketmanager_20tt_21',['Networking &lt;tt&gt;SocketManager&lt;/tt&gt;',['../index.html#autotoc_md10',1,'']]],
   ['type_22',['type',['../structToken.html#a67919af9f3a80dc0b28a0ab1e6d5bf8a',1,'Token']]]
 ];

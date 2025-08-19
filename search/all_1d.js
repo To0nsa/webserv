@@ -5,6 +5,5 @@ var searchData=
   ['webserv_2ecpp_2',['webserv.cpp',['../webserv_8cpp.html',1,'']]],
   ['webserv_2ehpp_3',['webserv.hpp',['../webserv_8hpp.html',1,'']]],
   ['what_4',['what',['../classConfigParseError.html#ab710f8634479d1d0aa8911e208630e2b',1,'ConfigParseError::what()'],['../classSocketManager_1_1SocketError.html#aff4182884655a2613ce9ae2d7dccc206',1,'SocketManager::SocketError::what()']]],
-  ['what_20it_20does_5',['What it Does',['../index.html#autotoc_md11',1,'']]],
-  ['with_20makefile_6',['Build with Makefile',['../index.html#autotoc_md24',1,'']]]
+  ['with_20makefile_5',['Build with Makefile',['../index.html#autotoc_md31',1,'']]]
 ];
